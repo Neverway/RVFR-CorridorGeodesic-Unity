@@ -6,6 +6,7 @@
 //=============================================================================
 
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Pawn : MonoBehaviour
@@ -44,8 +45,9 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return new WaitForEndOfFrame();
         gameInstance = FindObjectOfType<GameInstance>();
     }
 

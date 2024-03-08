@@ -39,11 +39,11 @@ public class WorldSettings : MonoBehaviour
     private void Start()
     {
         gameInstance = FindObjectOfType<GameInstance>();
-        if (!gameInstance.localPlayerCharacter) SpawnPlayerCharacter();
     }
 
     private void Update()
     {
+        if (!gameInstance.localPlayerCharacter) SpawnPlayerCharacter();
         CheckKillVolume();
     }
 

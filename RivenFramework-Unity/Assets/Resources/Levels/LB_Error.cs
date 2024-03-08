@@ -6,9 +6,8 @@
 //=============================================================================
 
 using UnityEngine;
-using UnityEngine.UI;
 
-public class WB_Extras : MonoBehaviour
+public class LB_Error : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -23,26 +22,18 @@ public class WB_Extras : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private WorldLoader worldLoader;
-    [SerializeField] private Button buttonBack, buttonExtra1, buttonExtra2, buttonExtra3;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
+    private void Update()
     {
-        buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
-        buttonExtra1.onClick.AddListener(() =>
+        if (Input.anyKeyDown)
         {
-            if (!worldLoader)
-            {
-                worldLoader = FindObjectOfType<WorldLoader>();
-            }
-            worldLoader.LoadWorld("Dev_LevelEditor");
-        });
+            FindObjectOfType<WorldLoader>().ForceLoadWorld("_Title", 0.3f);
+        }
     }
-
 
     //=-----------------=
     // Internal Functions

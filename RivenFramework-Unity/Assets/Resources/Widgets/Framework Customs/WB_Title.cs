@@ -62,7 +62,7 @@ public class WB_Title : MonoBehaviour
             case "MainGame":
                 if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
                 if (!levelLoader) levelLoader = FindObjectOfType<LevelLoader>();
-                worldLoader.Load("Overworld");
+                worldLoader.LoadWorld("World");
                 // levelLoader.Load("", true); // Replace with function to load save file level
                 break;
             case "Extras":
