@@ -39,7 +39,7 @@ public class WB_Extras : MonoBehaviour
             {
                 worldLoader = FindObjectOfType<WorldLoader>();
             }
-            worldLoader.LoadWorld("Dev_LevelEditor");
+            worldLoader.LoadWorld("_LevelEditor");
         });
     }
 
