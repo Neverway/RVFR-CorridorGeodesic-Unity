@@ -46,7 +46,9 @@ public class SpectatorPlayerController : PawnController
         if (_pawn.isPaused) return;
         
         var movement = spectatorActions.Move.ReadValue<Vector2>();
-        _pawn.Move(new Vector3(movement.x, movement.y, 0), "translate");
+        _pawn.Move(new Vector3(
+            movement.x, 
+            movement.y, 0), "translate");
     }
 
     public override void PawnFixedUpdate(Pawn _pawn)

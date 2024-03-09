@@ -29,7 +29,8 @@ public class GameInstance : MonoBehaviour
     // Reference Variables
     //=-----------------=
     [SerializeField] private List<GameObject> UserInterfaceWidgets;
-     public Pawn localPlayerCharacter;
+    public List<PawnController> PlayerControllerClasses;
+    public Pawn localPlayerCharacter;
 
     //=-----------------=
     // Mono Functions

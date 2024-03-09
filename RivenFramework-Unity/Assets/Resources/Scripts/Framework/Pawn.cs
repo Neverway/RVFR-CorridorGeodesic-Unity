@@ -16,7 +16,8 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     public PawnController currentController;
 
-    public PlayerState currentState;
+    public PlayerState defaultState;
+    public PlayerStateData currentState = new PlayerStateData();
 
     public string team;
     
@@ -73,8 +74,15 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     private void CheckCameraState()
     {
-        if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-        if (gameInstance.localPlayerCharacter == this && GetComponentInChildren<Camera>(true)) GetComponentInChildren<Camera>(true).gameObject.SetActive(true);
+        var viewCamera = GetComponentInChildren<Camera>(true);
+        if (IsPlayerControlled() && viewCamera)
+        {
+            viewCamera.gameObject.SetActive(true);
+        }
+        else if (viewCamera)
+        {
+            viewCamera.gameObject.SetActive(false);
+        }
     }
 
 
@@ -85,10 +93,17 @@ public class Pawn : MonoBehaviour
     {
         return Physics.CheckSphere(transform.position - new Vector3(0, 0, 0), 0.4f, groundMask);
     }
+    
+    public bool IsPlayerControlled()
+    {
+        if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+        return gameInstance.PlayerControllerClasses.Contains(currentController);
+    }
 
     public void Move(Vector3 _movement, string _mode)
     {
-        if (_mode == "translate") transform.Translate(_movement * (currentState.movementSpeed * Time.deltaTime));
+        if (_mode == "translate") transform.Translate(_movement * (
+            currentState.movementSpeed * Time.deltaTime));
     }
     
     public void Move(Vector3 _movement, string _mode, float _movementSpeed)

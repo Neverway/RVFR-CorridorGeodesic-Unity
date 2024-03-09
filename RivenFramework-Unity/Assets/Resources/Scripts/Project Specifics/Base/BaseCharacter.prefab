@@ -46,13 +46,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentController: {fileID: 11400000, guid: 19494914a783b9aa49f6822e8a61aa06, type: 2}
-  currentState: {fileID: 11400000, guid: 242ccfb8f33085518933ebd30f0897fe, type: 2}
+  defaultState: {fileID: 11400000, guid: 242ccfb8f33085518933ebd30f0897fe, type: 2}
+  currentState: {fileID: 0}
   team: 
   isPossessed: 0
   isPaused: 0
   wasPaused: 0
   isInvulnerable: 0
   isDead: 0
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &3708908881907885430
 GameObject:
   m_ObjectHideFlags: 0
