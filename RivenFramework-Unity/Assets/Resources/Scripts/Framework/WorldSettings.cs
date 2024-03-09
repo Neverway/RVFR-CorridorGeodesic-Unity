@@ -44,7 +44,7 @@ public class WorldSettings : MonoBehaviour
 
     private void Update()
     {
-        if (!gameInstance.localPlayerCharacter) SpawnPlayerCharacter();
+        if (gameInstance.localPlayerCharacter == null) SpawnPlayerCharacter();
         CheckKillVolume();
     }
 

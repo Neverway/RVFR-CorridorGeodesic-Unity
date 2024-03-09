@@ -34,6 +34,19 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    public void LateUpdate()
+    {
+        // If no player was found, enable a random pawns camera
+        if (localPlayerCharacter == null)
+        {
+            var emergencyFallback = FindObjectOfType<Pawn>();
+            if (emergencyFallback)
+            {
+                localPlayerCharacter = emergencyFallback;
+                emergencyFallback.GetComponentInChildren<Camera>(true).gameObject.SetActive(true);
+            }
+        }
+    }
 
 
     //=-----------------=

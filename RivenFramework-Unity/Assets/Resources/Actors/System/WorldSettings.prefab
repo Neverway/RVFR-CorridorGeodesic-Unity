@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8726872464012335453}
   - component: {fileID: 5676686107230140464}
-  - component: {fileID: 2258250942386444774}
   - component: {fileID: 7358925966721345984}
+  - component: {fileID: 2258250942386444774}
   m_Layer: 0
   m_Name: WorldSettings
   m_TagString: Untagged
@@ -49,21 +49,6 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
---- !u!114 &2258250942386444774
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3905510958729441697}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25ce825265ffd451cb84d377c4c24507, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameModeOverride: {fileID: 0}
-  disableWorldKillVolume: 0
-  worldKillVolumeDistance: 32767
 --- !u!114 &7358925966721345984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,3 +79,19 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+--- !u!114 &2258250942386444774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3905510958729441697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ce825265ffd451cb84d377c4c24507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameModeOverride: {fileID: 0}
+  startAsSpectator: 0
+  disableWorldKillVolume: 0
+  worldKillVolumeDistance: 32767
