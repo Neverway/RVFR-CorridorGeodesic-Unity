@@ -7,11 +7,14 @@
 
 using UnityEngine;
 
-public class PawnController : ScriptableObject
+public abstract class PawnController : ScriptableObject
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public abstract void PawnAwake(Pawn _pawn);
+    public abstract void PawnUpdate(Pawn _pawn);
+    public abstract void PawnFixedUpdate(Pawn _pawn);
 
 
     //=-----------------=

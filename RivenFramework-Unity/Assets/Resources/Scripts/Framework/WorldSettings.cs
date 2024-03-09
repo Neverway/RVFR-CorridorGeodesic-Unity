@@ -18,6 +18,7 @@ public class WorldSettings : MonoBehaviour
     // Public Variables
     //=-----------------=
     public GameMode gameModeOverride;
+    public bool startAsSpectator;
     public bool disableWorldKillVolume;
     public int worldKillVolumeDistance=32767;
 
@@ -81,31 +82,18 @@ public class WorldSettings : MonoBehaviour
     public void SpawnPlayerCharacter()
     {
         if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-        
+
         var startPoint = GetPlayerStartPoint();
         
-        // Check for gamemode override
-        if (gameModeOverride)
-        {
-            if (startPoint)
-            {
-                gameInstance.localPlayerCharacter = Instantiate(gameModeOverride.defaultPawnClass, startPoint.position, startPoint.rotation).GetComponent<Pawn>();
-            }
-            else
-            {
-                gameInstance.localPlayerCharacter = Instantiate(gameModeOverride.defaultPawnClass, new Vector3(), new Quaternion()).GetComponent<Pawn>();
-            }
-        }
-        else
-        {
-            if (startPoint)
-            {
-                gameInstance.localPlayerCharacter = Instantiate(gameInstance.defaultGamemode.defaultPawnClass, startPoint.position, startPoint.rotation).GetComponent<Pawn>();
-            }
-            else
-            {
-                gameInstance.localPlayerCharacter = Instantiate(gameInstance.defaultGamemode.defaultPawnClass, new Vector3(), new Quaternion()).GetComponent<Pawn>();
-            }
-        }
+        // Determine the game mode to use - either the override or the default.
+        var gameMode = gameModeOverride ? gameModeOverride : gameInstance.defaultGamemode;
+        // Choose the class type based on whether starting as a spectator.
+        var classToInstantiate = startAsSpectator ? gameMode.spectatorClass : gameMode.defaultPawnClass;
+        // Determine the spawn position and rotation - use default if startPoint is null.
+        Vector3 spawnPosition = startPoint ? startPoint.position : Vector3.zero;
+        Quaternion spawnRotation = startPoint ? startPoint.rotation : Quaternion.identity;
+        // Instantiate the player character.
+        gameInstance.localPlayerCharacter = Instantiate(classToInstantiate, spawnPosition, spawnRotation).GetComponent<Pawn>();
+
     }
 }

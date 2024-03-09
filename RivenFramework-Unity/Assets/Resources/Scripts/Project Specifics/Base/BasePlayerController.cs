@@ -9,8 +9,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="SpectatorController", menuName="Neverway/ScriptableObjects/Controllers/SpectatorController")]
-public class SpectatorController : PawnController
+[CreateAssetMenu(fileName="BasePlayerController", menuName="Neverway/ScriptableObjects/Controllers/BasePlayerController")]
+public class BasePlayerController : PawnController
 {
     //=-----------------=
     // Public Variables
@@ -30,16 +30,22 @@ public class SpectatorController : PawnController
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
+    public override void PawnAwake(Pawn _pawn)
     {
+        
+    }
     
+    public override void PawnUpdate(Pawn _pawn)
+    {
+        
     }
 
-    private void Update()
+    public override void PawnFixedUpdate(Pawn _pawn)
     {
-    
+        
     }
 
+    
     //=-----------------=
     // Internal Functions
     //=-----------------=

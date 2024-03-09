@@ -62,10 +62,11 @@ MonoBehaviour:
   defaultGamemode: {fileID: 11400000, guid: edb522727d8818f1fb5e4b40cf3287d3, type: 2}
   UserInterfaceWidgets:
   - {fileID: 1507811972370413053, guid: 02917cc8338914fddbf29dd8046ca0f0, type: 3}
+  - {fileID: 1507811972370413053, guid: 51fcd41068adeb412a5661e2212e90dd, type: 3}
+  - {fileID: 1507811972370413053, guid: 51fcd41068adeb412a5661e2212e90dd, type: 3}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  localPlayerCharacter: {fileID: 0}
 --- !u!114 &5917810448728512710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +79,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3acb94df3fd51fd19cb4cdcfac0549a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delayBeforeWorldChange: 0.25
+  minimumRequiredLoadTime: 1
+  loadingWorldID: _Travel
+  isLoading: 0
 --- !u!114 &8540078363942578872
 MonoBehaviour:
   m_ObjectHideFlags: 0

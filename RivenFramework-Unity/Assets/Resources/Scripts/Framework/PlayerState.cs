@@ -12,6 +12,7 @@ public class PlayerState : ScriptableObject
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public float movementSpeed=5f;
 
 
     //=-----------------=
@@ -27,7 +28,7 @@ public class PlayerState : ScriptableObject
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    
+
 
     //=-----------------=
     // Internal Functions

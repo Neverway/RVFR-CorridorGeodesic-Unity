@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WB_Title : MonoBehaviour
+public class WB_Pause : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -27,9 +27,8 @@ public class WB_Title : MonoBehaviour
     //=-----------------=
     private GameInstance gameInstance;
     private WorldLoader worldLoader;
-    private LevelLoader levelLoader; // Added for loading the overworld levels from Cartographer
-    [SerializeField] private Button buttonMainGame, buttonExtras, buttonRanking, buttonSettings, buttonQuit;
-    [SerializeField] private GameObject extrasWidget, rankingWidget, settingsWidget;
+    [SerializeField] private Button buttonResume, buttonSettings, buttonTitle, buttonQuit;
+    [SerializeField] private GameObject settingsWidget;
 
 
     //=-----------------=
@@ -39,43 +38,29 @@ public class WB_Title : MonoBehaviour
     {
         gameInstance = FindObjectOfType<GameInstance>();
         worldLoader = FindObjectOfType<WorldLoader>();
-        levelLoader = FindObjectOfType<LevelLoader>();
-        buttonMainGame.onClick.AddListener(delegate { OnClick("buttonMainGame"); });
-        buttonExtras.onClick.AddListener(delegate { OnClick("buttonExtras"); });
-        buttonRanking.onClick.AddListener(delegate { OnClick("buttonRanking"); });
+        buttonResume.onClick.AddListener(delegate { OnClick("buttonResume"); });
         buttonSettings.onClick.AddListener(delegate { OnClick("buttonSettings"); });
+        buttonTitle.onClick.AddListener(delegate { OnClick("buttonTitle"); });
         buttonQuit.onClick.AddListener(delegate { OnClick("buttonQuit"); });
     }
-
-    private void Update()
-    {
     
-    }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void OnClick(string button)
+    private void OnClick(string _button)
     {
-        switch (button)
+        switch (_button)
         {
-            case "buttonMainGame":
-                if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
-                if (!levelLoader) levelLoader = FindObjectOfType<LevelLoader>();
-                worldLoader.LoadWorld("World");
-                // levelLoader.Load("", true); // Replace with function to load save file level
-                break;
-            case "buttonExtras":
-                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-                GameInstance.AddWidget(extrasWidget);
-                break;
-            case "buttonRanking":
-                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-                GameInstance.AddWidget(rankingWidget);
+            case "buttonResume":
+                Destroy(gameObject);
                 break;
             case "buttonSettings":
                 if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
                 GameInstance.AddWidget(settingsWidget);
+                break;
+            case "buttonTitle":
+                worldLoader.LoadWorld("_Title");
                 break;
             case "buttonQuit":
                 Application.Quit();

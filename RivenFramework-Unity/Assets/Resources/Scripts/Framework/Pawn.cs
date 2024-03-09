@@ -29,6 +29,9 @@ public class Pawn : MonoBehaviour
     public event Action OnEntityHurt;
     public event Action OnEntityHeal;
     public event Action OnEntityDeath;
+    
+    [Tooltip("The collision layers that will be checked when testing if the entity is grounded")]
+    [SerializeField] private LayerMask groundMask;
 
 
     //=-----------------=
@@ -45,16 +48,25 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private IEnumerator Start()
+    private void Awake()
     {
-        yield return new WaitForEndOfFrame();
-        gameInstance = FindObjectOfType<GameInstance>();
+        currentController.PawnAwake(this);
     }
 
     private void Update()
     {
+        gameInstance = FindObjectOfType<GameInstance>();
         CheckCameraState();
+        if (isDead) return;
+        currentController.PawnUpdate(this);
     }
+
+    private void FixedUpdate()
+    {
+        if (isDead) return;
+        currentController.PawnFixedUpdate(this);
+    }
+    
 
     //=-----------------=
     // Internal Functions
@@ -69,6 +81,21 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public bool IsGrounded3D()
+    {
+        return Physics.CheckSphere(transform.position - new Vector3(0, 0, 0), 0.4f, groundMask);
+    }
+
+    public void Move(Vector3 _movement, string _mode)
+    {
+        if (_mode == "translate") transform.Translate(_movement * (currentState.movementSpeed * Time.deltaTime));
+    }
+    
+    public void Move(Vector3 _movement, string _mode, float _movementSpeed)
+    {
+        if (_mode == "translate") transform.Translate(_movement * (_movementSpeed * Time.deltaTime));
+    }
+    
     public void Hurt()
     {
         // Damages the pawn by a specified amount
