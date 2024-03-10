@@ -180,12 +180,17 @@ public class GameInstance : MonoBehaviour
         }
     }
 
+    public void UI_ShowLevelEditor()
+    {
+        AddWidget(UserInterfaceWidgets[3]);
+    }
+
     // This function requires a check for the existing menu due to it being re-created in the testing mode in the level editor scene
     public void UI_ShowHUD()
     {
         if (GetWidget("WB_HUD") == null)
         {
-            AddWidget(UserInterfaceWidgets[3]);
+            AddWidget(UserInterfaceWidgets[4]);
         }
         else
         {
@@ -197,7 +202,7 @@ public class GameInstance : MonoBehaviour
     {
         if (GetWidget("WB_Inventory") == null)
         {
-            AddWidget(UserInterfaceWidgets[4]); SetAllPawnsIsPaused(true);
+            AddWidget(UserInterfaceWidgets[5]); SetAllPawnsIsPaused(true);
         }
         else
         {
