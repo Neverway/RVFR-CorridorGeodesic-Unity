@@ -5,22 +5,15 @@
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateData
+public class Volume2D_Damage : Volume2D
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
+    [Tooltip("The amount of damage to deal to an entity within the trigger. (Value can be negative to heal)")]
+    public float damageAmount;
 
 
     //=-----------------=
@@ -36,6 +29,21 @@ public class PlayerStateData
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Update()
+    {
+        foreach (var entity in pawnsInTrigger)
+        {
+            if (owningTeam == "")
+            {
+                entity.ModifyHealth(-damageAmount);
+            }
+            else
+            {
+                if (entity.currentState.team == owningTeam && damageAmount < 0) entity.ModifyHealth(-damageAmount);
+                else if (entity.currentState.team != owningTeam && damageAmount > 0) entity.ModifyHealth(-damageAmount);
+            }
+        }
+    }
 
     //=-----------------=
     // Internal Functions
@@ -45,13 +53,4 @@ public class PlayerStateData
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
 }

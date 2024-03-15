@@ -5,22 +5,19 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class PlayerStateData
+[RequireComponent(typeof(TMP_Text))]
+public class UI_Text_PawnName : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
+    public Pawn targetPawn;
+    public bool findPossessedPawn;
 
 
     //=-----------------=
@@ -36,22 +33,36 @@ public class PlayerStateData
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Update()
+    {
+        if (findPossessedPawn)
+        {
+            targetPawn = FindPossessedPawn();
+        }
+        if (targetPawn)
+        {
+            GetComponent<TMP_Text>().text = targetPawn.currentState.characterName;
+        }
+        else
+        {
+            GetComponent<TMP_Text>().text = "---";
+        }
+    }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private Pawn FindPossessedPawn()
+    {
+        foreach (var entity in FindObjectsByType<Pawn>(FindObjectsSortMode.None))
+        {
+            if (entity.isPossessed) return entity;
+        }
+        return null;
+    }
 
 
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
 }

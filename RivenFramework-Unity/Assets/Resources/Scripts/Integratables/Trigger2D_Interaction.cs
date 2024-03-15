@@ -1,26 +1,20 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Used to trigger the activation of Trigger_Interacts 
+// Notes: The Interaction Trigger Prefab instantiated by an entity
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateData
+public class Trigger2D_Interaction : Volume2D
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
+    public Pawn targetPawn;
 
 
     //=-----------------=
@@ -36,6 +30,7 @@ public class PlayerStateData
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    
 
     //=-----------------=
     // Internal Functions
@@ -45,13 +40,4 @@ public class PlayerStateData
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
 }

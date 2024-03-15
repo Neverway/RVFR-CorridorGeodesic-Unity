@@ -1,26 +1,21 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Exposes variables to control a Light component's properties.
+// Notes: This script requires a Light component attached to the same GameObject.
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateData
+[RequireComponent(typeof(Light))]
+public class Object_VariableExposer_Light : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
+    public float intensity;
+    public float range;
+    public float colorRed, colorGreen, colorBlue;
 
 
     //=-----------------=
@@ -31,12 +26,25 @@ public class PlayerStateData
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private Light targetLight;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+        targetLight = GetComponent<Light>();
+    }
 
+    private void Update()
+    {
+        targetLight.intensity = intensity;
+        targetLight.range = range;
+        targetLight.color = new Color(colorRed, colorGreen, colorBlue);
+    }
+
+    
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -45,13 +53,4 @@ public class PlayerStateData
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
 }

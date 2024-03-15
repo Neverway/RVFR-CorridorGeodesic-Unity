@@ -19,17 +19,16 @@ public class Pawn : MonoBehaviour
     public PlayerState defaultState;
     public PlayerStateData currentState = new PlayerStateData();
 
-    public string team;
-    
     public bool isPossessed;
     public bool isPaused;
     public bool wasPaused; // used to restore a paused state when all pawns isPaused state is modified by the game instance
     public bool isInvulnerable;
     public bool isDead;
+    public bool isNearInteractable; // Imported from old system
 
-    public event Action OnEntityHurt;
-    public event Action OnEntityHeal;
-    public event Action OnEntityDeath;
+    public event Action OnPawnHurt;
+    public event Action OnPawnHeal;
+    public event Action OnPawnDeath;
     
     [Tooltip("The collision layers that will be checked when testing if the entity is grounded")]
     [SerializeField] private LayerMask groundMask;
@@ -44,6 +43,7 @@ public class Pawn : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private GameInstance gameInstance;
+    public Quaternion faceDirection; // Imported from old system
 
 
     //=-----------------=
@@ -85,6 +85,13 @@ public class Pawn : MonoBehaviour
         }
     }
 
+    private IEnumerator InvulnerabilityCooldown()
+    {
+        isInvulnerable = true;
+        yield return new WaitForSeconds(1);
+        isInvulnerable = false;
+    }
+
 
     //=-----------------=
     // External Functions
@@ -111,21 +118,40 @@ public class Pawn : MonoBehaviour
         if (_mode == "translate") transform.Translate(_movement * (_movementSpeed * Time.deltaTime));
     }
     
-    public void Hurt()
+    public void ModifyHealth(float _value)
     {
-        // Damages the pawn by a specified amount
-        if (isInvulnerable || isDead) return;
-    }
+        if (isInvulnerable) return;
+        StartCoroutine(InvulnerabilityCooldown());
+        switch (_value)
+        {
+            case > 0:
+                OnPawnHeal?.Invoke();
+                isDead = false;
+                if (currentState.sounds.heal) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.sounds.heal);
+                break;
+            case < 0:
+                if (isDead) return;
+                OnPawnHurt?.Invoke();
+                if (currentState.sounds.hurt) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.sounds.hurt);
+                break;
+        }
 
-    public void Heal()
-    {
-        // Heals the pawn by a specified amount
-        if (isInvulnerable || isDead) return;
+        if (currentState.health + _value <= 0)
+        {
+            if (isDead) return;
+            GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.sounds.death);
+            OnPawnDeath?.Invoke();
+            isDead = true;
+        }
+
+        if (currentState.health + _value > currentState.health) currentState.health = defaultState.data.health;
+        else if (currentState.health + _value < 0) currentState.health = 0;
+        else currentState.health += _value;
     }
 
     public void Kill()
     {
-        // Instantly sets the pawns health to zero, firing it's onDeath event
+        // Instantly sets the pawns health to zero, firing its onDeath event
     }
     
     public void GetPawnController()

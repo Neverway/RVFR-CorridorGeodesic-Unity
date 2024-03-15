@@ -5,22 +5,17 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateData
+[RequireComponent(typeof(SpriteRenderer))]
+public class Sprite_DataExposer : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
+    public string spriteOverride;
 
 
     //=-----------------=
@@ -31,11 +26,23 @@ public class PlayerStateData
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private SpriteRenderer spriteRenderer;
+    private LevelManager levelManager;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        levelManager = FindObjectOfType<LevelManager>();
+    }
+
+    private void Update()
+    {
+        spriteRenderer.sprite = levelManager.GetSpriteFromMemory(spriteOverride);
+    }
 
     //=-----------------=
     // Internal Functions
@@ -45,13 +52,4 @@ public class PlayerStateData
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
 }

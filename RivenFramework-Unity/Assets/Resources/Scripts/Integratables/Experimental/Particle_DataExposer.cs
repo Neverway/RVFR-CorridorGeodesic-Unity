@@ -5,22 +5,19 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateData
+[RequireComponent(typeof(ParticleSystem))]
+public class Particle_DataExposer : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
+    public float scaleX;
+    public float scaleY;
+    public float scaleZ;
 
 
     //=-----------------=
@@ -31,12 +28,23 @@ public class PlayerStateData
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private ParticleSystem particalEmmiter;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+        particalEmmiter = GetComponent<ParticleSystem>();
+    }
 
+    private void Update()
+    {
+        var shape = particalEmmiter.shape;
+        shape.scale = new Vector3(scaleX, scaleY, scaleZ);
+    }
+    
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -45,13 +53,4 @@ public class PlayerStateData
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
 }

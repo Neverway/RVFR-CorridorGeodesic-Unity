@@ -5,27 +5,23 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateData
+public class Volume2D_LoadMap : Volume2D
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
+    public string levelID;
+    public float exitOffsetX, exitOffsetY;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
+    private Vector3 exitOffset;
 
 
     //=-----------------=
@@ -36,6 +32,16 @@ public class PlayerStateData
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private new void OnTriggerEnter2D(Collider2D _other)
+    {
+        base.OnTriggerEnter2D(_other); // Call the base class method
+        if (_other.CompareTag("Pawn") && GetPlayerInTrigger())
+        {
+            exitOffset = new Vector3(exitOffsetX, exitOffsetY);
+            targetEnt.transform.position += exitOffset;
+            FindObjectOfType<LevelManager>().LoadLevelFromMemory(levelID);
+        }
+    }
 
     //=-----------------=
     // Internal Functions
@@ -45,13 +51,4 @@ public class PlayerStateData
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
 }

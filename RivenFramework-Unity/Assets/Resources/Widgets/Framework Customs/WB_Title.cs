@@ -27,7 +27,7 @@ public class WB_Title : MonoBehaviour
     //=-----------------=
     private GameInstance gameInstance;
     private WorldLoader worldLoader;
-    private LevelLoader levelLoader; // Added for loading the overworld levels from Cartographer
+    private LevelManager levelLoader; // Added for loading the overworld levels from Cartographer
     [SerializeField] private Button buttonMainGame, buttonExtras, buttonRanking, buttonSettings, buttonQuit;
     [SerializeField] private GameObject extrasWidget, rankingWidget, settingsWidget;
 
@@ -39,7 +39,7 @@ public class WB_Title : MonoBehaviour
     {
         gameInstance = FindObjectOfType<GameInstance>();
         worldLoader = FindObjectOfType<WorldLoader>();
-        levelLoader = FindObjectOfType<LevelLoader>();
+        levelLoader = FindObjectOfType<LevelManager>();
         buttonMainGame.onClick.AddListener(delegate { OnClick("buttonMainGame"); });
         buttonExtras.onClick.AddListener(delegate { OnClick("buttonExtras"); });
         buttonRanking.onClick.AddListener(delegate { OnClick("buttonRanking"); });
@@ -61,7 +61,7 @@ public class WB_Title : MonoBehaviour
         {
             case "buttonMainGame":
                 if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
-                if (!levelLoader) levelLoader = FindObjectOfType<LevelLoader>();
+                if (!levelLoader) levelLoader = FindObjectOfType<LevelManager>();
                 worldLoader.LoadWorld("World");
                 // levelLoader.Load("", true); // Replace with function to load save file level
                 break;

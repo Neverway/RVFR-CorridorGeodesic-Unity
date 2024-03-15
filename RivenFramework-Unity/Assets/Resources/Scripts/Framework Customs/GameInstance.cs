@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameInstance : MonoBehaviour
 {
@@ -58,41 +59,40 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     // Core External Functions
     //=-----------------=
-    /*
-    public void CreateNewPlayerCharacter(Gamemode _gamemode)
+    public void CreateNewPlayerCharacter(GameMode _gamemode)
     {
         // NEED FUNCTION TO FIND VALID PLAYER START POINT
         var startpoint = GetPlayerStartPoint().transform;
-        localPlayerCharacter = Instantiate(_gamemode.playerCharacter, startpoint.position, startpoint.rotation)
-            .GetComponent<Entity>();
+        localPlayerCharacter = Instantiate(_gamemode.defaultPawnClass, startpoint.position, startpoint.rotation)
+            .GetComponent<Pawn>();
         localPlayerCharacter.isPossessed = false;
         localPlayerCharacter.name = localPlayerCharacter.name.Replace("(Clone)", "").Trim();
     }
 
-    public void CreateNewPlayerCharacter(Gamemode _gamemode, bool _isLocalPlayer)
+    public void CreateNewPlayerCharacter(GameMode _gamemode, bool _isLocalPlayer)
     {
         // NEED FUNCTION TO FIND VALID PLAYER START POINT
         var startpoint = GetPlayerStartPoint().transform;
-        localPlayerCharacter = Instantiate(_gamemode.playerCharacter, startpoint.position, startpoint.rotation)
-            .GetComponent<Entity>();
+        localPlayerCharacter = Instantiate(_gamemode.defaultPawnClass, startpoint.position, startpoint.rotation)
+            .GetComponent<Pawn>();
         localPlayerCharacter.isPossessed = _isLocalPlayer;
         localPlayerCharacter.name = localPlayerCharacter.name.Replace("(Clone)", "").Trim();
     }
 
-    public void CreateNewPlayerCharacter(Gamemode _gamemode, bool _isLocalPlayer, bool _usePlayerStart)
+    public void CreateNewPlayerCharacter(GameMode _gamemode, bool _isLocalPlayer, bool _usePlayerStart)
     {
         // NEED FUNCTION TO FIND VALID PLAYER START POINT
         if (_usePlayerStart && FindObjectOfType<PlayerStart>())
         {
             var startpoint = GetPlayerStartPoint().transform;
-            localPlayerCharacter = Instantiate(_gamemode.playerCharacter, startpoint.position, startpoint.rotation)
-                .GetComponent<Entity>();
+            localPlayerCharacter = Instantiate(_gamemode.defaultPawnClass, startpoint.position, startpoint.rotation)
+                .GetComponent<Pawn>();
         }
         else
         {
             localPlayerCharacter =
-                Instantiate(_gamemode.playerCharacter, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0))
-                    .GetComponent<Entity>();
+                Instantiate(_gamemode.defaultPawnClass, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0))
+                    .GetComponent<Pawn>();
         }
 
         localPlayerCharacter.isPossessed = _isLocalPlayer;
@@ -115,7 +115,6 @@ public class GameInstance : MonoBehaviour
     {
         return localPlayerCharacter.currentController.ToString();
     }
-    */
     public static void AddWidget(GameObject _widgetBlueprint)
     {
         var canvas = GameObject.FindWithTag("UserInterface");

@@ -1,26 +1,18 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Updates a TextMeshPro text component with the current project version.
+// Notes: This script assumes TextMeshPro is used for displaying text.
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class PlayerStateData
+public class Text_ProjectVersion : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
 
 
     //=-----------------=
@@ -31,12 +23,19 @@ public class PlayerStateData
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private TMP_Text tmpText;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+	    tmpText = GetComponent<TMP_Text>();
+        tmpText.text = Application.version;
+    }
 
+    
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -45,13 +44,4 @@ public class PlayerStateData
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
 }

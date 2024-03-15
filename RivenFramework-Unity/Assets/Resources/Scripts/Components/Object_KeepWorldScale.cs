@@ -5,27 +5,21 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateData
+public class Object_KeepWorldScale : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
+    private Vector3 initialScale;
 
 
     //=-----------------=
@@ -36,6 +30,27 @@ public class PlayerStateData
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    void Start()
+    {
+        // Record the initial scale of the sprite
+        initialScale = transform.localScale;
+    }
+
+    void LateUpdate()
+    {
+        // Get the parent's scale
+        Vector3 parentScale = transform.parent.localScale;
+
+        // Calculate the inverse scale factor
+        Vector3 inverseScale = new Vector3(
+            1f / parentScale.x,
+            1f / parentScale.y,
+            1f / parentScale.z
+        );
+
+        // Apply the inverse scale to the sprite
+        transform.localScale = Vector3.Scale(initialScale, inverseScale);
+    }
 
     //=-----------------=
     // Internal Functions
@@ -45,13 +60,4 @@ public class PlayerStateData
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
 }

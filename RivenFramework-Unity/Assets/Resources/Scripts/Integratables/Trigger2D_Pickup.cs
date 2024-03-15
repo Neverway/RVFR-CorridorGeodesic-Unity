@@ -5,22 +5,18 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateData
+public class Trigger2D_Pickup : Volume2D
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string characterName;
-    public float health = 100;
-    public float movementSpeed = 5; // Please do not delete me, I am valuable. Feel free to add more variables here though. 
-    public string team;
-    public RuntimeAnimatorController animator;
-    public Sounds sounds;
+    public string itemID;
+    public Item item;
+    public bool useItemIDOverride;
 
 
     //=-----------------=
@@ -31,11 +27,22 @@ public class PlayerStateData
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+    
+    }
+
+    private void Update()
+    {
+        if (useItemIDOverride) item = FindObjectOfType<LevelManager>().GetItemFromMemory(itemID);
+        if (spriteRenderer && item) spriteRenderer.sprite = item.inventoryIcon;
+    }
 
     //=-----------------=
     // Internal Functions
@@ -45,13 +52,11 @@ public class PlayerStateData
     //=-----------------=
     // External Functions
     //=-----------------=
-}
-
-[Serializable]
-public class Sounds
-{
-    public AudioClip hurt;
-    public AudioClip heal;
-    public AudioClip death;
-    public AudioClip alerted;
+    public void activate()
+    {
+        if (GetPlayerInTrigger().GetComponent<Pawn_Inventory>().AddItem(item))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
