@@ -1,7 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
 // Purpose:
-// Notes: Adding a test comment for framework merging test
+// Notes: 
 //
 //=============================================================================
 
@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LB_Title_Test : MonoBehaviour
+public class LB_Title : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
