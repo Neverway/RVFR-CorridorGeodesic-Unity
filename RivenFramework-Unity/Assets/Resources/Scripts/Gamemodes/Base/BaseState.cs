@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="BaseState", menuName="Neverway/ScriptableObjects/Controllers/BaseState")]
+[CreateAssetMenu(fileName="BaseState", menuName="Neverway/ScriptableObjects/States/BaseState")]
 public class BaseState : PlayerState
 {
     //=-----------------=
