@@ -60,7 +60,7 @@ public class LevelManager : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnSceneLoaded(Scene _scene, LoadSceneMode _mode)
     {
         InitializeSceneReferences();
     }
@@ -68,9 +68,9 @@ public class LevelManager : MonoBehaviour
     private void InitializeSceneReferences()
     {
         tilemaps.Clear();
-        if (tilemaps.Count == 0 && GameObject.FindWithTag("Map_Tilemaps"))
+        if (tilemaps.Count == 0 && GameObject.FindWithTag("TilemapContainer"))
         {
-            var tileMapGroups = GameObject.FindWithTag("Map_Tilemaps").transform;
+            var tileMapGroups = GameObject.FindWithTag("TilemapContainer").transform;
             for (int i = 0; i < tileMapGroups.childCount; i++)
             {
                 for (int ii = 0; ii < tileMapGroups.GetChild(i).childCount; ii++)
@@ -79,10 +79,10 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
-        if (!assetsRoot) assetsRoot = GameObject.FindGameObjectWithTag("Map_Assets");
+        if (!assetsRoot) assetsRoot = GameObject.FindGameObjectWithTag("AssetContainer");
     }
     
-    private IEnumerator ShowFileDialogCoroutine(string mode)
+    private IEnumerator ShowFileDialogCoroutine(string _mode)
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter("CT Maps", ".ctmap"));
         FileBrowser.AddQuickLink("Data Path", Application.persistentDataPath);
@@ -96,13 +96,13 @@ public class LevelManager : MonoBehaviour
         {
             startingPath = Application.dataPath + "/Resources/Maps/";
         }
-        // Load maps while in the a built application
+        // Load maps while in the built application
         if (Directory.Exists($"{Application.dataPath}/Maps"))
         {
             startingPath = Application.dataPath + "/Maps/";
         }
 
-        yield return mode switch
+        yield return _mode switch
         {
             "Load" => FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.FilesAndFolders, false, startingPath, null, "Load Cartographer Map File", "Load"),
             "Save" => FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.FilesAndFolders, false, startingPath, null, "Save Cartographer Map File", "Save"),
@@ -111,7 +111,7 @@ public class LevelManager : MonoBehaviour
 
         if (!FileBrowser.Success) yield break;
         filePath = FileBrowser.Result[0];
-        switch (mode)
+        switch (_mode)
         {
             case "Load":
                 LoadLevel(filePath);
@@ -359,7 +359,7 @@ public class LevelManager : MonoBehaviour
         {
             LoadLevel($"{Application.dataPath}/Resources/Maps/{_levelID}.ctmap");
         }
-        // Load maps while in the a built application
+        // Load maps while in the built application
         if (Directory.Exists($"{Application.dataPath}/Maps"))
         {
             LoadLevel($"{Application.dataPath}/Maps/{_levelID}.ctmap");
@@ -368,31 +368,31 @@ public class LevelManager : MonoBehaviour
     }
     
     
-    public void ModifyLevelFile(string mode)
+    public void ModifyLevelFile(string _mode)
     {
-        StartCoroutine(ShowFileDialogCoroutine(mode));
+        StartCoroutine(ShowFileDialogCoroutine(_mode));
     }
 
-    public Tile GetTileFromMemory(string tileID)
+    public Tile GetTileFromMemory(string _tileID)
     {
         foreach (var tileMemoryGroup in tileMemory)
         {
             foreach (var tile in tileMemoryGroup.tiles)
             {
-                if (tile.name == tileID) return tile;
+                if (tile.name == _tileID) return tile;
             }
         }
 
         return null;
     }
 
-    public GameObject GetAssetFromMemory(string assetID)
+    public GameObject GetAssetFromMemory(string _assetID)
     {
         foreach (var assetMemoryGroup in assetMemory)
         {
             foreach (var asset in assetMemoryGroup.assets)
             {
-                if (asset.name == assetID) return asset;
+                if (asset.name == _assetID) return asset;
             }
         }
 
