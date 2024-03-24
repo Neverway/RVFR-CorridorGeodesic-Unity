@@ -51,6 +51,8 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     private void Awake()
     {
+        // initialize currentState;
+        currentState = defaultState.data;
         currentController.PawnAwake(this);
     }
 
@@ -163,5 +165,12 @@ public class Pawn : MonoBehaviour
     public void SetPawnController()
     {
         // Sets the type of controller that is possessing this pawn
+    }
+
+    public void SetPawnDefaultState(PlayerState _playerState)
+    {
+        // Sets the type of character
+        defaultState = _playerState;
+        currentState = defaultState.data;
     }
 }
