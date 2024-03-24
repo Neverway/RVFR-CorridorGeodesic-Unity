@@ -23,7 +23,7 @@ public class PlayerState : ScriptableObject
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public PlayerStateData data;
+    public PlayerStateData data = new PlayerStateData();
 
 
     //=-----------------=
