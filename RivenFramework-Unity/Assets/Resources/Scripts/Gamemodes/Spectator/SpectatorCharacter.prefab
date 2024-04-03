@@ -47,15 +47,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentController: {fileID: 11400000, guid: 7e616717ea1f6e2f6bdb90d053a662cf, type: 2}
   defaultState: {fileID: 11400000, guid: 69ba6f49b62c5c445869f4853ec2e6b7, type: 2}
-  team: 
+  currentState:
+    characterName: 
+    health: 100
+    movementSpeed: 5
+    team: 
+    animator: {fileID: 0}
+    sounds:
+      hurt: {fileID: 0}
+      heal: {fileID: 0}
+      death: {fileID: 0}
+      alerted: {fileID: 0}
   isPossessed: 0
   isPaused: 0
   wasPaused: 0
   isInvulnerable: 0
   isDead: 0
+  isNearInteractable: 0
   groundMask:
     serializedVersion: 2
     m_Bits: 0
+  faceDirection: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3708908881907885430
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +135,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:

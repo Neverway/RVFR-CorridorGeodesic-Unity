@@ -80,7 +80,7 @@ public class WB_LevelEditor : MonoBehaviour
     // Serialized Fields
     [SerializeField] private GameMode testingGamemode;
     [SerializeField] private TMP_Text topbarTitle;
-    [SerializeField] private TMP_Text sidebarTitle;
+    //[SerializeField] private TMP_Text sidebarTitle; // No longer needed since sidebar is now seperated
     [SerializeField] private Button[] fileButtons, viewButtons, helpButtons, filebarButtons, toolbarButtons, hotbarButtons, layerButtons, sublayerButtons, layerVisibilityButtons;
     [SerializeField] private Button clearHotbarButton, toggleInventoryButton;
     [SerializeField] private GameObject tileCursor, inspectionIndicator, shapePainterIndicator, shapePainterIndicatorPrefab;
@@ -155,7 +155,7 @@ public class WB_LevelEditor : MonoBehaviour
         fileButtons[2].onClick.AddListener(SaveCurrentMap);
         if (!levelManager) levelManager = FindObjectOfType<LevelManager>();
         fileButtons[3].onClick.AddListener(() => { levelManager.ModifyLevelFile("Save"); });
-        fileButtons[6].onClick.AddListener(Application.Quit);
+        fileButtons[4].onClick.AddListener(Application.Quit);
 
         // Help buttons
         foreach (var helpButton in helpButtons)
@@ -318,8 +318,8 @@ public class WB_LevelEditor : MonoBehaviour
         topbarTitle.text = topBarTitleText;
 
         // Update sidebar title
-        string sidebarTitleText = GetSidebarTitleText();
-        sidebarTitle.text = sidebarTitleText;
+        //string sidebarTitleText = GetSidebarTitleText();
+        //sidebarTitle.text = sidebarTitleText;
     }
 
     /// <summary>
@@ -346,14 +346,14 @@ public class WB_LevelEditor : MonoBehaviour
         return _filePath.Substring(lastIndex + 1);
     }
 
-    /// <summary>
+    /*/// <summary>
     /// Retrieves the text for the sidebar title based on the current tool.
     /// </summary>
     /// <returns>The text for the sidebar title.</returns>
     private string GetSidebarTitleText()
     {
         return currentTool == "paint" ? "Layers" : "Inspector";
-    }
+    }*/
 
 
     /// <summary>
@@ -604,7 +604,13 @@ public class WB_LevelEditor : MonoBehaviour
     /// </summary>
     private void UpdateCursorPosition()
     {
+        if (!viewCamera)
+        {
+            print("Unassigned");
+            return;
+        }
         cursorPos = viewCamera.ScreenToWorldPoint(Input.mousePosition);
+        print(viewCamera.ScreenToWorldPoint(Input.mousePosition));
     }
 
     /// <summary>

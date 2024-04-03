@@ -5,13 +5,19 @@
 //
 //=============================================================================
 
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class LB_LevelEditor : MonoBehaviour
+public class WB_LevelEditor_MemoryBrowser_Item : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public string tileID;
+    public Sprite tileSprite;
 
 
     //=-----------------=
@@ -22,7 +28,6 @@ public class LB_LevelEditor : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private GameInstance gameInstance;
 
 
     //=-----------------=
@@ -30,11 +35,8 @@ public class LB_LevelEditor : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-        gameInstance = FindObjectOfType<GameInstance>();
-        // I'm removing this and just making the Widget be pre-instantiated since the LevelEditor widget has SO MANY DANG REFERENCES IN THE CURRENT SCENE (P.S Don't tell Kevin)
-        // (Screw you past me!) ~Liz
-        // Oh boo-hoo, it's four references you dope! ~Future Liz
-        //gameInstance.UI_ShowLevelEditor();
+        transform.GetChild(0).GetComponent<Image>().sprite = tileSprite;
+        transform.GetChild(2).GetComponent<TMP_Text>().text = tileID;
     }
     
 
@@ -46,4 +48,9 @@ public class LB_LevelEditor : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void SendTileToHotbar()
+    {
+        var LevelEditorWidget = FindObjectOfType<WB_LevelEditor>();
+        LevelEditorWidget.SetCurrentHotBarTile(tileID);
+    }
 }
