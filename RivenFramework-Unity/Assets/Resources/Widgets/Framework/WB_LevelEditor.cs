@@ -606,11 +606,9 @@ public class WB_LevelEditor : MonoBehaviour
     {
         if (!viewCamera)
         {
-            print("Unassigned");
             return;
         }
         cursorPos = viewCamera.ScreenToWorldPoint(Input.mousePosition);
-        print(viewCamera.ScreenToWorldPoint(Input.mousePosition));
     }
 
     /// <summary>
