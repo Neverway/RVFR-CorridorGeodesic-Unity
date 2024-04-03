@@ -343,7 +343,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -10.308907}
+  m_SizeDelta: {x: 0, y: -795}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5359110204921714638
 CanvasRenderer:
@@ -5844,7 +5844,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6908676308806698429}
+    - targetCorrespondingSourceObject: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8271322451907876976}
+    - targetCorrespondingSourceObject: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5848723471276762674}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
 --- !u!224 &3414587928264063503 stripped
@@ -9029,7 +9038,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6510732463864050916}
+    m_TransformParent: {fileID: 3414587928264063503}
     m_Modifications:
     - target: {fileID: 6528802222171230684, guid: 65213ca033cf463c3ac6e2e39d60ecb1, type: 3}
       propertyPath: m_Name
@@ -15224,7 +15233,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6510732463864050916}
+    m_TransformParent: {fileID: 3414587928264063503}
     m_Modifications:
     - target: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
       propertyPath: m_Pivot.x
@@ -22438,6 +22447,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8429975481611810465, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -22465,15 +22478,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6449307436896347654}
-    - targetCorrespondingSourceObject: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6908676308806698429}
-    - targetCorrespondingSourceObject: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8271322451907876976}
-    - targetCorrespondingSourceObject: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5848723471276762674}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
 --- !u!224 &6510732463864050916 stripped
@@ -22818,7 +22822,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 2217247417603525543}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -22894,6 +22898,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2217247417603525543 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8429975481611810465, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
+  m_PrefabInstance: {fileID: 7653995995898871046}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257507684965280664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6449307436896347654 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
@@ -23236,7 +23251,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6510732463864050916}
+    m_TransformParent: {fileID: 3414587928264063503}
     m_Modifications:
     - target: {fileID: 3727008240746994432, guid: d8cd0ba81da845732b355b2a4f74477a, type: 3}
       propertyPath: m_Pivot.x
