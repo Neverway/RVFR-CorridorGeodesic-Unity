@@ -11,7 +11,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="CharacterData", menuName="Neverway/ScriptableObjects")]
 public class CharacterData : DataObject
 {
-    public string name;
+    public string objectName;
     public float health;
     public float movementSpeed;
     public string team;
