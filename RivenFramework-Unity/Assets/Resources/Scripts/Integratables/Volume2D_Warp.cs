@@ -44,14 +44,14 @@ public class Volume2D_Warp : Volume2D
         }
         if (_other.CompareTag("PhysProp") && targetProp)
         {
-            if (targetProp.GetComponent<Object_Grabbable>())
+            if (targetProp.gameObject.GetComponent<Object_Grabbable>())
             {
-                if (targetProp.GetComponent<Object_Grabbable>().isHeld)
+                if (targetProp.gameObject.GetComponent<Object_Grabbable>().isHeld)
                 {
                     return;
                 }
             }
-            targetProp.transform.position = GetExitWarp().position+exitOffset;
+            targetProp.gameObject.transform.position = GetExitWarp().position+exitOffset;
         }
     }
 

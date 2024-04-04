@@ -1,7 +1,8 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
-//
-// Purpose:
-// Notes:
+//========== Neverway 2023 Project Script | Written by Unknown Dev ============
+// 
+// Type: 
+// Purpose: 
+// Applied to: 
 //
 //=============================================================================
 
@@ -9,11 +10,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Prop : MonoBehaviour
+[CreateAssetMenu(fileName="Item_Utility_Consumable", menuName="Neverway/ScriptableObjects/Items")]
+public class Item_Utility_Consumable : Item
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public string effect;
+    public float amount;
 
 
     //=-----------------=
@@ -27,19 +31,6 @@ public class Prop : MonoBehaviour
 
 
     //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
-    {
-    
-    }
-
-    private void Update()
-    {
-    
-    }
-
-    //=-----------------=
     // Internal Functions
     //=-----------------=
 
@@ -48,3 +39,4 @@ public class Prop : MonoBehaviour
     // External Functions
     //=-----------------=
 }
+

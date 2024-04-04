@@ -48,7 +48,7 @@ public class UI_Image_PawnItems : MonoBehaviour
                     continue;
                 }
                 imageTargets[i].enabled = true;
-                imageTargets[i].sprite = targetPawn.GetComponent<Pawn_Inventory>().items[i].inventoryIcon;
+                imageTargets[i].sprite = targetPawn.GetComponent<Pawn_Inventory>().items[i].icon;
             }
         }
         else

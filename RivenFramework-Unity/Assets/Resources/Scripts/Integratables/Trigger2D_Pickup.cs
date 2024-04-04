@@ -41,7 +41,7 @@ public class Trigger2D_Pickup : Volume2D
     private void Update()
     {
         if (useItemIDOverride) item = FindObjectOfType<LevelManager>().GetItemFromMemory(itemID);
-        if (spriteRenderer && item) spriteRenderer.sprite = item.inventoryIcon;
+        if (spriteRenderer && item) spriteRenderer.sprite = item.icon;
     }
 
     //=-----------------=

@@ -403,7 +403,7 @@ public class LevelManager : MonoBehaviour
     {
         foreach (var item in itemMemory)
         {
-            if (item.itemName == _itemID) return item;
+            if (item.name == _itemID) return item;
         }
 
         return null;

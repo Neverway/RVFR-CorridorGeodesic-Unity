@@ -75,7 +75,7 @@ public class UI_Image_PawnEquippedItems : MonoBehaviour
 
         for (int i = 0; i < imageTargets.Length; i++)
         {
-            images[i] = targetPawn.GetComponent<Pawn_Inventory>().equippedItems[i]?.inventoryIcon;
+            images[i] = targetPawn.GetComponent<Pawn_Inventory>().equippedItems[i]?.icon;
         }
 
         if (isActionShelf)

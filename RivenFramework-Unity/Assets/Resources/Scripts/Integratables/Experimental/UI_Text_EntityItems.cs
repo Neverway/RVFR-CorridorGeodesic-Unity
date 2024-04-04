@@ -48,7 +48,7 @@ public class UI_Text_PawnItems : MonoBehaviour
                     textTargets[i].text = "---";
                     continue;
                 }
-                textTargets[i].text = targetPawn.GetComponent<Pawn_Inventory>().items[i].itemName;
+                textTargets[i].text = targetPawn.GetComponent<Pawn_Inventory>().items[i].name;
             }
         }
         else

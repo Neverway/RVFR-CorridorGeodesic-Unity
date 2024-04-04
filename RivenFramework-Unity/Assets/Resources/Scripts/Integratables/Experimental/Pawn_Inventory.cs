@@ -149,17 +149,17 @@ public class Pawn_Inventory : MonoBehaviour
             // set the depth layer
             liveItem.GetComponent<Object_DepthAssigner>().depthLayer = GetComponent<Object_DepthAssigner>().depthLayer;
             // set the graphic,
-            liveItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = equippedItems[currentAction].inventoryIcon;
+            liveItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = equippedItems[currentAction].icon;
             // set the damage team,
             liveItem.transform.GetChild(1).GetComponent<Volume2D_Damage>().owningTeam = pawn.currentState.team;
             // set the base damage,
-            liveItem.transform.GetChild(1).GetComponent<Volume2D_Damage>().damageAmount = itemWeapon.baseDamage;
+            liveItem.transform.GetChild(1).GetComponent<Volume2D_Damage>().damageAmount = itemWeapon.damage;
             // set the damage type,
             // Damage trigger does not accept damage type yet
             // set the knock back force,
-            liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().forceStrength = itemWeapon.forceStrength;
+            liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().forceStrength = itemWeapon.knockbackForce;
             // set the knock back delay,
-            liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().removeEffectDelay = itemWeapon.removeForceDelay;
+            liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().removeEffectDelay = itemWeapon.knockbackForceDuration;
             // set the object's life time
             Destroy(liveItem, 0.5f);
             StartCoroutine(UseDelay(0.75f));
@@ -189,7 +189,7 @@ public class Pawn_Inventory : MonoBehaviour
             // set the depth layer
             liveItem.GetComponent<Object_DepthAssigner>().depthLayer = GetComponent<Object_DepthAssigner>().depthLayer;
             // set the graphic,
-            liveItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = equippedItems[currentAction].inventoryIcon;
+            liveItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = equippedItems[currentAction].icon;
             // set the damage team,
             liveItem.transform.GetChild(1).GetComponent<Volume2D_Damage>().owningTeam = pawn.currentState.team;
             // set the base damage,

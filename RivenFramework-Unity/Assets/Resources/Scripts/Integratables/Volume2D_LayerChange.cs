@@ -39,14 +39,14 @@ public class Volume2D_LayerChange : Volume2D
         }
         if (_other.CompareTag("PhysProp") && targetProp)
         {
-            if (targetProp.GetComponent<Object_Grabbable>())
+            if (targetProp.gameObject.GetComponent<Object_Grabbable>())
             {
-                if (targetProp.GetComponent<Object_Grabbable>().isHeld)
+                if (targetProp.gameObject.GetComponent<Object_Grabbable>().isHeld)
                 {
                     return;
                 }
             }
-            SetTargetDepth(targetProp.GetComponent<Object_DepthAssigner>());
+            SetTargetDepth(targetProp.gameObject.GetComponent<Object_DepthAssigner>());
         }
     }
 
