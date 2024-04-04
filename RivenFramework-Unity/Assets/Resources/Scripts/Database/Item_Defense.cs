@@ -9,7 +9,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Item_Defense", menuName="Neverway/ScriptableObjects/Items")]
+[CreateAssetMenu(fileName="Item_Defense", menuName="Neverway/ScriptableObjects/Items/Defense")]
 public class Item_Defense : Item
 {
     //=-----------------=

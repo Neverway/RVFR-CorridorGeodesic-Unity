@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Item_Utility_Consumable", menuName="Neverway/ScriptableObjects/Items")]
+[CreateAssetMenu(fileName="Item_Utility_Consumable", menuName="Neverway/ScriptableObjects/Items/Consumable")]
 public class Item_Utility_Consumable : Item
 {
     //=-----------------=

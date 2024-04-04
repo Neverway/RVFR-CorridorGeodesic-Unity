@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Item_Weapon", menuName="Neverway/ScriptableObjects/Items")]
+[CreateAssetMenu(fileName="Item_Weapon", menuName="Neverway/ScriptableObjects/Items/Weapon")]
 public class Item_Weapon : Item
 {
     //=-----------------=

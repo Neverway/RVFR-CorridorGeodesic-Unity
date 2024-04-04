@@ -8,7 +8,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Prop", menuName="Neverway/ScriptableObjects")]
+[CreateAssetMenu(fileName="Prop", menuName="Neverway/ScriptableObjects/Prop")]
 public class Prop : DataObject
 {
     public GameObject gameObject;

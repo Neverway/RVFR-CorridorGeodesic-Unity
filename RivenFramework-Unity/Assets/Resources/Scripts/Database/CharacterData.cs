@@ -8,7 +8,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="CharacterData", menuName="Neverway/ScriptableObjects")]
+[CreateAssetMenu(fileName="CharacterData", menuName="Neverway/ScriptableObjects/CharacterData")]
 public class CharacterData : DataObject
 {
     public string objectName;
