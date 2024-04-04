@@ -15,4 +15,5 @@ public class CharacterData : DataObject
     public float health;
     public float movementSpeed;
     public string team;
+    public RuntimeAnimatorController animationController;
 }
