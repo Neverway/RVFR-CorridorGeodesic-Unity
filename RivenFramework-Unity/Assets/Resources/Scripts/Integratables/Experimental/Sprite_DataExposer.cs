@@ -27,7 +27,7 @@ public class Sprite_DataExposer : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private SpriteRenderer spriteRenderer;
-    private LevelManager levelManager;
+    private ProjectData projectData;
 
 
     //=-----------------=
@@ -36,12 +36,12 @@ public class Sprite_DataExposer : MonoBehaviour
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        levelManager = FindObjectOfType<LevelManager>();
+        projectData = FindObjectOfType<ProjectData>();
     }
 
     private void Update()
     {
-        spriteRenderer.sprite = levelManager.GetSpriteFromMemory(spriteOverride);
+        spriteRenderer.sprite = projectData.GetSpriteFromMemory(spriteOverride);
     }
 
     //=-----------------=

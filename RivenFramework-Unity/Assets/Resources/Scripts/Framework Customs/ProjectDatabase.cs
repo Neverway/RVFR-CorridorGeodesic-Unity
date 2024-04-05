@@ -17,6 +17,75 @@ public class ProjectData : MonoBehaviour
     public List<PropMemoryGroup> props;
     public List<ItemMemoryGroup> items;
     public List<CharacterMemoryGroup> characters;
+    public List<Sprite> sprites;
+    public Tile missingTileFallback;
+    public GameObject missingObjectFallback;
+    public Sprite missingSpriteFallback;
+
+    public Tile GetTileFromMemory(string _tileId)
+    {
+        foreach (var tileMemoryGroup in tiles)
+        {
+            foreach (var tile in tileMemoryGroup.tiles)
+            {
+                if (tile.name == _tileId) return tile;
+            }
+        }
+
+        return null;
+    }
+
+    public Actor GetActorFromMemory(string _id)
+    {
+        foreach (var actorMemoryGroup in props)
+        {
+            foreach (var asset in actorMemoryGroup.props)
+            {
+                if (asset.id == _id) return asset;
+            }
+        }
+
+        foreach (var actorMemoryGroup in items)
+        {
+            foreach (var asset in actorMemoryGroup.items)
+            {
+                if (asset.id == _id) return asset;
+            }
+        }
+
+        foreach (var actorMemoryGroup in characters)
+        {
+            foreach (var asset in actorMemoryGroup.characters)
+            {
+                if (asset.id == _id) return asset;
+            }
+        }
+
+        return null;
+    }
+
+    public Item GetItemFromMemory(string _itemId)
+    {
+        foreach (var actorMemoryGroup in items)
+        {
+            foreach (var asset in actorMemoryGroup.items)
+            {
+                if (asset.id == _itemId) return asset;
+            }
+        }
+
+        return null;
+    }
+
+    public Sprite GetSpriteFromMemory(string _spriteId)
+    {
+        foreach (var sprite in sprites)
+        {
+            if (sprite.name == _spriteId) return sprite;
+        }
+
+        return null;
+    }
 }
 
 // ---------------------------------------------------------

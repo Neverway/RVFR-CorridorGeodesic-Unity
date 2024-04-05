@@ -16,7 +16,8 @@ public class WB_LevelEditor_MemoryBrowser_Item : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string tileID;
+    public string tileId;
+    public string tileName;
     public Sprite tileSprite;
 
 
@@ -36,7 +37,11 @@ public class WB_LevelEditor_MemoryBrowser_Item : MonoBehaviour
     private void Start()
     {
         transform.GetChild(0).GetComponent<Image>().sprite = tileSprite;
-        transform.GetChild(2).GetComponent<TMP_Text>().text = tileID;
+        transform.GetChild(2).GetComponent<TMP_Text>().text = tileName;
+        if (tileName == "")
+        {
+            transform.GetChild(2).GetComponent<TMP_Text>().text = tileId;
+        }
     }
     
 
@@ -51,6 +56,6 @@ public class WB_LevelEditor_MemoryBrowser_Item : MonoBehaviour
     public void SendTileToHotbar()
     {
         var LevelEditorWidget = FindObjectOfType<WB_LevelEditor>();
-        LevelEditorWidget.SetCurrentHotBarTile(tileID);
+        LevelEditorWidget.SetCurrentHotBarTile(tileId);
     }
 }

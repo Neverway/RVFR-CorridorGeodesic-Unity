@@ -74,6 +74,7 @@ public class WB_LevelEditor : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private LevelManager levelManager;
+    private ProjectData projectData;
     private Camera viewCamera;
     private WB_LevelEditor_Inspector inspector;
 
@@ -119,6 +120,7 @@ public class WB_LevelEditor : MonoBehaviour
     private void Update()
     {
         levelManager = FindObjectOfType<LevelManager>();
+        projectData = FindObjectOfType<ProjectData>();
         // Update UI elements
         UpdateUIElements();
 
@@ -136,6 +138,7 @@ public class WB_LevelEditor : MonoBehaviour
     private void InitializeComponents()
     {
         levelManager = FindObjectOfType<LevelManager>();
+        projectData = FindObjectOfType<ProjectData>();
         viewCamera = FindObjectOfType<Camera>(false);
         inspector = FindObjectOfType<WB_LevelEditor_Inspector>(true);
         currentTilemap = levelManager.tilemaps[0];
@@ -151,9 +154,11 @@ public class WB_LevelEditor : MonoBehaviour
         // File buttons
         fileButtons[0].onClick.AddListener(NewMap);
         if (!levelManager) levelManager = FindObjectOfType<LevelManager>();
+        if (!projectData) projectData = FindObjectOfType<ProjectData>();
         fileButtons[1].onClick.AddListener(() => { levelManager.ModifyLevelFile("Load"); });
         fileButtons[2].onClick.AddListener(SaveCurrentMap);
         if (!levelManager) levelManager = FindObjectOfType<LevelManager>();
+        if (!projectData) projectData = FindObjectOfType<ProjectData>();
         fileButtons[3].onClick.AddListener(() => { levelManager.ModifyLevelFile("Save"); });
         fileButtons[4].onClick.AddListener(Application.Quit);
 
@@ -425,11 +430,11 @@ public class WB_LevelEditor : MonoBehaviour
     {
         if (currentTool == "paint")
         {
-            if (levelManager.GetTileFromMemory(hotBarTileID[currentHotBarIndex]) && !hotBarTileID[currentHotBarIndex].Contains("Collision"))
+            if (projectData.GetTileFromMemory(hotBarTileID[currentHotBarIndex]) && !hotBarTileID[currentHotBarIndex].Contains("Collision"))
                 return new Color(0.17f, 0.65f, 0.27f, 1f);
-            else if (levelManager.GetAssetFromMemory(hotBarTileID[currentHotBarIndex]))
+            else if (projectData.GetActorFromMemory(hotBarTileID[currentHotBarIndex]))
                 return new Color(0.25f, 0.41f, 0.72f, 1f);
-            else if (levelManager.GetTileFromMemory(hotBarTileID[currentHotBarIndex]) && hotBarTileID[currentHotBarIndex].Contains("Collision"))
+            else if (projectData.GetTileFromMemory(hotBarTileID[currentHotBarIndex]) && hotBarTileID[currentHotBarIndex].Contains("Collision"))
                 return new Color(0.55f, 0.22f, 0.22f, 1f);
             else
                 return new Color(0.5f, 0.5f, 0.5f, 0.5f); // Indicates a missing/null paint mode
@@ -447,7 +452,7 @@ public class WB_LevelEditor : MonoBehaviour
     {
         if (currentTool == "paint")
         {
-            return levelManager.GetTileFromMemory(hotBarTileID[currentHotBarIndex]) ? 0.5f : 0f;
+            return projectData.GetTileFromMemory(hotBarTileID[currentHotBarIndex]) ? 0.5f : 0f;
         }
         return 0f; // Default cursor offset
     }
@@ -462,15 +467,15 @@ public class WB_LevelEditor : MonoBehaviour
         {
             // Set sprite for each hotBar tile
             Image hotBarPreview = hotbarButtons[i].transform.GetChild(0).GetComponent<Image>();
-            if (levelManager.GetTileFromMemory(hotBarTileID[i]))
+            if (projectData.GetTileFromMemory(hotBarTileID[i]))
             {
                 hotBarPreview.enabled = true;
-                hotBarPreview.sprite = levelManager.GetTileFromMemory(hotBarTileID[i]).sprite;
+                hotBarPreview.sprite = projectData.GetTileFromMemory(hotBarTileID[i]).sprite;
             }
-            else if (levelManager.GetAssetFromMemory(hotBarTileID[i]))
+            else if (projectData.GetActorFromMemory(hotBarTileID[i]))
             {
                 hotBarPreview.enabled = true;
-                hotBarPreview.sprite = levelManager.GetAssetFromMemory(hotBarTileID[i]).GetComponent<SpriteRenderer>().sprite;
+                hotBarPreview.sprite = projectData.GetActorFromMemory(hotBarTileID[i]).icon;
             }
             else
             {
@@ -488,12 +493,12 @@ public class WB_LevelEditor : MonoBehaviour
     /// </summary>
     private void UpdateCurrentPaintMode()
     {
-        if (levelManager.GetTileFromMemory(hotBarTileID[currentHotBarIndex]))
+        if (projectData.GetTileFromMemory(hotBarTileID[currentHotBarIndex]))
         {
             if (hotBarTileID[currentHotBarIndex].ToLower().Contains("collision")) currentPaintMode = 2;
             else currentPaintMode = 0;
         }
-        else if (levelManager.GetAssetFromMemory(hotBarTileID[currentHotBarIndex]))
+        else if (projectData.GetActorFromMemory(hotBarTileID[currentHotBarIndex]))
         {
             currentPaintMode = 1;
         }
@@ -839,7 +844,7 @@ public class WB_LevelEditor : MonoBehaviour
     {
         Vector3 positionToUse = _position == default ? cursorPos : _position;
 
-        TileBase tile = levelManager.GetTileFromMemory(hotBarTileID[currentHotBarIndex]);
+        TileBase tile = projectData.GetTileFromMemory(hotBarTileID[currentHotBarIndex]);
         Vector3Int position = new Vector3Int((int)MathF.Floor(positionToUse.x), (int)MathF.Floor(positionToUse.y), 0);
         currentTilemap.SetTile(position, tile);
     }
@@ -864,60 +869,17 @@ public class WB_LevelEditor : MonoBehaviour
         }
 
         // Place the current asset at the selected position
-        GameObject asset = levelManager.GetAssetFromMemory(hotBarTileID[currentHotBarIndex]);
+        GameObject asset = projectData.GetActorFromMemory(hotBarTileID[currentHotBarIndex]).AssociatedGameObject;
         float assetZ = asset.transform.position.z + -currentLayer;
         Vector3 assetPosition = new Vector3(MathF.Round(positionToUse.x), MathF.Round(positionToUse.y), assetZ);
         GameObject assetRef = Instantiate(asset, assetPosition, Quaternion.identity, levelManager.assetsRoot.transform);
         assetRef.name = assetRef.name.Replace("(Clone)", "").Trim();
-        //if (assetRef.GetComponent<Asset_UniqueInstanceId>()) assetRef.GetComponent<Asset_UniqueInstanceId>().Id = GetNextAvailableId();
         
         if(!assetRef.GetComponent<Object_DepthAssigner>()) return;
 
         assetRef.GetComponent<Object_DepthAssigner>().depthLayer = currentLayer;
-
-/* OLD DEPTH ASSIGNMENT
-        var assetSortingLayer = assetRef.GetComponent<SpriteRenderer>().sortingLayerName;
         
-        // Assign the object to the correct height layer
-        switch (currentLayer)
-        {
-            case 0:
-                // Set collision layer for all collider on object
-                for (int i = 0; i < assetRef.GetComponentsInChildren<Collider2D>().Length; i++)
-                {
-                    asset.GetComponentsInChildren<Collider2D>()[i].gameObject.layer = 6;
-                }
-                // Set Z depth for lighting
-                assetRef.transform.position = new Vector3(assetRef.transform.position.x, assetRef.transform.position.y, 0);
-                // Set draw layer
-                if (assetSortingLayer == "Trigger" || assetSortingLayer == "NoDraw") break;
-                assetRef.GetComponent<SpriteRenderer>().sortingLayerName = "Depth Layer 1";
-                break;
-            case 1:
-                // Set collision layer for all collider on object
-                for (int i = 0; i < assetRef.GetComponentsInChildren<Collider2D>().Length; i++)
-                {
-                    asset.GetComponentsInChildren<Collider2D>()[i].gameObject.layer = 7;
-                }
-                // Set Z depth for lighting
-                assetRef.transform.position = new Vector3(assetRef.transform.position.x, assetRef.transform.position.y, -1);
-                // Set draw layer
-                if (assetSortingLayer == "Trigger" || assetSortingLayer == "NoDraw") break;
-                assetRef.GetComponent<SpriteRenderer>().sortingLayerName = "Depth Layer 2";
-                break;
-            case 2:
-                // Set collision layer for all colliders on object
-                for (int i = 0; i < assetRef.GetComponentsInChildren<Collider2D>().Length; i++)
-                {
-                    asset.GetComponentsInChildren<Collider2D>()[i].gameObject.layer = 8;
-                }
-                // Set Z depth for lighting
-                assetRef.transform.position = new Vector3(assetRef.transform.position.x, assetRef.transform.position.y, -2);
-                // Set draw layer
-                if (assetSortingLayer == "Trigger" || assetSortingLayer == "NoDraw") break;
-                assetRef.GetComponent<SpriteRenderer>().sortingLayerName = "Depth Layer 3";
-                break;
-        }*/
+        
     }
 
     /// <summary>

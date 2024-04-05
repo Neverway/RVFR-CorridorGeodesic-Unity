@@ -76,7 +76,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
                     continue;
                 }
                 var asset = Instantiate(inventoryTile, inventoryBrowserRoot.transform);
-                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = tileMemory.tiles[i].name;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileId = tileMemory.tiles[i].name;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = tileMemory.tiles[i].sprite;
                 foreach (var spacer in tileMemory.spacers)
                 {
@@ -99,7 +99,8 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
             for (int i = 0; i < propMemory.props.Count; i++)
             {
                 var asset = Instantiate(inventoryTile, inventoryBrowserRoot.transform);
-                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = propMemory.props[i].actorName;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileId = propMemory.props[i].id;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileName = propMemory.props[i].actorName;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = propMemory.props[i].icon;
                 foreach (var spacer in propMemory.spacers)
                 {
@@ -121,7 +122,8 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
             for (int i = 0; i < itemMemory.items.Count; i++)
             {
                 var asset = Instantiate(inventoryTile, inventoryBrowserRoot.transform);
-                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = itemMemory.items[i].actorName;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileId = itemMemory.items[i].id;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileName = itemMemory.items[i].actorName;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = itemMemory.items[i].icon;
                 foreach (var spacer in itemMemory.spacers)
                 {
@@ -143,7 +145,8 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
             for (int i = 0; i < characterMemory.characters.Count; i++)
             {
                 var asset = Instantiate(inventoryTile, inventoryBrowserRoot.transform);
-                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = characterMemory.characters[i].actorName;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileId = characterMemory.characters[i].id;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileName = characterMemory.characters[i].actorName;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = characterMemory.characters[i].icon;
                 foreach (var spacer in characterMemory.spacers)
                 {
