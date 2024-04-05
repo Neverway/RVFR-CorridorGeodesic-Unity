@@ -135,6 +135,28 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
                 }
             }
         }
+        
+        // Create characters
+        CreateHeader("Characters");
+        foreach (var characterMemory in projectData.characters)
+        {
+            for (int i = 0; i < characterMemory.characters.Count; i++)
+            {
+                var asset = Instantiate(inventoryTile, inventoryBrowserRoot.transform);
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = characterMemory.characters[i].actorName;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = characterMemory.characters[i].icon;
+                foreach (var spacer in characterMemory.spacers)
+                {
+                    if (spacer.index == i)
+                    {
+                        for (int j = 0; j < spacer.spacerCount; j++)
+                        {
+                            Instantiate(inventorySpacer, inventoryBrowserRoot.transform);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void CreateHeader(string _title)
