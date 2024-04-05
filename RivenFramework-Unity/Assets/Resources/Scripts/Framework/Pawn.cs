@@ -15,9 +15,8 @@ public class Pawn : MonoBehaviour
     // Public Variables
     //=-----------------=
     public PawnController currentController;
-
-    public PlayerState defaultState;
-    public PlayerStateData currentState = new PlayerStateData();
+    public CharacterData defaultState;
+    public CharacterState currentState;
 
     public bool isPossessed;
     public bool isPaused;
@@ -51,8 +50,7 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     private void Awake()
     {
-        // initialize currentState;
-        currentState = defaultState.data;
+        PassCharacterDataToCurrentState();
         currentController.PawnAwake(this);
     }
 
@@ -93,6 +91,21 @@ public class Pawn : MonoBehaviour
         yield return new WaitForSeconds(1);
         isInvulnerable = false;
     }
+    
+    // ------------------------------------------------------------------
+    // MODIFY ME TO MATCH YOUR CharacterState & CharacterData CLASSES!!!
+    // ------------------------------------------------------------------
+    private void PassCharacterDataToCurrentState()
+    {
+        currentState.characterName = defaultState.objectName;
+        currentState.health = defaultState.health;
+        currentState.movementSpeed = defaultState.movementSpeed;
+        currentState.team = defaultState.team;
+        currentState.animationController = defaultState.animationController;
+        currentState.characterSounds = defaultState.characterSounds;
+        // Add project specific variables below this line!
+    }
+    // ------------------------------------------------------------------
 
 
     //=-----------------=
@@ -129,24 +142,24 @@ public class Pawn : MonoBehaviour
             case > 0:
                 OnPawnHeal?.Invoke();
                 isDead = false;
-                if (currentState.sounds.heal) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.sounds.heal);
+                if (currentState.characterSounds.heal) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.heal);
                 break;
             case < 0:
                 if (isDead) return;
                 OnPawnHurt?.Invoke();
-                if (currentState.sounds.hurt) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.sounds.hurt);
+                if (currentState.characterSounds.hurt) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.hurt);
                 break;
         }
 
         if (currentState.health + _value <= 0)
         {
             if (isDead) return;
-            GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.sounds.death);
+            GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.death);
             OnPawnDeath?.Invoke();
             isDead = true;
         }
 
-        if (currentState.health + _value > currentState.health) currentState.health = defaultState.data.health;
+        if (currentState.health + _value > currentState.health) currentState.health = defaultState.health;
         else if (currentState.health + _value < 0) currentState.health = 0;
         else currentState.health += _value;
     }
@@ -167,10 +180,9 @@ public class Pawn : MonoBehaviour
         // Sets the type of controller that is possessing this pawn
     }
 
-    public void SetPawnDefaultState(PlayerState _playerState)
+    public void SetPawnDefaultState(CharacterState _playerState)
     {
         // Sets the type of character
-        defaultState = _playerState;
-        currentState = defaultState.data;
+        PassCharacterDataToCurrentState();
     }
 }

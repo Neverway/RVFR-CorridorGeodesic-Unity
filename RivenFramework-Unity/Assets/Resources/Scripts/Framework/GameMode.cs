@@ -7,7 +7,7 @@
 
 using UnityEngine;
 
-[CreateAssetMenu(fileName="GameMode", menuName="Neverway/ScriptableObjects/GameMode")]
+[CreateAssetMenu(fileName="GameMode", menuName="Neverway/ScriptableObjects/Pawns & Gamemodes/GameMode")]
 public class GameMode : ScriptableObject
 {
     //=-----------------=

@@ -31,7 +31,7 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     [SerializeField] private List<GameObject> UserInterfaceWidgets;
     public List<PawnController> PlayerControllerClasses;
-    public Pawn localPlayerCharacter;
+    [HideInInspector] public Pawn localPlayerCharacter;
 
     //=-----------------=
     // Mono Functions

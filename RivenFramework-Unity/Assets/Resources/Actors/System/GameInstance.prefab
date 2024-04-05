@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2652268917058259988}
   - component: {fileID: 5702750082381366372}
+  - component: {fileID: 596141195047680743}
   - component: {fileID: 2075546541581668014}
   - component: {fileID: 5917810448728512710}
   - component: {fileID: 8540078363942578872}
-  - component: {fileID: 596141195047680743}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -48,6 +48,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c91a148cf625f2eaa367aed660d096, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &596141195047680743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eeb9ae31fcc62fcb8a2fc0d45270925, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characters: []
+  props: []
+  items: []
 --- !u!114 &2075546541581668014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51a42400077aeaa1dbd51c0e60b52ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultGamemode: {fileID: 11400000, guid: edb522727d8818f1fb5e4b40cf3287d3, type: 2}
+  defaultGamemode: {fileID: 11400000, guid: d57c91470f4a246d49e336cd09fb6286, type: 2}
   UserInterfaceWidgets:
   - {fileID: 1507811972370413053, guid: 02917cc8338914fddbf29dd8046ca0f0, type: 3}
   - {fileID: 1507811972370413053, guid: aebdf1af0319bd15bb1d0ce870060199, type: 3}
@@ -69,8 +84,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   PlayerControllerClasses:
-  - {fileID: 11400000, guid: 19494914a783b9aa49f6822e8a61aa06, type: 2}
-  - {fileID: 11400000, guid: 7e616717ea1f6e2f6bdb90d053a662cf, type: 2}
+  - {fileID: 11400000, guid: 02844299f83062e3688fb3e76ac2692a, type: 2}
+  - {fileID: 11400000, guid: 39e9830e6bc5e60ee9bf7a0a613f8d82, type: 2}
   localPlayerCharacter: {fileID: 0}
 --- !u!114 &5917810448728512710
 MonoBehaviour:
@@ -170,18 +185,3 @@ MonoBehaviour:
   assetsRoot: {fileID: 0}
   filePath: 
   fileBrowserSkin: {fileID: 0}
---- !u!114 &596141195047680743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6048128124110562263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1eeb9ae31fcc62fcb8a2fc0d45270925, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characters: []
-  props: []
-  items: []

@@ -11,6 +11,11 @@
 //  state to not be a SO?" I hear you say. Well my dear sweet coding idiot,
 //  we still need PlayerState to be a SO so we can instance separate character
 //  stats for each type of character. Good effin luck! ~Liz [06:01-Mar09-2024]
+//  
+//  Ah, well past me is an idiot. I have moved CharacterData to be its own SO
+//  class. I am changing this class to now just be called CharacterState since
+//  calling it CharacterStateData would be redundant and also this is for characters
+//  not just for players. Good effin luck! ~Liz [22:47-Apr04-2024]
 //
 //=============================================================================
 
@@ -18,35 +23,14 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class PlayerState : ScriptableObject
+public class CharacterState
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public PlayerStateData data = new PlayerStateData();
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+    // DON'T FORGET TO MODIFY THE Pawn & CharacterData CLASS TO MATCH THIS DATA!!!
+    public string characterName;
+    public float health;
+    public float movementSpeed;
+    public string team;
+    public RuntimeAnimatorController animationController;
+    public CharacterSounds characterSounds;
+    // Add project specific variables below this line!
 }

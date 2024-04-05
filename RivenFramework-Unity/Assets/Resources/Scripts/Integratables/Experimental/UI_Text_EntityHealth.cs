@@ -41,7 +41,7 @@ public class UI_Text_PawnHealth : MonoBehaviour
         }
         if (targetPawn)
         {
-            GetComponent<TMP_Text>().text = $"{(targetPawn.currentState.health/targetPawn.defaultState.data.health)*100}";
+            GetComponent<TMP_Text>().text = $"{(targetPawn.currentState.health/targetPawn.defaultState.health)*100}";
         }
         else
         {

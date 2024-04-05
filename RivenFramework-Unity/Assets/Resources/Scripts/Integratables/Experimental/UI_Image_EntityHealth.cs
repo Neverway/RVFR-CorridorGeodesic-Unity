@@ -42,7 +42,7 @@ public class UI_Image_PawnHealth : MonoBehaviour
         }
         if (targetPawn)
         {
-            GetComponent<Image>().fillAmount = (targetPawn.currentState.health/targetPawn.defaultState.data.health)*100*0.01f;
+            GetComponent<Image>().fillAmount = (targetPawn.currentState.health/targetPawn.defaultState.health)*100*0.01f;
         }
         else
         {
