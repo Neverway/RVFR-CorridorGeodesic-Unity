@@ -26,6 +26,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private LevelManager levelManager;
+    private ProjectData projectData;
     [SerializeField] private GameObject inventoryBrowserRoot, inventoryTile, inventorySpacer;
 
 
@@ -35,6 +36,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
     private void Start()
     {
         levelManager = FindObjectOfType<LevelManager>();
+        projectData = FindObjectOfType<ProjectData>();
     }
 
     private void Update()
@@ -53,6 +55,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
     private void InitializeInventory()
     {
         levelManager = FindObjectOfType<LevelManager>();
+        projectData = FindObjectOfType<ProjectData>();
         
         // Clear inventory
         for (var i = 0; i < inventoryBrowserRoot.transform.childCount; i++)
@@ -61,7 +64,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
         }
         
         // Create tiles
-        foreach (var tileMemory in levelManager.tileMemory)
+        foreach (var tileMemory in projectData.tiles)
         {
             for (int i = 0; i < tileMemory.tiles.Count; i++)
             {
