@@ -11,7 +11,6 @@ using UnityEngine;
 [Serializable]
 public class Item : Actor
 {
-    public string objectName;
     public int stackCount;
     [TextArea] public string description;
     public bool isDiscardable = true;

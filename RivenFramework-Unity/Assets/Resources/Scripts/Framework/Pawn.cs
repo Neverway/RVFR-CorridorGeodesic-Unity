@@ -97,7 +97,7 @@ public class Pawn : MonoBehaviour
     // ------------------------------------------------------------------
     private void PassCharacterDataToCurrentState()
     {
-        currentState.characterName = defaultState.objectName;
+        currentState.characterName = defaultState.actorName;
         currentState.health = defaultState.health;
         currentState.movementSpeed = defaultState.movementSpeed;
         currentState.team = defaultState.team;

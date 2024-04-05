@@ -12,5 +12,6 @@ using UnityEngine;
 
 public class Actor : DataObject
 {
+    public string actorName;
     public GameObject AssociatedGameObject;
 }

@@ -89,15 +89,16 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
             }
         }
         
-        // Create assets
-        foreach (var assetMemory in levelManager.assetMemory)
+        // Create actors
+        // Create props
+        foreach (var propMemory in projectData.props)
         {
-            for (int i = 0; i < assetMemory.props.Count; i++)
+            for (int i = 0; i < propMemory.props.Count; i++)
             {
                 var asset = Instantiate(inventoryTile, inventoryBrowserRoot.transform);
-                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = assetMemory.props[i].name;
-                //asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = assetMemory.props[i].GetComponent<SpriteRenderer>().sprite; // TODO
-                foreach (var spacer in assetMemory.spacers)
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = propMemory.props[i].actorName;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = propMemory.props[i].icon;
+                foreach (var spacer in propMemory.spacers)
                 {
                     if (spacer.index == i)
                     {
