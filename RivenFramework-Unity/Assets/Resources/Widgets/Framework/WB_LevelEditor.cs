@@ -875,6 +875,19 @@ public class WB_LevelEditor : MonoBehaviour
         GameObject assetRef = Instantiate(asset, assetPosition, Quaternion.identity, levelManager.assetsRoot.transform);
         assetRef.name = assetRef.name.Replace("(Clone)", "").Trim();
         
+        // Assign the Actor data to the game object
+        switch (projectData.GetActorType(hotBarTileID[currentHotBarIndex]))
+        {
+            case "prop":
+                break;
+            case "item":
+                asset.GetComponent<Trigger2D_Pickup>().item = projectData.GetItemFromMemory(hotBarTileID[currentHotBarIndex]);
+                break;
+            case "character":
+                asset.GetComponent<Pawn>().SetPawnDefaultState(projectData.GetCharacterFromMemory(hotBarTileID[currentHotBarIndex]));
+                break;
+        }
+        
         if(!assetRef.GetComponent<Object_DepthAssigner>()) return;
 
         assetRef.GetComponent<Object_DepthAssigner>().depthLayer = currentLayer;

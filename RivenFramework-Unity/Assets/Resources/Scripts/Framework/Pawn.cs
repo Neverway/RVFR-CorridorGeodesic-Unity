@@ -180,9 +180,10 @@ public class Pawn : MonoBehaviour
         // Sets the type of controller that is possessing this pawn
     }
 
-    public void SetPawnDefaultState(CharacterState _playerState)
+    public void SetPawnDefaultState(CharacterData _playerState)
     {
         // Sets the type of character
+        defaultState = _playerState;
         PassCharacterDataToCurrentState();
     }
 }

@@ -64,6 +64,19 @@ public class ProjectData : MonoBehaviour
         return null;
     }
 
+    public Prop GetPropFromMemory(string _propId)
+    {
+        foreach (var actorMemoryGroup in props)
+        {
+            foreach (var asset in actorMemoryGroup.props)
+            {
+                if (asset.id == _propId) return asset;
+            }
+        }
+
+        return null;
+    }
+
     public Item GetItemFromMemory(string _itemId)
     {
         foreach (var actorMemoryGroup in items)
@@ -77,12 +90,34 @@ public class ProjectData : MonoBehaviour
         return null;
     }
 
+    public CharacterData GetCharacterFromMemory(string _characterId)
+    {
+        foreach (var actorMemoryGroup in characters)
+        {
+            foreach (var asset in actorMemoryGroup.characters)
+            {
+                if (asset.id == _characterId) return asset;
+            }
+        }
+
+        return null;
+    }
+
     public Sprite GetSpriteFromMemory(string _spriteId)
     {
         foreach (var sprite in sprites)
         {
             if (sprite.name == _spriteId) return sprite;
         }
+
+        return null;
+    }
+
+    public String GetActorType(string _id)
+    {
+        if (GetPropFromMemory(_id)) return "prop";
+        if (GetItemFromMemory(_id)) return "item";
+        if (GetCharacterFromMemory(_id)) return "character";
 
         return null;
     }
