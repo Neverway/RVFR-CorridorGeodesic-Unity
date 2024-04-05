@@ -20,9 +20,9 @@ public class LevelManager : MonoBehaviour
     // Public Variables
     //=-----------------=
     [Tooltip("A list of all the tiles and their categories used for the current project")]
-    public List<tileMemoryGroup> tileMemory;
+    public List<TileMemoryGroup> tileMemory;
     [Tooltip("A list of all the objects and their categories used for the current project")]
-    public List<AssetMemoryGroup> assetMemory;
+    public List<PropMemoryGroup> assetMemory;
     [Tooltip("A list of all the sprites that can be used for decor props for the current project")]
     public List<Sprite> spriteMemory;
     public List<Item> itemMemory;
@@ -176,7 +176,7 @@ public class LevelManager : MonoBehaviour
             GameObject tempAsset = null;
             foreach (var group in assetMemory)
             {
-                if (group.assets.Find(t => t.name == assetsRoot.transform.GetChild(i).gameObject.name))
+                if (group.props.Find(t => t.name == assetsRoot.transform.GetChild(i).gameObject.name))
                 {
                     // If the asset is found in assetMemory, set it as tempAsset
                     tempAsset = assetsRoot.transform.GetChild(i).gameObject;
@@ -246,9 +246,9 @@ public class LevelManager : MonoBehaviour
 
             foreach (var group in assetMemory)
             {
-                if (group.assets.Find(t => t.name == spotdata.id))
+                if (group.props.Find(t => t.name == spotdata.id))
                 {
-                    tempAsset = group.assets.Find(t => t.name == spotdata.id);
+                    //tempAsset = group.props.Find(t => t.name == spotdata.id); // Fix me TODO
                     tempPosition = spotdata.unsnappedPosition;
                     tempData = spotdata.assetData;
                     break;
@@ -390,9 +390,9 @@ public class LevelManager : MonoBehaviour
     {
         foreach (var assetMemoryGroup in assetMemory)
         {
-            foreach (var asset in assetMemoryGroup.assets)
+            foreach (var asset in assetMemoryGroup.props)
             {
-                if (asset.name == _assetID) return asset;
+                if (asset.name == _assetID) return asset.AssociatedGameObject; // TODO
             }
         }
 

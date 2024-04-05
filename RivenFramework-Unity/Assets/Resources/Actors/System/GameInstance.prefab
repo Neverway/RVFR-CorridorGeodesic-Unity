@@ -60,9 +60,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eeb9ae31fcc62fcb8a2fc0d45270925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characters: []
-  props: []
-  items: []
+  tiles:
+  - name: Collision
+    spacers:
+    - index: 2
+      spacerCount: 7
+    - index: 5
+      spacerCount: 7
+    - index: 8
+      spacerCount: 7
+    tiles: []
+  - name: Developer
+    spacers:
+    - index: 4
+      spacerCount: 5
+    - index: 9
+      spacerCount: 5
+    - index: 12
+      spacerCount: 7
+    - index: 17
+      spacerCount: 5
+    - index: 22
+      spacerCount: 5
+    - index: 27
+      spacerCount: 5
+    - index: 32
+      spacerCount: 5
+    - index: 37
+      spacerCount: 5
+    tiles: []
+  assets: []
+  props:
+  - name: Developer
+    spacers:
+    - index: 0
+      spacerCount: 9
+    props:
+    - {fileID: 11400000, guid: 4b487456cd26ed97b9b112f5d214b946, type: 2}
+  items:
+  - name: Developer
+    spacers:
+    - index: 4
+      spacerCount: 5
+    items:
+    - {fileID: 11400000, guid: ea3d34ebc54ea3140b9a4d959f606b67, type: 2}
+    - {fileID: 11400000, guid: 990a17bff84c59c12af408e4be0b5a46, type: 2}
+    - {fileID: 11400000, guid: a354ac0ae18c116c19bd7b1953f46358, type: 2}
+    - {fileID: 11400000, guid: a589b8716202873e586bd56c9aa162ad, type: 2}
+  characters:
+  - name: Developer
+    spacers:
+    - index: 0
+      spacerCount: 9
+    characters:
+    - {fileID: 11400000, guid: f23f77a19ad89b7178adf874fe2818f9, type: 2}
 --- !u!114 &2075546541581668014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,37 +169,15 @@ MonoBehaviour:
   tileMemory: []
   assetMemory:
   - name: System
-    assets:
-    - {fileID: 3601029168914885687, guid: 9ea99651ab07af3c685b598d5845478c, type: 3}
-    - {fileID: 2332245345589349154, guid: 72b8f84df1e78ee4daa2d22fb1423db8, type: 3}
-    - {fileID: 7922057297963016001, guid: b5cde969c3a7060f6b3a3a6914596ff4, type: 3}
-    - {fileID: 7922057297963016001, guid: 720dc80ed508aa6119172c9f8fd52ecb, type: 3}
-    - {fileID: 5613498893214837242, guid: 63027f4529aecb715b1e27e5cf9e9e5c, type: 3}
     spacers:
     - index: 4
       spacerCount: 5
+    props: []
   - name: System2D
-    assets:
-    - {fileID: 7874037791496066305, guid: d53efb56bbdb3ea6f81fbfb15a1f18c5, type: 3}
-    - {fileID: 2978214235260222513, guid: 503dc760a32da895fbff52e5b9d8cdbf, type: 3}
-    - {fileID: 1366982673205350056, guid: 5a90aa7910302f133bf99045528fe940, type: 3}
-    - {fileID: 536351338039600458, guid: e67e8bef31930d089b91891a0fd49767, type: 3}
-    - {fileID: 402553889264491600, guid: 05f69a47527eff2918987acfb6c384d6, type: 3}
-    - {fileID: 402553889264491600, guid: e759ce1ae1b2a171c9c8abf066ebbcdf, type: 3}
-    - {fileID: 402553889264491600, guid: d9bfb174d37943b31a82ff8bfad79861, type: 3}
-    - {fileID: 402553889264491600, guid: 78219aef1bc7d07ffb8a732a0d6d4241, type: 3}
-    - {fileID: 402553889264491600, guid: 03b60e63434803d62b829c486621d22f, type: 3}
-    - {fileID: 402553889264491600, guid: 93a88ec7da38b483e8adfd894ded6c11, type: 3}
-    - {fileID: 402553889264491600, guid: 2f101a6b030afc0ddaf695d46479698d, type: 3}
-    - {fileID: 402553889264491600, guid: 814780c2832c0d143bccb98645d6f59d, type: 3}
-    - {fileID: 402553889264491600, guid: 51bd6ea7b49f6355baa5e12188e1ca0e, type: 3}
-    - {fileID: 402553889264491600, guid: d4b404d2892399bc6bf06545bba9be43, type: 3}
-    - {fileID: 402553889264491600, guid: fbf43e487c02c638c8b7e5333257ff5e, type: 3}
-    - {fileID: 402553889264491600, guid: 9bd029d97f510b6fba6da25965e34b90, type: 3}
-    - {fileID: 402553889264491600, guid: 529381ed5c63ec32ea294ba1a6773ae9, type: 3}
     spacers:
     - index: 16
       spacerCount: 3
+    props: []
   spriteMemory: []
   itemMemory: []
   missingTileFallback: {fileID: 0}

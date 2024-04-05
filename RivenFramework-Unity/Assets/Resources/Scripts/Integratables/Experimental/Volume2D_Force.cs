@@ -47,8 +47,8 @@ public class Volume2D_Force : Volume2D
 	    }
 	    foreach (var prop in propsInTrigger)
 	    {
-		    if (prop) prop.gameObject.GetComponent<Rigidbody2D>().AddForce(transform.right*forceStrengthX, ForceMode2D.Force);
-		    if (prop) prop.gameObject.GetComponent<Rigidbody2D>().AddForce(transform.up*forceStrengthY, ForceMode2D.Force);
+		    if (prop) prop.AssociatedGameObject.GetComponent<Rigidbody2D>().AddForce(transform.right*forceStrengthX, ForceMode2D.Force);
+		    if (prop) prop.AssociatedGameObject.GetComponent<Rigidbody2D>().AddForce(transform.up*forceStrengthY, ForceMode2D.Force);
 	    }
     }
     private new void OnTriggerExit2D(Collider2D _other)

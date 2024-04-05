@@ -9,7 +9,7 @@ using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName="CharacterData", menuName="Neverway/ScriptableObjects/Pawns & Gamemodes/CharacterData")]
-public class CharacterData : DataObject
+public class CharacterData : Actor
 {
     // DON'T FORGET TO MODIFY THE Pawn & CharacterState CLASS TO MATCH THIS DATA!!!
     public string objectName;

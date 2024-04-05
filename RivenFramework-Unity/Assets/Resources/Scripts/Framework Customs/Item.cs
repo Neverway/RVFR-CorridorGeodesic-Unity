@@ -9,7 +9,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class Item : DataObject
+public class Item : Actor
 {
     public string objectName;
     public int stackCount;

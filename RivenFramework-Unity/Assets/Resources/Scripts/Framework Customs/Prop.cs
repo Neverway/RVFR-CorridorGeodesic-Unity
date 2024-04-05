@@ -9,7 +9,7 @@ using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName="Prop", menuName="Neverway/ScriptableObjects/Prop")]
-public class Prop : DataObject
+public class Prop : Actor
 {
-    public GameObject gameObject;
+    
 }

@@ -89,11 +89,11 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
         // Create assets
         foreach (var assetMemory in levelManager.assetMemory)
         {
-            for (int i = 0; i < assetMemory.assets.Count; i++)
+            for (int i = 0; i < assetMemory.props.Count; i++)
             {
                 var asset = Instantiate(inventoryTile, inventoryBrowserRoot.transform);
-                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = assetMemory.assets[i].name;
-                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = assetMemory.assets[i].GetComponent<SpriteRenderer>().sprite;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = assetMemory.props[i].name;
+                //asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = assetMemory.props[i].GetComponent<SpriteRenderer>().sprite; // TODO
                 foreach (var spacer in assetMemory.spacers)
                 {
                     if (spacer.index == i)

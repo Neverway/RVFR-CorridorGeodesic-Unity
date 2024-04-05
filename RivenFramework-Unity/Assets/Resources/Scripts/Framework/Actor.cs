@@ -10,34 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Actor : MonoBehaviour
+public class Actor : DataObject
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+    public GameObject AssociatedGameObject;
 }
