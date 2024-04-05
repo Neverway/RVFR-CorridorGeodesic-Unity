@@ -8,6 +8,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
@@ -27,7 +28,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
     //=-----------------=
     private LevelManager levelManager;
     private ProjectData projectData;
-    [SerializeField] private GameObject inventoryBrowserRoot, inventoryTile, inventorySpacer;
+    [SerializeField] private GameObject inventoryBrowserRoot, inventoryTile, inventorySpacer, inventoryHeader;
 
 
     //=-----------------=
@@ -64,6 +65,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
         }
         
         // Create tiles
+        CreateHeader("Tiles");
         foreach (var tileMemory in projectData.tiles)
         {
             for (int i = 0; i < tileMemory.tiles.Count; i++)
@@ -91,6 +93,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
         
         // Create actors
         // Create props
+        CreateHeader("Props");
         foreach (var propMemory in projectData.props)
         {
             for (int i = 0; i < propMemory.props.Count; i++)
@@ -109,6 +112,38 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
                     }
                 }
             }
+        }
+        
+        // Create items
+        CreateHeader("Items");
+        foreach (var itemMemory in projectData.items)
+        {
+            for (int i = 0; i < itemMemory.items.Count; i++)
+            {
+                var asset = Instantiate(inventoryTile, inventoryBrowserRoot.transform);
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileID = itemMemory.items[i].actorName;
+                asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = itemMemory.items[i].icon;
+                foreach (var spacer in itemMemory.spacers)
+                {
+                    if (spacer.index == i)
+                    {
+                        for (int j = 0; j < spacer.spacerCount; j++)
+                        {
+                            Instantiate(inventorySpacer, inventoryBrowserRoot.transform);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void CreateHeader(string _title)
+    {
+        var asset = Instantiate(inventoryHeader, inventoryBrowserRoot.transform);
+        asset.transform.GetChild(0).GetComponent<TMP_Text>().text = _title;
+        for (int j = 0; j < 9; j++)
+        {
+            Instantiate(inventorySpacer, inventoryBrowserRoot.transform);
         }
     }
 
