@@ -869,7 +869,11 @@ public class WB_LevelEditor : MonoBehaviour
         }
 
         // Place the current asset at the selected position
-        GameObject asset = projectData.GetActorFromMemory(hotBarTileID[currentHotBarIndex]).AssociatedGameObject;
+        GameObject asset = projectData.missingObjectFallback; // assign the asset as the missing object until it's overwritten
+        if (projectData.GetActorFromMemory(hotBarTileID[currentHotBarIndex]))
+        {
+            if (projectData.GetActorFromMemory(hotBarTileID[currentHotBarIndex]).AssociatedGameObject) asset = projectData.GetActorFromMemory(hotBarTileID[currentHotBarIndex]).AssociatedGameObject;
+        }
         float assetZ = asset.transform.position.z + -currentLayer;
         Vector3 assetPosition = new Vector3(MathF.Round(positionToUse.x), MathF.Round(positionToUse.y), assetZ);
         GameObject assetRef = Instantiate(asset, assetPosition, Quaternion.identity, levelManager.assetsRoot.transform);
