@@ -102,6 +102,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileId = propMemory.props[i].id;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileName = propMemory.props[i].actorName;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = propMemory.props[i].icon;
+                if (!propMemory.props[i].icon) asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = projectData.missingSpriteFallback;
                 foreach (var spacer in propMemory.spacers)
                 {
                     if (spacer.index == i)
@@ -125,6 +126,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileId = itemMemory.items[i].id;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileName = itemMemory.items[i].actorName;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = itemMemory.items[i].icon;
+                if (!itemMemory.items[i].icon) asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = projectData.missingItemIconFallback;
                 foreach (var spacer in itemMemory.spacers)
                 {
                     if (spacer.index == i)
@@ -148,6 +150,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileId = characterMemory.characters[i].id;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileName = characterMemory.characters[i].actorName;
                 asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = characterMemory.characters[i].icon;
+                if (!characterMemory.characters[i].icon) asset.GetComponent<WB_LevelEditor_MemoryBrowser_Item>().tileSprite = projectData.missingCharacterIconFallback;
                 foreach (var spacer in characterMemory.spacers)
                 {
                     if (spacer.index == i)

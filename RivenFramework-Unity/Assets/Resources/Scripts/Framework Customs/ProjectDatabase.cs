@@ -21,6 +21,8 @@ public class ProjectData : MonoBehaviour
     public Tile missingTileFallback;
     public GameObject missingObjectFallback;
     public Sprite missingSpriteFallback;
+    public Sprite missingItemIconFallback;
+    public Sprite missingCharacterIconFallback;
 
     public Tile GetTileFromMemory(string _tileId)
     {

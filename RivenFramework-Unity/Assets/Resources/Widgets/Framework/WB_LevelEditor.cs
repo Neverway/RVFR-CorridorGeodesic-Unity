@@ -476,6 +476,21 @@ public class WB_LevelEditor : MonoBehaviour
             {
                 hotBarPreview.enabled = true;
                 hotBarPreview.sprite = projectData.GetActorFromMemory(hotBarTileID[i]).icon;
+                if (!hotBarPreview.sprite)
+                {
+                    switch (projectData.GetActorType(hotBarTileID[i]))
+                    {
+                        case "prop":
+                            hotBarPreview.sprite = projectData.missingSpriteFallback;
+                            break;
+                        case "item":
+                            hotBarPreview.sprite = projectData.missingItemIconFallback;
+                            break;
+                        case "character":
+                            hotBarPreview.sprite = projectData.missingCharacterIconFallback;
+                            break;
+                    }
+                }
             }
             else
             {
@@ -885,7 +900,7 @@ public class WB_LevelEditor : MonoBehaviour
             case "prop":
                 break;
             case "item":
-                asset.GetComponent<Trigger2D_Pickup>().item = projectData.GetItemFromMemory(hotBarTileID[currentHotBarIndex]);
+                if (asset.GetComponent<Trigger2D_Pickup>()) asset.GetComponent<Trigger2D_Pickup>().item = projectData.GetItemFromMemory(hotBarTileID[currentHotBarIndex]);
                 break;
             case "character":
                 asset.GetComponent<Pawn>().SetPawnDefaultState(projectData.GetCharacterFromMemory(hotBarTileID[currentHotBarIndex]));
