@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// ---------------------------------------------------------
 public class ProjectData : MonoBehaviour
 {
     public List<TileMemoryGroup> tiles;
@@ -124,6 +125,8 @@ public class ProjectData : MonoBehaviour
         return null;
     }
 }
+// ---------------------------------------------------------
+
 
 // ---------------------------------------------------------
 [Serializable]
@@ -143,6 +146,8 @@ public class MemoryGroup
 }
 // ---------------------------------------------------------
 
+
+// ---------------------------------------------------------
 [Serializable]
 public class TileMemoryGroup : MemoryGroup
 {
@@ -166,11 +171,10 @@ public class CharacterMemoryGroup : MemoryGroup
 {
     public List<CharacterData> characters = new List<CharacterData>();
 }
+// ---------------------------------------------------------
 
 
-
-
-
+// ---------------------------------------------------------
 [Serializable]
 public class LevelData
 {

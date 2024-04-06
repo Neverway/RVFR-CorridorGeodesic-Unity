@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5606732640614416811}
   - component: {fileID: 6033580085628821583}
   - component: {fileID: 7697157551955111083}
+  - component: {fileID: 2428651795148297036}
   - component: {fileID: 6461402549390778562}
-  - component: {fileID: -8572795352901739137}
   - component: {fileID: -3514021473006265091}
   - component: {fileID: 6965304438980778751}
   m_Layer: 6
@@ -151,6 +151,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2428651795148297036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366982673205350056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d77637ce00b9546c94b8f2bc72af471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actorId: prop_light_point
+  scriptDataList: []
+  storedVariableData: []
 --- !u!114 &6461402549390778562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,34 +183,6 @@ MonoBehaviour:
   colorRed: 1
   colorGreen: 0.7
   colorBlue: 0.31
---- !u!114 &-8572795352901739137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366982673205350056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b31e295f9b3ad8a088de4f224ebfb61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scriptDataList:
-  - targetScript: {fileID: 6965304438980778751}
-    exposedVariables:
-    - depthLayer
-  - targetScript: {fileID: 6461402549390778562}
-    exposedVariables:
-    - intensity
-    - range
-    - colorRed
-    - colorGreen
-    - colorBlue
-  - targetScript: {fileID: -3514021473006265091}
-    exposedVariables:
-    - signalChannel
-    - isPowered
-  storedVariableData: []
 --- !u!114 &-3514021473006265091
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ public class LevelManager : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    /*
     [Tooltip("A list of all the tiles and their categories used for the current project")]
     public List<TileMemoryGroup> tileMemory;
     [Tooltip("A list of all the objects and their categories used for the current project")]
@@ -28,7 +29,7 @@ public class LevelManager : MonoBehaviour
     public List<Item> itemMemory;
     public Tile missingTileFallback;
     public GameObject missingObjectFallback;
-    public Sprite missingSpriteFallback;
+    public Sprite missingSpriteFallback;*/
     [Header("READ-ONLY (Don't touch!)")]
     [Tooltip("A list of all of the 'tile layers' used in the scene")]
     public List<Tilemap> tilemaps;
@@ -44,6 +45,7 @@ public class LevelManager : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private ProjectData projectData;
     [SerializeField] private UISkin fileBrowserSkin;
 
 
@@ -52,6 +54,7 @@ public class LevelManager : MonoBehaviour
     //=-----------------=
     private void Awake()
     {
+        projectData = FindObjectOfType<ProjectData>();
         InitializeSceneReferences();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -137,7 +140,7 @@ public class LevelManager : MonoBehaviour
                 {
                     // Check each tileMemory group to see if the tile exists
                     TileBase tempTile = null;
-                    foreach (var group in tileMemory)
+                    foreach (var group in projectData.tiles)
                     {
                         // If the tile exists in tileMemory, save its data
                         if (group.tiles.Find(t => t == tilemap.GetTile(new Vector3Int(x, y, 0))))
@@ -163,53 +166,43 @@ public class LevelManager : MonoBehaviour
             }
         }
     }
-
-    private void SaveAssets(LevelData _data)
+    private void SaveActors(LevelData _data)
     {
         // Save object data
         // Find all objects with an asset_instanceID component
         // For each one, see if we can find the root asset in assetMemory
         // If not, skip it
         // else, add the asset data for name, unique id, position, and any variable data
-        for (int i = 0; i < assetsRoot.transform.childCount; i++)
+        
+        foreach (var actor in FindObjectsOfType<ActorData>())
         {
+            // Only save objects that are in the actor container
+            // (I added this here because it was trying to save objects that were part of the level editor world)
+            if (!actor.gameObject.transform.parent) continue;
+            if (assetsRoot.gameObject != actor.gameObject.transform.parent.gameObject) continue;
+                
             GameObject tempAsset = null;
-            foreach (var group in assetMemory)
+            if (projectData.GetActorFromMemory(actor.actorId))
             {
-                if (group.props.Find(t => t.name == assetsRoot.transform.GetChild(i).gameObject.name))
-                {
-                    // If the asset is found in assetMemory, set it as tempAsset
-                    tempAsset = assetsRoot.transform.GetChild(i).gameObject;
-                    break;
-                }
+                // If the asset is found in assetMemory, set it as tempAsset
+                tempAsset = actor.gameObject;
             }
             
             // If the asset is not found in assetMemory, skip it
             if (tempAsset == null)
             {
-                tempAsset = assetsRoot.transform.GetChild(i).gameObject;
-                
-                print($"Object {assetsRoot.transform.GetChild(i).gameObject.name} not found! Saving placeholder object.");
+                tempAsset = projectData.missingObjectFallback;
+                print($"Object {actor.actorId} not found! Saving placeholder object.");
             }
             
             // Create a new SpotData instance to store the asset data
             SpotData newSpotData = new SpotData();
-            newSpotData.id = tempAsset.name; // Asset name
+            newSpotData.id = actor.actorId;
             newSpotData.unsnappedPosition = tempAsset.transform.position; // Asset position
             
-            // If the asset has an Object_RuntimeDataInspector component, inspect it for variable data
-            if (tempAsset.GetComponent<Object_RuntimeDataInspector>())
-            {
-                tempAsset.GetComponent<Object_RuntimeDataInspector>().Inspect();
-                newSpotData.assetData = tempAsset.GetComponent<Object_RuntimeDataInspector>().storedVariableData;
-            }
-            else
-            {
-                newSpotData.assetData = new List<VariableData>();
-            }
-            
-            // NEED LAYER/DEPTH ASSIGNMENT HERE
-            // newSpotData.layer = tempAsset.layer; // Assign layer information
+            // If the asset has runtime data, inspect it for variable data
+            actor.Inspect();
+            newSpotData.assetData = actor.storedVariableData;
             
             // Add the asset data to the level data
             _data.assets.Add(newSpotData);
@@ -222,7 +215,7 @@ public class LevelManager : MonoBehaviour
         {
             TileBase tempTile = null;
 
-            foreach (var group in tileMemory)
+            foreach (var group in projectData.tiles)
             {
                 if (group.tiles.Find(t => t.name == _data.tiles[i].id))
                 {
@@ -238,36 +231,40 @@ public class LevelManager : MonoBehaviour
 
     private void LoadAssets(LevelData _data)
     {
+        // Look through all the spots
         foreach (var spotdata in _data.assets)
         {
+            // Create starting values as nulls (in case they don't get a value later we still want them to be defined)
             GameObject tempAsset = null;
             Vector3 tempPosition = new Vector3();
             List<VariableData> tempData = new List<VariableData>();
 
-            foreach (var group in assetMemory)
+            // Find the actor that shares the same id as the spot id and assign the object, position, and data of the spot to our temp values
+            if (projectData.GetActorFromMemory(spotdata.id))
             {
-                if (group.props.Find(t => t.name == spotdata.id))
-                {
-                    //tempAsset = group.props.Find(t => t.name == spotdata.id); // Fix me TODO
-                    tempPosition = spotdata.unsnappedPosition;
-                    tempData = spotdata.assetData;
-                    break;
-                }
+                tempAsset = projectData.GetActorFromMemory(spotdata.id).AssociatedGameObject;
+                tempPosition = spotdata.unsnappedPosition;
+                tempData = spotdata.assetData;
             }
 
+            // Place a fallback object if we didn't find the actor in the project data
             if (tempAsset == null)
             {
-                tempAsset = missingObjectFallback;
+                tempAsset = projectData.missingObjectFallback;
                 tempAsset.name = spotdata.id;
                 tempPosition = spotdata.unsnappedPosition;
                 tempData = spotdata.assetData;
                 print($"Object {spotdata.id} not found! Placing fallback object.");
             }
+            
+            // Create the actor at the specified transform
             var assetRef = Instantiate(tempAsset, tempPosition, new Quaternion(0, 0, 0, 0), assetsRoot.transform);
+            // Remove the "(Clone)" part from the name since we're not cringe
             assetRef.name = assetRef.name.Replace("(Clone)", "").Trim();
-            if (!assetRef.GetComponent<Object_RuntimeDataInspector>()) continue;
-            assetRef.GetComponent<Object_RuntimeDataInspector>().storedVariableData = tempData;
-            assetRef.GetComponent<Object_RuntimeDataInspector>().SendVariableDataToScripts();
+            
+            // Assign the actor data
+            assetRef.GetComponent<ActorData>().storedVariableData = tempData;
+            assetRef.GetComponent<ActorData>().SendVariableDataToScripts();
         }
     }
 
@@ -285,7 +282,8 @@ public class LevelManager : MonoBehaviour
         var data = new LevelData();
         
         SaveTiles(data);
-        SaveAssets(data);
+        SaveActors(data);
+        print($"Writing {data.assets.Count} actors & {data.tiles.Count} tiles to {_filePath}");
         
         // Convert the level data to JSON format
         var json = JsonUtility.ToJson(data, true);
@@ -304,7 +302,7 @@ public class LevelManager : MonoBehaviour
         var data = new LevelData();
         
         SaveTiles(data);
-        SaveAssets(data);
+        SaveActors(data);
         
         // Convert the level data to JSON format
         var json = JsonUtility.ToJson(data, true);

@@ -895,6 +895,7 @@ public class WB_LevelEditor : MonoBehaviour
         assetRef.name = assetRef.name.Replace("(Clone)", "").Trim();
         
         // Assign the Actor data to the game object
+        assetRef.GetComponent<ActorData>().actorId = projectData.GetActorFromMemory(hotBarTileID[currentHotBarIndex]).id;
         switch (projectData.GetActorType(hotBarTileID[currentHotBarIndex]))
         {
             case "prop":

@@ -1,22 +1,25 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: This script allows us to look at and change variables in our game's objects while the game is running.
+// Purpose: Used by the levelManager to collect the ids for saving actors so they
+// can be loaded from the level file
 // Notes:
 //
 //=============================================================================
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-public class Object_RuntimeDataInspector : MonoBehaviour
+public class ActorData : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public List<ScriptData> scriptDataList; // MonoData class stores the target script, the variables we want to expose, 
-    [HideInInspector] public List<VariableData> storedVariableData; // The variable's name, type, and value that we are storing in the runtime data inspector
+    public string actorId;
+    public List<ScriptData> scriptDataList;
+    [HideInInspector] public List<VariableData> storedVariableData; // The variable's name, type, and value that we are storing in the actor data
 
 
     //=-----------------=
@@ -30,10 +33,10 @@ public class Object_RuntimeDataInspector : MonoBehaviour
 
 
     //=-----------------=
-    // MonoBehaviour Functions
+    // Mono Functions
     //=-----------------=
 
-    
+
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -88,6 +91,10 @@ public class Object_RuntimeDataInspector : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void InitializeDataFromId()
+    {
+        
+    }
     /// <summary>
     /// Looks at the variables we can see in our game objects and creates a list of information about them.
     /// </summary>
@@ -157,5 +164,19 @@ public class Object_RuntimeDataInspector : MonoBehaviour
             }
         }
     }
+}
 
+[Serializable]
+public class ScriptData
+{
+    public MonoBehaviour targetScript; // The script we want to communicate with
+    public List<string> exposedVariables; // The variables from that script we want to be able to change in the runtime inspector
+}
+
+[Serializable]
+public class VariableData
+{
+    public string name; // The name of the variable
+    public string type; // The type of variable
+    public string value; // The stored value of the variable
 }
