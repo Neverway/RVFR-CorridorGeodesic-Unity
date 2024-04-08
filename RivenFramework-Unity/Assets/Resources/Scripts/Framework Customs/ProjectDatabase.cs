@@ -187,9 +187,9 @@ public class SpotData
 {
     public int layer;
     public string layerID; // WIP value to track actual layer name, instead of layer hierarchy position, to hopefully make level file corruption less common when changing what's stored in level files
-    public string id;
-    public int uniqueId;
-    public Vector3Int position;
-    public Vector3 unsnappedPosition;
+    public string assetId;
+    public int uniqueInstanceId;
+    public Vector3Int tilePosition;
+    public Vector3 worldPosition;
     public List<VariableData> assetData = new List<VariableData>();
 }

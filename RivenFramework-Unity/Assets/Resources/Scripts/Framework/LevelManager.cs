@@ -156,8 +156,8 @@ public class LevelManager : MonoBehaviour
                     // Add the tile data to the level data
                     var newSpotData = new SpotData
                     {
-                        id = tempTile.name, // Tile name
-                        position = new Vector3Int(x,y,0), // Tile position
+                        assetId = tempTile.name, // Tile name
+                        tilePosition = new Vector3Int(x,y,0), // Tile position
                         layer = tilemaps.IndexOf(tilemap), // Tilemap layer
                         layerID = tilemap.name // Tilemap name
                     };
@@ -197,8 +197,8 @@ public class LevelManager : MonoBehaviour
             
             // Create a new SpotData instance to store the asset data
             SpotData newSpotData = new SpotData();
-            newSpotData.id = actor.actorId;
-            newSpotData.unsnappedPosition = tempAsset.transform.position; // Asset position
+            newSpotData.assetId = actor.actorId;
+            newSpotData.worldPosition = tempAsset.transform.position; // Asset position
             
             // If the asset has runtime data, inspect it for variable data
             actor.Inspect();
@@ -217,15 +217,15 @@ public class LevelManager : MonoBehaviour
 
             foreach (var group in projectData.tiles)
             {
-                if (group.tiles.Find(t => t.name == _data.tiles[i].id))
+                if (group.tiles.Find(t => t.name == _data.tiles[i].assetId))
                 {
-                    tempTile = group.tiles.Find(t => t.name == _data.tiles[i].id);
+                    tempTile = group.tiles.Find(t => t.name == _data.tiles[i].assetId);
                     break;
                 }
             }
             
             if (tempTile == null) continue;
-            tilemaps[_data.tiles[i].layer].SetTile(_data.tiles[i].position, tempTile);
+            tilemaps[_data.tiles[i].layer].SetTile(_data.tiles[i].tilePosition, tempTile);
         }
     }
 
@@ -241,11 +241,11 @@ public class LevelManager : MonoBehaviour
             List<VariableData> tempData = new List<VariableData>();
 
             // Find the actor that shares the same id as the spot id and assign the object, position, and data of the spot to our temp values
-            if (projectData.GetActorFromMemory(spotdata.id))
+            if (projectData.GetActorFromMemory(spotdata.assetId))
             {
-                tempAsset = projectData.GetActorFromMemory(spotdata.id).AssociatedGameObject;
-                tempId = spotdata.id;
-                tempPosition = spotdata.unsnappedPosition;
+                tempAsset = projectData.GetActorFromMemory(spotdata.assetId).AssociatedGameObject;
+                tempId = spotdata.assetId;
+                tempPosition = spotdata.worldPosition;
                 tempData = spotdata.assetData;
             }
 
@@ -253,10 +253,10 @@ public class LevelManager : MonoBehaviour
             if (tempAsset == null)
             {
                 tempAsset = projectData.missingObjectFallback;
-                tempId = spotdata.id;
-                tempPosition = spotdata.unsnappedPosition;
+                tempId = spotdata.assetId;
+                tempPosition = spotdata.worldPosition;
                 tempData = spotdata.assetData;
-                print($"Object {spotdata.id} not found! Placing fallback object.");
+                print($"Object {spotdata.assetId} not found! Placing fallback object.");
             }
             
             // Create the actor at the specified transform
