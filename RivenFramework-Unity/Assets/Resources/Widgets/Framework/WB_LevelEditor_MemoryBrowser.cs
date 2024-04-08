@@ -22,8 +22,8 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private string currentCategory;
-    private string currentGroup;
+    private string currentCategory = "All Assets";
+    private string currentGroup = "All";
 
 
     //=-----------------=
@@ -51,6 +51,7 @@ public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
     private void OnEnable()
     {
         InitializeCategoryBrowser();
+        SetCurrentCategoryAndGroup(currentCategory, currentGroup);
     }
 
     //=-----------------=

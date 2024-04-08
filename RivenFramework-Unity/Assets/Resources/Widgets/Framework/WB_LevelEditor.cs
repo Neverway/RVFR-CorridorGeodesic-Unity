@@ -277,6 +277,12 @@ public class WB_LevelEditor : MonoBehaviour
     /// <param name="_start">True to start testing, false to stop testing.</param>
     private void StartOrStopTest(bool _start)
     {
+        if (!testingGamemode)
+        {
+            Debug.LogWarning("Attempted to start a test in the level editor but no testingGamemode has been set!");
+            return;
+        }
+        
         // Initialize editor player if not already found
         if (!editorPlayer)
         {
