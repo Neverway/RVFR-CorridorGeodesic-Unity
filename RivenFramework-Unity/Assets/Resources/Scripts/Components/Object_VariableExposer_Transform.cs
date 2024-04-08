@@ -37,7 +37,7 @@ public class Object_VariableExposer_Transform : MonoBehaviour
     private void Update()
     {
         transform.localScale = new Vector3(scaleX, scaleY, 1);
-        transform.position = new Vector2(positionOrigin.x+positionOffsetX, positionOrigin.y+positionOffsetY);
+        transform.position = new Vector3(positionOrigin.x+positionOffsetX, positionOrigin.y+positionOffsetY, transform.position.z);
     }
 
     

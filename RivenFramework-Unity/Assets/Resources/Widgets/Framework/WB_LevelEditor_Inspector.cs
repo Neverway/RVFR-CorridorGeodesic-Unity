@@ -22,7 +22,7 @@ public class WB_LevelEditor_Inspector : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private Object_RuntimeDataInspector target;
+    private ActorData target;
     private List<GameObject> fields;
 
 
@@ -74,7 +74,7 @@ public class WB_LevelEditor_Inspector : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void InitializeInspector(Object_RuntimeDataInspector _data)
+    public void InitializeInspector(ActorData _data)
     {
         Clear();
         target = _data;

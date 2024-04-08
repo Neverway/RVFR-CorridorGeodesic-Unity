@@ -952,7 +952,7 @@ public class WB_LevelEditor : MonoBehaviour
         {
             inspectionIndicator.SetActive(true);
             inspectionIndicator.transform.position = closestAsset.position;
-            Object_RuntimeDataInspector data = closestAsset.gameObject.GetComponent<Object_RuntimeDataInspector>();
+            ActorData data = closestAsset.gameObject.GetComponent<ActorData>();
             if (data != null)
             {
                 inspector.InitializeInspector(data);
