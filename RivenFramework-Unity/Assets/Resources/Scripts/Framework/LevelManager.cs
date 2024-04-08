@@ -236,6 +236,7 @@ public class LevelManager : MonoBehaviour
         {
             // Create starting values as nulls (in case they don't get a value later we still want them to be defined)
             GameObject tempAsset = null;
+            string tempId = "";
             Vector3 tempPosition = new Vector3();
             List<VariableData> tempData = new List<VariableData>();
 
@@ -243,6 +244,7 @@ public class LevelManager : MonoBehaviour
             if (projectData.GetActorFromMemory(spotdata.id))
             {
                 tempAsset = projectData.GetActorFromMemory(spotdata.id).AssociatedGameObject;
+                tempId = spotdata.id;
                 tempPosition = spotdata.unsnappedPosition;
                 tempData = spotdata.assetData;
             }
@@ -251,7 +253,7 @@ public class LevelManager : MonoBehaviour
             if (tempAsset == null)
             {
                 tempAsset = projectData.missingObjectFallback;
-                tempAsset.name = spotdata.id;
+                tempId = spotdata.id;
                 tempPosition = spotdata.unsnappedPosition;
                 tempData = spotdata.assetData;
                 print($"Object {spotdata.id} not found! Placing fallback object.");
@@ -263,6 +265,7 @@ public class LevelManager : MonoBehaviour
             assetRef.name = assetRef.name.Replace("(Clone)", "").Trim();
             
             // Assign the actor data
+            assetRef.GetComponent<ActorData>().actorId = tempId;
             assetRef.GetComponent<ActorData>().storedVariableData = tempData;
             assetRef.GetComponent<ActorData>().SendVariableDataToScripts();
         }
