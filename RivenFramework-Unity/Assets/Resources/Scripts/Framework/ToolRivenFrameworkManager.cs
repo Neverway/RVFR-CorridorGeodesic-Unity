@@ -32,7 +32,7 @@ public class ToolRivenFrameworkManager : EditorWindow
     private List<bool> tileGroupExpandedStates = new List<bool>();
     
     private List<string> props = new List<string>();
-    private Dictionary<string, Color> scriptableObjectColors = new Dictionary<string, Color>();
+    private string newPropName = ""; // Variable to store the name of the new prop
 
 
     //=-----------------=
@@ -188,34 +188,23 @@ public class ToolRivenFrameworkManager : EditorWindow
     
     private void PropManager()
     {
-        EditorGUILayout.HelpBox("", MessageType.None);
+        EditorGUILayout.HelpBox("Add and modify the props that appear in your project. This will only handel the scriptable object data, you will still need to create a prefab with the same name as the prop in /Resources/Actors/Objects! Also don't forget to add each of these scriptables to a prop group in the GameInstance prefab's AssetData script found in /Resources/Actors/System. (Sorry, I know this a bit clunky right now but in the future this tool will be able to assign actors to the asset database. Good Luck! ~Liz)", MessageType.None);
         GUILayout.Space(10);
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         GetPropList();
         EditorGUILayout.EndScrollView();
         GUILayout.Space(10);
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.TextField("");
-        if (GUILayout.Button("New Prop")) {  }
+        newPropName = EditorGUILayout.TextField(newPropName);
+        // New Prop button
+        if (GUILayout.Button("New Prop") && !string.IsNullOrEmpty(newPropName)) { CreateNewProp(newPropName); newPropName = ""; }
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Fix IDs")) {  }
-        if (GUILayout.Button("Fix Asset Names")) {  }
-        if (GUILayout.Button("Fix Associated Prefabs")) {  }
+        if (GUILayout.Button("Fix IDs")) { FixPropIDs(); }
+        if (GUILayout.Button("Fix Actor Names")) { FixPropActorNames(); }
+        if (GUILayout.Button("Fix Associated Prefabs")) { FixPropAssociatedPrefabs(); }
         EditorGUILayout.EndHorizontal();
         if (GUILayout.Button("Check for Issues")) {  }
-        /*
-        CollectPropIDs();
-        DisplayScriptableObjects();
-        /*
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Fix Missing IDs")) { AutoGenerateMissingIds(); }
-        if (GUILayout.Button("Fix Missing Prefabs")) { AssociatePrefabsWithScriptables(); }
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Refresh")) { RefreshScriptableObjects(); }
-        if (GUILayout.Button("Check Assignments")) { ApplyScriptableObjectColors(); }
-        EditorGUILayout.EndHorizontal();*/
         
         GUILayout.Space(10); 
         
@@ -254,6 +243,81 @@ public class ToolRivenFrameworkManager : EditorWindow
         }
         Debug.LogError("Prefab " + _prefabName + " not found in folder: " + _folderPath);
         return null;
+    }
+    
+    // Helper function to split camel case words
+    private string[] SplitCamelCase(string input)
+    {
+        return Regex.Split(input, @"(?<!^)(?=[A-Z])");
+    }
+
+    private string GenerateIdFromActor(Actor _actor)
+    {
+        string name = _actor.name;
+
+        // Remove "Prop" or "prop" prefix if present
+        if (name.StartsWith("Prop"))
+            name = name.Substring(4);
+        else if (name.StartsWith("prop"))
+            name = name.Substring(4);
+
+        // Split the name into words
+        string[] words = SplitCamelCase(name);
+
+        List<string> processedWords = new List<string>();
+
+        // Iterate through each word
+        for (int i = 0; i < words.Length; i++)
+        {
+            // Check if the word ends with a number followed by a capital letter
+            if (i > 0 && char.IsDigit(words[i - 1][words[i - 1].Length - 1]) && char.IsUpper(words[i][0]))
+            {
+                // Combine the current word with the previous one without an underscore
+                processedWords[processedWords.Count - 1] += words[i].ToLower();
+            }
+            else
+            {
+                // Separate words by capital letters and convert to lowercase
+                string[] subWords = SplitCamelCase(words[i].ToLower());
+
+                processedWords.AddRange(subWords);
+            }
+        }
+
+        // Construct the ID
+        string id = "prop_" + string.Join("_", processedWords);
+
+        return id;
+    }
+
+    private string GenerateActorNameFromActor(Actor _actor)
+    {
+        string name = _actor.name;
+
+        // Split the name into words at capital letters
+        string[] words = SplitCamelCase(name);
+
+        List<string> processedWords = new List<string>();
+
+        // Iterate through each word
+        for (int i = 0; i < words.Length; i++)
+        {
+            // Check if the word is preceded by a number and followed by a capital letter
+            if (i > 0 && char.IsDigit(words[i - 1][words[i - 1].Length - 1]) && char.IsUpper(words[i][0]))
+            {
+                // Combine the current word with the previous one without a space
+                processedWords[processedWords.Count - 1] += words[i];
+            }
+            else
+            {
+                processedWords.Add(words[i]);
+            }
+        }
+
+        // Join the words with spaces
+        string actorName = string.Join(" ", processedWords);
+
+        return actorName;
     }
     
     //=-----------------=
@@ -319,12 +383,63 @@ public class ToolRivenFrameworkManager : EditorWindow
 
     }
     
+    private void FixPropIDs()
+    {
+        var guidList = AssetDatabase.FindAssets("", new[] { PropsFolder });
+        foreach (var guid in guidList)
+        {
+            var prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
+            if (prop != null)
+            {
+                prop.id = GenerateIdFromActor(prop);
+            }
+        }
+    }
+    
+    private void FixPropActorNames()
+    {
+        var guidList = AssetDatabase.FindAssets("", new[] { PropsFolder });
+        foreach (var guid in guidList)
+        {
+            var prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
+            if (prop != null)
+            {
+                prop.actorName = GenerateActorNameFromActor(prop);
+            }
+        }
+    }
+    
+    private void FixPropAssociatedPrefabs()
+    {
+        var guidList = AssetDatabase.FindAssets("", new[] { PropsFolder });
+        foreach (var guid in guidList)
+        {
+            var prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
+            if (prop != null)
+            {
+                prop.AssociatedGameObject = GetPrefabAtPath(prop.name, ObjectsFolder);
+            }
+        }
+    }
+    
     private void DeleteProp(Prop _prop)
     {
         string assetPath = AssetDatabase.GetAssetPath(_prop);
         AssetDatabase.DeleteAsset(assetPath);
         props.Remove(_prop.id);
-        // Optionally, you may want to refresh the prop list display after deletion.
+    }
+
+    private void CreateNewProp(string propName)
+    {
+        // Create a new instance of the Prop scriptable object
+        Prop newProp = CreateInstance<Prop>();
+    
+        // Set the name of the new prop
+        newProp.name = propName;
+    
+        // Create asset file for the new prop
+        string assetPath = $"{PropsFolder}/{propName}.asset";
+        AssetDatabase.CreateAsset(newProp, assetPath);
     }
 
 }
