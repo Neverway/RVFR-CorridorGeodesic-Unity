@@ -27,10 +27,11 @@ public class ToolRivenFrameworkManager : EditorWindow
     // Private Variables
     //=-----------------=
     private string currentWindow = "Home";
+    private Vector2 scrollPosition = Vector2.zero;
     
     private List<bool> tileGroupExpandedStates = new List<bool>();
     
-    private List<string> propIDs = new List<string>();
+    private List<string> props = new List<string>();
     private Dictionary<string, Color> scriptableObjectColors = new Dictionary<string, Color>();
 
 
@@ -188,10 +189,25 @@ public class ToolRivenFrameworkManager : EditorWindow
     private void PropManager()
     {
         EditorGUILayout.HelpBox("", MessageType.None);
-        GUILayout.Space(10); 
-        
+        GUILayout.Space(10);
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+        GetPropList();
+        EditorGUILayout.EndScrollView();
+        GUILayout.Space(10);
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.TextField("");
+        if (GUILayout.Button("New Prop")) {  }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Fix IDs")) {  }
+        if (GUILayout.Button("Fix Asset Names")) {  }
+        if (GUILayout.Button("Fix Associated Prefabs")) {  }
+        EditorGUILayout.EndHorizontal();
+        if (GUILayout.Button("Check for Issues")) {  }
+        /*
         CollectPropIDs();
         DisplayScriptableObjects();
+        /*
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Fix Missing IDs")) { AutoGenerateMissingIds(); }
         if (GUILayout.Button("Fix Missing Prefabs")) { AssociatePrefabsWithScriptables(); }
@@ -199,14 +215,11 @@ public class ToolRivenFrameworkManager : EditorWindow
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Refresh")) { RefreshScriptableObjects(); }
         if (GUILayout.Button("Check Assignments")) { ApplyScriptableObjectColors(); }
-        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.EndHorizontal();*/
         
         GUILayout.Space(10); 
         
-        if (GUILayout.Button("Back"))
-        {
-            currentWindow = "Home";
-        }
+        if (GUILayout.Button("Back")) { currentWindow = "Home"; }
     }
 
 
@@ -246,179 +259,72 @@ public class ToolRivenFrameworkManager : EditorWindow
     //=-----------------=
     // Prop Manager Functions
     //=-----------------=
-    private void CollectPropIDs()
+    private void GetPropList()
     {
-        propIDs.Clear();
-        var guids = AssetDatabase.FindAssets("", new[] { PropsFolder });
-        foreach (var guid in guids)
+        props.Clear();
+        var guidList = AssetDatabase.FindAssets("", new[] { PropsFolder });
+        foreach (var guid in guidList)
         {
-            var assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            var prop = AssetDatabase.LoadAssetAtPath<Prop>(assetPath);
+            var prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
             if (prop != null)
             {
-                propIDs.Add(prop.id);
-            }
-        }
-    }
-
-    private void DisplayScriptableObjects()
-    {
-        var guids = AssetDatabase.FindAssets("", new[] { PropsFolder });
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Props", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("ID", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("Associated Prefab", EditorStyles.boldLabel);
-        EditorGUILayout.EndHorizontal();
-        foreach (var guid in guids)
-        {
-            var assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            var prop = AssetDatabase.LoadAssetAtPath<Prop>(assetPath);
-            if (prop != null)
-            {
-                DisplayScriptableObjectField(assetPath, prop);
+                props.Add(prop.id);
+                DisplayPropField(prop);
             }
         }
     }
     
-    private void DisplayScriptableObjectField(string assetPath, Prop prop)
+
+    private void DisplayPropField(Prop _prop)
     {
+
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.ObjectField(prop, typeof(Prop), false);
-
-        // ID Field
-        bool isIDUnique = propIDs.FindAll(id => id == prop.id).Count == 1;
-        prop.id = EditorGUILayout.TextField(prop.id, GUILayout.Width(200));
-
-        // Prefab Field
-        bool prefabExists = File.Exists($"{ObjectsFolder}/{prop.name}.prefab");
-        prop.AssociatedGameObject = (GameObject)EditorGUILayout.ObjectField(prop.AssociatedGameObject, typeof(GameObject), false);
-
-        EditorGUILayout.EndHorizontal();
-
-        // Set the scriptable object color based on conditions
-        if (scriptableObjectColors.ContainsKey(assetPath))
+        
+        // Icon preview
+        if (_prop.icon)
         {
-            EditorGUI.DrawRect(GUILayoutUtility.GetLastRect(), scriptableObjectColors[assetPath] * new Color(1, 1, 1, 0.2f)); // Slightly color the background based on the status
-        }
-    }
-
-    private void AssociatePrefabsWithScriptables()
-    {
-        foreach (string propID in propIDs)
-        {
-            var propSOPaths = AssetDatabase.FindAssets(propID, new[] { PropsFolder })
-                .Select(guid => AssetDatabase.GUIDToAssetPath(guid))
-                .Where(path => AssetDatabase.LoadAssetAtPath<Prop>(path)?.id == propID)
-                .ToList();
-
-            foreach (var propSOPath in propSOPaths)
-            {
-                Prop propSO = AssetDatabase.LoadAssetAtPath<Prop>(propSOPath);
-                string prefabPath = $"{ObjectsFolder}/{propSO.name}.prefab";
-
-                if (File.Exists(prefabPath))
-                {
-                    GameObject prefabGO = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-                    propSO.AssociatedGameObject = prefabGO;
-                    EditorUtility.SetDirty(propSO); // Mark the Prop SO as dirty to ensure the change is saved
-                }
-            }
-        }
-
-        AssetDatabase.SaveAssets();
-    }
-
-    private void AutoGenerateMissingIds()
-    {
-        foreach (string propID in propIDs)
-        {
-            var propSOPaths = AssetDatabase.FindAssets(propID, new[] { PropsFolder })
-                .Select(guid => AssetDatabase.GUIDToAssetPath(guid))
-                .ToList();
-
-            foreach (var propSOPath in propSOPaths)
-            {
-                Prop propSO = AssetDatabase.LoadAssetAtPath<Prop>(propSOPath);
-
-                // Generate ID based on scriptable object name
-                string[] words = SplitCamelCase(propSO.name);
-                List<string> processedWords = new List<string>();
-
-                for (int i = 0; i < words.Length; i++)
-                {
-                    // Handle special cases for words
-                    if (i < words.Length - 1 && char.IsDigit(words[i][words[i].Length - 1]) && char.IsUpper(words[i + 1][0]))
-                    {
-                        processedWords.Add(words[i] + words[i + 1]);
-                        i++; // Skip the next word
-                    }
-                    else
-                    {
-                        processedWords.Add(words[i].ToLower());
-                    }
-                }
-
-                // Construct the ID
-                string id = string.Join("_", processedWords);
-                if (!id.StartsWith("prop_") && !id.StartsWith("Prop_")) id = "prop_" + id;
-
-                propSO.id = id.ToLower();
-
-                EditorUtility.SetDirty(propSO); // Mark the Prop SO as dirty to ensure the change is saved
-            }
-        }
-
-        AssetDatabase.SaveAssets();
-    }
-
-
-
-// Helper function to split camel case words without splitting certain cases
-    private string[] SplitCamelCase(string input)
-    {
-        return Regex.Split(input, @"(?<!^)(?=[A-Z])");
-    }
-
-
-
-    
-    private void RefreshScriptableObjects()
-    {
-        // Clear scriptable object colors
-        scriptableObjectColors.Clear();
-        Repaint(); // Repaint the window to reflect the changes
-    }
-
-    private void ApplyScriptableObjectColors()
-    {
-        foreach (var assetPath in AssetDatabase.FindAssets("", new[] { PropsFolder }).Select(guid => AssetDatabase.GUIDToAssetPath(guid)))
-        {
-            var prop = AssetDatabase.LoadAssetAtPath<Prop>(assetPath);
-            if (prop != null)
-            {
-                bool isIDUnique = !string.IsNullOrEmpty(prop.id) && propIDs.Count(id => id == prop.id) == 1;
-                bool prefabExists = File.Exists($"{ObjectsFolder}/{prop.name}.prefab");
-
-                Color statusColor = GetScriptableObjectColor(isIDUnique, prefabExists);
-                scriptableObjectColors[assetPath] = statusColor;
-            }
-        }
-    }
-
-
-    private Color GetScriptableObjectColor(bool isIDUnique, bool prefabExists)
-    {
-        if (isIDUnique && prefabExists)
-        {
-            return Color.green;
-        }
-        else if (!isIDUnique && !prefabExists)
-        {
-            return Color.red;
+            Texture2D propImage = _prop.icon.texture;
+            GUILayout.Label(propImage, GUILayout.Width(25), GUILayout.Height(25));
         }
         else
         {
-            return new Color(1f,0.5f,0f);
+            GUILayout.Label(GUIContent.none, GUILayout.Width(25), GUILayout.Height(25));
         }
+
+        // Icon Field
+        _prop.icon = (Sprite)EditorGUILayout.ObjectField(_prop.icon, typeof(Sprite), false, GUILayout.Width(35));
+        
+        // Scriptable
+        EditorGUILayout.ObjectField(_prop, typeof(Prop), false, GUILayout.MinWidth(100));
+
+        // Id Field
+        _prop.id = EditorGUILayout.TextField(_prop.id);
+
+        // Actor Name Field
+        _prop.actorName = EditorGUILayout.TextField(_prop.actorName);
+
+        // Prefab Field
+        _prop.AssociatedGameObject = (GameObject)EditorGUILayout.ObjectField(_prop.AssociatedGameObject, typeof(GameObject), false);
+
+        // Delete button
+        if (GUILayout.Button("Delete", GUILayout.Width(60))) 
+        { 
+            if (EditorUtility.DisplayDialog("Delete Prop", "Are you sure you want to delete this prop?", "Yes", "No"))
+            {
+                DeleteProp(_prop);
+            }
+        }
+
+        EditorGUILayout.EndHorizontal();
+
     }
+    
+    private void DeleteProp(Prop _prop)
+    {
+        string assetPath = AssetDatabase.GetAssetPath(_prop);
+        AssetDatabase.DeleteAsset(assetPath);
+        props.Remove(_prop.id);
+        // Optionally, you may want to refresh the prop list display after deletion.
+    }
+
 }
