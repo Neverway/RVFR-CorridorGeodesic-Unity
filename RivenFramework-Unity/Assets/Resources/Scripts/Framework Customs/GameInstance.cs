@@ -29,7 +29,7 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private List<GameObject> UserInterfaceWidgets;
+    public List<GameObject> UserInterfaceWidgets;
     public List<PawnController> PlayerControllerClasses;
     [HideInInspector] public Pawn localPlayerCharacter;
 
