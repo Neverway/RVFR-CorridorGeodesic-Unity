@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -18,9 +19,6 @@ public class ToolRivenFrameworkManager : EditorWindow
     //=-----------------=
     // Public Variables
     //=-----------------=
-    private const string SystemObjectsFolder = "Assets/Resources/Actors/System";
-    private const string PropsFolder = "Assets/Resources/Actors/Props";
-    private const string ObjectsFolder = "Assets/Resources/Actors/Objects";
 
 
     //=-----------------=
@@ -28,11 +26,17 @@ public class ToolRivenFrameworkManager : EditorWindow
     //=-----------------=
     private string currentWindow = "Home";
     private Vector2 scrollPosition = Vector2.zero;
+    private const string SystemObjectsFolder = "Assets/Resources/Actors/System";
+    private const string ObjectsFolder = "Assets/Resources/Actors/Objects";
     
-    private List<bool> tileGroupExpandedStates = new List<bool>();
-    
+    private const string PropsFolder = "Assets/Resources/Actors/Props";
     private List<string> props = new List<string>();
-    private string newPropName = ""; // Variable to store the name of the new prop
+    private string newPropName = "";
+    
+    private const string ItemsFolder = "Assets/Resources/Actors/Items";
+    private List<string> items = new List<string>();
+    private string newItemName = "";
+    private string selectedType = "Utility Throwable";
 
 
     //=-----------------=
@@ -64,6 +68,9 @@ public class ToolRivenFrameworkManager : EditorWindow
                 break;
             case "PropManager":
                 PropManager();
+                break;
+            case "ItemManager":
+                ItemManager();
                 break;
             default:
                 Missing();
@@ -197,12 +204,58 @@ public class ToolRivenFrameworkManager : EditorWindow
         EditorGUILayout.BeginHorizontal();
         newPropName = EditorGUILayout.TextField(newPropName);
         // New Prop button
-        if (GUILayout.Button("New Prop") && !string.IsNullOrEmpty(newPropName)) { CreateNewProp(newPropName); newPropName = ""; }
+        if (GUILayout.Button("Create New Prop") && !string.IsNullOrEmpty(newPropName)) { CreateNewProp(newPropName); newPropName = ""; }
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Fix IDs")) { FixPropIDs(); }
         if (GUILayout.Button("Fix Actor Names")) { FixPropActorNames(); }
         if (GUILayout.Button("Fix Associated Prefabs")) { FixPropAssociatedPrefabs(); }
+        EditorGUILayout.EndHorizontal();
+        if (GUILayout.Button("Check for Issues")) {  }
+        
+        GUILayout.Space(10); 
+        
+        if (GUILayout.Button("Back")) { currentWindow = "Home"; }
+    }
+    
+    private void ItemManager()
+    {
+        EditorGUILayout.HelpBox("Add and modify the items that appear in your project. This will only handel the scriptable object data, you will still need to create a prefab with the same name as the item in /Resources/Actors/Objects! Also don't forget to add each of these scriptables to a item group in the GameInstance prefab's AssetData script found in /Resources/Actors/System. (Sorry, I know this a bit clunky right now but in the future this tool will be able to assign actors to the asset database. Good Luck! ~Liz)", MessageType.None);
+        GUILayout.Space(10);
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+        GetItemList();
+        EditorGUILayout.EndScrollView();
+        GUILayout.Space(10);
+        EditorGUILayout.BeginHorizontal();
+        string[] types = new string[]
+        {
+            "Utility Throwable",
+            "Utility Consumable",
+            "Weapon Bladed",
+            "Weapon Bludgeoning",
+            "Weapon Polearm",
+            "Weapon Projectile",
+            "Weapon Hitscan",
+            "Magic",
+            "Defense",
+            "Defense Head",
+            "Defense Chest",
+            "Defense Back",
+            "Defense Legs",
+            "Defense Feet",
+            "Other"
+        };
+        int selectedIndex = Array.IndexOf(types, selectedType);
+        selectedIndex = EditorGUILayout.Popup("Type", selectedIndex, types);
+        selectedType = types[selectedIndex];
+        newItemName = EditorGUILayout.TextField(newItemName);
+        // New Item button
+        if (GUILayout.Button("Create New Item") && !string.IsNullOrEmpty(newItemName)) { CreateNewItem(newItemName); newItemName = ""; }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Fix IDs")) { FixItemIDs(); }
+        if (GUILayout.Button("Fix Actor Names")) { FixItemActorNames(); }
+        //if (GUILayout.Button("Fix Associated Prefabs")) { FixItemAssociatedPrefabs(); }
         EditorGUILayout.EndHorizontal();
         if (GUILayout.Button("Check for Issues")) {  }
         
@@ -251,7 +304,7 @@ public class ToolRivenFrameworkManager : EditorWindow
         return Regex.Split(input, @"(?<!^)(?=[A-Z])");
     }
 
-    private string GenerateIdFromActor(Actor _actor)
+    private string GenerateIdFromActor(Actor _actor, string _typeTag)
     {
         string name = _actor.name;
 
@@ -285,7 +338,7 @@ public class ToolRivenFrameworkManager : EditorWindow
         }
 
         // Construct the ID
-        string id = "prop_" + string.Join("_", processedWords);
+        string id = _typeTag + "_" + string.Join("_", processedWords);
 
         return id;
     }
@@ -391,7 +444,7 @@ public class ToolRivenFrameworkManager : EditorWindow
             var prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
             if (prop != null)
             {
-                prop.id = GenerateIdFromActor(prop);
+                prop.id = GenerateIdFromActor(prop, "prop");
             }
         }
     }
@@ -440,6 +493,127 @@ public class ToolRivenFrameworkManager : EditorWindow
         // Create asset file for the new prop
         string assetPath = $"{PropsFolder}/{propName}.asset";
         AssetDatabase.CreateAsset(newProp, assetPath);
+    }
+    
+    //=-----------------=
+    // Item Manager Functions
+    //=-----------------=
+    private void GetItemList()
+    {
+        items.Clear();
+        var guidList = AssetDatabase.FindAssets("", new[] { ItemsFolder });
+        foreach (var guid in guidList)
+        {
+            var item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
+            if (item != null)
+            {
+                items.Add(item.id);
+                DisplayItemField(item);
+            }
+        }
+    }
+    
+
+    private void DisplayItemField(Item _item)
+    {
+
+        EditorGUILayout.BeginHorizontal();
+        
+        // Icon preview
+        if (_item.icon)
+        {
+            Texture2D itemImage = _item.icon.texture;
+            GUILayout.Label(itemImage, GUILayout.Width(25), GUILayout.Height(25));
+        }
+        else
+        {
+            GUILayout.Label(GUIContent.none, GUILayout.Width(25), GUILayout.Height(25));
+        }
+
+        // Icon Field
+        _item.icon = (Sprite)EditorGUILayout.ObjectField(_item.icon, typeof(Sprite), false, GUILayout.Width(35));
+        
+        // Scriptable
+        EditorGUILayout.ObjectField(_item, typeof(Item), false, GUILayout.MinWidth(100));
+
+        // Id Field
+        _item.id = EditorGUILayout.TextField(_item.id);
+
+        // Actor Name Field
+        _item.actorName = EditorGUILayout.TextField(_item.actorName);
+
+        // Prefab Field
+        _item.AssociatedGameObject = (GameObject)EditorGUILayout.ObjectField(_item.AssociatedGameObject, typeof(GameObject), false);
+
+        // Delete button
+        if (GUILayout.Button("Delete", GUILayout.Width(60))) 
+        { 
+            if (EditorUtility.DisplayDialog("Delete Item", "Are you sure you want to delete this item?", "Yes", "No"))
+            {
+                DeleteItem(_item);
+            }
+        }
+
+        EditorGUILayout.EndHorizontal();
+
+    }
+    
+    private void FixItemIDs()
+    {
+        var guidList = AssetDatabase.FindAssets("", new[] { ItemsFolder });
+        foreach (var guid in guidList)
+        {
+            var item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
+            if (item != null)
+            {
+                item.id = GenerateIdFromActor(item, "item");
+            }
+        }
+    }
+    
+    private void FixItemActorNames()
+    {
+        var guidList = AssetDatabase.FindAssets("", new[] { ItemsFolder });
+        foreach (var guid in guidList)
+        {
+            var item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
+            if (item != null)
+            {
+                item.actorName = GenerateActorNameFromActor(item);
+            }
+        }
+    }
+    
+    private void FixItemAssociatedPrefabs()
+    {
+        var guidList = AssetDatabase.FindAssets("", new[] { ItemsFolder });
+        foreach (var guid in guidList)
+        {
+            var item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
+            if (item != null)
+            {
+                item.AssociatedGameObject = GetPrefabAtPath(item.name, ObjectsFolder);
+            }
+        }
+    }
+    
+    private void DeleteItem(Item _item)
+    {
+        string assetPath = AssetDatabase.GetAssetPath(_item);
+        AssetDatabase.DeleteAsset(assetPath);
+        items.Remove(_item.id);
+    }
+
+    private void CreateNewItem(string _itemName)
+    {
+        Item newItem = null;
+    
+        // Set the name of the new item
+        newItem.name = _itemName;
+    
+        // Create asset file for the new item
+        string assetPath = $"{ItemsFolder}/{_itemName}.asset";
+        AssetDatabase.CreateAsset(newItem, assetPath);
     }
 
 }
