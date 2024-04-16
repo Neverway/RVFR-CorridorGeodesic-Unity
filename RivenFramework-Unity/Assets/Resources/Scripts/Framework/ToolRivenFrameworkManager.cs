@@ -36,7 +36,7 @@ public class ToolRivenFrameworkManager : EditorWindow
     private const string ItemsFolder = "Assets/Resources/Actors/Items";
     private List<string> items = new List<string>();
     private string newItemName = "";
-    private string selectedType = "Utility Throwable";
+    private string selectedItemType = "Utility Throwable";
 
 
     //=-----------------=
@@ -245,9 +245,9 @@ public class ToolRivenFrameworkManager : EditorWindow
             "Defense Feet",
             "Other"
         };
-        int selectedIndex = Array.IndexOf(types, selectedType);
+        int selectedIndex = Array.IndexOf(types, selectedItemType);
         selectedIndex = EditorGUILayout.Popup("Type", selectedIndex, types);
-        selectedType = types[selectedIndex];
+        selectedItemType = types[selectedIndex];
         newItemName = EditorGUILayout.TextField(newItemName);
         // New Item button
         if (GUILayout.Button("Create New Item") && !string.IsNullOrEmpty(newItemName)) { CreateNewItem(newItemName); newItemName = ""; }
@@ -255,7 +255,7 @@ public class ToolRivenFrameworkManager : EditorWindow
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Fix IDs")) { FixItemIDs(); }
         if (GUILayout.Button("Fix Actor Names")) { FixItemActorNames(); }
-        //if (GUILayout.Button("Fix Associated Prefabs")) { FixItemAssociatedPrefabs(); }
+        if (GUILayout.Button("Fix Associated Prefabs")) { FixItemAssociatedPrefabs(); }
         EditorGUILayout.EndHorizontal();
         if (GUILayout.Button("Check for Issues")) {  }
         
@@ -294,7 +294,7 @@ public class ToolRivenFrameworkManager : EditorWindow
             string prefabPath = AssetDatabase.GUIDToAssetPath(prefabGUIDs[0]);
             return AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
         }
-        Debug.LogError("Prefab " + _prefabName + " not found in folder: " + _folderPath);
+        Debug.LogWarning("Prefab " + _prefabName + " not found in folder: " + _folderPath);
         return null;
     }
     
@@ -606,7 +606,62 @@ public class ToolRivenFrameworkManager : EditorWindow
 
     private void CreateNewItem(string _itemName)
     {
-        Item newItem = null;
+        Item newItem = null; // Declare a single base type reference
+        
+        switch (selectedItemType)
+        {
+            case "Utility Throwable":
+                newItem = CreateInstance<Item_Utility_Throwable>();
+                break;
+            case "Utility Consumable":
+                newItem = CreateInstance<Item_Utility_Consumable>();
+                break;
+            case "Weapon Bladed":
+                newItem = CreateInstance<Item_Weapon_Bladed>();
+                break;
+            case "Weapon Bludgeoning":
+                newItem = CreateInstance<Item_Weapon_Bludgeoning>();
+                break;
+            case "Weapon Polearm":
+                newItem = CreateInstance<Item_Weapon_Polearm>();
+                break;
+            case "Weapon Projectile":
+                newItem = CreateInstance<Item_Weapon_Projectile>();
+                break;
+            case "Weapon Hitscan":
+                newItem = CreateInstance<Item_Weapon_Hitscan>();
+                break;
+            case "Magic":
+                newItem = CreateInstance<Item_Magic>();
+                break;
+            case "Defense":
+                newItem = CreateInstance<Item_Defense>();
+                break;
+            case "Defense Head":
+                newItem = CreateInstance<Item_Defense_Head>();
+                break;
+            case "Defense Chest":
+                newItem = CreateInstance<Item_Defense_Chest>();
+                break;
+            case "Defense Back":
+                newItem = CreateInstance<Item_Defense_Back>();
+                break;
+            case "Defense Legs":
+                newItem = CreateInstance<Item_Defense_Legs>();
+                break;
+            case "Defense Feet":
+                newItem = CreateInstance<Item_Defense_Feet>();
+                break;
+            default:
+                newItem = CreateInstance<Item>(); // Default item type
+                break;
+        }
+
+        if (newItem == null)
+        {
+            Debug.LogError("Failed to create new item: unknown type " + selectedItemType);
+            return;
+        }
     
         // Set the name of the new item
         newItem.name = _itemName;
