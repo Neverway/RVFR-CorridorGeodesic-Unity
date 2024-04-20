@@ -196,21 +196,35 @@ public class ToolRivenFrameworkManager : EditorWindow
     private void PropManager()
     {
         EditorGUILayout.HelpBox("Add and modify the props that appear in your project. This will only handel the scriptable object data, you will still need to create a prefab with the same name as the prop in /Resources/Actors/Objects! Also don't forget to add each of these scriptables to a prop group in the GameInstance prefab's AssetData script found in /Resources/Actors/System. (Sorry, I know this a bit clunky right now but in the future this tool will be able to assign actors to the asset database. Good Luck! ~Liz)", MessageType.None);
+        
         GUILayout.Space(10);
+        
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("Icon", GUILayout.Width(65));
+        EditorGUILayout.LabelField("Scriptable", GUILayout.MinWidth(135));
+        EditorGUILayout.LabelField("ID", GUILayout.MinWidth(100));
+        EditorGUILayout.LabelField("Actor Name", GUILayout.MinWidth(100));
+        EditorGUILayout.LabelField("Associated Prefab", GUILayout.MinWidth(100));
+        EditorGUILayout.LabelField("", GUILayout.Width(60));
+        EditorGUILayout.EndHorizontal();
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         GetPropList();
         EditorGUILayout.EndScrollView();
+        
         GUILayout.Space(10);
+        
         EditorGUILayout.BeginHorizontal();
         newPropName = EditorGUILayout.TextField(newPropName);
         // New Prop button
         if (GUILayout.Button("Create New Prop") && !string.IsNullOrEmpty(newPropName)) { CreateNewProp(newPropName); newPropName = ""; }
         EditorGUILayout.EndHorizontal();
+        
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Fix IDs")) { FixPropIDs(); }
         if (GUILayout.Button("Fix Actor Names")) { FixPropActorNames(); }
         if (GUILayout.Button("Fix Associated Prefabs")) { FixPropAssociatedPrefabs(); }
         EditorGUILayout.EndHorizontal();
+        
         if (GUILayout.Button("Check for Issues")) {  }
         
         GUILayout.Space(10); 
@@ -221,11 +235,25 @@ public class ToolRivenFrameworkManager : EditorWindow
     private void ItemManager()
     {
         EditorGUILayout.HelpBox("Add and modify the items that appear in your project. This will only handel the scriptable object data, you will still need to create a prefab with the same name as the item in /Resources/Actors/Objects! Also don't forget to add each of these scriptables to a item group in the GameInstance prefab's AssetData script found in /Resources/Actors/System. (Sorry, I know this a bit clunky right now but in the future this tool will be able to assign actors to the asset database. Good Luck! ~Liz)", MessageType.None);
+        
         GUILayout.Space(10);
+        
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("Icon", GUILayout.Width(65));
+        EditorGUILayout.LabelField("Scriptable", GUILayout.MinWidth(135));
+        EditorGUILayout.LabelField("ID", GUILayout.MinWidth(100));
+        EditorGUILayout.LabelField("Actor Name", GUILayout.MinWidth(100));
+        EditorGUILayout.LabelField("Associated Prefab", GUILayout.MinWidth(100));
+        EditorGUILayout.LabelField("Stack Count", GUILayout.MinWidth(100));
+        EditorGUILayout.LabelField("Description", GUILayout.MinWidth(100));
+        EditorGUILayout.LabelField("", GUILayout.Width(60));
+        EditorGUILayout.EndHorizontal();
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         GetItemList();
         EditorGUILayout.EndScrollView();
+        
         GUILayout.Space(10);
+        
         EditorGUILayout.BeginHorizontal();
         string[] types = new string[]
         {
@@ -252,11 +280,13 @@ public class ToolRivenFrameworkManager : EditorWindow
         // New Item button
         if (GUILayout.Button("Create New Item") && !string.IsNullOrEmpty(newItemName)) { CreateNewItem(newItemName); newItemName = ""; }
         EditorGUILayout.EndHorizontal();
+        
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Fix IDs")) { FixItemIDs(); }
         if (GUILayout.Button("Fix Actor Names")) { FixItemActorNames(); }
         if (GUILayout.Button("Fix Associated Prefabs")) { FixItemAssociatedPrefabs(); }
         EditorGUILayout.EndHorizontal();
+        
         if (GUILayout.Button("Check for Issues")) {  }
         
         GUILayout.Space(10); 
@@ -544,6 +574,12 @@ public class ToolRivenFrameworkManager : EditorWindow
 
         // Prefab Field
         _item.AssociatedGameObject = (GameObject)EditorGUILayout.ObjectField(_item.AssociatedGameObject, typeof(GameObject), false);
+
+        // Stack Count Field
+        _item.stackCount = EditorGUILayout.IntField(_item.stackCount);
+
+        // Description Field
+        _item.description = EditorGUILayout.TextField(_item.description);
 
         // Delete button
         if (GUILayout.Button("Delete", GUILayout.Width(60))) 
