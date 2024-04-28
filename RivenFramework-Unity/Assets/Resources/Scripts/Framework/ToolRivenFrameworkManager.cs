@@ -311,7 +311,7 @@ public class ToolRivenFrameworkManager : EditorWindow
             float scaledHeight = scaledWidth / aspectRatio;
             
             // Display the scaled image
-            GUILayout.Label(propImage, GUILayout.Width(scaledWidth), GUILayout.Height(scaledHeight));
+            GUILayout.Label(propImage, GUILayout.Width(scaledWidth), GUILayout.Height(scaledHeight), GUILayout.MaxHeight(200));
         }
     }
     
