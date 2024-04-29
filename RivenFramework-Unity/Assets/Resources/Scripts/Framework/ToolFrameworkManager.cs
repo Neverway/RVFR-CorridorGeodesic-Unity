@@ -1,11 +1,12 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Unity editor tool to manage project settings, as well as props, items,
+// & characters that appear in the project
+// Notes: This script only handles the main windows. The other windows are stored
+// in their own scripts
 //
 //=============================================================================
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -91,7 +92,7 @@ public class ToolFrameworkManager : EditorWindow
         GUILayout.Space(10); 
 
         // Game instance settings
-        if (GetPrefabAtPath("GameInstance", SystemObjectsFolder) != null)
+        if (GetPrefabAtPath("GameInstance", SystemObjectsFolder) is not null)
         {
             GameInstance gameInstance = GetPrefabAtPath("GameInstance", SystemObjectsFolder).GetComponent<GameInstance>();
             if (gameInstance != null)
@@ -133,18 +134,16 @@ public class ToolFrameworkManager : EditorWindow
     private void HeaderImage()
     {
         Texture2D propImage = Resources.Load<Texture2D>("Sprites/System/Frameworklogo1");
-        if (propImage != null)
-        {
-            // Calculate the scaled size of the image
-            float maxWidth = position.width - 10;
-            float maxHeight = position.height - 100;
-            float aspectRatio = propImage.width / (float)propImage.height;
-            float scaledWidth = Mathf.Min(maxWidth, maxHeight * aspectRatio);
-            float scaledHeight = scaledWidth / aspectRatio;
+        if (propImage is null) return;
+        // Calculate the scaled size of the image
+        float maxWidth = position.width - 10;
+        float maxHeight = position.height - 100;
+        float aspectRatio = propImage.width / (float)propImage.height;
+        float scaledWidth = Mathf.Min(maxWidth, maxHeight * aspectRatio);
+        float scaledHeight = scaledWidth / aspectRatio;
             
-            // Display the scaled image
-            GUILayout.Label(propImage, GUILayout.Width(scaledWidth), GUILayout.Height(scaledHeight), GUILayout.MaxHeight(200));
-        }
+        // Display the scaled image
+        GUILayout.Label(propImage, GUILayout.Width(scaledWidth), GUILayout.Height(scaledHeight), GUILayout.MaxHeight(200));
     }
     
     public GameObject GetPrefabAtPath(string _prefabName, string _folderPath)
@@ -161,23 +160,23 @@ public class ToolFrameworkManager : EditorWindow
     }
     
     // Helper function to split camel case words
-    private string[] SplitCamelCase(string input)
+    private string[] SplitCamelCase(string _input)
     {
-        return Regex.Split(input, @"(?<!^)(?=[A-Z])");
+        return Regex.Split(_input, @"(?<!^)(?=[A-Z])");
     }
 
     public string GenerateIdFromActor(Actor _actor, string _typeTag)
     {
-        string name = _actor.name;
+        string actorName = _actor.name;
 
         // Remove "Prop" or "prop" prefix if present
-        if (name.StartsWith("Prop"))
-            name = name.Substring(4);
-        else if (name.StartsWith("prop"))
-            name = name.Substring(4);
+        if (actorName.StartsWith("Prop"))
+            actorName = actorName.Substring(4);
+        else if (actorName.StartsWith("prop"))
+            actorName = actorName.Substring(4);
 
         // Split the name into words
-        string[] words = SplitCamelCase(name);
+        string[] words = SplitCamelCase(actorName);
 
         List<string> processedWords = new List<string>();
 
@@ -207,10 +206,10 @@ public class ToolFrameworkManager : EditorWindow
 
     public string GenerateActorNameFromActor(Actor _actor)
     {
-        string name = _actor.name;
+        string actorName = _actor.name;
 
         // Split the name into words at capital letters
-        string[] words = SplitCamelCase(name);
+        string[] words = SplitCamelCase(actorName);
 
         List<string> processedWords = new List<string>();
 
@@ -230,8 +229,8 @@ public class ToolFrameworkManager : EditorWindow
         }
 
         // Join the words with spaces
-        string actorName = string.Join(" ", processedWords);
+        string outputName = string.Join(" ", processedWords);
 
-        return actorName;
+        return outputName;
     }
 }
