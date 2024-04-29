@@ -6,7 +6,6 @@
 //=============================================================================
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -34,7 +33,7 @@ public class ToolFrameworkManagerItems : EditorWindow
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    public void Window(ToolFrameworkManager _FrameworkManagerWindow)
+    public void Window(ToolFrameworkManager _frameworkManagerWindow)
     {
         // Description
         EditorGUILayout.HelpBox("Add and modify the items that appear in your project. This will only handel the scriptable object data, you will still need to create a prefab with the same name as the item in /Resources/Actors/Objects! Also don't forget to add each of these scriptables to a item group in the GameInstance prefab's AssetData script found in /Resources/Actors/System. (Sorry, I know this a bit clunky right now but in the future this tool will be able to assign actors to the asset database. Good Luck! ~Liz)", MessageType.None);
@@ -53,7 +52,7 @@ public class ToolFrameworkManagerItems : EditorWindow
         EditorGUILayout.EndHorizontal();
         
         // Actor list
-        _FrameworkManagerWindow.scrollPosition = EditorGUILayout.BeginScrollView(_FrameworkManagerWindow.scrollPosition);
+        _frameworkManagerWindow.scrollPosition = EditorGUILayout.BeginScrollView(_frameworkManagerWindow.scrollPosition);
         GetActorList();
         EditorGUILayout.EndScrollView();
         GUILayout.Space(10);
@@ -78,24 +77,24 @@ public class ToolFrameworkManagerItems : EditorWindow
             "Defense Feet",
             "Other"
         };
-        int selectedIndex = Array.IndexOf(types, _FrameworkManagerWindow.selectedItemType);
+        int selectedIndex = Array.IndexOf(types, _frameworkManagerWindow.selectedItemType);
         selectedIndex = EditorGUILayout.Popup("Type", selectedIndex, types);
-        _FrameworkManagerWindow.selectedItemType = types[selectedIndex];
+        _frameworkManagerWindow.selectedItemType = types[selectedIndex];
         newItemName = EditorGUILayout.TextField(newItemName);
-        if (GUILayout.Button("Create New Item") && !string.IsNullOrEmpty(newItemName)) { CreateNewItem(_FrameworkManagerWindow, newItemName); newItemName = ""; }
+        if (GUILayout.Button("Create New Item") && !string.IsNullOrEmpty(newItemName)) { CreateNewItem(_frameworkManagerWindow, newItemName); newItemName = ""; }
         EditorGUILayout.EndHorizontal();
         
         // Fix ... buttons
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Fix IDs")) { FixItemIDs(_FrameworkManagerWindow); }
-        if (GUILayout.Button("Fix Actor Names")) { FixItemActorNames(_FrameworkManagerWindow); }
-        if (GUILayout.Button("Fix Associated Prefabs")) { FixItemAssociatedPrefabs(_FrameworkManagerWindow); }
+        if (GUILayout.Button("Fix IDs")) { FixItemIDs(_frameworkManagerWindow); }
+        if (GUILayout.Button("Fix Actor Names")) { FixItemActorNames(_frameworkManagerWindow); }
+        if (GUILayout.Button("Fix Associated Prefabs")) { FixItemAssociatedPrefabs(_frameworkManagerWindow); }
         EditorGUILayout.EndHorizontal();
         
         // Issue check and back buttons
         if (GUILayout.Button("Check for Issues")) {  }
         GUILayout.Space(10); 
-        if (GUILayout.Button("Back")) { _FrameworkManagerWindow.currentWindow = "Home"; }
+        if (GUILayout.Button("Back")) { _frameworkManagerWindow.currentWindow = "Home"; }
     }
     
     
@@ -108,15 +107,13 @@ public class ToolFrameworkManagerItems : EditorWindow
     private void GetActorList()
     {
         actors.Clear();
-        var guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
-        foreach (var guid in guidList)
+        string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
+        foreach (string guid in guidList)
         {
-            var item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
-            if (item != null)
-            {
-                actors.Add(item.id);
-                DisplayActorField(item);
-            }
+            Item item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
+            if (item is null) continue;
+            actors.Add(item.id);
+            DisplayActorField(item);
         }
     }
     
@@ -171,41 +168,41 @@ public class ToolFrameworkManagerItems : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
     
-    private void FixItemIDs(ToolFrameworkManager _FrameworkManagerWindow)
+    private void FixItemIDs(ToolFrameworkManager _frameworkManagerWindow)
     {
-        var guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
+        string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
         foreach (var guid in guidList)
         {
-            var item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
-            if (item != null)
+            Item item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
+            if (item is not null)
             {
-                item.id = _FrameworkManagerWindow.GenerateIdFromActor(item, "item");
+                item.id = _frameworkManagerWindow.GenerateIdFromActor(item, "item");
             }
         }
     }
     
-    private void FixItemActorNames(ToolFrameworkManager _FrameworkManagerWindow)
+    private void FixItemActorNames(ToolFrameworkManager _frameworkManagerWindow)
     {
-        var guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
-        foreach (var guid in guidList)
+        string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
+        foreach (string guid in guidList)
         {
-            var item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
-            if (item != null)
+            Item item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
+            if (item is not null)
             {
-                item.actorName = _FrameworkManagerWindow.GenerateActorNameFromActor(item);
+                item.actorName = _frameworkManagerWindow.GenerateActorNameFromActor(item);
             }
         }
     }
     
-    private void FixItemAssociatedPrefabs(ToolFrameworkManager _FrameworkManagerWindow)
+    private void FixItemAssociatedPrefabs(ToolFrameworkManager _frameworkManagerWindow)
     {
-        var guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
-        foreach (var guid in guidList)
+        string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
+        foreach (string guid in guidList)
         {
-            var item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
-            if (item != null)
+            Item item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
+            if (item is not null)
             {
-                item.AssociatedGameObject = _FrameworkManagerWindow.GetPrefabAtPath(item.name, ToolFrameworkManager.ObjectsFolder);
+                item.AssociatedGameObject = _frameworkManagerWindow.GetPrefabAtPath(item.name, ToolFrameworkManager.ObjectsFolder);
             }
         }
     } 
@@ -217,62 +214,30 @@ public class ToolFrameworkManagerItems : EditorWindow
         actors.Remove(_item.id);
     }
 
-    private void CreateNewItem(ToolFrameworkManager _FrameworkManagerWindow, string _itemName)
+    private void CreateNewItem(ToolFrameworkManager _frameworkManagerWindow, string _itemName)
     {
-        Item newItem = null; // Declare a single base type reference
-
-        switch (_FrameworkManagerWindow.selectedItemType)
+        Item newItem = _frameworkManagerWindow.selectedItemType switch
         {
-            case "Utility Throwable":
-                newItem = CreateInstance<Item_Utility_Throwable>();
-                break;
-            case "Utility Consumable":
-                newItem = CreateInstance<Item_Utility_Consumable>();
-                break;
-            case "Weapon Bladed":
-                newItem = CreateInstance<Item_Weapon_Bladed>();
-                break;
-            case "Weapon Bludgeoning":
-                newItem = CreateInstance<Item_Weapon_Bludgeoning>();
-                break;
-            case "Weapon Polearm":
-                newItem = CreateInstance<Item_Weapon_Polearm>();
-                break;
-            case "Weapon Projectile":
-                newItem = CreateInstance<Item_Weapon_Projectile>();
-                break;
-            case "Weapon Hitscan":
-                newItem = CreateInstance<Item_Weapon_Hitscan>();
-                break;
-            case "Magic":
-                newItem = CreateInstance<Item_Magic>();
-                break;
-            case "Defense":
-                newItem = CreateInstance<Item_Defense>();
-                break;
-            case "Defense Head":
-                newItem = CreateInstance<Item_Defense_Head>();
-                break;
-            case "Defense Chest":
-                newItem = CreateInstance<Item_Defense_Chest>();
-                break;
-            case "Defense Back":
-                newItem = CreateInstance<Item_Defense_Back>();
-                break;
-            case "Defense Legs":
-                newItem = CreateInstance<Item_Defense_Legs>();
-                break;
-            case "Defense Feet":
-                newItem = CreateInstance<Item_Defense_Feet>();
-                break;
-            default:
-                newItem = CreateInstance<Item>(); // Default item type
-                break;
-        }
+            "Utility Throwable" => CreateInstance<Item_Utility_Throwable>(),
+            "Utility Consumable" => CreateInstance<Item_Utility_Consumable>(),
+            "Weapon Bladed" => CreateInstance<Item_Weapon_Bladed>(),
+            "Weapon Bludgeoning" => CreateInstance<Item_Weapon_Bludgeoning>(),
+            "Weapon Polearm" => CreateInstance<Item_Weapon_Polearm>(),
+            "Weapon Projectile" => CreateInstance<Item_Weapon_Projectile>(),
+            "Weapon Hitscan" => CreateInstance<Item_Weapon_Hitscan>(),
+            "Magic" => CreateInstance<Item_Magic>(),
+            "Defense" => CreateInstance<Item_Defense>(),
+            "Defense Head" => CreateInstance<Item_Defense_Head>(),
+            "Defense Chest" => CreateInstance<Item_Defense_Chest>(),
+            "Defense Back" => CreateInstance<Item_Defense_Back>(),
+            "Defense Legs" => CreateInstance<Item_Defense_Legs>(),
+            "Defense Feet" => CreateInstance<Item_Defense_Feet>(),
+            _ => CreateInstance<Item>()
+        };
 
-        if (newItem == null)
+        if (newItem is null)
         {
-            Debug.LogError("Failed to create new item: unknown type " + _FrameworkManagerWindow.selectedItemType);
+            Debug.LogError("Failed to create new item: unknown type " + _frameworkManagerWindow.selectedItemType);
             return;
         }
     

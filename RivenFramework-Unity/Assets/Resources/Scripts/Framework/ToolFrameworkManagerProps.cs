@@ -33,7 +33,7 @@ public class ToolFrameworkManagerProps : EditorWindow
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    public void Window(ToolFrameworkManager _FrameworkManagerWindow)
+    public void Window(ToolFrameworkManager _frameworkManagerWindow)
     {
         // Description
         EditorGUILayout.HelpBox("Add and modify the assets that appear in your project. This will only handel the scriptable object data, you will still need to create a prefab with the same name as the prop in /Resources/Actors/Objects! Also don't forget to add each of these scriptables to a prop group in the GameInstance prefab's AssetData script found in /Resources/Actors/System. (Sorry, I know this a bit clunky right now but in the future this tool will be able to assign actors to the asset database. Good Luck! ~Liz)", MessageType.None);
@@ -50,7 +50,7 @@ public class ToolFrameworkManagerProps : EditorWindow
         EditorGUILayout.EndHorizontal();
         
         // Actor list
-        _FrameworkManagerWindow.scrollPosition = EditorGUILayout.BeginScrollView(_FrameworkManagerWindow.scrollPosition);
+        _frameworkManagerWindow.scrollPosition = EditorGUILayout.BeginScrollView(_frameworkManagerWindow.scrollPosition);
         GetActorList();
         EditorGUILayout.EndScrollView();
         GUILayout.Space(10);
@@ -63,15 +63,15 @@ public class ToolFrameworkManagerProps : EditorWindow
         
         // Fix ... buttons
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Fix IDs")) { FixPropIDs(_FrameworkManagerWindow); }
-        if (GUILayout.Button("Fix Actor Names")) { FixPropActorNames(_FrameworkManagerWindow); }
-        if (GUILayout.Button("Fix Associated Prefabs")) { FixPropAssociatedPrefabs(_FrameworkManagerWindow); }
+        if (GUILayout.Button("Fix IDs")) { FixPropIDs(_frameworkManagerWindow); }
+        if (GUILayout.Button("Fix Actor Names")) { FixPropActorNames(_frameworkManagerWindow); }
+        if (GUILayout.Button("Fix Associated Prefabs")) { FixPropAssociatedPrefabs(_frameworkManagerWindow); }
         EditorGUILayout.EndHorizontal();
         
         // Issue check and back buttons
         if (GUILayout.Button("Check for Issues")) {  }
         GUILayout.Space(10); 
-        if (GUILayout.Button("Back")) { _FrameworkManagerWindow.currentWindow = "Home"; }
+        if (GUILayout.Button("Back")) { _frameworkManagerWindow.currentWindow = "Home"; }
     }
     
     
@@ -84,15 +84,13 @@ public class ToolFrameworkManagerProps : EditorWindow
     private void GetActorList()
     {
         actors.Clear();
-        var guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
-        foreach (var guid in guidList)
+        string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
+        foreach (string guid in guidList)
         {
-            var prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
-            if (prop != null)
-            {
-                actors.Add(prop.id);
-                DisplayActorField(prop);
-            }
+            Prop prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
+            if (prop is null) continue;
+            actors.Add(prop.id);
+            DisplayActorField(prop);
         }
     }
     
@@ -141,41 +139,41 @@ public class ToolFrameworkManagerProps : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
     
-    private void FixPropIDs(ToolFrameworkManager _FrameworkManagerWindow)
+    private void FixPropIDs(ToolFrameworkManager _frameworkManagerWindow)
     {
-        var guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
-        foreach (var guid in guidList)
+        string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
+        foreach (string guid in guidList)
         {
-            var prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
-            if (prop != null)
+            Prop prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
+            if (prop is not null)
             {
-                prop.id = _FrameworkManagerWindow.GenerateIdFromActor(prop, "prop");
+                prop.id = _frameworkManagerWindow.GenerateIdFromActor(prop, "prop");
             }
         }
     }
     
-    private void FixPropActorNames(ToolFrameworkManager _FrameworkManagerWindow)
+    private void FixPropActorNames(ToolFrameworkManager _frameworkManagerWindow)
     {
-        var guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
-        foreach (var guid in guidList)
+        string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
+        foreach (string guid in guidList)
         {
-            var prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
-            if (prop != null)
+            Prop prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
+            if (prop is not null)
             {
-                prop.actorName = _FrameworkManagerWindow.GenerateActorNameFromActor(prop);
+                prop.actorName = _frameworkManagerWindow.GenerateActorNameFromActor(prop);
             }
         }
     }
     
-    private void FixPropAssociatedPrefabs(ToolFrameworkManager _FrameworkManagerWindow)
+    private void FixPropAssociatedPrefabs(ToolFrameworkManager _frameworkManagerWindow)
     {
-        var guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
-        foreach (var guid in guidList)
+        string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
+        foreach (string guid in guidList)
         {
-            var prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
-            if (prop != null)
+            Prop prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
+            if (prop is not null)
             {
-                prop.AssociatedGameObject = _FrameworkManagerWindow.GetPrefabAtPath(prop.name, ToolFrameworkManager.ObjectsFolder);
+                prop.AssociatedGameObject = _frameworkManagerWindow.GetPrefabAtPath(prop.name, ToolFrameworkManager.ObjectsFolder);
             }
         }
     } 
