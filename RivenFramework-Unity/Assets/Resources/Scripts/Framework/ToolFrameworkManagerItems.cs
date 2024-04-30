@@ -189,7 +189,7 @@ public class ToolFrameworkManagerItems : EditorWindow
 
         // Description Field
         _item.description = EditorGUILayout.TextField(_item.description);
-
+        
         // Delete button
         if (GUILayout.Button("Delete", GUILayout.Width(60))) 
         { 

@@ -35,6 +35,7 @@ public class ToolFrameworkManager : EditorWindow
     //=-----------------=
     private ToolFrameworkManagerProps propManager;
     private ToolFrameworkManagerItems itemManager;
+    private ToolFrameworkManagerCharacters characterManager;
 
 
     //=-----------------=
@@ -66,7 +67,7 @@ public class ToolFrameworkManager : EditorWindow
                 if (itemManager) itemManager.Window(this);
                 break;
             case "CharacterManager":
-                CreateInstance<ToolFrameworkManagerProps>().Window(this);
+                if (characterManager) characterManager.Window(this);
                 break;
             default:
                 Missing();
@@ -103,7 +104,16 @@ public class ToolFrameworkManager : EditorWindow
             }
             currentWindow = "ItemManager";
         }
-        if (GUILayout.Button("Character Manager")) { currentWindow = "CharacterManager"; }
+
+        if (GUILayout.Button("Character Manager"))
+        {
+            if (characterManager is null)
+            {
+                characterManager = CreateInstance<ToolFrameworkManagerCharacters>();
+                characterManager.initialized = false;
+            }
+            currentWindow = "CharacterManager";
+        }
     }
 
     private void ProjectSetup()

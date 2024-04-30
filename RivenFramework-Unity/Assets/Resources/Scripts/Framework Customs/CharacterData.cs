@@ -12,6 +12,7 @@ using UnityEngine;
 public class CharacterData : Actor
 {
     // DON'T FORGET TO MODIFY THE Pawn & CharacterState CLASS TO MATCH THIS DATA!!!
+    public string characterName;
     public float health;
     public float movementSpeed;
     public string team;
