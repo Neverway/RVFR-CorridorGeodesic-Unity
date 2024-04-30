@@ -18,6 +18,7 @@ public class ToolFrameworkManager : EditorWindow
     // Public Variables
     //=-----------------=
     public string currentWindow = "Home";
+    public string newActorName = "";
 
 
     //=-----------------=
@@ -32,6 +33,8 @@ public class ToolFrameworkManager : EditorWindow
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private ToolFrameworkManagerProps propManager;
+    private ToolFrameworkManagerItems itemManager;
 
 
     //=-----------------=
@@ -57,10 +60,10 @@ public class ToolFrameworkManager : EditorWindow
                 ProjectSetup();
                 break;
             case "PropManager":
-                CreateInstance<ToolFrameworkManagerProps>().Window(this);
+                if (propManager) propManager.Window(this);
                 break;
             case "ItemManager":
-                CreateInstance<ToolFrameworkManagerItems>().Window(this);
+                if (itemManager) itemManager.Window(this);
                 break;
             case "CharacterManager":
                 CreateInstance<ToolFrameworkManagerProps>().Window(this);
@@ -81,8 +84,25 @@ public class ToolFrameworkManager : EditorWindow
         GUILayout.Space(10); 
         if (GUILayout.Button("Project Setup")) { currentWindow = "ProjectSetup"; }
         GUILayout.Space(10); 
-        if (GUILayout.Button("Prop Manager")) { currentWindow = "PropManager"; }
-        if (GUILayout.Button("Item Manager")) { currentWindow = "ItemManager"; }
+        if (GUILayout.Button("Prop Manager")) 
+        {
+            if (propManager is null)
+            {
+                propManager = CreateInstance<ToolFrameworkManagerProps>();
+                propManager.initialized = false;
+            }
+            currentWindow = "PropManager"; 
+        }
+
+        if (GUILayout.Button("Item Manager"))
+        {
+            if (itemManager is null)
+            {
+                itemManager = CreateInstance<ToolFrameworkManagerItems>();
+                itemManager.initialized = false;
+            }
+            currentWindow = "ItemManager";
+        }
         if (GUILayout.Button("Character Manager")) { currentWindow = "CharacterManager"; }
     }
 

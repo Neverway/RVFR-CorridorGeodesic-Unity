@@ -1,6 +1,9 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: The script is designed to help manage props in a project by providing
+// a user-friendly interface for creating, editing, and deleting props. Props are
+// represented as scriptable objects, which are stored in a specific folder
+// (Assets/Resources/Actors/Props).
 // Notes:
 //
 //=============================================================================
@@ -9,15 +12,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UIElements;
 
 public class ToolFrameworkManagerProps : EditorWindow
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
+    // Path to the folder where Prop scriptable objects are stored.
     private const string ActorsFolder = "Assets/Resources/Actors/Props";
+    // List of actor identifiers for the props.
     private List<string> actors = new List<string>();
-    private string newPropName = "";
+    // Name for a new prop to be created.
+    //private string _frameworkManager.newActorName = "";
+    public bool initialized;
 
 
     //=-----------------=
@@ -28,14 +36,24 @@ public class ToolFrameworkManagerProps : EditorWindow
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private List<Prop> props = new List<Prop>();
 
     
     //=-----------------=
-    // Internal Functions
+    // Window Functions
     //=-----------------=
-    public void Window(ToolFrameworkManager _frameworkManagerWindow)
-    {
-        // Description
+    /// <summary>
+    /// Show the main window for this script
+    /// </summary>
+    /// <param name="_frameworkManager"></param>
+    public void Window(ToolFrameworkManager _frameworkManager)
+    {        
+        if (!initialized)
+        {
+            EditorApplication.delayCall += () => GetActorList();
+            initialized = true;
+        }
+        // Long description and guidance for users on how to use this editor window effectively.
         EditorGUILayout.HelpBox("Add and modify the assets that appear in your project. This will only handel the scriptable object data, you will still need to create a prefab with the same name as the prop in /Resources/Actors/Objects! Also don't forget to add each of these scriptables to a prop group in the GameInstance prefab's AssetData script found in /Resources/Actors/System. (Sorry, I know this a bit clunky right now but in the future this tool will be able to assign actors to the asset database. Good Luck! ~Liz)", MessageType.None);
         GUILayout.Space(10);
         
@@ -50,33 +68,37 @@ public class ToolFrameworkManagerProps : EditorWindow
         EditorGUILayout.EndHorizontal();
         
         // Actor list
-        _frameworkManagerWindow.scrollPosition = EditorGUILayout.BeginScrollView(_frameworkManagerWindow.scrollPosition);
-        GetActorList();
+        _frameworkManager.scrollPosition = EditorGUILayout.BeginScrollView(_frameworkManager.scrollPosition);
+        ShowActors();
         EditorGUILayout.EndScrollView();
         GUILayout.Space(10);
         
         // New actor button
         EditorGUILayout.BeginHorizontal();
-        newPropName = EditorGUILayout.TextField(newPropName);
-        if (GUILayout.Button("Create New Prop") && !string.IsNullOrEmpty(newPropName)) { CreateNewProp(newPropName); newPropName = ""; }
+        _frameworkManager.newActorName = EditorGUILayout.TextField(_frameworkManager.newActorName);
+        if (GUILayout.Button("Create New Prop") && !string.IsNullOrEmpty(_frameworkManager.newActorName)) { CreateNewProp(_frameworkManager, _frameworkManager.newActorName); _frameworkManager.newActorName = ""; }
         EditorGUILayout.EndHorizontal();
         
         // Fix ... buttons
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Fix IDs")) { FixPropIDs(_frameworkManagerWindow); }
-        if (GUILayout.Button("Fix Actor Names")) { FixPropActorNames(_frameworkManagerWindow); }
-        if (GUILayout.Button("Fix Associated Prefabs")) { FixPropAssociatedPrefabs(_frameworkManagerWindow); }
+        if (GUILayout.Button("Fix IDs")) { FixPropIDs(_frameworkManager); }
+        if (GUILayout.Button("Fix Actor Names")) { FixPropActorNames(_frameworkManager); }
+        if (GUILayout.Button("Fix Associated Prefabs")) { FixPropAssociatedPrefabs(_frameworkManager); }
         EditorGUILayout.EndHorizontal();
         
         // Issue check and back buttons
         if (GUILayout.Button("Check for Issues")) {  }
-        GUILayout.Space(10); 
-        if (GUILayout.Button("Back")) { _frameworkManagerWindow.currentWindow = "Home"; }
+        GUILayout.Space(10);
+        if (GUILayout.Button("Back"))
+        {
+            _frameworkManager.newActorName = "";
+            _frameworkManager.currentWindow = "Home";
+        }
     }
     
     
     //=-----------------=
-    // Window Functions
+    // Internal Functions
     //=-----------------=
     /// <summary>
     /// Find all the scriptable objects in the specified asset folder
@@ -84,12 +106,23 @@ public class ToolFrameworkManagerProps : EditorWindow
     private void GetActorList()
     {
         actors.Clear();
+        props.Clear();
         string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
         foreach (string guid in guidList)
         {
             Prop prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
             if (prop is null) continue;
             actors.Add(prop.id);
+            props.Add(prop);
+        }
+
+        initialized = false;
+    }
+
+    private void ShowActors()
+    {
+        foreach (Prop prop in props)
+        {
             DisplayActorField(prop);
         }
     }
@@ -139,7 +172,11 @@ public class ToolFrameworkManagerProps : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
     
-    private void FixPropIDs(ToolFrameworkManager _frameworkManagerWindow)
+    /// <summary>
+    /// Button assign ids, used to reference object in terminal and scripts, to all found actors
+    /// </summary>
+    /// <param name="_frameworkManager"></param>
+    private void FixPropIDs(ToolFrameworkManager _frameworkManager)
     {
         string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
         foreach (string guid in guidList)
@@ -147,12 +184,16 @@ public class ToolFrameworkManagerProps : EditorWindow
             Prop prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
             if (prop is not null)
             {
-                prop.id = _frameworkManagerWindow.GenerateIdFromActor(prop, "prop");
+                prop.id = _frameworkManager.GenerateIdFromActor(prop, "prop");
             }
         }
     }
     
-    private void FixPropActorNames(ToolFrameworkManager _frameworkManagerWindow)
+    /// <summary>
+    /// Button assign runtime names, used in menus, to all found actors
+    /// </summary>
+    /// <param name="_frameworkManager"></param>
+    private void FixPropActorNames(ToolFrameworkManager _frameworkManager)
     {
         string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
         foreach (string guid in guidList)
@@ -160,12 +201,16 @@ public class ToolFrameworkManagerProps : EditorWindow
             Prop prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
             if (prop is not null)
             {
-                prop.actorName = _frameworkManagerWindow.GenerateActorNameFromActor(prop);
+                prop.actorName = _frameworkManager.GenerateActorNameFromActor(prop);
             }
         }
     }
     
-    private void FixPropAssociatedPrefabs(ToolFrameworkManager _frameworkManagerWindow)
+    /// <summary>
+    /// Button assign game object, to all found actors
+    /// </summary>
+    /// <param name="_frameworkManager"></param>
+    private void FixPropAssociatedPrefabs(ToolFrameworkManager _frameworkManager)
     {
         string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
         foreach (string guid in guidList)
@@ -173,7 +218,7 @@ public class ToolFrameworkManagerProps : EditorWindow
             Prop prop = AssetDatabase.LoadAssetAtPath<Prop>(AssetDatabase.GUIDToAssetPath(guid));
             if (prop is not null)
             {
-                prop.AssociatedGameObject = _frameworkManagerWindow.GetPrefabAtPath(prop.name, ToolFrameworkManager.ObjectsFolder);
+                prop.AssociatedGameObject = _frameworkManager.GetPrefabAtPath(prop.name, ToolFrameworkManager.ObjectsFolder);
             }
         }
     } 
@@ -183,18 +228,21 @@ public class ToolFrameworkManagerProps : EditorWindow
         string assetPath = AssetDatabase.GetAssetPath(_prop);
         AssetDatabase.DeleteAsset(assetPath);
         actors.Remove(_prop.id);
+        initialized = false;
     }
 
-    private void CreateNewProp(string _propName)
+    private void CreateNewProp(ToolFrameworkManager _frameworkManager, string _propName)
     {
         // Create a new instance of the Prop scriptable object
         Prop newProp = CreateInstance<Prop>();
     
         // Set the name of the new prop
         newProp.name = _propName;
+        _frameworkManager.newActorName = "";
     
         // Create asset file for the new prop
         string assetPath = $"{ActorsFolder}/{_propName}.asset";
         AssetDatabase.CreateAsset(newProp, assetPath);
+        initialized = false;
     }
 }

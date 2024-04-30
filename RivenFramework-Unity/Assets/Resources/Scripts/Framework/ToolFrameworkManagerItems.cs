@@ -1,11 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: The script is designed to help manage items in a project by providing
+// a user-friendly interface for creating, editing, and deleting items. Items are
+// represented as scriptable objects, which are stored in a specific folder
+// (Assets/Resources/Actors/Items).
 // Notes:
 //
 //=============================================================================
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -15,9 +19,13 @@ public class ToolFrameworkManagerItems : EditorWindow
     //=-----------------=
     // Public Variables
     //=-----------------=
+    // Path to the folder where Item scriptable objects are stored.
     private const string ActorsFolder = "Assets/Resources/Actors/Items";
+    // List of actor identifiers for the items.
     private List<string> actors = new List<string>();
-    private string newItemName = "";
+    // Name for a new item to be created.
+    //private string _frameworkManager.newActorName = "";
+    public bool initialized;
 
 
     //=-----------------=
@@ -28,14 +36,24 @@ public class ToolFrameworkManagerItems : EditorWindow
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private List<Item> items = new List<Item>();
 
     
     //=-----------------=
-    // Internal Functions
+    // Window Functions
     //=-----------------=
-    public void Window(ToolFrameworkManager _frameworkManagerWindow)
+    /// <summary>
+    /// Show the main window for this script
+    /// </summary>
+    /// <param name="_frameworkManager"></param>
+    public void Window(ToolFrameworkManager _frameworkManager)
     {
-        // Description
+        if (!initialized)
+        {
+            EditorApplication.delayCall += () => GetActorList();
+            initialized = true;
+        }
+        // Long description and guidance for users on how to use this editor window effectively.
         EditorGUILayout.HelpBox("Add and modify the items that appear in your project. This will only handel the scriptable object data, you will still need to create a prefab with the same name as the item in /Resources/Actors/Objects! Also don't forget to add each of these scriptables to a item group in the GameInstance prefab's AssetData script found in /Resources/Actors/System. (Sorry, I know this a bit clunky right now but in the future this tool will be able to assign actors to the asset database. Good Luck! ~Liz)", MessageType.None);
         GUILayout.Space(10);
         
@@ -52,8 +70,8 @@ public class ToolFrameworkManagerItems : EditorWindow
         EditorGUILayout.EndHorizontal();
         
         // Actor list
-        _frameworkManagerWindow.scrollPosition = EditorGUILayout.BeginScrollView(_frameworkManagerWindow.scrollPosition);
-        GetActorList();
+        _frameworkManager.scrollPosition = EditorGUILayout.BeginScrollView(_frameworkManager.scrollPosition);
+        ShowActors();
         EditorGUILayout.EndScrollView();
         GUILayout.Space(10);
         
@@ -77,35 +95,40 @@ public class ToolFrameworkManagerItems : EditorWindow
             "Defense Feet",
             "Other"
         };
-        int selectedIndex = Array.IndexOf(types, _frameworkManagerWindow.selectedItemType);
+        int selectedIndex = Array.IndexOf(types, _frameworkManager.selectedItemType);
         selectedIndex = EditorGUILayout.Popup("Type", selectedIndex, types);
-        _frameworkManagerWindow.selectedItemType = types[selectedIndex];
-        newItemName = EditorGUILayout.TextField(newItemName);
-        if (GUILayout.Button("Create New Item") && !string.IsNullOrEmpty(newItemName)) { CreateNewItem(_frameworkManagerWindow, newItemName); newItemName = ""; }
+        _frameworkManager.selectedItemType = types[selectedIndex];
+        _frameworkManager.newActorName = EditorGUILayout.TextField(_frameworkManager.newActorName);
+        if (GUILayout.Button("Create New Item") && !string.IsNullOrEmpty(_frameworkManager.newActorName)) { CreateNewItem(_frameworkManager, _frameworkManager.newActorName); _frameworkManager.newActorName = ""; }
         EditorGUILayout.EndHorizontal();
         
         // Fix ... buttons
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Fix IDs")) { FixItemIDs(_frameworkManagerWindow); }
-        if (GUILayout.Button("Fix Actor Names")) { FixItemActorNames(_frameworkManagerWindow); }
-        if (GUILayout.Button("Fix Associated Prefabs")) { FixItemAssociatedPrefabs(_frameworkManagerWindow); }
+        if (GUILayout.Button("Fix IDs")) { FixItemIDs(_frameworkManager); }
+        if (GUILayout.Button("Fix Actor Names")) { FixItemActorNames(_frameworkManager); }
+        if (GUILayout.Button("Fix Associated Prefabs")) { FixItemAssociatedPrefabs(_frameworkManager); }
         EditorGUILayout.EndHorizontal();
         
         // Issue check and back buttons
         if (GUILayout.Button("Check for Issues")) {  }
-        GUILayout.Space(10); 
-        if (GUILayout.Button("Back")) { _frameworkManagerWindow.currentWindow = "Home"; }
+        GUILayout.Space(10);
+        if (GUILayout.Button("Back"))
+        {
+            _frameworkManager.newActorName = "";
+            _frameworkManager.currentWindow = "Home";
+        }
     }
     
     
     //=-----------------=
-    // Window Functions
+    // Internal Functions
     //=-----------------=
     /// <summary>
     /// Find all the scriptable objects in the specified asset folder
     /// </summary>
     private void GetActorList()
     {
+        items.Clear();
         actors.Clear();
         string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
         foreach (string guid in guidList)
@@ -113,6 +136,16 @@ public class ToolFrameworkManagerItems : EditorWindow
             Item item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
             if (item is null) continue;
             actors.Add(item.id);
+            items.Add(item);
+        }
+        
+        initialized = false;
+    }
+
+    private void ShowActors()
+    {
+        foreach (Item item in items)
+        {
             DisplayActorField(item);
         }
     }
@@ -168,7 +201,11 @@ public class ToolFrameworkManagerItems : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
     
-    private void FixItemIDs(ToolFrameworkManager _frameworkManagerWindow)
+    /// <summary>
+    /// Button assign ids, used to reference object in terminal and scripts, to all found actors
+    /// </summary>
+    /// <param name="_frameworkManager"></param>
+    private void FixItemIDs(ToolFrameworkManager _frameworkManager)
     {
         string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
         foreach (var guid in guidList)
@@ -176,12 +213,16 @@ public class ToolFrameworkManagerItems : EditorWindow
             Item item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
             if (item is not null)
             {
-                item.id = _frameworkManagerWindow.GenerateIdFromActor(item, "item");
+                item.id = _frameworkManager.GenerateIdFromActor(item, "item");
             }
         }
     }
     
-    private void FixItemActorNames(ToolFrameworkManager _frameworkManagerWindow)
+    /// <summary>
+    /// Button assign runtime names, used in menus, to all found actors
+    /// </summary>
+    /// <param name="_frameworkManager"></param>
+    private void FixItemActorNames(ToolFrameworkManager _frameworkManager)
     {
         string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
         foreach (string guid in guidList)
@@ -189,12 +230,16 @@ public class ToolFrameworkManagerItems : EditorWindow
             Item item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
             if (item is not null)
             {
-                item.actorName = _frameworkManagerWindow.GenerateActorNameFromActor(item);
+                item.actorName = _frameworkManager.GenerateActorNameFromActor(item);
             }
         }
     }
     
-    private void FixItemAssociatedPrefabs(ToolFrameworkManager _frameworkManagerWindow)
+    /// <summary>
+    /// Button assign game object, to all found actors
+    /// </summary>
+    /// <param name="_frameworkManager"></param>
+    private void FixItemAssociatedPrefabs(ToolFrameworkManager _frameworkManager)
     {
         string[] guidList = AssetDatabase.FindAssets("", new[] { ActorsFolder });
         foreach (string guid in guidList)
@@ -202,7 +247,7 @@ public class ToolFrameworkManagerItems : EditorWindow
             Item item = AssetDatabase.LoadAssetAtPath<Item>(AssetDatabase.GUIDToAssetPath(guid));
             if (item is not null)
             {
-                item.AssociatedGameObject = _frameworkManagerWindow.GetPrefabAtPath(item.name, ToolFrameworkManager.ObjectsFolder);
+                item.AssociatedGameObject = _frameworkManager.GetPrefabAtPath(item.name, ToolFrameworkManager.ObjectsFolder);
             }
         }
     } 
@@ -212,11 +257,12 @@ public class ToolFrameworkManagerItems : EditorWindow
         string assetPath = AssetDatabase.GetAssetPath(_item);
         AssetDatabase.DeleteAsset(assetPath);
         actors.Remove(_item.id);
+        initialized = false;
     }
 
-    private void CreateNewItem(ToolFrameworkManager _frameworkManagerWindow, string _itemName)
+    private void CreateNewItem(ToolFrameworkManager _frameworkManager, string _itemName)
     {
-        Item newItem = _frameworkManagerWindow.selectedItemType switch
+        Item newItem = _frameworkManager.selectedItemType switch
         {
             "Utility Throwable" => CreateInstance<Item_Utility_Throwable>(),
             "Utility Consumable" => CreateInstance<Item_Utility_Consumable>(),
@@ -237,15 +283,17 @@ public class ToolFrameworkManagerItems : EditorWindow
 
         if (newItem is null)
         {
-            Debug.LogError("Failed to create new item: unknown type " + _frameworkManagerWindow.selectedItemType);
+            Debug.LogError("Failed to create new item: unknown type " + _frameworkManager.selectedItemType);
             return;
         }
     
         // Set the name of the new item
         newItem.name = _itemName;
+        _frameworkManager.newActorName = "";
     
         // Create asset file for the new item
         string assetPath = $"{ActorsFolder}/{_itemName}.asset";
         AssetDatabase.CreateAsset(newItem, assetPath);
+        initialized = false;
     }
 }
