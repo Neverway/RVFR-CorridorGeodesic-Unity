@@ -18,6 +18,7 @@ public class ApplicationSettings : MonoBehaviour
     public Vector2 targetResolution = new Vector2(1920, 1080);
     [Range(0, 3)] public int windowMode = 0;
     [Range(-1, 300)] public int fpslimit = 60;
+    public bool showFramecounter;
     
     [Range(0, 4)] public int resolutionScale = 3;
 
@@ -31,6 +32,7 @@ public class ApplicationSettings : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private GameInstance gameInstance;
 
 
     //=-----------------=
@@ -38,7 +40,7 @@ public class ApplicationSettings : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-         
+        gameInstance = GetComponent<GameInstance>();
     }
 
     private void Update()
@@ -81,6 +83,22 @@ public class ApplicationSettings : MonoBehaviour
         // Vsync
         // FPS limit
         Application.targetFrameRate = fpslimit;
+        // Framecounter
+        switch (showFramecounter)
+        {
+            case true:
+                if (!GameInstance.GetWidget("WB_Framecounter"))
+                {
+                    gameInstance.UI_ShowFramecounter();
+                }
+                break;
+            case false:
+                if (GameInstance.GetWidget("WB_Framecounter"))
+                {
+                    Destroy(GameInstance.GetWidget("WB_Framecounter"));
+                }
+                break;
+        }
         
         // Resolution Scale
         switch (resolutionScale)

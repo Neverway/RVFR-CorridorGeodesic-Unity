@@ -29,7 +29,7 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [Tooltip("0-Title, 1-Loading, 2-Pause, 3-LevelEditor, 4-HUD, 5-Inventory, 6-Settings")]
+    [Tooltip("0-Title, 1-Loading, 2-Pause, 3-LevelEditor, 4-HUD, 5-Inventory, 6-Framecounter")]
     public List<GameObject> UserInterfaceWidgets;
     public List<PawnController> PlayerControllerClasses;
     [HideInInspector] public Pawn localPlayerCharacter;
@@ -214,5 +214,11 @@ public class GameInstance : MonoBehaviour
         {
             Destroy(GetWidget("WB_Inventory")); SetAllPawnsIsPaused(false);
         }
+    }
+
+    // 6
+    public void UI_ShowFramecounter()
+    {
+        AddWidget(UserInterfaceWidgets[6]);
     }
 }

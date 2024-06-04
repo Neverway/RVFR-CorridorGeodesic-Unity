@@ -41,6 +41,7 @@ public class UI_Text_FPS : MonoBehaviour
     private void Start()
     {
 	    fpsCounterText = GetComponent<TMP_Text>();
+	    ShowFPSCounter(1);
     }
 
     private void Update()
