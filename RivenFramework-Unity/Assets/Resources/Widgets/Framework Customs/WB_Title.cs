@@ -75,7 +75,9 @@ public class WB_Title : MonoBehaviour
                 break;
             case "buttonSettings":
                 if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-                GameInstance.AddWidget(settingsWidget);
+                GameInstance.AddWidget(settingsWidget); // Create the settings widget
+                Destroy(gameObject); // Remove the current widget
+                //GameInstance.GetWidget("WB_Settings").GetComponent<WB_Settings>().Init();
                 break;
             case "buttonQuit":
                 Application.Quit();

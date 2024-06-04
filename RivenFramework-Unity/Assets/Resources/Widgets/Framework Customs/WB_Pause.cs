@@ -58,6 +58,7 @@ public class WB_Pause : MonoBehaviour
             case "buttonSettings":
                 if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
                 GameInstance.AddWidget(settingsWidget);
+                GameInstance.GetWidget("WB_Settings").GetComponent<WB_Settings>().Init();
                 break;
             case "buttonTitle":
                 worldLoader.LoadWorld("_Title");

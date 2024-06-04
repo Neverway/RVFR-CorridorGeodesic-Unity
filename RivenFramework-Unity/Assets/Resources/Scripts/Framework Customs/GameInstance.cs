@@ -29,6 +29,7 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [Tooltip("0-Title, 1-Loading, 2-Pause, 3-LevelEditor, 4-HUD, 5-Inventory, 6-Settings")]
     public List<GameObject> UserInterfaceWidgets;
     public List<PawnController> PlayerControllerClasses;
     [HideInInspector] public Pawn localPlayerCharacter;
@@ -157,19 +158,22 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     // User External Functions
     //=-----------------=
+    // 0
     public void UI_ShowTitle()
     {
         AddWidget(UserInterfaceWidgets[0]);
     }
 
+    // 1
     public void UI_ShowLoading()
     {
         AddWidget(UserInterfaceWidgets[1]);
     }
 
+    // 2
     public void UI_ShowPause()
     {
-        if (GetWidget("WB_Pause") == null)
+        if (!GetWidget("WB_Pause"))
         {
             AddWidget(UserInterfaceWidgets[2]); SetAllPawnsIsPaused(true);
         }
@@ -179,15 +183,17 @@ public class GameInstance : MonoBehaviour
         }
     }
 
+    // 3
     public void UI_ShowLevelEditor()
     {
         AddWidget(UserInterfaceWidgets[3]);
     }
 
-    // This function requires a check for the existing menu due to it being re-created in the testing mode in the level editor scene
+    // 4 (If you are wondering, this function requires a check for the existing menu due to it being re-created in the
+    // testing mode in the level editor scene)
     public void UI_ShowHUD()
     {
-        if (GetWidget("WB_HUD") == null)
+        if (!GetWidget("WB_HUD"))
         {
             AddWidget(UserInterfaceWidgets[4]);
         }
@@ -197,9 +203,10 @@ public class GameInstance : MonoBehaviour
         }
     }
 
+    // 5 
     public void UI_ShowInventory()
     {
-        if (GetWidget("WB_Inventory") == null)
+        if (!GetWidget("WB_Inventory"))
         {
             AddWidget(UserInterfaceWidgets[5]); SetAllPawnsIsPaused(true);
         }

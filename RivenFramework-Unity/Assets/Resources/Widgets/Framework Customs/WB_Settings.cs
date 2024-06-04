@@ -23,8 +23,9 @@ public class WB_Settings : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private WorldLoader worldLoader;
-    [SerializeField] private Button buttonBack, buttonExtra1, buttonExtra2, buttonExtra3;
+    private GameInstance gameInstance;
+    [SerializeField] private Button buttonBack, buttonGraphics, buttonAudio, buttonControls, buttonGameplay;
+    [SerializeField] private GameObject graphicsWidget, audioWidget, controlsWidget, gameplayWidget;
 
 
     //=-----------------=
@@ -32,15 +33,67 @@ public class WB_Settings : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-        buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
+        gameInstance = FindObjectOfType<GameInstance>();
+        buttonBack.onClick.AddListener(delegate { OnClick("buttonBack"); });
+        buttonGraphics.onClick.AddListener(delegate { OnClick("buttonGraphics"); });
+        buttonAudio.onClick.AddListener(delegate { OnClick("buttonAudio"); });
+        buttonControls.onClick.AddListener(delegate { OnClick("buttonControls"); });
+        buttonGameplay.onClick.AddListener(delegate { OnClick("buttonGameplay"); });
+        Init();
     }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private void OnClick(string button)
+    {
+        switch (button)
+        {
+            case "buttonBack":
+                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                gameInstance.UI_ShowTitle();
+                RemoveSubwidgets();
+                Destroy(gameObject);
+                break;
+            case "buttonGraphics":
+                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                RemoveSubwidgets();
+                GameInstance.AddWidget(graphicsWidget);
+                break;
+            case "buttonAudio":
+                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                RemoveSubwidgets();
+                GameInstance.AddWidget(audioWidget);
+                break;
+            case "buttonControls":
+                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                RemoveSubwidgets();
+                GameInstance.AddWidget(controlsWidget);
+                break;
+            case "buttonGameplay":
+                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                RemoveSubwidgets();
+                GameInstance.AddWidget(gameplayWidget);
+                break;
+        }
+    }
 
 
     //=-----------------=
     // External Functions
     //=-----------------=
+    [Tooltip("Call this to add the first setting sub-widget")]
+    public void Init()
+    {
+        RemoveSubwidgets();
+        GameInstance.AddWidget(graphicsWidget);
+    }
+    
+    public void RemoveSubwidgets()
+    {
+        Destroy(GameInstance.GetWidget("WB_Settings_Graphics"));
+        Destroy(GameInstance.GetWidget("WB_Settings_Audio"));
+        Destroy(GameInstance.GetWidget("WB_Settings_Controls"));
+        Destroy(GameInstance.GetWidget("WB_Settings_Gameplay"));
+    }
 }
