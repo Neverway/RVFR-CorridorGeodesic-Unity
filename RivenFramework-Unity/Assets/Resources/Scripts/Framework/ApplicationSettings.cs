@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
@@ -15,18 +16,15 @@ public class ApplicationSettings : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public Vector2 targetResolution = new Vector2(1920, 1080);
-    [Range(0, 3)] public int windowMode = 0;
-    [Range(-1, 300)] public int fpslimit = 60;
-    public bool showFramecounter;
-    
-    [Range(0, 4)] public int resolutionScale = 3;
+    public ApplicationSettingsData defaultSettingsData;
+    public ApplicationSettingsData currentSettingsData;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
     public bool debugApply;
+    private string path;
 
 
     //=-----------------=
@@ -40,7 +38,11 @@ public class ApplicationSettings : MonoBehaviour
     //=-----------------=
     private void Start()
     {
+        path = $"{Application.persistentDataPath}/settings.json";
+        print(path);
         gameInstance = GetComponent<GameInstance>();
+        if (File.Exists(path)) LoadSettings();
+        ApplySettings();
     }
 
     private void Update()
@@ -48,7 +50,7 @@ public class ApplicationSettings : MonoBehaviour
         if (debugApply)
         {
             debugApply = false;
-            ApplyGraphicSettings();
+            ApplySettings();
         }
     }
 
@@ -60,12 +62,30 @@ public class ApplicationSettings : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void ApplyGraphicSettings()
+    public void ResetSettings()
+    {
+        currentSettingsData = defaultSettingsData;
+    }
+    
+    public void SaveSettings()
+    {
+        var json = JsonUtility.ToJson(currentSettingsData, true);
+        File.WriteAllText(path, json); // Save JSON data to file
+    }
+    
+    public void LoadSettings()
+    {
+        var json = File.ReadAllText(path);
+        var data = JsonUtility.FromJson<ApplicationSettingsData>(json);
+        currentSettingsData = data;
+    }
+    
+    public void ApplySettings()
     {
         // Resolution
-        Screen.SetResolution(Mathf.RoundToInt(targetResolution.x), Mathf.RoundToInt(targetResolution.x), Screen.fullScreen);
+        Screen.SetResolution(Mathf.RoundToInt(currentSettingsData.targetResolution.x), Mathf.RoundToInt(currentSettingsData.targetResolution.x), Screen.fullScreen);
         // Window Mode
-        switch (windowMode)
+        switch (currentSettingsData.windowMode)
         {
             case 0:
                 Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
@@ -82,9 +102,9 @@ public class ApplicationSettings : MonoBehaviour
         }
         // Vsync
         // FPS limit
-        Application.targetFrameRate = fpslimit;
+        Application.targetFrameRate = currentSettingsData.fpslimit;
         // Framecounter
-        switch (showFramecounter)
+        switch (currentSettingsData.showFramecounter)
         {
             case true:
                 if (!GameInstance.GetWidget("WB_Framecounter"))
@@ -101,7 +121,7 @@ public class ApplicationSettings : MonoBehaviour
         }
         
         // Resolution Scale
-        switch (resolutionScale)
+        switch (currentSettingsData.resolutionScale)
         {
             case 0:
                 ScalableBufferManager.ResizeBuffers(0.25f, 0.25f);
@@ -127,5 +147,7 @@ public class ApplicationSettings : MonoBehaviour
         // Motion Blur
         // Ambient Occlusion
         // Bloom
+        
+        SaveSettings();
     }
 }
