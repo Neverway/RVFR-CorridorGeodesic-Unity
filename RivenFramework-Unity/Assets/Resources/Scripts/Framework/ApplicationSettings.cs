@@ -140,6 +140,39 @@ public class ApplicationSettings : MonoBehaviour
                 break;
         }
         // Shadow Quality
+        switch (currentSettingsData.shadowQuality)
+        {
+            case 0:
+                QualitySettings.shadows = ShadowQuality.Disable; // Real-time shadows (off)
+                QualitySettings.shadowResolution = ShadowResolution.Low;
+                QualitySettings.shadowCascades = 0;
+                QualitySettings.shadowDistance = 10;
+                break;
+            case 1:
+                QualitySettings.shadows = ShadowQuality.HardOnly; // Real-time shadows (hard-shadows only)
+                QualitySettings.shadowResolution = ShadowResolution.Low;
+                QualitySettings.shadowCascades = 2;
+                QualitySettings.shadowDistance = 15;
+                break;
+            case 2:
+                QualitySettings.shadows = ShadowQuality.All; // Real-time shadows (all)
+                QualitySettings.shadowResolution = ShadowResolution.Medium;
+                QualitySettings.shadowCascades = 2;
+                QualitySettings.shadowDistance = 20;
+                break;
+            case 3:
+                QualitySettings.shadows = ShadowQuality.All; // Real-time shadows (all)
+                QualitySettings.shadowResolution = ShadowResolution.High;
+                QualitySettings.shadowCascades = 4;
+                QualitySettings.shadowDistance = 40;
+                break;
+            case 4:
+                QualitySettings.shadows = ShadowQuality.All; // Real-time shadows (all)
+                QualitySettings.shadowResolution = ShadowResolution.VeryHigh;
+                QualitySettings.shadowCascades = 4;
+                QualitySettings.shadowDistance = 150;
+                break;
+        }
         // Effects Quality
         // Texture Quality
         
