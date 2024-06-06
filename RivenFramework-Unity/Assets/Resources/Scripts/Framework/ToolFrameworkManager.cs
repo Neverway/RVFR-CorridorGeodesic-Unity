@@ -41,10 +41,10 @@ public class ToolFrameworkManager : EditorWindow
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    [MenuItem("Neverway/Framework Manager2")]
+    [MenuItem("Neverway/Framework Manager")]
     public static void ShowWindow()
     {
-        GetWindow<ToolFrameworkManager>("Riven Framework Manager2");
+        GetWindow<ToolFrameworkManager>("Riven Framework Manager");
     }
 
     private void OnGUI()
@@ -136,11 +136,23 @@ public class ToolFrameworkManager : EditorWindow
                 EditorGUILayout.ObjectField(gameInstance.UserInterfaceWidgets[4], typeof(GameObject), false);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("HUD Inventory:", GUILayout.Width(120));
+                EditorGUILayout.LabelField("Inventory Widget:", GUILayout.Width(120));
                 EditorGUILayout.ObjectField(gameInstance.UserInterfaceWidgets[5], typeof(GameObject), false);
                 EditorGUILayout.EndHorizontal();
             }
             else { Debug.LogError("GameInstance component not found on the prefab."); }
+            
+            ApplicationSettings applicationSettings = GetPrefabAtPath("GameInstance", SystemObjectsFolder).GetComponent<ApplicationSettings>();
+            if (applicationSettings != null)
+            {
+                GUILayout.Space(10); 
+                EditorGUILayout.LabelField("Default Application Settings", EditorStyles.boldLabel);
+                EditorGUILayout.Vector2Field("Target Resolution", applicationSettings.defaultSettingsData.targetResolution);
+                EditorGUILayout.BeginHorizontal();
+                //EditorGUILayout.LabelField("Window Mode", GUILayout.Width(120));
+                //EditorGUILayout.IntSlider(applicationSettings.defaultSettingsData.windowMode, 0,3);
+                EditorGUILayout.EndHorizontal();
+            }
         }
         GUILayout.Space(10); 
         
