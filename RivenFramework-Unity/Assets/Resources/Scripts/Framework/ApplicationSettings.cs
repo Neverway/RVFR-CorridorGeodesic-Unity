@@ -175,6 +175,30 @@ public class ApplicationSettings : MonoBehaviour
         }
         // Effects Quality
         // Texture Quality
+        switch (currentSettingsData.textureQuality)
+        {
+            case 0:
+                QualitySettings.globalTextureMipmapLimit = 3;
+                QualitySettings.anisotropicFiltering = AnisotropicFiltering.Disable;
+                break;
+            case 1:
+                QualitySettings.globalTextureMipmapLimit = 3;
+                QualitySettings.anisotropicFiltering = AnisotropicFiltering.Enable;
+                break;
+            case 2:
+                QualitySettings.globalTextureMipmapLimit = 2;
+                QualitySettings.anisotropicFiltering = AnisotropicFiltering.Enable;
+                break;
+            case 3:
+                QualitySettings.globalTextureMipmapLimit = 1;
+                QualitySettings.anisotropicFiltering = AnisotropicFiltering.Enable;
+                break;
+            case 4:
+                QualitySettings.globalTextureMipmapLimit = 0;
+                QualitySettings.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
+                break;
+        }
+        
         
         // Anti-Aliasing
         // Motion Blur
