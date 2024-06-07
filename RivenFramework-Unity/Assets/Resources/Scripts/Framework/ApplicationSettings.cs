@@ -39,7 +39,6 @@ public class ApplicationSettings : MonoBehaviour
     private void Start()
     {
         path = $"{Application.persistentDataPath}/settings.json";
-        print(path);
         gameInstance = GetComponent<GameInstance>();
         if (File.Exists(path)) LoadSettings();
         ApplySettings();
