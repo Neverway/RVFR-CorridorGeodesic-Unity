@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +25,8 @@ public class WB_Settings : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private GameInstance gameInstance;
-    [SerializeField] private Button buttonBack, buttonGraphics, buttonAudio, buttonControls, buttonGameplay;
+    private ApplicationSettings applicationSettings;
+    [SerializeField] private Button buttonBack, buttonApply, buttonReset, buttonGraphics, buttonAudio, buttonControls, buttonGameplay;
     [SerializeField] private GameObject graphicsWidget, audioWidget, controlsWidget, gameplayWidget;
 
 
@@ -34,7 +36,11 @@ public class WB_Settings : MonoBehaviour
     private void Start()
     {
         gameInstance = FindObjectOfType<GameInstance>();
+        applicationSettings = FindObjectOfType<ApplicationSettings>();
+        applicationSettings.LoadSettings();
         buttonBack.onClick.AddListener(delegate { OnClick("buttonBack"); });
+        buttonApply.onClick.AddListener(delegate { OnClick("buttonApply"); });
+        buttonReset.onClick.AddListener(delegate { OnClick("buttonReset"); });
         buttonGraphics.onClick.AddListener(delegate { OnClick("buttonGraphics"); });
         buttonAudio.onClick.AddListener(delegate { OnClick("buttonAudio"); });
         buttonControls.onClick.AddListener(delegate { OnClick("buttonControls"); });
@@ -54,6 +60,14 @@ public class WB_Settings : MonoBehaviour
                 gameInstance.UI_ShowTitle();
                 RemoveSubwidgets();
                 Destroy(gameObject);
+                break;
+            case "buttonApply":
+                applicationSettings.ApplySettings();
+                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                break;
+            case "buttonReset":
+                applicationSettings.ResetSettings();
+                if (FindObjectOfType<WB_Settings_Graphics>()) { FindObjectOfType<WB_Settings_Graphics>().InitButtonValues(); }
                 break;
             case "buttonGraphics":
                 if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();

@@ -16,7 +16,7 @@ public class ApplicationSettingsData
     // Graphics
     // Display
     [Tooltip("X-Width, Y-Height")]
-    public Vector2 targetResolution = new Vector2(1920, 1080);
+    public int targetResolution;
     [Tooltip("0-Fullscreen, 1-Fullscreen Windowed, 2-Windowed, 3-Windowed Maximized")]
     [Range(0, 3)] public int windowMode = 0;
     [Tooltip("Also referred to as target framerate")]

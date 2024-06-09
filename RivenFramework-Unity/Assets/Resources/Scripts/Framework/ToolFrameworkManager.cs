@@ -147,7 +147,7 @@ public class ToolFrameworkManager : EditorWindow
             {
                 GUILayout.Space(10); 
                 EditorGUILayout.LabelField("Default Application Settings", EditorStyles.boldLabel);
-                EditorGUILayout.Vector2Field("Target Resolution", applicationSettings.defaultSettingsData.targetResolution);
+                //EditorGUILayout.Vector2Field("Target Resolution", applicationSettings.defaultSettingsData.targetResolution);
                 EditorGUILayout.BeginHorizontal();
                 //EditorGUILayout.LabelField("Window Mode", GUILayout.Width(120));
                 //EditorGUILayout.IntSlider(applicationSettings.defaultSettingsData.windowMode, 0,3);

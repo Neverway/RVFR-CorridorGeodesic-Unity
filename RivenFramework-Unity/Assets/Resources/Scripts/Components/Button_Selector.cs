@@ -29,6 +29,7 @@ public class Button_Selector : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    public event Action onValueChanged;
     [SerializeField] private Button left, right;
     [SerializeField] private GameObject indicator, indicatorSelected, indicatorRoot;
     [SerializeField] private TMP_Text text;
@@ -42,20 +43,18 @@ public class Button_Selector : MonoBehaviour
     {
         left.onClick.AddListener(delegate
         {
-            print("Left");
+            onValueChanged?.Invoke();
             if (currentIndex - 1 >= 0)
             {
                 currentIndex--;
-                print(currentIndex);
             }
         });
         right.onClick.AddListener(delegate
         {
-            print("Right");
+            onValueChanged?.Invoke();
             if (currentIndex + 1 <= selectorOptions.Count-1)
             {
                 currentIndex++;
-                print(currentIndex);
             }
         });
         // Create indicators

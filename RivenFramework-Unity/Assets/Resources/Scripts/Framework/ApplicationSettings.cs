@@ -40,7 +40,7 @@ public class ApplicationSettings : MonoBehaviour
     {
         path = $"{Application.persistentDataPath}/settings.json";
         gameInstance = GetComponent<GameInstance>();
-        if (File.Exists(path)) LoadSettings();
+        LoadSettings();
         ApplySettings();
     }
 
@@ -74,15 +74,22 @@ public class ApplicationSettings : MonoBehaviour
     
     public void LoadSettings()
     {
-        var json = File.ReadAllText(path);
-        var data = JsonUtility.FromJson<ApplicationSettingsData>(json);
-        currentSettingsData = data;
+        if (File.Exists(path))
+        {
+            var json = File.ReadAllText(path);
+            var data = JsonUtility.FromJson<ApplicationSettingsData>(json);
+            currentSettingsData = data;
+        }
+        else
+        {
+            currentSettingsData = defaultSettingsData;
+        }
     }
     
     public void ApplySettings()
     {
         // Resolution
-        Screen.SetResolution(Mathf.RoundToInt(currentSettingsData.targetResolution.x), Mathf.RoundToInt(currentSettingsData.targetResolution.x), Screen.fullScreen);
+        //Screen.SetResolution(Mathf.RoundToInt(currentSettingsData.targetResolution.x), Mathf.RoundToInt(currentSettingsData.targetResolution.x), Screen.fullScreen);
         // Window Mode
         switch (currentSettingsData.windowMode)
         {
