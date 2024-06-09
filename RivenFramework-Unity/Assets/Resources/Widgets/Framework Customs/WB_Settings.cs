@@ -64,6 +64,7 @@ public class WB_Settings : MonoBehaviour
             case "buttonApply":
                 applicationSettings.ApplySettings();
                 if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                print(QualitySettings.vSyncCount);
                 break;
             case "buttonReset":
                 applicationSettings.ResetSettings();

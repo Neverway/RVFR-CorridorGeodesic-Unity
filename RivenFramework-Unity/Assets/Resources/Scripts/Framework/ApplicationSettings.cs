@@ -5,10 +5,7 @@
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 public class ApplicationSettings : MonoBehaviour
@@ -110,14 +107,21 @@ public class ApplicationSettings : MonoBehaviour
         switch (currentSettingsData.enableVysnc)
         {
             case true:
-                QualitySettings.vSyncCount = 1;
+                QualitySettings.vSyncCount = 2;
                 break;
             case false:
                 QualitySettings.vSyncCount = 0;
                 break;
         }
         // FPS limit
-        Application.targetFrameRate = currentSettingsData.fpslimit;
+        if (!currentSettingsData.enableVysnc)
+        {
+            Application.targetFrameRate = currentSettingsData.fpslimit;
+        }
+        else
+        {
+            Application.targetFrameRate = 0;
+        }
         // Framecounter
         switch (currentSettingsData.showFramecounter)
         {
