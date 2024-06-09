@@ -107,6 +107,15 @@ public class ApplicationSettings : MonoBehaviour
                 break;
         }
         // Vsync
+        switch (currentSettingsData.enableVysnc)
+        {
+            case true:
+                QualitySettings.vSyncCount = 1;
+                break;
+            case false:
+                QualitySettings.vSyncCount = 0;
+                break;
+        }
         // FPS limit
         Application.targetFrameRate = currentSettingsData.fpslimit;
         // Framecounter
@@ -180,6 +189,29 @@ public class ApplicationSettings : MonoBehaviour
                 break;
         }
         // Effects Quality
+        switch (currentSettingsData.effectsQuality)
+        {
+            case 0:
+                QualitySettings.softParticles = false;
+                QualitySettings.particleRaycastBudget = 4;
+                break;
+            case 1:
+                QualitySettings.softParticles = false;
+                QualitySettings.particleRaycastBudget = 16;
+                break;
+            case 2:
+                QualitySettings.softParticles = true;
+                QualitySettings.particleRaycastBudget = 64;
+                break;
+            case 3:
+                QualitySettings.softParticles = true;
+                QualitySettings.particleRaycastBudget = 256;
+                break;
+            case 4:
+                QualitySettings.softParticles = true;
+                QualitySettings.particleRaycastBudget = 4096;
+                break;
+        }
         // Texture Quality
         switch (currentSettingsData.textureQuality)
         {
@@ -207,9 +239,66 @@ public class ApplicationSettings : MonoBehaviour
         
         
         // Anti-Aliasing
+        switch (currentSettingsData.antialiasing)
+        {
+            case 0:
+                QualitySettings.antiAliasing = 0;
+                break;
+            case 1:
+                QualitySettings.antiAliasing = 2;
+                break;
+            case 2:
+                QualitySettings.antiAliasing = 4;
+                break;
+            case 3:
+                QualitySettings.antiAliasing = 8;
+                break;
+            case 4:
+                QualitySettings.antiAliasing = 8;
+                break;
+        }
         // Motion Blur
+        switch (currentSettingsData.motionBlur)
+        {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
         // Ambient Occlusion
+        switch (currentSettingsData.ambientOcclusion)
+        {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
         // Bloom
+        switch (currentSettingsData.bloom)
+        {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
         
         SaveSettings();
     }

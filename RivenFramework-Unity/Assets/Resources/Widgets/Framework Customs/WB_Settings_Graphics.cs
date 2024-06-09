@@ -30,6 +30,7 @@ public class WB_Settings_Graphics : MonoBehaviour
     // Display
     [SerializeField] private TMP_Dropdown targetResolution;
     [SerializeField] private Button_Selector windowMode;
+    [SerializeField] private Toggle enableVsync;
     [SerializeField] private Slider fpslimit;
     [SerializeField] private Toggle showFramecounter;
     
@@ -80,6 +81,7 @@ public class WB_Settings_Graphics : MonoBehaviour
     {
         targetResolution.value = applicationSettings.currentSettingsData.targetResolution;
         windowMode.currentIndex = applicationSettings.currentSettingsData.windowMode;
+        enableVsync.isOn = applicationSettings.currentSettingsData.enableVysnc;
         fpslimit.value = applicationSettings.currentSettingsData.fpslimit;
         showFramecounter.isOn = applicationSettings.currentSettingsData.showFramecounter;
 

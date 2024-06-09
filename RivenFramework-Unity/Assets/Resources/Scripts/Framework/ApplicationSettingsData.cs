@@ -19,6 +19,8 @@ public class ApplicationSettingsData
     public int targetResolution;
     [Tooltip("0-Fullscreen, 1-Fullscreen Windowed, 2-Windowed, 3-Windowed Maximized")]
     [Range(0, 3)] public int windowMode = 0;
+    [Tooltip("Vertical sync")]
+    public bool enableVysnc = false;
     [Tooltip("Also referred to as target framerate")]
     [Range(-1, 300)] public int fpslimit = 60;
     [Tooltip("Also referred to as fps counter")]
