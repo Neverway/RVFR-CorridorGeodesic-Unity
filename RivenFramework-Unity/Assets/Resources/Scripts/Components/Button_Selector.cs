@@ -66,9 +66,10 @@ public class Button_Selector : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void Update()
     {
         // Updated selection
+        // I really wish this could have been done inside an onClick event instead of update, but the iterator acts possessed otherwise >:L  ~Liz (Jun12-24)
         for (int i = 0; i < indicators.Count; i++)
         {
             // Reset all the indicator colors

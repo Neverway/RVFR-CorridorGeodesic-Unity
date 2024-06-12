@@ -47,4 +47,30 @@ public class ApplicationSettingsData
     [Range(0, 4)] public int ambientOcclusion = 2;
     [Tooltip("0-Lowest, 4-Highest")]
     [Range(0, 4)] public int bloom = 2;
+    
+    // Audio
+    // Audio Devices
+    [Tooltip("0-System Default")]
+    public int outputDevice = 0;
+    [Tooltip("0-System Default")]
+    public int inputDevice = 0;
+    [Range(0, 100)] public int inputVolume = 100;
+    
+    
+    // Audio Mixer
+    [Range(0, 100)] public int masterVolume = 100;
+    [Range(0, 100)] public int musicVolume = 100;
+    [Range(0, 100)] public int soundVolume = 100;
+    [Range(0, 100)] public int voiceVolume = 100;
+    [Range(0, 100)] public int chatterVolume = 100;
+    [Range(0, 100)] public int ambientVolume = 100;
+    [Range(0, 100)] public int menuVolume = 100;
+    
+    // Audio Accessibility
+    public bool visualizeSoundEffects = false;
+    [Tooltip("0-Off, 1-Dialogue, 2-Voice Chat, 3-All")]
+    [Range(0, 4)] public int closedCaptioning = 0;
+    [Range(-1, 300)] public int minVolume = 0;
+    [Range(-1, 300)] public int maxVolume = 140;
+    [Range(-1, 300)] public int minFrequency = 17;
 }
