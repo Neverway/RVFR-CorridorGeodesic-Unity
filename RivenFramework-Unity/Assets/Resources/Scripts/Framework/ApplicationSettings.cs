@@ -5,7 +5,9 @@
 //
 //=============================================================================
 
+using System.Collections.Generic;
 using System.IO;
+using Unity.Collections;
 using UnityEngine;
 
 public class ApplicationSettings : MonoBehaviour
@@ -13,8 +15,9 @@ public class ApplicationSettings : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public ApplicationSettingsData defaultSettingsData;
+    [ReadOnly] [SerializeField] private ApplicationSettingsData defaultSettingsData;
     public ApplicationSettingsData currentSettingsData;
+    public Resolution[] resolutions;
 
 
     //=-----------------=
@@ -38,6 +41,7 @@ public class ApplicationSettings : MonoBehaviour
         path = $"{Application.persistentDataPath}/settings.json";
         gameInstance = GetComponent<GameInstance>();
         LoadSettings();
+        GetCurrentResolutionFromList();
         ApplySettings();
     }
 
@@ -53,6 +57,17 @@ public class ApplicationSettings : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private void UpdateActiveWindowButtons()
+    {
+        if (FindObjectOfType<WB_Settings_Graphics>())
+        {
+            FindObjectOfType<WB_Settings_Graphics>().InitButtonValues();
+        }
+        if (FindObjectOfType<WB_Settings_Audio>())
+        {
+            FindObjectOfType<WB_Settings_Audio>().InitButtonValues();
+        }
+    }
 
 
     //=-----------------=
@@ -60,7 +75,8 @@ public class ApplicationSettings : MonoBehaviour
     //=-----------------=
     public void ResetSettings()
     {
-        currentSettingsData = defaultSettingsData;
+        currentSettingsData = new ApplicationSettingsData(defaultSettingsData);
+        ApplySettings();
     }
     
     public void SaveSettings()
@@ -79,30 +95,14 @@ public class ApplicationSettings : MonoBehaviour
         }
         else
         {
-            currentSettingsData = defaultSettingsData;
+            currentSettingsData = new ApplicationSettingsData(defaultSettingsData);
         }
     }
     
     public void ApplySettings()
     {
         // Resolution
-        //Screen.SetResolution(Mathf.RoundToInt(currentSettingsData.targetResolution.x), Mathf.RoundToInt(currentSettingsData.targetResolution.x), Screen.fullScreen);
-        // Window Mode
-        switch (currentSettingsData.windowMode)
-        {
-            case 0:
-                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-                break;
-            case 1:
-                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-                break;
-            case 2:
-                Screen.fullScreenMode = FullScreenMode.Windowed;
-                break;
-            case 3:
-                Screen.fullScreenMode = FullScreenMode.MaximizedWindow;
-                break;
-        }
+        Screen.SetResolution(resolutions[currentSettingsData.targetResolution].width, resolutions[currentSettingsData.targetResolution].height, GetFullscreenMode());
         // Vsync
         switch (currentSettingsData.enableVysnc)
         {
@@ -304,6 +304,45 @@ public class ApplicationSettings : MonoBehaviour
                 break;
         }
         
+        
+        
         SaveSettings();
+        UpdateActiveWindowButtons();
+    }
+
+    FullScreenMode GetFullscreenMode()
+    {
+        // Window Mode
+        switch (currentSettingsData.windowMode)
+        {
+            case 0:
+                return FullScreenMode.ExclusiveFullScreen;
+            case 1:
+                return FullScreenMode.FullScreenWindow;
+            case 2:
+                return FullScreenMode.Windowed;
+            case 3:
+                return FullScreenMode.MaximizedWindow;
+            default:
+                return FullScreenMode.ExclusiveFullScreen;
+        }
+    }
+    
+    void GetCurrentResolutionFromList()
+    {
+        resolutions = Screen.resolutions;
+        int currentResolutionIndex = 0;
+
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            // Check if this resolution is the current one
+            if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
+            {
+                currentResolutionIndex = i;
+            }
+        }
+
+        // Set the dropdown options
+        currentSettingsData.targetResolution = currentResolutionIndex;
     }
 }

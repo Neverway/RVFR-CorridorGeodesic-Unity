@@ -18,59 +18,138 @@ public class ApplicationSettingsData
     [Tooltip("X-Width, Y-Height")]
     public int targetResolution;
     [Tooltip("0-Fullscreen, 1-Fullscreen Windowed, 2-Windowed, 3-Windowed Maximized")]
-    [Range(0, 3)] public int windowMode = 0;
+    [Range(0, 3)] public int windowMode;
     [Tooltip("Vertical sync")]
-    public bool enableVysnc = false;
+    public bool enableVysnc;
     [Tooltip("Also referred to as target framerate")]
-    [Range(-1, 300)] public int fpslimit = 60;
+    [Range(-1, 300)] public int fpslimit;
     [Tooltip("Also referred to as fps counter")]
-    public bool showFramecounter = false;
+    public bool showFramecounter;
     
     // Quality
     [Tooltip("0-25%, 1-50%, 2-75%, 3-100%, 4-200%")]
-    [Range(0, 4)] public int resolutionScale = 3;
+    [Range(0, 4)] public int resolutionScale;
     [Tooltip("0-Lowest, 4-Highest")]
-    [Range(0, 4)] public int shadowQuality = 2;
+    [Range(0, 4)] public int shadowQuality;
     [Tooltip("0-Lowest, 4-Highest")]
-    [Range(0, 4)] public int effectsQuality = 2;
+    [Range(0, 4)] public int effectsQuality;
     [Tooltip("0-Lowest, 4-Highest")]
-    [Range(0, 4)] public int textureQuality = 2;
-    [Tooltip("0-Lowest, 4-Highest")]
-    [Range(0, 4)] public int postprocessingQuality = 2;
+    [Range(0, 4)] public int textureQuality;
+
+    [Tooltip("0-Lowest, 4-Highest")] [Range(0, 4)]
+    public int postprocessingQuality;
     
     // Effects
     [Tooltip("0-Off")]
-    [Range(0, 4)] public int antialiasing = 2;
+    [Range(0, 4)] public int antialiasing;
     [Tooltip("0-Lowest, 4-Highest")]
-    [Range(0, 4)] public int motionBlur = 2;
+    [Range(0, 4)] public int motionBlur;
     [Tooltip("0-Lowest, 4-Highest")]
-    [Range(0, 4)] public int ambientOcclusion = 2;
+    [Range(0, 4)] public int ambientOcclusion;
     [Tooltip("0-Lowest, 4-Highest")]
-    [Range(0, 4)] public int bloom = 2;
+    [Range(0, 4)] public int bloom;
     
     // Audio
     // Audio Devices
     [Tooltip("0-System Default")]
-    public int outputDevice = 0;
+    public int outputDevice; 
     [Tooltip("0-System Default")]
-    public int inputDevice = 0;
-    [Range(0, 100)] public int inputVolume = 100;
+    public int inputDevice;
+    [Range(0, 100)] public int inputVolume;
     
     
     // Audio Mixer
-    [Range(0, 100)] public int masterVolume = 100;
-    [Range(0, 100)] public int musicVolume = 100;
-    [Range(0, 100)] public int soundVolume = 100;
-    [Range(0, 100)] public int voiceVolume = 100;
-    [Range(0, 100)] public int chatterVolume = 100;
-    [Range(0, 100)] public int ambientVolume = 100;
-    [Range(0, 100)] public int menuVolume = 100;
+    [Range(0, 100)] public int masterVolume;
+    [Range(0, 100)] public int musicVolume;
+    [Range(0, 100)] public int soundVolume;
+    [Range(0, 100)] public int voiceVolume;
+    [Range(0, 100)] public int chatterVolume;
+    [Range(0, 100)] public int ambientVolume;
+    [Range(0, 100)] public int menuVolume;
     
     // Audio Accessibility
-    public bool visualizeSoundEffects = false;
+    public bool visualizeSoundEffects;
     [Tooltip("0-Off, 1-Dialogue, 2-Voice Chat, 3-All")]
-    [Range(0, 4)] public int closedCaptioning = 0;
-    [Range(-1, 300)] public int minVolume = 0;
-    [Range(-1, 300)] public int maxVolume = 140;
-    [Range(-1, 300)] public int minFrequency = 17;
+    [Range(0, 4)] public int closedCaptioning;
+    public int minVolume;
+    public int maxVolume;
+    public int minFrequency;
+
+    // Default constructor
+    public ApplicationSettingsData()
+    {
+        targetResolution = 0;
+        windowMode = 0;
+        enableVysnc = false;
+        fpslimit = 60;
+        showFramecounter = false;
+
+        resolutionScale = 3;
+        shadowQuality = 2;
+        effectsQuality = 2;
+        textureQuality = 2;
+        postprocessingQuality = 2;
+
+        antialiasing = 0;
+        motionBlur = 2;
+        ambientOcclusion = 2;
+        bloom = 2;
+
+        outputDevice = 0;
+        inputDevice = 0;
+        inputVolume = 100;
+
+        masterVolume = 100;
+        musicVolume = 100;
+        soundVolume = 100;
+        voiceVolume = 100;
+        chatterVolume = 100;
+        ambientVolume = 100;
+        menuVolume = 100;
+
+        visualizeSoundEffects = false;
+        closedCaptioning = 0;
+        minVolume = 0;
+        maxVolume = 140;
+        minFrequency = 17;
+    }
+
+    // Clone constructor
+    public ApplicationSettingsData(ApplicationSettingsData other)
+    {
+        targetResolution = other.targetResolution;
+        windowMode = other.windowMode;
+        enableVysnc = other.enableVysnc;
+        fpslimit = other.fpslimit;
+        showFramecounter = other.showFramecounter;
+        
+        resolutionScale = other.resolutionScale;
+        shadowQuality = other.shadowQuality;
+        effectsQuality = other.effectsQuality;
+        textureQuality = other.textureQuality;
+        postprocessingQuality = other.postprocessingQuality;
+        
+        antialiasing = other.antialiasing;
+        motionBlur = other.motionBlur;
+        ambientOcclusion = other.ambientOcclusion;
+        bloom = other.bloom;
+        
+        outputDevice = other.outputDevice;
+        inputDevice = other.inputDevice;
+        inputVolume = other.inputVolume;
+        
+        masterVolume = other.masterVolume;
+        musicVolume = other.musicVolume;
+        soundVolume = other.soundVolume;
+        voiceVolume = other.voiceVolume;
+        chatterVolume = other.chatterVolume;
+        ambientVolume = other.ambientVolume;
+        menuVolume = other.menuVolume;
+        
+        visualizeSoundEffects = other.visualizeSoundEffects;
+        closedCaptioning = other.closedCaptioning;
+        minVolume = other.minVolume;
+        maxVolume = other.maxVolume;
+        minFrequency = other.minFrequency;
+    }
 }
