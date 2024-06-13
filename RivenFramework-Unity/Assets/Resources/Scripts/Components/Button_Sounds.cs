@@ -43,14 +43,12 @@ public class Button_Sounds : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
 
     public void OnPointerEnter( PointerEventData _pointerEventData ) 
     {
-        print("1");
         audioSource.clip = hover;
         audioSource.Play();
     }
 
     public void OnPointerDown( PointerEventData _pointerEventData ) 
     {
-        print("2");
         audioSource.clip = select;
         audioSource.Play();
     }    
