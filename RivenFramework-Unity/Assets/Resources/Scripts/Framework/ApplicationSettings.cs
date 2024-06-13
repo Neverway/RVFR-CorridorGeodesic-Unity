@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class ApplicationSettings : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class ApplicationSettings : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private GameInstance gameInstance;
+    public AudioMixer audioMixer;
 
 
     //=-----------------=
@@ -304,6 +306,15 @@ public class ApplicationSettings : MonoBehaviour
                 break;
         }
         
+        // AUDIO SETTINGS
+        audioMixer.SetFloat("inputMicrophone", ConvertVolumeToPercentage(currentSettingsData.masterVolume));
+        audioMixer.SetFloat("master", ConvertVolumeToPercentage(currentSettingsData.masterVolume));
+        audioMixer.SetFloat("music", ConvertVolumeToPercentage(currentSettingsData.musicVolume));
+        audioMixer.SetFloat("soundEffects", ConvertVolumeToPercentage(currentSettingsData.soundVolume));
+        audioMixer.SetFloat("voiceChat", ConvertVolumeToPercentage(currentSettingsData.voiceVolume));
+        audioMixer.SetFloat("characterChatter", ConvertVolumeToPercentage(currentSettingsData.chatterVolume));
+        audioMixer.SetFloat("ambient", ConvertVolumeToPercentage(currentSettingsData.ambientVolume));
+        audioMixer.SetFloat("menus", ConvertVolumeToPercentage(currentSettingsData.menuVolume));
         
         
         SaveSettings();
@@ -345,4 +356,23 @@ public class ApplicationSettings : MonoBehaviour
         // Set the dropdown options
         currentSettingsData.targetResolution = currentResolutionIndex;
     }
+
+    public static float ConvertVolumeToPercentage(int _volumeSliderValue)
+    {
+        // Calculate the mapped value using the formula: mappedValue = -80 + 0.8 * volumeSliderValue
+        float mappedValue = -80 + 0.8f * _volumeSliderValue;
+
+        // Ensure the mapped value stays within the range of -80 to 0
+        if (mappedValue < -80)
+        {
+            mappedValue = -80;
+        }
+        else if (mappedValue > 0)
+        {
+            mappedValue = 0;
+        }
+
+        return mappedValue;
+    }
+
 }
