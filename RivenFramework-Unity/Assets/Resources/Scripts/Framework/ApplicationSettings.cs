@@ -294,43 +294,73 @@ public class ApplicationSettings : MonoBehaviour
         switch (currentSettingsData.motionBlur)
         {
             case 0:
-                
+                postProcessProfile.GetSetting<MotionBlur>().active = false;
                 break;
             case 1:
+                postProcessProfile.GetSetting<MotionBlur>().active = true;
+                postProcessProfile.GetSetting<MotionBlur>().shutterAngle.value = 100f;
                 break;
             case 2:
+                postProcessProfile.GetSetting<MotionBlur>().active = true;
+                postProcessProfile.GetSetting<MotionBlur>().shutterAngle.value = 170f;
                 break;
             case 3:
+                postProcessProfile.GetSetting<MotionBlur>().active = true;
+                postProcessProfile.GetSetting<MotionBlur>().shutterAngle.value = 200f;
                 break;
             case 4:
+                postProcessProfile.GetSetting<MotionBlur>().active = true;
+                postProcessProfile.GetSetting<MotionBlur>().shutterAngle.value = 270f;
                 break;
         }
         // Ambient Occlusion
         switch (currentSettingsData.ambientOcclusion)
         {
             case 0:
+                postProcessProfile.GetSetting<AmbientOcclusion>().active = false;
                 break;
             case 1:
+                postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
+                postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 0.25f;
                 break;
             case 2:
+                postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
+                postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 0.5f;
                 break;
             case 3:
+                postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
+                postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 1f;
                 break;
             case 4:
+                postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
+                postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 2f;
                 break;
         }
         // Bloom
         switch (currentSettingsData.bloom)
         {
             case 0:
+                postProcessProfile.GetSetting<Bloom>().active = false;
                 break;
             case 1:
+                postProcessProfile.GetSetting<Bloom>().active = true;
+                postProcessProfile.GetSetting<Bloom>().intensity.value = 0.25f;
+                postProcessProfile.GetSetting<Bloom>().threshold.value = 1f;
                 break;
             case 2:
+                postProcessProfile.GetSetting<Bloom>().active = true;
+                postProcessProfile.GetSetting<Bloom>().intensity.value = 2f;
+                postProcessProfile.GetSetting<Bloom>().threshold.value = 1f;
                 break;
             case 3:
+                postProcessProfile.GetSetting<Bloom>().active = true;
+                postProcessProfile.GetSetting<Bloom>().intensity.value = 4f;
+                postProcessProfile.GetSetting<Bloom>().threshold.value = 0.75f;
                 break;
             case 4:
+                postProcessProfile.GetSetting<Bloom>().active = true;
+                postProcessProfile.GetSetting<Bloom>().intensity.value = 6f;
+                postProcessProfile.GetSetting<Bloom>().threshold.value = 0.75f;
                 break;
         }
         
