@@ -57,7 +57,6 @@ public class ApplicationSettingsData
     public int inputDevice;
     [Range(0, 100)] public int inputVolume;
     
-    
     // Audio Mixer
     [Range(0, 100)] public int masterVolume;
     [Range(0, 100)] public int musicVolume;
@@ -74,6 +73,25 @@ public class ApplicationSettingsData
     public int minVolume;
     public int maxVolume;
     public int minFrequency;
+    
+    // Gameplay
+    // View
+    public bool invertHorizontalView;
+    public bool invertVerticalView;
+    public float horizontalLookSpeed;
+    public float verticalLookSpeed;
+    public int cameraFov;
+    
+    // Communication
+    public bool hideTextChat;
+    public bool enablePushToTalk;
+    
+    // General Accessibility
+    public float colorBlindIntensity;
+    public int colorBlindFilter;
+    public bool dyslexicFriendlyFont;
+    public bool reduceStrobing;
+    public bool screenReader;
 
     // Default constructor
     public ApplicationSettingsData()
@@ -112,6 +130,21 @@ public class ApplicationSettingsData
         minVolume = 0;
         maxVolume = 140;
         minFrequency = 17;
+
+        invertHorizontalView = false;
+        invertVerticalView = false;
+        horizontalLookSpeed = 1;
+        verticalLookSpeed = 0.75f;
+        cameraFov = 90;
+
+        hideTextChat = false;
+        enablePushToTalk = false;
+
+        colorBlindIntensity = 0;
+        colorBlindFilter = 0;
+        dyslexicFriendlyFont = false;
+        reduceStrobing = false;
+        screenReader = false;
     }
 
     // Clone constructor

@@ -355,12 +355,12 @@ public class ApplicationSettings : MonoBehaviour
             case 3:
                 postProcessProfile.GetSetting<Bloom>().active = true;
                 postProcessProfile.GetSetting<Bloom>().intensity.value = 1.75f;
-                postProcessProfile.GetSetting<Bloom>().threshold.value = 0.8f;
+                postProcessProfile.GetSetting<Bloom>().threshold.value = 1f;
                 break;
             case 4:
                 postProcessProfile.GetSetting<Bloom>().active = true;
-                postProcessProfile.GetSetting<Bloom>().intensity.value = 3f;
-                postProcessProfile.GetSetting<Bloom>().threshold.value = 0.75f;
+                postProcessProfile.GetSetting<Bloom>().intensity.value = 1.75f;
+                postProcessProfile.GetSetting<Bloom>().threshold.value = 0.8f;
                 break;
         }
         
@@ -373,6 +373,67 @@ public class ApplicationSettings : MonoBehaviour
         audioMixer.SetFloat("characterChatter", ConvertVolumeToPercentage(currentSettingsData.chatterVolume));
         audioMixer.SetFloat("ambient", ConvertVolumeToPercentage(currentSettingsData.ambientVolume));
         audioMixer.SetFloat("menus", ConvertVolumeToPercentage(currentSettingsData.menuVolume));
+        
+        // GAMEPLAY SETTINGS
+        // ColorBlind Filter
+        switch (currentSettingsData.bloom)
+        {
+            case 0:
+                postProcessProfile.GetSetting<ColorGrading>().active = true;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 100;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                    
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 100;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0;
+                break;
+            case 1:
+                // Protanopia
+                postProcessProfile.GetSetting<ColorGrading>().active = true;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 56;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 44;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                    
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 55;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 45;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0;
+                
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 24;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 76;
+                break;
+            case 2:
+                // Deuteranopia
+                postProcessProfile.GetSetting<ColorGrading>().active = true;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 80;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 20;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                    
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 25;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 75;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0;
+                
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 14;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 86;
+                break;
+            case 3:
+                // Tritanopia
+                postProcessProfile.GetSetting<ColorGrading>().active = true;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 95;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 5;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                    
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 43;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 57;
+                
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 47;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 53;
+                break;
+        }
         
         
         SaveSettings();
