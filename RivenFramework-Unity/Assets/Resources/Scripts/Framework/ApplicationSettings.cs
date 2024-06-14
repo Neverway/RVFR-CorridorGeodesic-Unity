@@ -10,6 +10,7 @@ using System.IO;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering.PostProcessing;
 
 public class ApplicationSettings : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class ApplicationSettings : MonoBehaviour
     //=-----------------=
     private GameInstance gameInstance;
     public AudioMixer audioMixer;
+    public GameObject cameraPrefab;
+    public PostProcessProfile postProcessProfile;
 
 
     //=-----------------=
@@ -260,13 +263,38 @@ public class ApplicationSettings : MonoBehaviour
                 QualitySettings.antiAliasing = 8;
                 break;
             case 4:
-                QualitySettings.antiAliasing = 8;
+                QualitySettings.antiAliasing = 0;
+                cameraPrefab.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.FastApproximateAntialiasing;
+                // Apply to any active cameras (that support it)
+                foreach (var camera in FindObjectsOfType<Camera>())
+                {
+                    if (camera.GetComponent<PostProcessLayer>()) camera.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.FastApproximateAntialiasing;
+                }
+                break;
+            case 5:
+                QualitySettings.antiAliasing = 0;
+                cameraPrefab.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
+                // Apply to any active cameras (that support it)
+                foreach (var camera in FindObjectsOfType<Camera>())
+                {
+                    if (camera.GetComponent<PostProcessLayer>()) camera.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
+                }
+                break;
+            case 6:
+                QualitySettings.antiAliasing = 0;
+                cameraPrefab.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.TemporalAntialiasing;
+                // Apply to any active cameras (that support it)
+                foreach (var camera in FindObjectsOfType<Camera>())
+                {
+                    if (camera.GetComponent<PostProcessLayer>()) camera.GetComponent<PostProcessLayer>().antialiasingMode = PostProcessLayer.Antialiasing.TemporalAntialiasing;
+                }
                 break;
         }
         // Motion Blur
         switch (currentSettingsData.motionBlur)
         {
             case 0:
+                
                 break;
             case 1:
                 break;
