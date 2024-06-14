@@ -344,22 +344,22 @@ public class ApplicationSettings : MonoBehaviour
                 break;
             case 1:
                 postProcessProfile.GetSetting<Bloom>().active = true;
-                postProcessProfile.GetSetting<Bloom>().intensity.value = 0.25f;
+                postProcessProfile.GetSetting<Bloom>().intensity.value = 1f;
                 postProcessProfile.GetSetting<Bloom>().threshold.value = 1f;
                 break;
             case 2:
                 postProcessProfile.GetSetting<Bloom>().active = true;
-                postProcessProfile.GetSetting<Bloom>().intensity.value = 2f;
+                postProcessProfile.GetSetting<Bloom>().intensity.value = 1.5f;
                 postProcessProfile.GetSetting<Bloom>().threshold.value = 1f;
                 break;
             case 3:
                 postProcessProfile.GetSetting<Bloom>().active = true;
-                postProcessProfile.GetSetting<Bloom>().intensity.value = 4f;
-                postProcessProfile.GetSetting<Bloom>().threshold.value = 0.75f;
+                postProcessProfile.GetSetting<Bloom>().intensity.value = 1.75f;
+                postProcessProfile.GetSetting<Bloom>().threshold.value = 0.8f;
                 break;
             case 4:
                 postProcessProfile.GetSetting<Bloom>().active = true;
-                postProcessProfile.GetSetting<Bloom>().intensity.value = 6f;
+                postProcessProfile.GetSetting<Bloom>().intensity.value = 3f;
                 postProcessProfile.GetSetting<Bloom>().threshold.value = 0.75f;
                 break;
         }
