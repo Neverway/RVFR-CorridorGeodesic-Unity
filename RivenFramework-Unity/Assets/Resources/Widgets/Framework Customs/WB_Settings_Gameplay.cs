@@ -28,7 +28,8 @@ public class WB_Settings_Gameplay : MonoBehaviour
     //=-----------------=
     private ApplicationSettings applicationSettings;
     // Display
-    [SerializeField] public Button_Selector colorBlindFilter;
+    [SerializeField] private Button_Selector colorBlindFilter;
+    [SerializeField] private Toggle dyslexicFriendlyFont;
 
 
     //=-----------------=
@@ -51,11 +52,13 @@ public class WB_Settings_Gameplay : MonoBehaviour
     //=-----------------=
     public void InitButtonValues()
     {
+        dyslexicFriendlyFont.isOn = applicationSettings.currentSettingsData.dyslexicFriendlyFont;
         colorBlindFilter.currentIndex = applicationSettings.currentSettingsData.colorBlindFilter;
     }
 
     private void InitEventListeners()
-    {
+    {        
+        dyslexicFriendlyFont.onValueChanged.AddListener(delegate { applicationSettings.currentSettingsData.dyslexicFriendlyFont = dyslexicFriendlyFont.isOn; });
     }    
 
 

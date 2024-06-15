@@ -7,7 +7,9 @@
 
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using Unity.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering.PostProcessing;
@@ -36,6 +38,7 @@ public class ApplicationSettings : MonoBehaviour
     public AudioMixer audioMixer;
     public GameObject cameraPrefab;
     public PostProcessProfile postProcessProfile;
+    public TMP_SpriteAsset dyslexiaFont;
 
 
     //=-----------------=
@@ -380,10 +383,10 @@ public class ApplicationSettings : MonoBehaviour
         
         // GAMEPLAY SETTINGS
         // ColorBlind Filter
-        switch (currentSettingsData.colorBlindFilter)
+        switch (currentSettingsData.colorBlindFilter
+                )
         {
             case 0:
-                print("None");
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
                 postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 100;
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 0;
@@ -399,7 +402,6 @@ public class ApplicationSettings : MonoBehaviour
                 break;
             case 1:
                 // Protanopia
-                print("Protanopia");
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
                 postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 56;
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 44;
@@ -415,7 +417,6 @@ public class ApplicationSettings : MonoBehaviour
                 break;
             case 2:
                 // Deuteranopia
-                print("Deuteranopia");
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
                 postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 80;
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 20;
@@ -431,7 +432,6 @@ public class ApplicationSettings : MonoBehaviour
                 break;
             case 3:
                 // Tritanopia
-                print("Tritanopia");
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
                 postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 95;
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 5;
@@ -445,6 +445,15 @@ public class ApplicationSettings : MonoBehaviour
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 47;
                 postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 53;
                 break;
+        }
+        // Dyslexia Assist
+        if (currentSettingsData.dyslexicFriendlyFont)
+        {
+            GetComponent<ApplicationFontSetter>().currentFont = 1;
+        }
+        else
+        {
+            GetComponent<ApplicationFontSetter>().currentFont = 0;
         }
         
         

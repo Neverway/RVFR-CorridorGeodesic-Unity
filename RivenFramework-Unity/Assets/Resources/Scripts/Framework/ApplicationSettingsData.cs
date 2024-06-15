@@ -88,7 +88,7 @@ public class ApplicationSettingsData
     
     // General Accessibility
     public float colorBlindIntensity;
-    public int colorBlindFilter;
+    [Range(0,3)] public int colorBlindFilter;
     public bool dyslexicFriendlyFont;
     public bool reduceStrobing;
     public bool screenReader;
