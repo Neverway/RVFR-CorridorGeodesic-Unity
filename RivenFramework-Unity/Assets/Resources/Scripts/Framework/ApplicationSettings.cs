@@ -72,6 +72,10 @@ public class ApplicationSettings : MonoBehaviour
         {
             FindObjectOfType<WB_Settings_Audio>().InitButtonValues();
         }
+        if (FindObjectOfType<WB_Settings_Gameplay>())
+        {
+            FindObjectOfType<WB_Settings_Gameplay>().InitButtonValues();
+        }
     }
 
 
@@ -376,9 +380,10 @@ public class ApplicationSettings : MonoBehaviour
         
         // GAMEPLAY SETTINGS
         // ColorBlind Filter
-        switch (currentSettingsData.bloom)
+        switch (currentSettingsData.colorBlindFilter)
         {
             case 0:
+                print("None");
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
                 postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 100;
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 0;
@@ -387,9 +392,14 @@ public class ApplicationSettings : MonoBehaviour
                 postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 0;
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 100;
                 postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0;
+                
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 100;
                 break;
             case 1:
                 // Protanopia
+                print("Protanopia");
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
                 postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 56;
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 44;
@@ -399,12 +409,13 @@ public class ApplicationSettings : MonoBehaviour
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 45;
                 postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0;
                 
-                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 0;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 24;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 76;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 24;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 76;
                 break;
             case 2:
                 // Deuteranopia
+                print("Deuteranopia");
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
                 postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 80;
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 20;
@@ -414,12 +425,13 @@ public class ApplicationSettings : MonoBehaviour
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 75;
                 postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0;
                 
-                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 0;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 14;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 86;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 14;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 86;
                 break;
             case 3:
                 // Tritanopia
+                print("Tritanopia");
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
                 postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 95;
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 5;
@@ -429,9 +441,9 @@ public class ApplicationSettings : MonoBehaviour
                 postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 43;
                 postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 57;
                 
-                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 0;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 47;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 53;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 47;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 53;
                 break;
         }
         
