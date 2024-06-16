@@ -87,7 +87,7 @@ public class ApplicationSettingsData
     public bool enablePushToTalk;
     
     // General Accessibility
-    public float colorBlindIntensity;
+    public int colorBlindIntensity;
     [Range(0,3)] public int colorBlindFilter;
     public bool dyslexicFriendlyFont;
     public bool reduceStrobing;
@@ -140,7 +140,7 @@ public class ApplicationSettingsData
         hideTextChat = false;
         enablePushToTalk = false;
 
-        colorBlindIntensity = 0;
+        colorBlindIntensity = 1;
         colorBlindFilter = 0;
         dyslexicFriendlyFont = false;
         reduceStrobing = false;
@@ -184,5 +184,20 @@ public class ApplicationSettingsData
         minVolume = other.minVolume;
         maxVolume = other.maxVolume;
         minFrequency = other.minFrequency;
+
+        invertHorizontalView = other.invertHorizontalView;
+        invertVerticalView = other.invertVerticalView;
+        horizontalLookSpeed = other.horizontalLookSpeed;
+        verticalLookSpeed = other.verticalLookSpeed;
+        cameraFov = other.cameraFov;
+
+        hideTextChat = other.hideTextChat;
+        enablePushToTalk = other.enablePushToTalk;
+
+        colorBlindIntensity = other.colorBlindIntensity;
+        colorBlindFilter = other.colorBlindFilter;
+        dyslexicFriendlyFont = other.dyslexicFriendlyFont;
+        reduceStrobing = other.reduceStrobing;
+        screenReader = other.screenReader;
     }
 }

@@ -27,7 +27,10 @@ public class WB_Settings_Gameplay : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private ApplicationSettings applicationSettings;
+    // View
+    [SerializeField] private Slider cameraFov;
     // Display
+    //[SerializeField] private Slider colorBlindIntensity;
     [SerializeField] private Button_Selector colorBlindFilter;
     [SerializeField] private Toggle dyslexicFriendlyFont;
 
@@ -52,12 +55,14 @@ public class WB_Settings_Gameplay : MonoBehaviour
     //=-----------------=
     public void InitButtonValues()
     {
+        cameraFov.value = applicationSettings.currentSettingsData.cameraFov;
         dyslexicFriendlyFont.isOn = applicationSettings.currentSettingsData.dyslexicFriendlyFont;
         colorBlindFilter.currentIndex = applicationSettings.currentSettingsData.colorBlindFilter;
     }
 
     private void InitEventListeners()
     {        
+        cameraFov.onValueChanged.AddListener(delegate { applicationSettings.currentSettingsData.cameraFov = Mathf.RoundToInt(cameraFov.value); });
         dyslexicFriendlyFont.onValueChanged.AddListener(delegate { applicationSettings.currentSettingsData.dyslexicFriendlyFont = dyslexicFriendlyFont.isOn; });
     }    
 

@@ -382,7 +382,16 @@ public class ApplicationSettings : MonoBehaviour
         audioMixer.SetFloat("menus", ConvertVolumeToPercentage(currentSettingsData.menuVolume));
         
         // GAMEPLAY SETTINGS
+        // Camera FOV
+        cameraPrefab.GetComponent<Camera>().fieldOfView = currentSettingsData.cameraFov;
+        // Apply to any active cameras
+        foreach (var camera in FindObjectsOfType<Camera>())
+        {
+            camera.fieldOfView = currentSettingsData.cameraFov;
+        }
+        
         // ColorBlind Filter
+        var colorBlindIntensityValue = 1; // @Liz I SUCK AT MATH AND EVERY EQUATION I TRIED CAUSES NEGATIVE COLOR VALUES (That's bad!)
         switch (currentSettingsData.colorBlindFilter
                 )
         {
@@ -403,32 +412,32 @@ public class ApplicationSettings : MonoBehaviour
             case 1:
                 // Protanopia
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
-                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 56;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 44;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 56*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 44*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0*colorBlindIntensityValue;
                     
-                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 55;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 45;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 55*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 45*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0*colorBlindIntensityValue;
                 
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 24;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 76;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 24*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 76*colorBlindIntensityValue;
                 break;
             case 2:
                 // Deuteranopia
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
-                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 80;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 20;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 80*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 20*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0*colorBlindIntensityValue;
                     
-                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 25;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 75;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 25*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 75*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0*colorBlindIntensityValue;
                 
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 14;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 86;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 14*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 86*colorBlindIntensityValue;
                 break;
             case 3:
                 // Tritanopia
