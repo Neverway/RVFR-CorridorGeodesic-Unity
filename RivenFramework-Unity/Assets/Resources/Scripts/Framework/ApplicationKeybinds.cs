@@ -9,12 +9,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class Keybinds : MonoBehaviour
+public class ApplicationKeybinds : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public InputActionAsset inputActionAsset;
     public List<KeybindList> keyboardList;
     public List<KeybindList> controllerList;
 
@@ -42,6 +44,20 @@ public class Keybinds : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public string GetCurrentInputDevice()
+    {
+        /*
+        if (InputSystem.devices.Count > 0)
+        {
+            var currentControlScheme = InputSystem.devices[0].device.ToString();
+        }
+        else
+        {
+            currentControlScheme = "Keyboard";
+        }
+        //print(currentControlScheme);*/
+        return null;
+    }
 }
 
 [Serializable]

@@ -28,7 +28,7 @@ public class WB_Settings_Controls : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    public InputActionAsset inputActionAsset;
+    public ApplicationKeybinds applicationKeybinds;
     public GameObject contentRoot;
     public GameObject headerObject;
     public GameObject bindingObject;
@@ -40,15 +40,17 @@ public class WB_Settings_Controls : MonoBehaviour
     //=-----------------=
     void Start()
     {
+        applicationKeybinds = FindObjectOfType<ApplicationKeybinds>();
+        
         // Check if the input action asset is assigned
-        if (inputActionAsset == null)
+        if (applicationKeybinds.inputActionAsset == null)
         {
             Debug.LogError("InputActionAsset is not assigned.");
             return;
         }
 
         // Iterate through all action maps
-        foreach (var actionMap in inputActionAsset.actionMaps)
+        foreach (var actionMap in applicationKeybinds.inputActionAsset.actionMaps)
         {
             // Only continue if the current action map is in the list of requested maps
             //Debug.Log($"Action Map: {actionMap.name}");
@@ -81,6 +83,10 @@ public class WB_Settings_Controls : MonoBehaviour
                                 var newBindingEntry = Instantiate(bindingObject, contentRoot.transform);
                                 string partName = partBinding.name;
                                 newBindingEntry.GetComponent<ControlBindingEntry>().text.text = $"{action.name} {partName}";
+                                foreach (var keyHint in newBindingEntry.GetComponent<ControlBindingEntry>().keyHints)
+                                {
+                                    keyHint.targetAction = $"{action.name} {partName}";
+                                }
                                 newBindingEntry.SetActive(true);
                                 //Debug.Log($"      Keyboard Part: {partBinding.path}");
                             }
@@ -100,6 +106,10 @@ public class WB_Settings_Controls : MonoBehaviour
                             // Create a binding entry
                             var newBindingEntry = Instantiate(bindingObject, contentRoot.transform);
                             newBindingEntry.GetComponent<ControlBindingEntry>().text.text = action.name;
+                            foreach (var keyHint in newBindingEntry.GetComponent<ControlBindingEntry>().keyHints)
+                            {
+                                keyHint.targetAction = action.name;
+                            }
                             newBindingEntry.SetActive(true);
                             //Debug.Log($"    Keyboard Binding: {binding.path}");
                         }

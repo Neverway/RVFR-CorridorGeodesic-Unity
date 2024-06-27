@@ -17,6 +17,7 @@ public class ControlBindingEntry : MonoBehaviour
     // Public Variables
     //=-----------------=
     public TMP_Text text;
+    public Image_KeyHint[] keyHints;
 
 
     //=-----------------=
@@ -27,13 +28,12 @@ public class ControlBindingEntry : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    public InputAction actionReference;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    
+
 
     //=-----------------=
     // Internal Functions
