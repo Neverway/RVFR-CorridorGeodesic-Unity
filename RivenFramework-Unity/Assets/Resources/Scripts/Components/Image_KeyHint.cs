@@ -53,30 +53,63 @@ public class Image_KeyHint : MonoBehaviour
     //=-----------------=
     private void UpdateKeyHint()
     {
-        // Get the current input device
+        // Iterate through all action maps
+        foreach (var actionMap in applicationKeybinds.inputActionAsset.actionMaps)
+        {
+            // Get target actionMap
+            if (actionMap.name != targetActionMap) continue;
+            
+            // Iterate through all actions in the action map
+            foreach (var action in actionMap.actions)
+            {
+                // Get target action
+                if (action.name != targetAction) continue;
+                
+                // Iterate through all bindings in the action
+                for (int i = 0; i < action.bindings.Count; i++)
+                {
+                    var binding = action.bindings[i];
 
-        // Get the control for the target action
-        
-        // Depending on the target input device, get the correct list of controls to images
-        KeybindList keybind = null;/*
-        if (currentControlScheme.Contains("Keyboard") || currentControlScheme.Contains("Mouse"))
-        {
-            //keybind = applicationKeybinds.controllerList.Find(k => k.keybindID == targetAction);
+                    // Check if the binding is a composite binding
+                    if (binding.isComposite)
+                    {
+                        // Print each part of the composite binding
+                        int partIndex = i + 1;
+                        while (partIndex < action.bindings.Count && action.bindings[partIndex].isPartOfComposite)
+                        {
+                            var partBinding = action.bindings[partIndex];
+                            var controlScheme = partBinding.groups;
+                            if (controlScheme.Contains("Keyboard"))
+                            {
+                            }
+                            else if (controlScheme.Contains("Gamepad"))
+                            {
+                            }
+                            partIndex++;
+                        }
+                    }
+                    else if (!binding.isPartOfComposite)
+                    {
+                        // Check if it's a keyboard or gamepad binding
+                        var controlScheme = binding.groups;
+                        
+                        if (controlScheme.Contains("Keyboard") && targetInputDevice == 1)
+                        {
+                            // Set the current image to the relative binding
+                            string originalString = binding.path;
+                            string[] parts = originalString.Split('/');
+                            
+                            Debug.Log($"    Keyboard Binding: {parts[1]}");
+                            hintImage.sprite = applicationKeybinds.GetKeybindImage(1, parts[1]);
+                        }
+                        else if (controlScheme.Contains("Gamepad") && targetInputDevice == 2)
+                        {
+                            
+                        }
+                    }
+                }
+            }
         }
-        else if (currentControlScheme.Contains("Gamepad"))
-        {
-            //keybind = applicationKeybinds.keyboardList.Find(k => k.keybindID == targetAction);
-        }
-
-        // Set the image sprite
-        if (keybind != null)
-        {
-            //hintImage.sprite = keybind.keybindSprite;
-        }
-        else
-        {
-            //Debug.LogWarning("Keybind not found for action: " + targetAction);
-        }*/
     }
 
 

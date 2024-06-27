@@ -77,6 +77,7 @@ public class WB_Settings_Controls : MonoBehaviour
                         {
                             var partBinding = action.bindings[partIndex];
                             var controlScheme = partBinding.groups;
+                            //Debug.Log($" [COMP] Action: {action.name} CS: {controlScheme}");
                             if (controlScheme.Contains("Keyboard"))
                             {
                                 // Create a binding entry
@@ -101,6 +102,7 @@ public class WB_Settings_Controls : MonoBehaviour
                     {
                         // Check if it's a keyboard or gamepad binding
                         var controlScheme = binding.groups;
+                        //Debug.Log($" Action: {action.name} CS: {controlScheme}");
                         if (controlScheme.Contains("Keyboard"))
                         {
                             // Create a binding entry

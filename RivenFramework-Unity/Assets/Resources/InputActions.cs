@@ -412,7 +412,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""L1"",
+                    ""name"": ""Left"",
                     ""type"": ""Button"",
                     ""id"": ""3c6a5b41-d834-4a7c-bdc1-42e4176f0197"",
                     ""expectedControlType"": ""Button"",
@@ -421,7 +421,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""R1"",
+                    ""name"": ""Right"",
                     ""type"": ""Button"",
                     ""id"": ""9eac0ad3-39ed-4a4b-a041-e56d803e73b2"",
                     ""expectedControlType"": ""Button"",
@@ -635,8 +635,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""L1"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -646,8 +646,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""L1"",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -657,8 +657,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""R1"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -668,8 +668,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""R1"",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -720,8 +720,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_TopDown2D_Interact = m_TopDown2D.FindAction("Interact", throwIfNotFound: true);
         m_TopDown2D_Action = m_TopDown2D.FindAction("Action", throwIfNotFound: true);
         m_TopDown2D_Menu = m_TopDown2D.FindAction("Menu", throwIfNotFound: true);
-        m_TopDown2D_L1 = m_TopDown2D.FindAction("L1", throwIfNotFound: true);
-        m_TopDown2D_R1 = m_TopDown2D.FindAction("R1", throwIfNotFound: true);
+        m_TopDown2D_Left = m_TopDown2D.FindAction("Left", throwIfNotFound: true);
+        m_TopDown2D_Right = m_TopDown2D.FindAction("Right", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -866,8 +866,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_TopDown2D_Interact;
     private readonly InputAction m_TopDown2D_Action;
     private readonly InputAction m_TopDown2D_Menu;
-    private readonly InputAction m_TopDown2D_L1;
-    private readonly InputAction m_TopDown2D_R1;
+    private readonly InputAction m_TopDown2D_Left;
+    private readonly InputAction m_TopDown2D_Right;
     public struct TopDown2DActions
     {
         private @InputActions m_Wrapper;
@@ -877,8 +877,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_TopDown2D_Interact;
         public InputAction @Action => m_Wrapper.m_TopDown2D_Action;
         public InputAction @Menu => m_Wrapper.m_TopDown2D_Menu;
-        public InputAction @L1 => m_Wrapper.m_TopDown2D_L1;
-        public InputAction @R1 => m_Wrapper.m_TopDown2D_R1;
+        public InputAction @Left => m_Wrapper.m_TopDown2D_Left;
+        public InputAction @Right => m_Wrapper.m_TopDown2D_Right;
         public InputActionMap Get() { return m_Wrapper.m_TopDown2D; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -903,12 +903,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Menu.started += instance.OnMenu;
             @Menu.performed += instance.OnMenu;
             @Menu.canceled += instance.OnMenu;
-            @L1.started += instance.OnL1;
-            @L1.performed += instance.OnL1;
-            @L1.canceled += instance.OnL1;
-            @R1.started += instance.OnR1;
-            @R1.performed += instance.OnR1;
-            @R1.canceled += instance.OnR1;
+            @Left.started += instance.OnLeft;
+            @Left.performed += instance.OnLeft;
+            @Left.canceled += instance.OnLeft;
+            @Right.started += instance.OnRight;
+            @Right.performed += instance.OnRight;
+            @Right.canceled += instance.OnRight;
         }
 
         private void UnregisterCallbacks(ITopDown2DActions instance)
@@ -928,12 +928,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Menu.started -= instance.OnMenu;
             @Menu.performed -= instance.OnMenu;
             @Menu.canceled -= instance.OnMenu;
-            @L1.started -= instance.OnL1;
-            @L1.performed -= instance.OnL1;
-            @L1.canceled -= instance.OnL1;
-            @R1.started -= instance.OnR1;
-            @R1.performed -= instance.OnR1;
-            @R1.canceled -= instance.OnR1;
+            @Left.started -= instance.OnLeft;
+            @Left.performed -= instance.OnLeft;
+            @Left.canceled -= instance.OnLeft;
+            @Right.started -= instance.OnRight;
+            @Right.performed -= instance.OnRight;
+            @Right.canceled -= instance.OnRight;
         }
 
         public void RemoveCallbacks(ITopDown2DActions instance)
@@ -984,7 +984,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnAction(InputAction.CallbackContext context);
         void OnMenu(InputAction.CallbackContext context);
-        void OnL1(InputAction.CallbackContext context);
-        void OnR1(InputAction.CallbackContext context);
+        void OnLeft(InputAction.CallbackContext context);
+        void OnRight(InputAction.CallbackContext context);
     }
 }
