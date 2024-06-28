@@ -10,14 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 2652268917058259988}
   - component: {fileID: 5702750082381366372}
-  - component: {fileID: 596141195047680743}
   - component: {fileID: 2075546541581668014}
+  - component: {fileID: 596141195047680743}
+  - component: {fileID: 7258144002670317548}
   - component: {fileID: 5917810448728512710}
   - component: {fileID: 8540078363942578872}
   - component: {fileID: 7542183137678892761}
   - component: {fileID: 1729050732691396800}
   - component: {fileID: 3184570166544695642}
-  - component: {fileID: 7258144002670317548}
   - component: {fileID: 7739524578549366403}
   m_Layer: 0
   m_Name: GameInstance
@@ -53,6 +53,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c91a148cf625f2eaa367aed660d096, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2075546541581668014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51a42400077aeaa1dbd51c0e60b52ab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultGamemode: {fileID: 11400000, guid: d57c91470f4a246d49e336cd09fb6286, type: 2}
+  UserInterfaceWidgets:
+  - {fileID: 1507811972370413053, guid: 02917cc8338914fddbf29dd8046ca0f0, type: 3}
+  - {fileID: 1507811972370413053, guid: aebdf1af0319bd15bb1d0ce870060199, type: 3}
+  - {fileID: 1507811972370413053, guid: 51fcd41068adeb412a5661e2212e90dd, type: 3}
+  - {fileID: 1507811972370413053, guid: b12154ce97c9df9ad82b1ec00f6ab89d, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 1985048443619682036, guid: d7a6a9f14009a7035a7398092fcf75cd, type: 3}
+  PlayerControllerClasses:
+  - {fileID: 11400000, guid: 02844299f83062e3688fb3e76ac2692a, type: 2}
+  - {fileID: 11400000, guid: 39e9830e6bc5e60ee9bf7a0a613f8d82, type: 2}
+  localPlayerCharacter: {fileID: 0}
 --- !u!114 &596141195047680743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,7 +213,7 @@ MonoBehaviour:
   missingSpriteFallback: {fileID: 21300000, guid: 6557c4572c10cca909fd0c5446993926, type: 3}
   missingItemIconFallback: {fileID: 21300000, guid: 90715407aa403b30eaedcff2bae902f3, type: 3}
   missingCharacterIconFallback: {fileID: 21300000, guid: b44d1c24d80b9deda9cf54a1e29aeec0, type: 3}
---- !u!114 &2075546541581668014
+--- !u!114 &7258144002670317548
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,22 +222,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6048128124110562263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51a42400077aeaa1dbd51c0e60b52ab9, type: 3}
+  m_Script: {fileID: 11500000, guid: a6bcafdb5faf577bfbd5c03e6fe4e704, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultGamemode: {fileID: 11400000, guid: d57c91470f4a246d49e336cd09fb6286, type: 2}
-  UserInterfaceWidgets:
-  - {fileID: 1507811972370413053, guid: 02917cc8338914fddbf29dd8046ca0f0, type: 3}
-  - {fileID: 1507811972370413053, guid: aebdf1af0319bd15bb1d0ce870060199, type: 3}
-  - {fileID: 1507811972370413053, guid: 51fcd41068adeb412a5661e2212e90dd, type: 3}
-  - {fileID: 1507811972370413053, guid: b12154ce97c9df9ad82b1ec00f6ab89d, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 1985048443619682036, guid: d7a6a9f14009a7035a7398092fcf75cd, type: 3}
-  PlayerControllerClasses:
-  - {fileID: 11400000, guid: 02844299f83062e3688fb3e76ac2692a, type: 2}
-  - {fileID: 11400000, guid: 39e9830e6bc5e60ee9bf7a0a613f8d82, type: 2}
-  localPlayerCharacter: {fileID: 0}
+  currentFont: 0
+  defaultFont: {fileID: 11400000, guid: 2c045bfe6fc79dc1cbe7fd011d751e32, type: 2}
+  dyslexiaAssistFont: {fileID: 11400000, guid: eb1dbb2ed3db32cc4a3ffcbf6ca1405a, type: 2}
 --- !u!114 &5917810448728512710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,7 +387,6 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: 549b84953554a157688e4ed0cb77d9a7, type: 2}
   cameraPrefab: {fileID: 1032958373095033568, guid: 94967e615899f4eb88f9883b59fd0167, type: 3}
   postProcessProfile: {fileID: 11400000, guid: a955f9f7ab1cde5dea83bd6ace99621d, type: 2}
-  dyslexiaFont: {fileID: 0}
 --- !u!114 &1729050732691396800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,21 +645,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameras: []
---- !u!114 &7258144002670317548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6048128124110562263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6bcafdb5faf577bfbd5c03e6fe4e704, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentFont: 0
-  defaultFont: {fileID: 11400000, guid: 2c045bfe6fc79dc1cbe7fd011d751e32, type: 2}
-  dyslexiaAssistFont: {fileID: 11400000, guid: eb1dbb2ed3db32cc4a3ffcbf6ca1405a, type: 2}
 --- !u!82 &7739524578549366403
 AudioSource:
   m_ObjectHideFlags: 0

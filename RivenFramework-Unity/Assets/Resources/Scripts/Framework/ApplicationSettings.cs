@@ -38,7 +38,6 @@ public class ApplicationSettings : MonoBehaviour
     public AudioMixer audioMixer;
     public GameObject cameraPrefab;
     public PostProcessProfile postProcessProfile;
-    public TMP_SpriteAsset dyslexiaFont;
 
 
     //=-----------------=
