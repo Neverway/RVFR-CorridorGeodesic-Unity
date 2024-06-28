@@ -53,19 +53,13 @@ public class ApplicationKeybinds : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public string GetCurrentInputDevice()
-    {
-        /*
-        if (InputSystem.devices.Count > 0)
-        {
-            var currentControlScheme = InputSystem.devices[0].device.ToString();
-        }
-        else
-        {
-            currentControlScheme = "Keyboard";
-        }
-        //print(currentControlScheme);*/
-        return null;
+    [Tooltip("1-Keyboard, 2-Controller")]
+    public int GetCurrentInputDevice()
+    {        
+        // Check for controller input
+        string[] joystickNames = Input.GetJoystickNames();
+        if (joystickNames.Length > 0) return 2;
+        return 1;
     }
     public Sprite GetKeybindImage(int _deviceID, string _keybindID)
     {
@@ -78,17 +72,22 @@ public class ApplicationKeybinds : MonoBehaviour
                 foreach (var keybind in keyboardList)
                 {
                     if (_keybindID.ToLower() == keybind.keybindID.ToLower())
+                    {
                         return keybind.keybindSprite;
+                    }
                 }
                 break;
             case 2:
                 foreach (var keybind in controllerList)
                 {
                     if (_keybindID.ToLower() == keybind.keybindID.ToLower())
+                    {
                         return keybind.keybindSprite;
+                    }
                 }
                 break;
         }
+        Debug.LogWarning($"{_deviceID} {_keybindID}");
         return _image;
     }
 }
