@@ -96,13 +96,13 @@ public class ApplicationKeybinds : MonoBehaviour
         return _image;
     }
 
-    public void SetBinding(string _actionMap, string _action)
+    public void SetBinding(string _actionMap, string _action, bool isComposite = false)
     {
         // Code courtesy of VoidSay
         // Source: https://forum.unity.com/threads/changing-inputactions-bindings-at-runtime.842188/
         // must dispose of collection or else you will have a memory leak and error with crash!
         rebindOperation?.Cancel();
- 
+
         void CleanUp()
         {
             rebindOperation?.Dispose();
@@ -110,31 +110,47 @@ public class ApplicationKeybinds : MonoBehaviour
         }
 
         var action = inputActionAsset.FindActionMap(_actionMap).FindAction(_action);
-        print("We reached this point");
-        action.PerformInteractiveRebinding().Start().OnCancel(something =>
+        //print("We reached this point");
+        if (!isComposite)
+        {
+            rebindOperation = action.PerformInteractiveRebinding().Start().OnCancel(something =>
             {
-                Debug.Log("canceled");
+                //Debug.Log("canceled");
                 CleanUp();
             })
             .OnComplete(something =>
             {
-                Debug.Log("finished");
-                
+                //Debug.Log("finished");
                 Destroy(GameInstance.GetWidget("WB_Settings_Controls_Rebinding"));
                 // Save
                 string device = string.Empty;
                 string key = string.Empty;
                 action.GetBindingDisplayString(0, out device, out key);
-                print("OUTPUT "+"<" + device + ">/" + key);
+                //print("OUTPUT "+"<" + device + ">/" + key);
                 action.ChangeBinding(0).WithPath($"<{device}>/{key}");
-                //PlayerPrefs.SetString(action.name, "<" + device + ">/" + key);
-                //PlayerPrefs.Save();// not necessary if you close the application properly or want to implement confirmation button
                 CleanUp();
             });
-    }
- 
-    private void save()
-    {
+        }
+        else
+        {
+            rebindOperation = action.PerformInteractiveRebinding(0).Start().OnCancel(something =>
+            {
+                //Debug.Log("canceled");
+                CleanUp();
+            })
+            .OnComplete(something =>
+            {
+                //Debug.Log("finished");
+                Destroy(GameInstance.GetWidget("WB_Settings_Controls_Rebinding"));
+                // Save
+                string device = string.Empty;
+                string key = string.Empty;
+                action.GetBindingDisplayString(0, out device, out key);
+                //print("OUTPUT "+"<" + device + ">/" + key);
+                action.ChangeBinding(0).WithPath($"<{device}>/{key}");
+                CleanUp();
+            });
+        }
     }
 }
 
