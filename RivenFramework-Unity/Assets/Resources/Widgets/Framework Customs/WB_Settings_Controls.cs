@@ -18,7 +18,8 @@ public class WB_Settings_Controls : MonoBehaviour
     // Public Variables
     //=-----------------=
     public List<string> targetActionMaps;
-
+    public string b;
+    
 
     //=-----------------=
     // Private Variables
@@ -32,6 +33,7 @@ public class WB_Settings_Controls : MonoBehaviour
     public GameObject contentRoot;
     public GameObject headerObject;
     public GameObject bindingObject;
+    public GameObject bindingWidget;
     
 
 
@@ -133,4 +135,10 @@ public class WB_Settings_Controls : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void Rebind(string _actionMap, string _action)
+    {
+        GameInstance.AddWidget(bindingWidget);
+        applicationKeybinds.SetBinding(_actionMap, _action);
+        print($"{_actionMap} {_action}");
+    }
 }

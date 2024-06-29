@@ -43,4 +43,8 @@ public class ControlBindingEntry : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void SendRebindRequest()
+    {
+        FindObjectOfType<WB_Settings_Controls>().Rebind(keyHints[0].targetActionMap, keyHints[0].targetAction);
+    }
 }

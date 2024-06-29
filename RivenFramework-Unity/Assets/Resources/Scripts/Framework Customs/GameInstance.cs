@@ -126,6 +126,11 @@ public class GameInstance : MonoBehaviour
         newWidget.name = newWidget.name.Replace("(Clone)", "").Trim();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="_widgetName">The name of the root object of the ui element</param>
+    /// <returns></returns>
     public static GameObject GetWidget(string _widgetName)
     {
         var canvas = GameObject.FindWithTag("UserInterface");
