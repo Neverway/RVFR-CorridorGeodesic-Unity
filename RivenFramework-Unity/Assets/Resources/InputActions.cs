@@ -456,7 +456,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Keyboard&Mouse"",
                     ""id"": ""4368fad4-dcc2-48cf-9467-a2ecb94cb6bf"",
-                    ""path"": ""2DVector(mode=1)"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -465,7 +465,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""up"",
+                    ""name"": ""Up"",
                     ""id"": ""3245c815-14c8-4b3a-a19e-7f4c43fe73ca"",
                     ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
@@ -476,7 +476,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""down"",
+                    ""name"": ""Down"",
                     ""id"": ""6b67de67-c1b9-42e5-afc4-a31cfbddd28f"",
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
@@ -487,7 +487,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""left"",
+                    ""name"": ""Left"",
                     ""id"": ""97a32fea-239b-4a8e-b702-4f4e5194f513"",
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
@@ -498,7 +498,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""right"",
+                    ""name"": ""Right"",
                     ""id"": ""459ead7b-e305-4b4e-841e-2af00037c821"",
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",

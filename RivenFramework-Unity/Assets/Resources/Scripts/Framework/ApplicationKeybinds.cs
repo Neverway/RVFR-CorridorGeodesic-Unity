@@ -1,12 +1,13 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Stores the lists of input actions to button hint sprites.
+//          Also holds functions for rebinding controls
+// Notes: Originally this was supposed to also handel saving and loading the controls
+//        to a file like controls.config, but I guess unity already saves them somewhere?
 //
 //=============================================================================
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,30 +25,17 @@ public class ApplicationKeybinds : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private string path;
     private InputActionRebindingExtensions.RebindingOperation rebindOperation;
 
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private GameInstance gameInstance;
 
     
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-        path = $"{Application.persistentDataPath}/settings.json";
-        gameInstance = GetComponent<GameInstance>();
-        //LoadControlls();
-        //ApplyContolls();
-    }
-
-    private void Update()
-    {
-    }
 
 
     //=-----------------=
@@ -58,6 +46,7 @@ public class ApplicationKeybinds : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    /*
     [Tooltip("1-Keyboard, 2-Controller")]
     public int GetCurrentInputDevice()
     {        
@@ -65,7 +54,8 @@ public class ApplicationKeybinds : MonoBehaviour
         string[] joystickNames = Input.GetJoystickNames();
         if (joystickNames.Length > 0) return 2;
         return 1;
-    }
+    }*/
+    
     public Sprite GetKeybindImage(int _deviceID, string _keybindID)
     {
         Sprite _image = null;
@@ -96,8 +86,9 @@ public class ApplicationKeybinds : MonoBehaviour
         return _image;
     }
 
-    public void SetBinding(string _actionMap, string _action, bool isComposite = false)
+    public void SetBinding(string _actionMap, string _action, bool _isComposite)
     {
+        Debug.Log($"[{this.name}] Executing function 'SetBinding(actionMap={_actionMap}, action={_action}, isComposite={_isComposite})'");
         // Code courtesy of VoidSay
         // Source: https://forum.unity.com/threads/changing-inputactions-bindings-at-runtime.842188/
         // must dispose of collection or else you will have a memory leak and error with crash!
@@ -109,45 +100,50 @@ public class ApplicationKeybinds : MonoBehaviour
             rebindOperation = null;
         }
 
-        var action = inputActionAsset.FindActionMap(_actionMap).FindAction(_action);
-        //print("We reached this point");
-        if (!isComposite)
+        if (!_isComposite)
         {
-            rebindOperation = action.PerformInteractiveRebinding().Start().OnCancel(something =>
+            Debug.Log("Not a composite");
+            var action = inputActionAsset.FindActionMap(_actionMap).FindAction(_action);
+            print($"_AM [{_actionMap}] _A[{_action}] A[{action}]");
+            rebindOperation = action.PerformInteractiveRebinding().Start()
+            .OnCancel(something =>
             {
-                //Debug.Log("canceled");
                 CleanUp();
             })
             .OnComplete(something =>
             {
-                //Debug.Log("finished");
                 Destroy(GameInstance.GetWidget("WB_Settings_Controls_Rebinding"));
                 // Save
                 string device = string.Empty;
                 string key = string.Empty;
                 action.GetBindingDisplayString(0, out device, out key);
-                //print("OUTPUT "+"<" + device + ">/" + key);
+                print("OUTPUT "+"<" + device + ">/" + key);
                 action.ChangeBinding(0).WithPath($"<{device}>/{key}");
                 CleanUp();
             });
         }
         else
         {
-            rebindOperation = action.PerformInteractiveRebinding(0).Start().OnCancel(something =>
+            Debug.Log("Composite");
+            string input = _action;
+            string[] parts = input.Split(' ');
+            var parsedAction = parts[0];
+            var action = inputActionAsset.FindActionMap(_actionMap).FindAction(parsedAction);
+            print($"_AM [{_actionMap}] _A[{_action}] A[{action}] PA[{parsedAction}]");
+            rebindOperation = action.PerformInteractiveRebinding(1).Start()
+            .OnCancel(something =>
             {
-                //Debug.Log("canceled");
                 CleanUp();
             })
             .OnComplete(something =>
             {
-                //Debug.Log("finished");
                 Destroy(GameInstance.GetWidget("WB_Settings_Controls_Rebinding"));
                 // Save
                 string device = string.Empty;
                 string key = string.Empty;
-                action.GetBindingDisplayString(0, out device, out key);
-                //print("OUTPUT "+"<" + device + ">/" + key);
-                action.ChangeBinding(0).WithPath($"<{device}>/{key}");
+                action.GetBindingDisplayString(1, out device, out key);
+                print("OUTPUT "+"<" + device + ">/" + key);
+                action.ChangeBinding(1).WithPath($"<{device}>/{key}");
                 CleanUp();
             });
         }

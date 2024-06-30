@@ -18,6 +18,7 @@ public class ControlBindingEntry : MonoBehaviour
     //=-----------------=
     public TMP_Text text;
     public Image_KeyHint[] keyHints;
+    public bool isComposite;
 
 
     //=-----------------=
@@ -45,6 +46,7 @@ public class ControlBindingEntry : MonoBehaviour
     //=-----------------=
     public void SendRebindRequest()
     {
-        FindObjectOfType<WB_Settings_Controls>().Rebind(keyHints[0].targetActionMap, keyHints[0].targetAction);
+        Debug.Log($"[{this.name}] Executing function 'SendRebindRequest()'");
+        FindObjectOfType<WB_Settings_Controls>().Rebind(keyHints[0].targetActionMap, keyHints[0].targetAction, isComposite);
     }
 }
