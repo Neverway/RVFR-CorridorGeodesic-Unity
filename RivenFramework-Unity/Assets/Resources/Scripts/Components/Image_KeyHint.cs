@@ -52,15 +52,19 @@ public class Image_KeyHint : MonoBehaviour
     private void UpdateKeyHint()
     {
         var action = applicationKeybinds.inputActionAsset.FindActionMap(targetActionMap).FindAction(targetAction);
-        if (action==null) return; // This filters out composite bindings FYI
+        if (action == null)
+        {
+            // FUTURE ME PUT CODE HERE FOR DISPLAYING COMPOSITE BINDINGS!!!
+            return;
+        }
         for (int i = 0; i < action.bindings.Count; i++)
         {
             var binding = action.bindings[i];
             var controlScheme = binding.groups;
-            
+
             string[] splitBinding = binding.path.Split("/");
             var bindingKey = splitBinding[1];
-            
+
             if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1)
             {
                 hintImage.sprite = applicationKeybinds.GetKeybindImage(1, bindingKey);
