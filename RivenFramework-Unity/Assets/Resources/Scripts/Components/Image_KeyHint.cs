@@ -6,6 +6,7 @@
 //=============================================================================
 
 using System;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -52,11 +53,51 @@ public class Image_KeyHint : MonoBehaviour
     private void UpdateKeyHint()
     {
         var action = applicationKeybinds.inputActionAsset.FindActionMap(targetActionMap).FindAction(targetAction);
+        // If action is null it's probably because the target action is a composite, so we'll need to parse the direction we want
         if (action == null)
         {
             // FUTURE ME PUT CODE HERE FOR DISPLAYING COMPOSITE BINDINGS!!!
+            foreach (var inputAction in applicationKeybinds.inputActionAsset.FindActionMap(targetActionMap).actions)
+            {
+                if (inputAction.bindings.Count > 0 && inputAction.bindings[0].isComposite)
+                {
+                    foreach (var binding in inputAction.bindings)
+                    {
+                        if (binding.isPartOfComposite)
+                        {
+                            string pattern = @"/([^/\[]+)(?:/([^/\[]+))?";
+                            Match match = Regex.Match(binding.path, pattern);
+
+                            if (match.Success)
+                            {
+                                // Extract the matched part from the regex
+                                var bindingKey = match.Groups[1].Value;
+                                if (match.Groups[2].Success)
+                                {
+                                    bindingKey += "/" + match.Groups[2].Value;
+                                }
+                                Debug.Log($"{bindingKey}");
+
+                                var controlScheme = binding.groups;
+
+                                // Set the hint image based on the control scheme
+                                if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1)
+                                {
+                                    hintImage.sprite = applicationKeybinds.GetKeybindImage(1, bindingKey);
+                                }
+                                else if (controlScheme == "Gamepad" && targetInputDevice == 2)
+                                {
+                                    hintImage.sprite = applicationKeybinds.GetKeybindImage(2, bindingKey);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             return;
         }
+        // Since we got a return from action, we are not a composite, if we are abandoned all hope!
         for (int i = 0; i < action.bindings.Count; i++)
         {
             var binding = action.bindings[i];
