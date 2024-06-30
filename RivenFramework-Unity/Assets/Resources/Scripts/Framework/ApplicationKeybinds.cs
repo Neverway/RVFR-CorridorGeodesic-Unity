@@ -46,7 +46,6 @@ public class ApplicationKeybinds : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    /*
     [Tooltip("1-Keyboard, 2-Controller")]
     public int GetCurrentInputDevice()
     {        
@@ -54,7 +53,7 @@ public class ApplicationKeybinds : MonoBehaviour
         string[] joystickNames = Input.GetJoystickNames();
         if (joystickNames.Length > 0) return 2;
         return 1;
-    }*/
+    }
     
     public Sprite GetKeybindImage(int _deviceID, string _keybindID)
     {
@@ -62,6 +61,7 @@ public class ApplicationKeybinds : MonoBehaviour
         switch (_deviceID)
         {
             case 0:
+                
                 break;
             case 1:
                 foreach (var keybind in keyboardList)

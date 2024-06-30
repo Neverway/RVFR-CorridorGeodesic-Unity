@@ -56,8 +56,8 @@ public class WB_Settings : MonoBehaviour
         switch (button)
         {
             case "buttonBack":
-                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-                gameInstance.UI_ShowTitle();
+                //if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                //gameInstance.UI_ShowTitle();
                 RemoveSubwidgets();
                 Destroy(gameObject);
                 break;

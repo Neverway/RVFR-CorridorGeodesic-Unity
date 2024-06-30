@@ -53,6 +53,12 @@ public class WB_Pause : MonoBehaviour
         switch (_button)
         {
             case "buttonResume":
+                var _settingsWidget = GameInstance.GetWidget("WB_Settings");
+                if (_settingsWidget)
+                {
+                    _settingsWidget.GetComponent<WB_Settings>().RemoveSubwidgets();
+                    Destroy(_settingsWidget);
+                }
                 Destroy(gameObject);
                 break;
             case "buttonSettings":

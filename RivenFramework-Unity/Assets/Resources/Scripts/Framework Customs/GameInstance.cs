@@ -184,6 +184,12 @@ public class GameInstance : MonoBehaviour
         }
         else
         {
+            var _settingsWidget = GetWidget("WB_Settings");
+            if (_settingsWidget)
+            {
+                _settingsWidget.GetComponent<WB_Settings>().RemoveSubwidgets();
+                Destroy(_settingsWidget);
+            }
             Destroy(GetWidget("WB_Pause")); SetAllPawnsIsPaused(false);
         }
     }

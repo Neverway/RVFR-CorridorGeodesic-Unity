@@ -57,6 +57,7 @@ public class Image_KeyHint : MonoBehaviour
         if (action == null)
         {
             // FUTURE ME PUT CODE HERE FOR DISPLAYING COMPOSITE BINDINGS!!!
+            /*
             foreach (var inputAction in applicationKeybinds.inputActionAsset.FindActionMap(targetActionMap).actions)
             {
                 if (inputAction.bindings.Count > 0 && inputAction.bindings[0].isComposite)
@@ -93,7 +94,7 @@ public class Image_KeyHint : MonoBehaviour
                         }
                     }
                 }
-            }
+            }*/
 
             return;
         }
@@ -106,7 +107,11 @@ public class Image_KeyHint : MonoBehaviour
             string[] splitBinding = binding.path.Split("/");
             var bindingKey = splitBinding[1];
 
-            if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1)
+            if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 0)
+            {
+                hintImage.sprite = applicationKeybinds.GetKeybindImage(applicationKeybinds.GetCurrentInputDevice(), bindingKey);
+            }
+            else if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1)
             {
                 hintImage.sprite = applicationKeybinds.GetKeybindImage(1, bindingKey);
             }
