@@ -51,84 +51,26 @@ public class Image_KeyHint : MonoBehaviour
     //=-----------------=
     private void UpdateKeyHint()
     {
-        // Iterate through all action maps
-        foreach (var actionMap in applicationKeybinds.inputActionAsset.actionMaps)
+        var action = applicationKeybinds.inputActionAsset.FindActionMap(targetActionMap).FindAction(targetAction);
+        if (action==null) return; // This filters out composite bindings FYI
+        for (int i = 0; i < action.bindings.Count; i++)
         {
-            // Get target actionMap
-            if (actionMap.name != targetActionMap) continue;
+            var binding = action.bindings[i];
+            var controlScheme = binding.groups;
             
-            // Iterate through all actions in the action map
-            foreach (var action in actionMap.actions)
+            string[] splitBinding = binding.path.Split("/");
+            var bindingKey = splitBinding[1];
+            
+            if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1)
             {
-                // Get target action
-                if (action.name == targetAction)
-                {
-                    // Iterate through all bindings in the action
-                    for (int i = 0; i < action.bindings.Count; i++)
-                    {
-                        var binding = action.bindings[i];
-                        // Check if it's a keyboard or gamepad binding
-                        var controlScheme = binding.groups;
-
-                        if (controlScheme.Contains("Keyboard") && targetInputDevice == 1)
-                        {
-                            // Set the current image to the relative binding
-
-                            //Debug.Log($"    Keyboard Binding: {parts[1]}");
-                            hintImage.sprite = applicationKeybinds.GetKeybindImage(1, binding.path.Replace("<Keyboard>/", ""));
-                        }
-                        else if (controlScheme.Contains("Gamepad") && targetInputDevice == 2)
-                        {
-                            // Set the current image to the relative binding
-
-                            //Debug.Log($"    Controller Binding: {parts[1]}");
-                            hintImage.sprite = applicationKeybinds.GetKeybindImage(2, binding.path.Replace("<Gamepad>/", ""));
-                        }
-                    }
-                }
-                else if (targetAction.Contains(action.name))
-                {
-                    // Iterate through all bindings in the action
-                    for (int i = 0; i < action.bindings.Count; i++)
-                    {
-                        var binding = action.bindings[i];
-                        //Debug.Log($"    Composite Binding: {binding.path}");
-
-                        // Print each part of the composite binding
-                        int partIndex = i + 1;
-                        while (partIndex < action.bindings.Count && action.bindings[partIndex].isPartOfComposite)
-                        {
-                            var partBinding = action.bindings[partIndex];
-                            var controlScheme = partBinding.groups;
-                            //Debug.Log($" [COMP] Action: {action.name} CS: {controlScheme}");
-                            if (controlScheme.Contains("Keyboard") && targetInputDevice == 1)
-                            {
-                                string input = targetAction;
-                                string[] parts = input.Split(' ');
-                                if (partBinding.path.Contains(parts[1]))
-                                {
-                                    // ToLower is used here since the composite id's are parsed as lowercase, if they were uppercase, they would fail
-                                    hintImage.sprite = applicationKeybinds.GetKeybindImage(1, binding.path.Replace("<Keyboard>/", ""));
-                                    Debug.Log($"      Keyboard Part: {partBinding.path.Replace("<Keyboard>/", "")}");
-                                }
-                            }
-                            else if (controlScheme.Contains("Gamepad") && targetInputDevice == 2)
-                            {
-                                string input = targetAction;
-                                string[] parts = input.Split(' ');
-                                if (partBinding.path.Contains(parts[1]))
-                                {
-                                    // ToLower is used here since the composite id's are parsed as lowercase, if they were uppercase, they would fail
-                                    hintImage.sprite = applicationKeybinds.GetKeybindImage(2, binding.path.Replace("<Gamepad>/", ""));
-                                    Debug.Log($"      Keyboard Part: {partBinding.path.Replace("<Gamepad>/", "")}");
-                                }
-                            }
-                            partIndex++;
-                        }
-                    }
-                }
+                hintImage.sprite = applicationKeybinds.GetKeybindImage(1, bindingKey);
+            }
+            else if (controlScheme == "Gamepad" && targetInputDevice == 2)
+            {
+                hintImage.sprite = applicationKeybinds.GetKeybindImage(2, bindingKey);
             }
         }
+
     }
 
 
