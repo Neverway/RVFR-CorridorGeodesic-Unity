@@ -29,8 +29,6 @@ public class Pawn : MonoBehaviour
     public event Action OnPawnHeal;
     public event Action OnPawnDeath;
     
-    [Tooltip("The collision layers that will be checked when testing if the entity is grounded")]
-    [SerializeField] private LayerMask groundMask;
 
 
     //=-----------------=
@@ -105,6 +103,7 @@ public class Pawn : MonoBehaviour
         currentState.characterSounds = defaultState.characterSounds;
         currentState.groundCheckOffset = defaultState.groundCheckOffset;
         currentState.groundCheckRadius = defaultState.groundCheckRadius;
+        currentState.groundMask = defaultState.groundMask;
         // Add project specific variables below this line!
         currentState.drag = defaultState.drag;
         currentState.movementMultiplier = defaultState.movementMultiplier;
@@ -117,7 +116,7 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     public bool IsGrounded3D()
     {
-        return Physics.CheckSphere(transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, groundMask);
+        return Physics.CheckSphere(transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, currentState.groundMask);
     }
     
     public bool IsPlayerControlled()

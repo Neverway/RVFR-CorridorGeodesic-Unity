@@ -20,6 +20,7 @@ public class CharacterData : Actor
     public CharacterSounds characterSounds;
     public Vector3 groundCheckOffset;
     public float groundCheckRadius;
+    public LayerMask groundMask;
     // Add project specific variables below this line!
     public float drag;
     public float movementMultiplier;

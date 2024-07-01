@@ -34,6 +34,8 @@ public class CharacterState
     public CharacterSounds characterSounds;
     public Vector3 groundCheckOffset;
     public float groundCheckRadius;
+    [Tooltip("The collision layers that will be checked when testing if the entity is grounded")]
+    public LayerMask groundMask;
     // Add project specific variables below this line!
     public float drag;
     public float movementMultiplier;
