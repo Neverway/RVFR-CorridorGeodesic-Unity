@@ -117,6 +117,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         //Debug.Log(_pawn.IsGrounded3D());
         if (fpsActions.Jump.WasPressedThisFrame() && _pawn.IsGrounded3D())
         {
+            rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
             rigidbody.AddForce(Vector3.up * _pawn.currentState.jumpForce, ForceMode.Impulse);
         }
     }
