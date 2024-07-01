@@ -114,6 +114,8 @@ public class Pawn : MonoBehaviour
         currentState.airMovementMultiplier = defaultState.airMovementMultiplier;
         currentState.gravityMultiplier = defaultState.gravityMultiplier;
         currentState.jumpForce = defaultState.jumpForce;
+        currentState.sprintSpeedMultiplier = defaultState.sprintSpeedMultiplier;
+        currentState.sprintAcceleration = defaultState.sprintAcceleration;
     }
     // ------------------------------------------------------------------
 
