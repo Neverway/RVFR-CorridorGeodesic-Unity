@@ -18,6 +18,8 @@ public class CharacterData : Actor
     public string team;
     public RuntimeAnimatorController animationController;
     public CharacterSounds characterSounds;
+    public Vector3 groundCheckOffset;
+    public float groundCheckRadius;
     // Add project specific variables below this line!
 }
 
