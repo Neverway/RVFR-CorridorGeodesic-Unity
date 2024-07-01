@@ -103,6 +103,8 @@ public class Pawn : MonoBehaviour
         currentState.team = defaultState.team;
         currentState.animationController = defaultState.animationController;
         currentState.characterSounds = defaultState.characterSounds;
+        currentState.groundCheckOffset = defaultState.groundCheckOffset;
+        currentState.groundCheckRadius = defaultState.groundCheckRadius;
         // Add project specific variables below this line!
         currentState.drag = defaultState.drag;
         currentState.movementMultiplier = defaultState.movementMultiplier;
@@ -115,7 +117,7 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     public bool IsGrounded3D()
     {
-        return Physics.CheckSphere(transform.position - new Vector3(0, 0, 0), 0.4f, groundMask);
+        return Physics.CheckSphere(transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, groundMask);
     }
     
     public bool IsPlayerControlled()

@@ -32,6 +32,8 @@ public class CharacterState
     public string team;
     public RuntimeAnimatorController animationController;
     public CharacterSounds characterSounds;
+    public Vector3 groundCheckOffset;
+    public float groundCheckRadius;
     // Add project specific variables below this line!
     public float drag;
     public float movementMultiplier;
