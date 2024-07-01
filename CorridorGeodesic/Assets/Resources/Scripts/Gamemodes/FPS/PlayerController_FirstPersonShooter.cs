@@ -53,6 +53,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         rigidbody.freezeRotation = true;
 
         viewCamera = _pawn.GetComponentInChildren<Camera>();
+        rigidbody.mass = _pawn.currentState.gravityMultiplier;
     }
     
     public override void PawnUpdate(Pawn _pawn)
@@ -109,16 +110,38 @@ public class PlayerController_FirstPersonShooter : PawnController
     private void UpdateJumping(Pawn _pawn)
     {
         Debug.Log(_pawn.IsGrounded3D());
+        if (fpsActions.Jump.WasPressedThisFrame() && _pawn.IsGrounded3D())
+        {
+            rigidbody.AddForce(Vector3.up * _pawn.currentState.jumpForce, ForceMode.Impulse);
+        }
     }
     
     private void MovePlayer(Pawn _pawn)
     {
-        rigidbody.AddForce(moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier), ForceMode.Acceleration);
+        if (_pawn.IsGrounded3D())
+        {
+            rigidbody.AddForce(
+                moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier),
+                ForceMode.Acceleration);
+        }
+        else
+        {
+            rigidbody.AddForce(
+                moveDirection.normalized * (_pawn.currentState.movementSpeed * (_pawn.currentState.movementMultiplier * _pawn.currentState.airMovementMultiplier)),
+                ForceMode.Acceleration);
+        }
     }
 
     private void ControlDrag(Pawn _pawn)
     {
-        rigidbody.drag = _pawn.currentState.drag;
+        if (_pawn.IsGrounded3D())
+        {
+            rigidbody.drag = _pawn.currentState.groundDrag;
+        }
+        else
+        {
+            rigidbody.drag = _pawn.currentState.airDrag;
+        }
     }
 
 

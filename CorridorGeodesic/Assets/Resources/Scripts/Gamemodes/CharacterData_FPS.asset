@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c6704b8f67483982645bc426bec79f, type: 3}
   m_Name: CharacterData_FPS
   m_EditorClassIdentifier: 
-  id: 
+  id: character_fps
   icon: {fileID: 0}
   actorName: 
   AssociatedGameObject: {fileID: 0}
@@ -26,5 +26,14 @@ MonoBehaviour:
     heal: {fileID: 0}
     death: {fileID: 0}
     alerted: {fileID: 0}
-  drag: 5
+  groundCheckOffset: {x: 0, y: 0.85, z: 0}
+  groundCheckRadius: 0.05
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  groundDrag: 6
+  airDrag: 2
   movementMultiplier: 10
+  airMovementMultiplier: 0.1
+  gravityMultiplier: 75
+  jumpForce: 1.25
