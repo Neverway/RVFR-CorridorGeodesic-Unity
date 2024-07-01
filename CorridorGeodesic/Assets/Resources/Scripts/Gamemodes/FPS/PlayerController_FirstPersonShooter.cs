@@ -79,6 +79,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         UpdateJumping(_pawn);
         
         // Calculate Slope Movement
+        Debug.Log(slopMoveDirection);
         slopMoveDirection = Vector3.ProjectOnPlane(moveDirection, _pawn.slopeHit.normal);
     }
 
@@ -113,7 +114,7 @@ public class PlayerController_FirstPersonShooter : PawnController
 
     private void UpdateJumping(Pawn _pawn)
     {
-        Debug.Log(_pawn.IsGrounded3D());
+        //Debug.Log(_pawn.IsGrounded3D());
         if (fpsActions.Jump.WasPressedThisFrame() && _pawn.IsGrounded3D())
         {
             rigidbody.AddForce(Vector3.up * _pawn.currentState.jumpForce, ForceMode.Impulse);
