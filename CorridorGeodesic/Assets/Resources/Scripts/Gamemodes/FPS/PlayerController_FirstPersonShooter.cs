@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -58,6 +59,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     {
         if (fpsActions.Pause.WasPressedThisFrame()) gameInstance.UI_ShowPause();
 
+        // Lock mouse when unpaused, unlock when paused
         if (_pawn.isPaused)
         {
             if (Cursor.lockState == CursorLockMode.Locked)
@@ -70,17 +72,9 @@ public class PlayerController_FirstPersonShooter : PawnController
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
-        
-        moveDirection = _pawn.transform.forward * fpsActions.Move.ReadValue<Vector2>().y + _pawn.transform.right * fpsActions.Move.ReadValue<Vector2>().x;
-        ControlDrag(_pawn);
-
-        var multiplier = 0.01f;
-        var applicationSettings = FindObjectOfType<ApplicationSettings>();
-        yRotation += fpsActions.LookAxis.ReadValue<Vector2>().x*(20*applicationSettings.currentSettingsData.verticalLookSpeed)*multiplier;
-        xRotation -= fpsActions.LookAxis.ReadValue<Vector2>().y*(20*applicationSettings.currentSettingsData.horizontalLookSpeed)*multiplier;
-
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
+        UpdateMovement(_pawn);
+        UpdateRotation(_pawn);
+        UpdateJumping(_pawn);
     }
 
     public override void PawnFixedUpdate(Pawn _pawn)
@@ -94,6 +88,29 @@ public class PlayerController_FirstPersonShooter : PawnController
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private void UpdateMovement(Pawn _pawn)
+    {
+        // Pawn movement
+        moveDirection = _pawn.transform.forward * fpsActions.Move.ReadValue<Vector2>().y + _pawn.transform.right * fpsActions.Move.ReadValue<Vector2>().x;
+        ControlDrag(_pawn);
+    }
+
+    private void UpdateRotation(Pawn _pawn)
+    {
+        // Pawn looking
+        var multiplier = 0.01f;
+        var applicationSettings = FindObjectOfType<ApplicationSettings>();
+        yRotation += fpsActions.LookAxis.ReadValue<Vector2>().x*(20*applicationSettings.currentSettingsData.verticalLookSpeed)*multiplier;
+        xRotation -= fpsActions.LookAxis.ReadValue<Vector2>().y*(20*applicationSettings.currentSettingsData.horizontalLookSpeed)*multiplier;
+
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+    }
+
+    private void UpdateJumping(Pawn _pawn)
+    {
+        Debug.Log(_pawn.IsGrounded3D());
+    }
+    
     private void MovePlayer(Pawn _pawn)
     {
         rigidbody.AddForce(moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier), ForceMode.Acceleration);
