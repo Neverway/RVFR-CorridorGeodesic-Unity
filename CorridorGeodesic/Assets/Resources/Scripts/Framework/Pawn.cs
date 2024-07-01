@@ -41,6 +41,7 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     private GameInstance gameInstance;
     public Quaternion faceDirection; // Imported from old system
+    public RaycastHit slopeHit;
 
 
     //=-----------------=
@@ -121,6 +122,16 @@ public class Pawn : MonoBehaviour
     public bool IsGrounded3D()
     {
         return Physics.CheckSphere(transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, currentState.groundMask);
+    }
+    
+    public bool IsGroundSloped3D()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
+        {
+            return slopeHit.normal != Vector3.up;
+        }
+
+        return false;
     }
     
     public bool IsPlayerControlled()
