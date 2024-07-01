@@ -27,6 +27,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     // Private Variables
     //=-----------------=
     private Vector3 moveDirection;
+    private Vector3 slopMoveDirection;
     private float yRotation;
     private float xRotation;
 
@@ -76,6 +77,9 @@ public class PlayerController_FirstPersonShooter : PawnController
         UpdateMovement(_pawn);
         UpdateRotation(_pawn);
         UpdateJumping(_pawn);
+        
+        // Calculate Slope Movement
+        slopMoveDirection = Vector3.ProjectOnPlane(moveDirection, _pawn.slopeHit.normal);
     }
 
     public override void PawnFixedUpdate(Pawn _pawn)
@@ -118,10 +122,16 @@ public class PlayerController_FirstPersonShooter : PawnController
     
     private void MovePlayer(Pawn _pawn)
     {
-        if (_pawn.IsGrounded3D())
+        if (_pawn.IsGrounded3D() && !_pawn.IsGroundSloped3D())
         {
             rigidbody.AddForce(
                 moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier),
+                ForceMode.Acceleration);
+        }
+        else if (_pawn.IsGrounded3D() && _pawn.IsGroundSloped3D())
+        {
+            rigidbody.AddForce(
+                slopMoveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier),
                 ForceMode.Acceleration);
         }
         else
