@@ -99,6 +99,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Pawn movement
         moveDirection = _pawn.transform.forward * fpsActions.Move.ReadValue<Vector2>().y + _pawn.transform.right * fpsActions.Move.ReadValue<Vector2>().x;
         ControlDrag(_pawn);
+        ControlSprinting(_pawn);
     }
 
     private void UpdateRotation(Pawn _pawn)
@@ -153,6 +154,22 @@ public class PlayerController_FirstPersonShooter : PawnController
         else
         {
             rigidbody.drag = _pawn.currentState.airDrag;
+        }
+    }
+
+    private void ControlSprinting(Pawn _pawn)
+    {
+        if (fpsActions.Action.IsPressed() && _pawn.IsGrounded3D())
+        {
+            _pawn.currentState.movementSpeed = Mathf.Lerp(_pawn.currentState.movementSpeed,
+                _pawn.defaultState.movementSpeed * _pawn.currentState.sprintSpeedMultiplier,
+                _pawn.currentState.sprintAcceleration * Time.deltaTime);
+        }
+        else 
+        {
+            _pawn.currentState.movementSpeed = Mathf.Lerp(_pawn.currentState.movementSpeed,
+                _pawn.defaultState.movementSpeed,
+                _pawn.currentState.sprintAcceleration * Time.deltaTime);
         }
     }
 
