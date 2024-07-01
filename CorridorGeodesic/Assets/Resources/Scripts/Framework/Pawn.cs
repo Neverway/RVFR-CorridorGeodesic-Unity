@@ -105,8 +105,12 @@ public class Pawn : MonoBehaviour
         currentState.groundCheckRadius = defaultState.groundCheckRadius;
         currentState.groundMask = defaultState.groundMask;
         // Add project specific variables below this line!
-        currentState.drag = defaultState.drag;
+        currentState.groundDrag = defaultState.groundDrag;
+        currentState.airDrag = defaultState.airDrag;
         currentState.movementMultiplier = defaultState.movementMultiplier;
+        currentState.airMovementMultiplier = defaultState.airMovementMultiplier;
+        currentState.gravityMultiplier = defaultState.gravityMultiplier;
+        currentState.jumpForce = defaultState.jumpForce;
     }
     // ------------------------------------------------------------------
 
