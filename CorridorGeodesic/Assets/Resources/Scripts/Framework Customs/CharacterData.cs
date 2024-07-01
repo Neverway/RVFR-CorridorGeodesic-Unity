@@ -19,6 +19,8 @@ public class CharacterData : Actor
     public RuntimeAnimatorController animationController;
     public CharacterSounds characterSounds;
     // Add project specific variables below this line!
+    public float drag;
+    public float movementMultiplier;
 }
 
 [Serializable]

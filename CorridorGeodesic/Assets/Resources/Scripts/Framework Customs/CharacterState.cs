@@ -33,4 +33,6 @@ public class CharacterState
     public RuntimeAnimatorController animationController;
     public CharacterSounds characterSounds;
     // Add project specific variables below this line!
+    public float drag;
+    public float movementMultiplier;
 }

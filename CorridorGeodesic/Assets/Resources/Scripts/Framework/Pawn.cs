@@ -104,6 +104,8 @@ public class Pawn : MonoBehaviour
         currentState.animationController = defaultState.animationController;
         currentState.characterSounds = defaultState.characterSounds;
         // Add project specific variables below this line!
+        currentState.drag = defaultState.drag;
+        currentState.movementMultiplier = defaultState.movementMultiplier;
     }
     // ------------------------------------------------------------------
 
