@@ -37,4 +37,6 @@ public class CharacterState
     [Tooltip("The collision layers that will be checked when testing if the entity is grounded")]
     public LayerMask groundMask;
     // Add project specific variables below this line!
+    public float drag;
+    public float movementMultiplier;
 }

@@ -22,6 +22,8 @@ public class CharacterData : Actor
     public float groundCheckRadius;
     public LayerMask groundMask;
     // Add project specific variables below this line!
+    public float drag;
+    public float movementMultiplier;
 }
 
 [Serializable]

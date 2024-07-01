@@ -220,7 +220,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""up"",
                     ""id"": ""918142f3-3e29-40e2-8adb-e1e3a459346a"",
-                    ""path"": ""<Mouse>/delta/up"",
+                    ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -231,7 +231,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""down"",
                     ""id"": ""2bf39943-1a75-4ba5-851f-c4e9571889c9"",
-                    ""path"": ""<Mouse>/delta/down"",
+                    ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -242,7 +242,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""left"",
                     ""id"": ""d76c4146-0440-4054-828f-0e4bbc2a8399"",
-                    ""path"": ""<Mouse>/delta/left"",
+                    ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -253,7 +253,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""right"",
                     ""id"": ""369d8ccc-a052-4a6d-8a5f-a1ae2ad53862"",
-                    ""path"": ""<Mouse>/delta/right"",
+                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -786,6 +786,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LookAxis"",
+                    ""type"": ""Value"",
+                    ""id"": ""08e1e397-dc4e-4f61-b072-e1d51466c29f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -957,7 +966,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Up"",
                     ""id"": ""e532a9f7-3295-4f18-97e8-b780e5a31409"",
-                    ""path"": ""<Mouse>/delta/up"",
+                    ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -968,7 +977,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Down"",
                     ""id"": ""3a5cf0d0-4200-429a-b31a-78a29b86ff25"",
-                    ""path"": ""<Mouse>/delta/down"",
+                    ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -979,7 +988,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Left"",
                     ""id"": ""9b1cfa7f-77a9-40e8-97f2-eca2c0653c81"",
-                    ""path"": ""<Mouse>/delta/left"",
+                    ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -990,7 +999,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Right"",
                     ""id"": ""41240d61-d8a3-4532-914f-8392973a741f"",
-                    ""path"": ""<Mouse>/delta/right"",
+                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -1228,6 +1237,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""263429a6-1297-4a0b-9f7b-32e11d10adcb"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LookAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1292,6 +1312,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_FirstPersonShooter_Secondary = m_FirstPersonShooter.FindAction("Secondary", throwIfNotFound: true);
         m_FirstPersonShooter_Left = m_FirstPersonShooter.FindAction("Left", throwIfNotFound: true);
         m_FirstPersonShooter_Right = m_FirstPersonShooter.FindAction("Right", throwIfNotFound: true);
+        m_FirstPersonShooter_LookAxis = m_FirstPersonShooter.FindAction("LookAxis", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1537,6 +1558,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_FirstPersonShooter_Secondary;
     private readonly InputAction m_FirstPersonShooter_Left;
     private readonly InputAction m_FirstPersonShooter_Right;
+    private readonly InputAction m_FirstPersonShooter_LookAxis;
     public struct FirstPersonShooterActions
     {
         private @InputActions m_Wrapper;
@@ -1553,6 +1575,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @Secondary => m_Wrapper.m_FirstPersonShooter_Secondary;
         public InputAction @Left => m_Wrapper.m_FirstPersonShooter_Left;
         public InputAction @Right => m_Wrapper.m_FirstPersonShooter_Right;
+        public InputAction @LookAxis => m_Wrapper.m_FirstPersonShooter_LookAxis;
         public InputActionMap Get() { return m_Wrapper.m_FirstPersonShooter; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1598,6 +1621,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Right.started += instance.OnRight;
             @Right.performed += instance.OnRight;
             @Right.canceled += instance.OnRight;
+            @LookAxis.started += instance.OnLookAxis;
+            @LookAxis.performed += instance.OnLookAxis;
+            @LookAxis.canceled += instance.OnLookAxis;
         }
 
         private void UnregisterCallbacks(IFirstPersonShooterActions instance)
@@ -1638,6 +1664,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Right.started -= instance.OnRight;
             @Right.performed -= instance.OnRight;
             @Right.canceled -= instance.OnRight;
+            @LookAxis.started -= instance.OnLookAxis;
+            @LookAxis.performed -= instance.OnLookAxis;
+            @LookAxis.canceled -= instance.OnLookAxis;
         }
 
         public void RemoveCallbacks(IFirstPersonShooterActions instance)
@@ -1705,5 +1734,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnSecondary(InputAction.CallbackContext context);
         void OnLeft(InputAction.CallbackContext context);
         void OnRight(InputAction.CallbackContext context);
+        void OnLookAxis(InputAction.CallbackContext context);
     }
 }
