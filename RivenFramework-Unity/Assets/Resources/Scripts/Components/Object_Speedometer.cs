@@ -17,6 +17,7 @@ public class UI_Text_Speedometer : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [SerializeField] private bool UseLocalPlayer;
 
 
     //=-----------------=
@@ -29,6 +30,7 @@ public class UI_Text_Speedometer : MonoBehaviour
     //=-----------------=
     private TMP_Text velocityText;
     [SerializeField] private Rigidbody entityRigidbody;
+    private GameInstance gameInstance;
 
 
     //=-----------------=
@@ -37,10 +39,16 @@ public class UI_Text_Speedometer : MonoBehaviour
     private void Start()
     {
         velocityText = GetComponent<TMP_Text>();
+        gameInstance = FindObjectOfType<GameInstance>();
     }
 
     private void Update()
     {
+        if (UseLocalPlayer && !entityRigidbody)
+        {
+            if (gameInstance.localPlayerCharacter.GetComponent<Rigidbody>()) entityRigidbody = gameInstance.localPlayerCharacter.GetComponent<Rigidbody>();
+        }
+        if (!entityRigidbody) return;
         velocityText.text = "Velocity: " + entityRigidbody.velocity.magnitude.ToString("F2") + " m/s";
     }
     
