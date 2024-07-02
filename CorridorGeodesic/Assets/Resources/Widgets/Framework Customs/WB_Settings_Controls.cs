@@ -69,7 +69,7 @@ public class WB_Settings_Controls : MonoBehaviour
 
                     // Check if the binding is a composite binding
                     if (binding.isComposite)
-                    {/*
+                    {
                         //Debug.Log($"    Composite Binding: {binding.path}");
                         //Debug.Log($"[{this.name}] {action.name} is a composite binding with path '{binding.path}'");
 
@@ -91,7 +91,7 @@ public class WB_Settings_Controls : MonoBehaviour
                                 {
                                     keyHint.targetAction = $"{action.name} {partName}";
                                 }
-                                newBindingEntry.SetActive(true);
+                                //newBindingEntry.SetActive(true);
                                 //Debug.Log($"      Keyboard Part: {partBinding.path}");
                                 //Debug.Log($"[{this.name}] {action.name} contains binding path '{partBinding.path}'");
                             }
@@ -101,7 +101,7 @@ public class WB_Settings_Controls : MonoBehaviour
                                 //Debug.Log($"[{this.name}] {action.name} contains binding path '{partBinding.path}'");
                             }
                             partIndex++;
-                        }*/
+                        }
                     }
                     else if (!binding.isPartOfComposite)
                     {
