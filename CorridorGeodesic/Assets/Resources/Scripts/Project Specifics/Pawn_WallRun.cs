@@ -60,7 +60,7 @@ public class Pawn_WallRun : MonoBehaviour
         applicationSettings = FindObjectOfType<ApplicationSettings>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         CheckWall();
 
