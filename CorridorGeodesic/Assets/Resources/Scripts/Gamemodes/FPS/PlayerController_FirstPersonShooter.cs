@@ -114,8 +114,8 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Pawn looking
         var multiplier = 0.01f;
         var applicationSettings = FindObjectOfType<ApplicationSettings>();
-        yRotation += fpsActions.LookAxis.ReadValue<Vector2>().x*(20*applicationSettings.currentSettingsData.verticalLookSpeed)*multiplier;
-        xRotation -= fpsActions.LookAxis.ReadValue<Vector2>().y*(20*applicationSettings.currentSettingsData.horizontalLookSpeed)*multiplier;
+        yRotation += fpsActions.LookAxis.ReadValue<Vector2>().x*(20*applicationSettings.currentSettingsData.horizontalLookSpeed)*multiplier;
+        xRotation -= fpsActions.LookAxis.ReadValue<Vector2>().y*(20*applicationSettings.currentSettingsData.verticalLookSpeed)*multiplier;
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
     }
