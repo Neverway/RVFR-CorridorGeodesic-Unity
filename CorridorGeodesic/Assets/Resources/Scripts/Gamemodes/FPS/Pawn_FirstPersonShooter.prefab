@@ -906,9 +906,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 7443549735799978621}
   wallDistance: 0.6
-  minimumJumpHeight: 2
-  wallRunGravity: 4300
-  wallJumpForce: 1000
+  minimumJumpHeight: 1
+  wallRunGravity: 1600
+  wallJumpForce: 1200
+  wallRunAdditionalFov: 10
+  wallRunFovTime: 4
+  cameraTilt: 15
+  cameraTiltTime: 4
+  camera: {fileID: 7998361403213607096}
 --- !u!4 &5128313973611898881 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7857472642894048, guid: ff3469225baab858c9ebc9e25666dba4,
@@ -918,6 +923,12 @@ Transform:
 --- !u!4 &7443549735799978621 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2340826424920119964, guid: ff3469225baab858c9ebc9e25666dba4,
+    type: 3}
+  m_PrefabInstance: {fileID: 5129745348347650273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &7998361403213607096 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3012740365997609049, guid: ff3469225baab858c9ebc9e25666dba4,
     type: 3}
   m_PrefabInstance: {fileID: 5129745348347650273}
   m_PrefabAsset: {fileID: 0}

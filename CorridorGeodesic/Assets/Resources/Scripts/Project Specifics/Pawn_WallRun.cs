@@ -23,11 +23,19 @@ public class Pawn_WallRun : MonoBehaviour
     [SerializeField] private float wallRunGravity = 5;
     [SerializeField] private float wallJumpForce = 5;
 
+    [Header("Camera")] 
+    [SerializeField] private float wallRunAdditionalFov = 20;
+    [SerializeField] private float wallRunFovTime = 20;
+    [SerializeField] private float cameraTilt;
+    [SerializeField] private float cameraTiltTime;
+
+    public float tilt { get; private set; }
+
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private bool wallLeft, wallRight;
+    private bool wallLeft, wallRight; 
     private RaycastHit leftWallHit, rightWallHit;
 
 
@@ -35,7 +43,9 @@ public class Pawn_WallRun : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private Rigidbody rigidbody;
-    public InputActions.FirstPersonShooterActions fpsActions;
+    private InputActions.FirstPersonShooterActions fpsActions;
+    private ApplicationSettings applicationSettings;
+    [SerializeField] private Camera camera;
 
 
     //=-----------------=
@@ -46,6 +56,8 @@ public class Pawn_WallRun : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
         fpsActions = new InputActions().FirstPersonShooter;
         fpsActions.Enable();
+        
+        applicationSettings = FindObjectOfType<ApplicationSettings>();
     }
 
     private void Update()
@@ -106,11 +118,29 @@ public class Pawn_WallRun : MonoBehaviour
                 rigidbody.AddForce(wallRunJumpDirection * (wallJumpForce * 100), ForceMode.Force);
             }
         }
+        
+        // Camera effects
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView,
+            applicationSettings.currentSettingsData.cameraFov + wallRunAdditionalFov, wallRunFovTime * Time.deltaTime);
+
+        if (wallLeft)
+        {
+            tilt = Mathf.Lerp(tilt, -cameraTilt, cameraTiltTime * Time.deltaTime);
+        }
+        if (wallRight)
+        {
+            tilt = Mathf.Lerp(tilt, cameraTilt, cameraTiltTime * Time.deltaTime);
+        }
     }
 
     private void StopWallRun()
     {
         rigidbody.useGravity = enabled;
+        
+        // Camera effects
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView,
+            applicationSettings.currentSettingsData.cameraFov, wallRunFovTime * Time.deltaTime);
+        tilt = Mathf.Lerp(tilt, 0, cameraTiltTime * Time.deltaTime);
     }
 
 

@@ -79,14 +79,21 @@ public class PlayerController_FirstPersonShooter : PawnController
         UpdateJumping(_pawn);
         
         // Calculate Slope Movement
-        Debug.Log(slopMoveDirection);
+        //Debug.Log(slopMoveDirection);
         slopMoveDirection = Vector3.ProjectOnPlane(moveDirection, _pawn.slopeHit.normal);
     }
 
     public override void PawnFixedUpdate(Pawn _pawn)
     {
         MovePlayer(_pawn);
-        viewCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        if (_pawn.GetComponent<Pawn_WallRun>())
+        {
+            viewCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, _pawn.GetComponent<Pawn_WallRun>().tilt);
+        }
+        else
+        {
+            viewCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        }
         _pawn.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
     
