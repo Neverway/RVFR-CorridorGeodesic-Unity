@@ -74,6 +74,22 @@ public class PlayerController_FirstPersonShooter : PawnController
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
+        // Item usage
+        if (fpsActions.Primary.WasPressedThisFrame())
+        {
+            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+            {
+                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UsePrimary();
+            }
+        }
+        if (fpsActions.Secondary.WasPressedThisFrame())
+        {
+            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+            {
+                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSecondary();
+            }
+        }
+        
         UpdateMovement(_pawn);
         UpdateRotation(_pawn);
         UpdateJumping(_pawn);
