@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_Layers.cs" />
-     <Compile Include="Assets/Resources/Materials/Portals/PortalTeleporter.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/PortalCamera.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/Widget_Depth.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Bludgeoning.cs" />
      <Compile Include="Assets/Resources/Levels/LB_Error.cs" />
@@ -93,6 +93,7 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/CharacterState.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/LogicGate_Or.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/GameInstance.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/Rift.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/PawnController.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/LogicGate_And.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Settings_Graphics.cs" />
@@ -100,7 +101,6 @@
      <Compile Include="Assets/Resources/Scripts/Integratables/Trigger2D_Interaction.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Button_Selector.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/ControlBindingEntry.cs" />
-     <Compile Include="Assets/Resources/Materials/Portals/PortalCamera.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Utility.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Back.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Button_Sounds.cs" />
@@ -110,6 +110,7 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/DataObject.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_DepthAssigner.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Volume2D_Force.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/PortalTextureSetup.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/Pawn.cs" />
      <Compile Include="Assets/Darkbringer Shader/Preview/DarkbringerUIPreview.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_VariableExposer_Light.cs" />
@@ -124,7 +125,6 @@
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_MemoryBrowser_Item.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Text_EntityName.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon.cs" />
-     <Compile Include="Assets/Resources/Materials/Portals/NewBehaviourScript.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Projectile.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Particle_DataExposer.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Title.cs" />
@@ -150,7 +150,6 @@
      <Compile Include="Assets/Resources/Scripts/Integratables/Trigger2D_Event.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/temp.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Image_EntityEquippedItems.cs" />
-     <Compile Include="Assets/Resources/Materials/Portals/PortalTextureSetup.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Text_SliderValue.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Trigger2D_Interactable.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_Inspector.cs" />
@@ -158,6 +157,7 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Polearm.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/GameMode.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/PortalTeleporter.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Logic_Interactable.cs" />
      <Compile Include="Assets/Resources/Scripts/Gamemodes/FPS/PlayerController_FirstPersonShooter.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/ProjectDatabase.cs" />
@@ -207,7 +207,6 @@
      <Folder Include="Assets/Resources/Scripts/Framework" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Xbox Series" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Surface-Mobile.shader" />
-     <Folder Include="Assets/Resources/Materials/Portals/Environment" />
      <Folder Include="Assets/Resources/Actors/System" />
      <Folder Include="Assets/Resources/Widgets/Framework Customs" />
      <Folder Include="Assets/Samples" />
@@ -216,7 +215,6 @@
      <Folder Include="Assets/Resources/Widgets/Components" />
      <Folder Include="Assets/Packages" />
      <Folder Include="Assets/Resources/Sprites/System" />
-     <Folder Include="Assets/Resources/Materials/Portals/Standard Assets" />
      <Folder Include="Assets/Resources/Sprites/Tilesets/Collision" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Keyboard &amp; Mouse" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/PS4" />
@@ -243,7 +241,6 @@
      <Folder Include="Assets/Resources/Scripts" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro_Surface.cginc" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Ouya" />
-     <Folder Include="Assets/Resources/Materials/Portals/Resources" />
      <Folder Include="Assets/TextMesh Pro/Shaders" />
      <None Include="Assets/Darkbringer Shader/DarkBringerRefined.shader" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Keyboard &amp; Mouse/Light" />
@@ -262,7 +259,6 @@
      <Folder Include="Assets/Resources/Sprites/Characters" />
      <Folder Include="Assets/Resources/Sound" />
      <Folder Include="Assets/Resources/Scripts/Gamemodes/Default" />
-     <Folder Include="Assets/Resources/Materials/Portals/PostProcessing" />
      <Folder Include="Assets/Resources/Scripts/Gamemodes" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Masking.shader" />
      <Folder Include="Assets/Resources/Widgets/Project Specifics" />

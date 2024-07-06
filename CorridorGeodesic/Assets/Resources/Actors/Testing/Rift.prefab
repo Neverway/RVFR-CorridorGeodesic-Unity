@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6114403920249581930}
   - component: {fileID: 4492423538743090143}
+  - component: {fileID: -2693150866304311688}
   m_Layer: 0
   m_Name: Rift
   m_TagString: Untagged
@@ -50,6 +51,20 @@ MonoBehaviour:
   cameraB: {fileID: 6417648585356993021}
   cameraMatA: {fileID: 2100000, guid: 959c50d8d834c2042a284fd28d7227d6, type: 2}
   cameraMatB: {fileID: 2100000, guid: 32c27e8a04985124e86a10e6f7425cea, type: 2}
+--- !u!114 &-2693150866304311688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345048906418830031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f3d0a2e5f798a0e992d77e2f13804c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  portalA: {fileID: 385546327743005553}
+  portalB: {fileID: 3990119177877850287}
 --- !u!1 &385546327743005553
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,7 +370,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1626811902462728602, guid: 94967e615899f4eb88f9883b59fd0167, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -382,7 +398,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 555de10a985e07f47942cba70242d94f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
   portal: {fileID: 7506509040737733941}
   otherPortal: {fileID: 2594208911727029897}
 --- !u!20 &6417648585356993021 stripped
@@ -470,7 +485,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1626811902462728602, guid: 94967e615899f4eb88f9883b59fd0167, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -509,6 +525,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 555de10a985e07f47942cba70242d94f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
   portal: {fileID: 2594208911727029897}
   otherPortal: {fileID: 7506509040737733941}

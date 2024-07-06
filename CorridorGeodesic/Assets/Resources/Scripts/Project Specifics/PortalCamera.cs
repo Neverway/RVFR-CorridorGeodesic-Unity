@@ -1,7 +1,8 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
 // Purpose:
-// Notes:
+// Notes: Created following the portal rendering tutorial by Brackeys
+// Source: https://www.youtube.com/watch?v=cuQao3hEKfs
 //
 //=============================================================================
 

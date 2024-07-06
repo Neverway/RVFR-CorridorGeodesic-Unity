@@ -77,6 +77,8 @@ public class VacuumProjectile : MonoBehaviour
             {
                 geoFolder.currentAmmo++;
             }
+
+            geoFolder.deployedInfinityMarkers.Remove(gameObject);
         }
         // Erase the projectile
         Destroy(gameObject);
