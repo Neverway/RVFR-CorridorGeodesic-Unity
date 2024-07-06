@@ -29,6 +29,7 @@ public class PortalCamera : MonoBehaviour
 	private Transform playerCamera;
 	[SerializeField] private Transform portal;
 	[SerializeField] private Transform otherPortal;
+	[SerializeField] private Vector3 positionOffset;
 
 
 	//=-----------------=
@@ -48,7 +49,7 @@ public class PortalCamera : MonoBehaviour
 		}
 		
 		Vector3 playerOffsetFromPortal = playerCamera.position - otherPortal.position;
-		transform.position = portal.position + playerOffsetFromPortal;
+		transform.position = portal.position + playerOffsetFromPortal + positionOffset;
 
 		float angularDifferenceBetweenPortalRotations = Quaternion.Angle(portal.rotation, otherPortal.rotation);
 

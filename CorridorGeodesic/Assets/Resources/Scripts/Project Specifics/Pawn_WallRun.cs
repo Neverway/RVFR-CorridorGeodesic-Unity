@@ -46,6 +46,7 @@ public class Pawn_WallRun : MonoBehaviour
     private InputActions.FirstPersonShooterActions fpsActions;
     private ApplicationSettings applicationSettings;
     [SerializeField] private Camera viewCamera;
+    [SerializeField] private LayerMask layerMask;
 
 
     //=-----------------=
@@ -91,12 +92,12 @@ public class Pawn_WallRun : MonoBehaviour
     //=-----------------=
     private bool CanWallRun()
     {
-        return !Physics.Raycast(transform.position, Vector3.down, minimumJumpHeight);
+        return !Physics.Raycast(transform.position, Vector3.down, minimumJumpHeight, layerMask);
     }
     private void CheckWall()
     {
-        wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallDistance);
-        wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallDistance);
+        wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallDistance, layerMask);
+        wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallDistance, layerMask);
     }
 
     private void StartWallRun()
