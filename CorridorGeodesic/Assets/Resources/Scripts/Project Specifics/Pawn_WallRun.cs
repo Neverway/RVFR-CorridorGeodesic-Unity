@@ -42,10 +42,10 @@ public class Pawn_WallRun : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private Rigidbody rigidbody;
+    private Rigidbody objectRigidbody;
     private InputActions.FirstPersonShooterActions fpsActions;
     private ApplicationSettings applicationSettings;
-    [SerializeField] private Camera camera;
+    [SerializeField] private Camera viewCamera;
 
 
     //=-----------------=
@@ -53,7 +53,7 @@ public class Pawn_WallRun : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        objectRigidbody = GetComponent<Rigidbody>();
         fpsActions = new InputActions().FirstPersonShooter;
         fpsActions.Enable();
         
@@ -101,26 +101,26 @@ public class Pawn_WallRun : MonoBehaviour
 
     private void StartWallRun()
     {
-        rigidbody.useGravity = false;
-        rigidbody.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
+        objectRigidbody.useGravity = false;
+        objectRigidbody.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
         if (fpsActions.Jump.WasPressedThisFrame())
         {
             if (wallLeft)
             {
                 Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal;
-                rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y);
-                rigidbody.AddForce(wallRunJumpDirection * (wallJumpForce * 100), ForceMode.Force);
+                objectRigidbody.velocity = new Vector3(objectRigidbody.velocity.x, objectRigidbody.velocity.y);
+                objectRigidbody.AddForce(wallRunJumpDirection * (wallJumpForce * 100), ForceMode.Force);
             }
             else if (wallRight)
             {
                 Vector3 wallRunJumpDirection = transform.up + rightWallHit.normal;
-                rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y);
-                rigidbody.AddForce(wallRunJumpDirection * (wallJumpForce * 100), ForceMode.Force);
+                objectRigidbody.velocity = new Vector3(objectRigidbody.velocity.x, objectRigidbody.velocity.y);
+                objectRigidbody.AddForce(wallRunJumpDirection * (wallJumpForce * 100), ForceMode.Force);
             }
         }
         
         // Camera effects
-        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView,
+        viewCamera.fieldOfView = Mathf.Lerp(viewCamera.fieldOfView,
             applicationSettings.currentSettingsData.cameraFov + wallRunAdditionalFov, wallRunFovTime * Time.deltaTime);
 
         if (wallLeft)
@@ -135,10 +135,10 @@ public class Pawn_WallRun : MonoBehaviour
 
     private void StopWallRun()
     {
-        rigidbody.useGravity = enabled;
+        objectRigidbody.useGravity = enabled;
         
         // Camera effects
-        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView,
+        viewCamera.fieldOfView = Mathf.Lerp(viewCamera.fieldOfView,
             applicationSettings.currentSettingsData.cameraFov, wallRunFovTime * Time.deltaTime);
         tilt = Mathf.Lerp(tilt, 0, cameraTiltTime * Time.deltaTime);
     }
