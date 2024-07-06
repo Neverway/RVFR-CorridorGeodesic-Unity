@@ -86,10 +86,12 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 Vector3 midPoint = (deployedInfinityMarkers[0].transform.position + deployedInfinityMarkers[1].transform.position) * 0.5f;
                 deployedRift = Instantiate(riftObject, midPoint, new Quaternion());
                 deployedRift.transform.LookAt(deployedInfinityMarkers[0].transform);
+                deployedRift.transform.rotation = new Quaternion(0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
+                deployedRift.GetComponent<Rift>().distanceToMarker = Vector3.Distance(deployedInfinityMarkers[0].transform.position, deployedInfinityMarkers[1].transform.position) * 0.5f;
             }
             else
             {
-                deployedRift.GetComponent<Rift>().DivergePortals(5, 5);
+                deployedRift.GetComponent<Rift>().DivergePortals(5, 0.25f);
             }
         }
     }
