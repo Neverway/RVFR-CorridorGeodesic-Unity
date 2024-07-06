@@ -33,7 +33,7 @@ public class PortalTextureSetup : MonoBehaviour
 	//=-----------------=
 	// Mono Functions
 	//=-----------------=
-	void Start () {
+	void Update () {
 		if (cameraA.targetTexture != null)
 		{
 			cameraA.targetTexture.Release();
