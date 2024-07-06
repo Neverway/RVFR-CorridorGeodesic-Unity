@@ -82,7 +82,7 @@ public class PlayerController_FirstPersonShooter : PawnController
                 _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UsePrimary();
             }
         }
-        if (fpsActions.Secondary.WasPressedThisFrame())
+        if (fpsActions.Secondary.IsPressed())
         {
             if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
             {

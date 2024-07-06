@@ -25,6 +25,7 @@ public class Rift : MonoBehaviour
     // Reference Variables
     //=-----------------=
     public GameObject portalA, portalB;
+    public float distanceToMarker;
     
 
     //=-----------------=
@@ -42,7 +43,7 @@ public class Rift : MonoBehaviour
     //=-----------------=
     public void DivergePortals(float distance, float speed)
     {
-        portalA.transform.localPosition = Vector3.Lerp(portalA.transform.localPosition, -Vector3.forward*distance, Time.deltaTime * speed);
-        portalB.transform.localPosition = Vector3.Lerp(portalB.transform.localPosition, Vector3.forward*distance, Time.deltaTime * speed);
+        portalA.transform.localPosition = Vector3.Lerp(portalA.transform.localPosition, -Vector3.forward*distanceToMarker, Time.deltaTime);
+        portalB.transform.localPosition = Vector3.Lerp(portalB.transform.localPosition, Vector3.forward*distanceToMarker, Time.deltaTime);
     }
 }
