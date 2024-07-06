@@ -28,7 +28,10 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private GameObject vacuumProjectile;
+    [SerializeField] private GameObject riftObject;
     [SerializeField] private float projectileForce;
+    public List<GameObject> deployedInfinityMarkers = new List<GameObject>();
+    private GameObject deployedRift;
 
 
     //=-----------------=
@@ -36,33 +39,60 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     public override void UsePrimary()
     {
-        if (currentAmmo <= 0) return;
-        currentAmmo--;
-        var projectile = Instantiate(vacuumProjectile, barrelTransform.transform.position, barrelTransform.transform.rotation, null);
-        projectile.GetComponent<Rigidbody>().AddForce(transform.forward * -projectileForce, ForceMode.Impulse);
-        projectile.GetComponent<VacuumProjectile>().geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+        DeployInfinityMarker();
     }
     
     public override void UseSecondary()
     {
-        var projectiles = FindObjectsOfType<VacuumProjectile>();
-        foreach (var projectile in projectiles)
-        {
-            Destroy(projectile.gameObject);
-        }
-
-        currentAmmo = maxAmmo;
+        ConvergeInfinityMarkers();
     }
     
     public override void UseSpecial()
     {
-        
+        RecallInfinityMarkers();
     }
     
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private void RecallInfinityMarkers()
+    {
+        var projectiles = FindObjectsOfType<VacuumProjectile>();
+        foreach (var projectile in projectiles)
+        {
+            Destroy(projectile.gameObject);
+        }
+        if (deployedRift) Destroy(deployedRift);
+        currentAmmo = maxAmmo;
+        deployedInfinityMarkers.Clear();
+    }
+    private void DeployInfinityMarker()
+    {
+        if (currentAmmo <= 0) return;
+        currentAmmo--;
+        var projectile = Instantiate(vacuumProjectile, barrelTransform.transform.position, barrelTransform.transform.rotation, null);
+        projectile.GetComponent<Rigidbody>().AddForce(transform.forward * -projectileForce, ForceMode.Impulse);
+        projectile.GetComponent<VacuumProjectile>().geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+        deployedInfinityMarkers.Add(projectile);
+    }
+
+    private void ConvergeInfinityMarkers()
+    {
+        if (deployedInfinityMarkers.Count >= 2)
+        {
+            if (!deployedRift)
+            {
+                Vector3 midPoint = (deployedInfinityMarkers[0].transform.position + deployedInfinityMarkers[1].transform.position) * 0.5f;
+                deployedRift = Instantiate(riftObject, midPoint, new Quaternion());
+                deployedRift.transform.LookAt(deployedInfinityMarkers[0].transform);
+            }
+            else
+            {
+                deployedRift.GetComponent<Rift>().DivergePortals(5, 5);
+            }
+        }
+    }
 
 
     //=-----------------=

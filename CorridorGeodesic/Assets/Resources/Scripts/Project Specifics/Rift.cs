@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class Rift : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -24,20 +24,13 @@ public class NewBehaviourScript : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-
+    public GameObject portalA, portalB;
+    
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
     
-    }
-
-    private void Update()
-    {
-    
-    }
 
     //=-----------------=
     // Internal Functions
@@ -47,4 +40,9 @@ public class NewBehaviourScript : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void DivergePortals(float distance, float speed)
+    {
+        portalA.transform.localPosition = Vector3.Lerp(portalA.transform.localPosition, -Vector3.forward*distance, Time.deltaTime * speed);
+        portalB.transform.localPosition = Vector3.Lerp(portalB.transform.localPosition, Vector3.forward*distance, Time.deltaTime * speed);
+    }
 }

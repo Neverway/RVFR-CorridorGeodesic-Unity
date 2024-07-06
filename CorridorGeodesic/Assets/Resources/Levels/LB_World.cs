@@ -35,6 +35,10 @@ public class LB_World : MonoBehaviour
         gameInstance = FindObjectOfType<GameInstance>();
         gameInstance.UI_ShowHUD();
     }
+    private void Update()
+    {
+        
+    }
     
 
     //=-----------------=

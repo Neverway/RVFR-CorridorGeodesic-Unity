@@ -89,6 +89,13 @@ public class PlayerController_FirstPersonShooter : PawnController
                 _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSecondary();
             }
         }
+        if (fpsActions.Interact.WasPressedThisFrame())
+        {
+            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+            {
+                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
+            }
+        }
         
         UpdateMovement(_pawn);
         UpdateRotation(_pawn);
