@@ -20,13 +20,13 @@ public class PortalTeleporter : MonoBehaviour
 	//=-----------------=
 	// Private Variables
 	//=-----------------=
-	private bool playerIsOverlapping = false;
+	private bool isOverlapping = false;
 
 
 	//=-----------------=
 	// Reference Variables
 	//=-----------------=
-	public Transform player;
+	public Transform targetObject;
 	public Transform reciever;
 
 
@@ -34,40 +34,41 @@ public class PortalTeleporter : MonoBehaviour
 	// Mono Functions
 	//=-----------------=
 	void Update () {
-		if (playerIsOverlapping)
+		if (isOverlapping)
 		{
-			Vector3 portalToPlayer = player.position - transform.position;
+			Vector3 portalToPlayer = targetObject.position - transform.position;
 			float dotProduct = Vector3.Dot(transform.up, portalToPlayer);
-
 			// If this is true: The player has moved across the portal
 			if (dotProduct < 0f)
 			{
 				// Teleport him!
 				float rotationDiff = -Quaternion.Angle(transform.rotation, reciever.rotation);
 				rotationDiff += 180;
-				player.Rotate(Vector3.up, rotationDiff);
+				targetObject.Rotate(Vector3.up, rotationDiff);
 
 				Vector3 positionOffset = Quaternion.Euler(0f, rotationDiff, 0f) * portalToPlayer;
-				player.position = reciever.position + positionOffset;
+				targetObject.position = reciever.position + positionOffset;
 
-				playerIsOverlapping = false;
+				isOverlapping = false;
 			}
 		}
 	}
 
 	void OnTriggerEnter (Collider other)
 	{
-		if (other.tag == "Player")
+		//if (other.tag == "Player")
 		{
-			playerIsOverlapping = true;
+			targetObject = other.gameObject.transform;
+			isOverlapping = true;
 		}
 	}
 
 	void OnTriggerExit (Collider other)
 	{
-		if (other.tag == "Player")
+		//if (other.tag == "Player")
 		{
-			playerIsOverlapping = false;
+			targetObject = null;
+			isOverlapping = false;
 		}
 	}
 	
