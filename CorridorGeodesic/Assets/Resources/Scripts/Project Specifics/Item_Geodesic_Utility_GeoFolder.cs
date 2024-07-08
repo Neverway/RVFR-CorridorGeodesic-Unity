@@ -44,7 +44,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     
     public override void UseSecondary()
     {
-        ConvergeInfinityMarkers();
+        //ConvergeInfinityMarkers();
     }
     
     public override void UseSpecial()

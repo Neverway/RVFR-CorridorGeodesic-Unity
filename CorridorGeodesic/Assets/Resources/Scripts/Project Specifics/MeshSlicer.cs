@@ -15,8 +15,8 @@ public class MeshDestroy : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public int CutCascades = 1;
-    public float ExplodeForce = 0;
+    [HideInInspector]public int CutCascades = 1;
+    [HideInInspector]public float ExplodeForce = 0;
 
 
     //=-----------------=
@@ -26,7 +26,10 @@ public class MeshDestroy : MonoBehaviour
     private Vector3 edgeVertex = Vector3.zero;
     private Vector2 edgeUV = Vector2.zero;
     private Plane edgePlane = new Plane();
-    [SerializeField] private Transform posA, posB, posC;
+    [HideInInspector][SerializeField] private bool destroyOriginal;
+    [SerializeField] private Vector3 normal;
+    [Range(-1,1)][SerializeField] private float inPointDistance;
+    public bool sliceThisObject;
 
 
     //=-----------------=
@@ -39,8 +42,9 @@ public class MeshDestroy : MonoBehaviour
     //=-----------------=
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(2))
         {
+            if (!sliceThisObject) return;
             DestroyMesh();
         }
     }
@@ -87,8 +91,8 @@ public class MeshDestroy : MonoBehaviour
                 bounds.Expand(0.5f);  // Expand the bounds slightly
 
                 // Create a random plane within the bounds
-                
-                var plane = new Plane(UnityEngine.Random.onUnitSphere,new Vector3(UnityEngine.Random.Range(bounds.min.x, bounds.max.x), Random.Range(bounds.min.y, bounds.max.y), Random.Range(bounds.min.z, bounds.max.z)));
+                //var plane = new Plane(UnityEngine.Random.onUnitSphere, new Vector3(UnityEngine.Random.Range(bounds.min.x, bounds.max.x), Random.Range(bounds.min.y, bounds.max.y), Random.Range(bounds.min.z, bounds.max.z)));
+                var plane = new Plane(normal, inPointDistance);
                 
 
                 // Generate the two sub-parts
@@ -110,7 +114,7 @@ public class MeshDestroy : MonoBehaviour
         }
 
         // Destroy the original game object
-        Destroy(gameObject);
+        if (destroyOriginal) Destroy(gameObject);
     }
 
     
@@ -362,9 +366,9 @@ public class PartMesh
         var filter = GameObject.AddComponent<MeshFilter>();
         filter.mesh = mesh;
 
-        // Add a MeshCollider component and set it to convex
+        // Add a MeshCollider component and set it to NON convex, because objects can't exist inside convex spaces
         var collider = GameObject.AddComponent<MeshCollider>();
-        collider.convex = true;
+        collider.convex = false;
 
         // Add a MeshDestroy component and copy the settings from the original
         var meshDestroy = GameObject.AddComponent<MeshDestroy>();
