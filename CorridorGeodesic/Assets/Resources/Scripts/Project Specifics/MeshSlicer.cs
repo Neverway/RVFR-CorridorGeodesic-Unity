@@ -15,8 +15,11 @@ public class MeshDestroy : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [HideInInspector]public int CutCascades = 1;
-    [HideInInspector]public float ExplodeForce = 0;
+    public int CutCascades = 2;
+    public GameObject cutPlane;
+    public GameObject inPointReference;
+    [SerializeField] private Vector3 cutNormal;
+    [SerializeField] [Range(-1,1)] private float inPointDistance;
 
 
     //=-----------------=
@@ -25,11 +28,8 @@ public class MeshDestroy : MonoBehaviour
     private bool edgeSet = false;
     private Vector3 edgeVertex = Vector3.zero;
     private Vector2 edgeUV = Vector2.zero;
-    private Plane edgePlane = new Plane();
-    [HideInInspector][SerializeField] private bool destroyOriginal;
-    [SerializeField] private Vector3 normal;
-    [Range(-1,1)][SerializeField] private float inPointDistance;
-    public bool sliceThisObject;
+    //private Plane edgePlane = new Plane();
+    private bool destroyOriginal;
 
 
     //=-----------------=
@@ -44,9 +44,21 @@ public class MeshDestroy : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(2))
         {
-            if (!sliceThisObject) return;
+            GenerateCutPlane();
             DestroyMesh();
         }
+    }
+
+    private void GenerateCutPlane()
+    {
+        // Get the cut direction based on the cutPlane
+        cutNormal = cutPlane.transform.up;
+        
+        // Calculate the vector from the plane's position to the object's position
+        Vector3 planeToObject = gameObject.transform.position - cutPlane.transform.position;
+
+        // Project this vector onto the cutNormal to get the distance
+        inPointDistance = Vector3.Dot(planeToObject, cutNormal);
     }
 
     //=-----------------=
@@ -92,7 +104,7 @@ public class MeshDestroy : MonoBehaviour
 
                 // Create a random plane within the bounds
                 //var plane = new Plane(UnityEngine.Random.onUnitSphere, new Vector3(UnityEngine.Random.Range(bounds.min.x, bounds.max.x), Random.Range(bounds.min.y, bounds.max.y), Random.Range(bounds.min.z, bounds.max.z)));
-                var plane = new Plane(normal, inPointDistance);
+                var plane = new Plane(cutNormal, inPointDistance);
                 
 
                 // Generate the two sub-parts
@@ -114,7 +126,14 @@ public class MeshDestroy : MonoBehaviour
         }
 
         // Destroy the original game object
-        if (destroyOriginal) Destroy(gameObject);
+        if (destroyOriginal)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     
@@ -371,9 +390,8 @@ public class PartMesh
         collider.convex = false;
 
         // Add a MeshDestroy component and copy the settings from the original
-        var meshDestroy = GameObject.AddComponent<MeshDestroy>();
-        meshDestroy.CutCascades = original.CutCascades;
-        meshDestroy.ExplodeForce = original.ExplodeForce;
+        //var meshDestroy = GameObject.AddComponent<MeshDestroy>();
+        //meshDestroy.CutCascades = original.CutCascades;
     }
 }
 
