@@ -25,6 +25,7 @@ public class Rift : MonoBehaviour
     // Reference Variables
     //=-----------------=
     public GameObject portalA, portalB;
+    public GameObject visualPlaneA, visualPlaneB;
     public float distanceToMarker;
     
 

@@ -10,16 +10,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeshDestroy : MonoBehaviour
+public class MeshSlicer : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public int CutCascades = 2;
-    public GameObject cutPlane;
-    public GameObject inPointReference;
-    [SerializeField] private Vector3 cutNormal;
-    [SerializeField] [Range(-1,1)] private float inPointDistance;
+    public List<GameObject> cutPlanes = new List<GameObject>();
+    public bool isCascadeSegment;
 
 
     //=-----------------=
@@ -30,6 +27,8 @@ public class MeshDestroy : MonoBehaviour
     private Vector2 edgeUV = Vector2.zero;
     //private Plane edgePlane = new Plane();
     private bool destroyOriginal;
+    private List<Vector3> cutNormals = new List<Vector3>();
+    private List<float> inPointDistances = new List<float>();
 
 
     //=-----------------=
@@ -44,21 +43,24 @@ public class MeshDestroy : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(2))
         {
-            GenerateCutPlane();
-            DestroyMesh();
         }
     }
 
-    private void GenerateCutPlane()
+    private void GenerateCutPlanes()
     {
-        // Get the cut direction based on the cutPlane
-        cutNormal = cutPlane.transform.up;
+        cutNormals.Clear();
+        inPointDistances.Clear();
+        for (int i = 0; i < cutPlanes.Count; i++)
+        {
+            // Get the cut direction based on the cutPlane
+            cutNormals.Add(cutPlanes[i].transform.up);
         
-        // Calculate the vector from the plane's position to the object's position
-        Vector3 planeToObject = gameObject.transform.position - cutPlane.transform.position;
+            // Calculate the vector from the plane's position to the object's position
+            Vector3 planeToObject = gameObject.transform.position - cutPlanes[i].transform.position;
 
-        // Project this vector onto the cutNormal to get the distance
-        inPointDistance = Vector3.Dot(planeToObject, cutNormal);
+            // Project this vector onto the cutNormal to get the distance
+            inPointDistances.Add(Vector3.Dot(planeToObject, cutNormals[i]));
+        }
     }
 
     //=-----------------=
@@ -94,7 +96,7 @@ public class MeshDestroy : MonoBehaviour
         parts.Add(mainPart);
 
         // Iterate through the number of cut cascades
-        for (var c = 0; c < CutCascades; c++)
+        for (var c = 0; c < cutPlanes.Count; c++)
         {
             // For each part, generate two new sub-parts using a random plane
             for (var i = 0; i < parts.Count; i++)
@@ -104,7 +106,7 @@ public class MeshDestroy : MonoBehaviour
 
                 // Create a random plane within the bounds
                 //var plane = new Plane(UnityEngine.Random.onUnitSphere, new Vector3(UnityEngine.Random.Range(bounds.min.x, bounds.max.x), Random.Range(bounds.min.y, bounds.max.y), Random.Range(bounds.min.z, bounds.max.z)));
-                var plane = new Plane(cutNormal, inPointDistance);
+                var plane = new Plane(cutNormals[i], inPointDistances[i]);
                 
 
                 // Generate the two sub-parts
@@ -291,6 +293,11 @@ public class MeshDestroy : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void ApplyCuts()
+    {
+        GenerateCutPlanes();
+        DestroyMesh();
+    }
 }
 
 public class PartMesh
@@ -358,7 +365,7 @@ public class PartMesh
     }
 
     // Method to create a GameObject from the mesh data
-    public void MakeGameObject(MeshDestroy original)
+    public void MakeGameObject(MeshSlicer original)
     {
         // Create a new GameObject and set its transform to match the original
         GameObject = new GameObject(original.name);
@@ -390,8 +397,8 @@ public class PartMesh
         collider.convex = false;
 
         // Add a MeshDestroy component and copy the settings from the original
-        //var meshDestroy = GameObject.AddComponent<MeshDestroy>();
-        //meshDestroy.CutCascades = original.CutCascades;
+        var meshDestroy = GameObject.AddComponent<MeshSlicer>();
+        meshDestroy.isCascadeSegment = true;
     }
 }
 
