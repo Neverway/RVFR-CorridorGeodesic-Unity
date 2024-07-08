@@ -44,12 +44,19 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     
     public override void UseSecondary()
     {
-        //ConvergeInfinityMarkers();
+        ConvergeInfinityMarkers();
+    }
+    
+    public override void ReleaseSecondary()
+    {
+        UndoGeometricCuts();
+        ApplyGeometricCuts();
     }
     
     public override void UseSpecial()
     {
         RecallInfinityMarkers();
+        UndoGeometricCuts();
     }
     
 
@@ -92,6 +99,41 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             else
             {
                 deployedRift.GetComponent<Rift>().DivergePortals(5, 0.25f);
+                deployedRift.SetActive(true);
+            }
+        }
+    }
+
+    private void ApplyGeometricCuts()
+    {
+        if (!deployedRift) return;
+        // Find all slice-able meshes
+        foreach (var sliceableMesh in FindObjectsByType<MeshSlicer>(FindObjectsSortMode.None))
+        {
+            // Avoid cutting segments that are already cut
+            if (!sliceableMesh.isCascadeSegment)
+            {
+                sliceableMesh.cutPlanes.Clear();
+                sliceableMesh.cutPlanes.Add(deployedRift.GetComponent<Rift>().visualPlaneA);
+                sliceableMesh.cutPlanes.Add(deployedRift.GetComponent<Rift>().visualPlaneB);
+                sliceableMesh.ApplyCuts();
+                deployedRift.SetActive(false);
+            }
+        }
+    }
+
+    private void UndoGeometricCuts()
+    {
+        // Find all slice-able meshes
+        foreach (var sliceableMesh in FindObjectsByType<MeshSlicer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (sliceableMesh.isCascadeSegment)
+            {
+                Destroy(sliceableMesh.gameObject);
+            }
+            else
+            {
+                sliceableMesh.gameObject.SetActive(true);
             }
         }
     }

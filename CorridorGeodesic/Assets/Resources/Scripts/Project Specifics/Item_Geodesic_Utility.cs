@@ -50,6 +50,11 @@ public class Item_Geodesic_Utility : MonoBehaviour
         
     }
     
+    public virtual void ReleaseSecondary()
+    {
+        
+    }
+    
     public virtual void UseSpecial()
     {
         
