@@ -246,7 +246,7 @@ public class MeshDestroy : MonoBehaviour
             edgeSet = true;
             edgeVertex = vertex1;
             edgeUV = uv1;
-        }
+        }/*
         else
         {
             // If it's not the first edge, create a plane using three points
@@ -264,7 +264,7 @@ public class MeshDestroy : MonoBehaviour
                 edgeUV, // UV coordinates for the vertices
                 uv1,
                 uv2);
-        }
+        }*/
     }
 
 
