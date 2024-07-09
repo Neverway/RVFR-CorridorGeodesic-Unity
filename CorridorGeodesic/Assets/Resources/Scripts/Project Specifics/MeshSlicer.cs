@@ -17,6 +17,7 @@ public class MeshSlicer : MonoBehaviour
     //=-----------------=
     public List<GameObject> cutPlanes = new List<GameObject>();
     public bool isCascadeSegment;
+    public int segmentId; // This value is used to keep track of what cut this is, 0 is uncut, 1 is a weird cut glitch, 0 is true A-Space, 2 is B-Space, 3 is Null-Space
 
 
     //=-----------------=
@@ -25,7 +26,7 @@ public class MeshSlicer : MonoBehaviour
     private bool edgeSet = false;
     private Vector3 edgeVertex = Vector3.zero;
     private Vector2 edgeUV = Vector2.zero;
-    //private Plane edgePlane = new Plane();
+    private Plane edgePlane = new Plane();
     private bool destroyOriginal;
     private List<Vector3> cutNormals = new List<Vector3>();
     private List<float> inPointDistances = new List<float>();
@@ -122,7 +123,7 @@ public class MeshSlicer : MonoBehaviour
         // Create GameObjects for each part and add explosion force
         for (var i = 0; i < parts.Count; i++)
         {
-            parts[i].MakeGameObject(this);
+            parts[i].MakeGameObject(this, i);
             // Uncomment the line below to add explosion force to the parts
             // parts[i].GameObject.GetComponent<Rigidbody>().AddForceAtPosition(parts[i].Bounds.center * ExplodeForce, transform.position);
         }
@@ -267,7 +268,7 @@ public class MeshSlicer : MonoBehaviour
             edgeSet = true;
             edgeVertex = vertex1;
             edgeUV = uv1;
-        }/*
+        }
         else
         {
             // If it's not the first edge, create a plane using three points
@@ -285,7 +286,7 @@ public class MeshSlicer : MonoBehaviour
                 edgeUV, // UV coordinates for the vertices
                 uv1,
                 uv2);
-        }*/
+        }
     }
 
 
@@ -315,7 +316,7 @@ public class PartMesh
     public Vector2[] UV;
 
     // GameObject to represent this mesh in the scene
-    public GameObject GameObject;
+    public GameObject _GameObject;
     
     // Bounds to keep track of the mesh's boundaries
     public Bounds Bounds = new Bounds();
@@ -365,13 +366,13 @@ public class PartMesh
     }
 
     // Method to create a GameObject from the mesh data
-    public void MakeGameObject(MeshSlicer original)
+    public void MakeGameObject(MeshSlicer original, int _segmentId)
     {
         // Create a new GameObject and set its transform to match the original
-        GameObject = new GameObject(original.name);
-        GameObject.transform.position = original.transform.position;
-        GameObject.transform.rotation = original.transform.rotation;
-        GameObject.transform.localScale = original.transform.localScale;
+        _GameObject = new GameObject(original.name);
+        _GameObject.transform.position = original.transform.position;
+        _GameObject.transform.rotation = original.transform.rotation;
+        _GameObject.transform.localScale = original.transform.localScale;
 
         // Create a new Mesh and assign the vertex, normal, and UV data
         var mesh = new Mesh();
@@ -385,20 +386,25 @@ public class PartMesh
         Bounds = mesh.bounds;
 
         // Add a MeshRenderer component and assign the materials from the original
-        var renderer = GameObject.AddComponent<MeshRenderer>();
+        var renderer = _GameObject.AddComponent<MeshRenderer>();
         renderer.materials = original.GetComponent<MeshRenderer>().materials;
 
         // Add a MeshFilter component and assign the generated mesh
-        var filter = GameObject.AddComponent<MeshFilter>();
+        var filter = _GameObject.AddComponent<MeshFilter>();
         filter.mesh = mesh;
 
         // Add a MeshCollider component and set it to NON convex, because objects can't exist inside convex spaces
-        var collider = GameObject.AddComponent<MeshCollider>();
+        var collider = _GameObject.AddComponent<MeshCollider>();
         collider.convex = false;
 
         // Add a MeshDestroy component and copy the settings from the original
-        var meshDestroy = GameObject.AddComponent<MeshSlicer>();
+        var meshDestroy = _GameObject.AddComponent<MeshSlicer>();
         meshDestroy.isCascadeSegment = true;
+        meshDestroy.segmentId = _segmentId;
+        if (meshDestroy.segmentId == 3)
+        {
+            meshDestroy.gameObject.SetActive(false);
+        }
     }
 }
 
