@@ -16,11 +16,14 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     public int maxAmmo=2;
     public int currentAmmo=2;
+    public bool allowNoLinearSlicing;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
+    private float collapsedDistance;
+    private Vector3 collapsedDirection;
 
 
     //=-----------------=
@@ -93,7 +96,8 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 Vector3 midPoint = (deployedInfinityMarkers[0].transform.position + deployedInfinityMarkers[1].transform.position) * 0.5f;
                 deployedRift = Instantiate(riftObject, midPoint, new Quaternion());
                 deployedRift.transform.LookAt(deployedInfinityMarkers[0].transform);
-                deployedRift.transform.rotation = new Quaternion(0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
+                if (allowNoLinearSlicing) deployedRift.transform.rotation = new Quaternion(deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
+                else deployedRift.transform.rotation = new Quaternion(0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
                 deployedRift.GetComponent<Rift>().distanceToMarker = Vector3.Distance(deployedInfinityMarkers[0].transform.position, deployedInfinityMarkers[1].transform.position) * 0.5f;
             }
             else
@@ -117,9 +121,32 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 sliceableMesh.cutPlanes.Add(deployedRift.GetComponent<Rift>().visualPlaneA);
                 sliceableMesh.cutPlanes.Add(deployedRift.GetComponent<Rift>().visualPlaneB);
                 sliceableMesh.ApplyCuts();
+                
+                // Collapse the space between the planes
+                // Float
+                collapsedDistance = Vector3.Distance(deployedRift.GetComponent<Rift>().visualPlaneA.transform.position, deployedRift.GetComponent<Rift>().visualPlaneB.transform.position);
+                // Direction
+                collapsedDirection = deployedRift.GetComponent<Rift>().visualPlaneA.gameObject.transform.up;
+
+                
                 deployedRift.SetActive(false);
             }
         }
+
+        // Delay the movement until after the cut has been fully created
+        foreach (var sliceableMesh in FindObjectsByType<MeshSlicer>(FindObjectsSortMode.None))
+        {
+            if (sliceableMesh.segmentId == 2)
+            {
+                sliceableMesh.gameObject.transform.position += collapsedDirection*collapsedDistance;
+            }
+            StartCoroutine(MoveAfterSlice(sliceableMesh));
+        }
+    }
+
+    private IEnumerator MoveAfterSlice(MeshSlicer _sliceableMesh)
+    {
+        yield return new WaitForSeconds(2f);
     }
 
     private void UndoGeometricCuts()
