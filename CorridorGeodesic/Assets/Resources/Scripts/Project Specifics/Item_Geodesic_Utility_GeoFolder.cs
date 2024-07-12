@@ -73,7 +73,22 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             Destroy(projectile.gameObject);
         }
-        if (deployedRift) Destroy(deployedRift);
+
+        if (deployedRift)
+        {
+            // Reposition objects in A space to match the change in distance between the markers
+            deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
+            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInASpace)
+            {
+                _actor.gameObject.transform.position -= (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
+            }
+            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInBSpace)
+            {
+                _actor.gameObject.transform.position += (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
+            }
+            
+            Destroy(deployedRift);
+        }
         currentAmmo = maxAmmo;
         deployedInfinityMarkers.Clear();
     }
@@ -128,7 +143,6 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 // Direction
                 collapsedDirection = deployedRift.GetComponent<Rift>().visualPlaneA.gameObject.transform.up;
 
-                deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
                 deployedRift.SetActive(false);
             }
         }
@@ -138,9 +152,23 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             if (sliceableMesh.segmentId == 2)
             {
-                sliceableMesh.gameObject.transform.position += collapsedDirection*collapsedDistance;
+                sliceableMesh.gameObject.transform.position += (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
+            }
+            else if (sliceableMesh.segmentId == 0)
+            {
+                sliceableMesh.gameObject.transform.position -= (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
             }
             StartCoroutine(MoveAfterSlice(sliceableMesh));
+        }
+        // Reposition objects in A space to match the change in distance between the markers
+        deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
+        foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInASpace)
+        {
+            _actor.gameObject.transform.position += (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
+        }
+        foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInBSpace)
+        {
+            _actor.gameObject.transform.position -= (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
         }
     }
 

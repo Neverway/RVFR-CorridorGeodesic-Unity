@@ -58,12 +58,27 @@ public class Rift : MonoBehaviour
         objectsInBSpace.Clear();
         objectsInNullSpace.Clear();
         
+        // Get the plane's normal and its point in space
+        Plane plane = new Plane(CenterPlane.transform.up, CenterPlane.transform.position);
+        
         foreach (var actor in FindObjectsOfType<ActorData>())
         {
-            var distanceVector = actor.transform.position.z -
-            if (CenterPlane.transform.localPosition.z>)
+            Vector3 actorPosition = actor.transform.position;
+
+            // Determine the side of the plane
+            float distance = plane.GetDistanceToPoint(actorPosition);
+
+            if (distance > 0)
             {
-                
+                objectsInASpace.Add(actor.gameObject); // In front of the plane
+            }
+            else if (distance < 0)
+            {
+                objectsInBSpace.Add(actor.gameObject); // Behind the plane
+            }
+            else
+            {
+                objectsInNullSpace.Add(actor.gameObject); // On the plane
             }
         }
     }
