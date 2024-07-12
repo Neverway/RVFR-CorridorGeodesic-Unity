@@ -128,7 +128,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 // Direction
                 collapsedDirection = deployedRift.GetComponent<Rift>().visualPlaneA.gameObject.transform.up;
 
-                
+                deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
                 deployedRift.SetActive(false);
             }
         }

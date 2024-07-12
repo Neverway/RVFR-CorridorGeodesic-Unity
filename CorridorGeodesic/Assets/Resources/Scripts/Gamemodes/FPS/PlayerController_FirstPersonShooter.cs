@@ -111,6 +111,12 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Calculate Slope Movement
         //Debug.Log(slopMoveDirection);
         slopMoveDirection = Vector3.ProjectOnPlane(moveDirection, _pawn.slopeHit.normal);
+        
+        // Debug Respawn
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            Destroy(_pawn.gameObject);
+        }
     }
 
     public override void PawnFixedUpdate(Pawn _pawn)
