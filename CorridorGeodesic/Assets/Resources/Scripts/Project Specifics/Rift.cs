@@ -14,6 +14,9 @@ public class Rift : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public List<GameObject> objectsInASpace;
+    public List<GameObject> objectsInBSpace;
+    public List<GameObject> objectsInNullSpace;
 
 
     //=-----------------=
@@ -24,6 +27,7 @@ public class Rift : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    public GameObject CenterPlane;
     public GameObject portalA, portalB;
     public GameObject visualPlaneA, visualPlaneB;
     public float distanceToMarker;
@@ -46,5 +50,21 @@ public class Rift : MonoBehaviour
     {
         portalA.transform.localPosition = Vector3.Lerp(portalA.transform.localPosition, -Vector3.forward*distanceToMarker, Time.deltaTime);
         portalB.transform.localPosition = Vector3.Lerp(portalB.transform.localPosition, Vector3.forward*distanceToMarker, Time.deltaTime);
+    }
+
+    public void GetObjectSpacialLists()
+    {
+        objectsInASpace.Clear();
+        objectsInBSpace.Clear();
+        objectsInNullSpace.Clear();
+        
+        foreach (var actor in FindObjectsOfType<ActorData>())
+        {
+            var distanceVector = actor.transform.position.z -
+            if (CenterPlane.transform.localPosition.z>)
+            {
+                
+            }
+        }
     }
 }
