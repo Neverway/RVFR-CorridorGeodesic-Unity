@@ -17,13 +17,14 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public int maxAmmo=2;
     public int currentAmmo=2;
     public bool allowNoLinearSlicing;
-
+    public float convergenceSpeed=0.25f;
+    
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private float collapsedDistance;
-    private Vector3 collapsedDirection;
+    public float collapsedDistance;
+    public Vector3 collapsedDirection;
 
 
     //=-----------------=
@@ -34,7 +35,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private GameObject riftObject;
     [SerializeField] private float projectileForce;
     public List<GameObject> deployedInfinityMarkers = new List<GameObject>();
-    private GameObject deployedRift;
+    public GameObject deployedRift;
 
 
     //=-----------------=
@@ -52,14 +53,17 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     
     public override void ReleaseSecondary()
     {
-        UndoGeometricCuts();
-        ApplyGeometricCuts();
+        //StopCoroutine(PeriodiclyFoldGeometry());
+        //UndoGeometricCuts();
+        //ApplyGeometricCuts();
     }
     
     public override void UseSpecial()
     {
         RecallInfinityMarkers();
         UndoGeometricCuts();
+        collapsedDistance = 0;
+        collapsedDirection = new Vector3();
     }
     
 
@@ -76,17 +80,6 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         if (deployedRift)
         {
-            // Reposition objects in A space to match the change in distance between the markers
-            deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
-            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInASpace)
-            {
-                _actor.gameObject.transform.position -= (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
-            }
-            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInBSpace)
-            {
-                _actor.gameObject.transform.position += (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
-            }
-            
             Destroy(deployedRift);
         }
         currentAmmo = maxAmmo;
@@ -117,15 +110,25 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
             else
             {
-                deployedRift.GetComponent<Rift>().DivergePortals(5, 0.25f);
-                deployedRift.SetActive(true);
+                deployedRift.GetComponent<Rift>().DivergePortals(1);
+                StartCoroutine(PeriodiclyFoldGeometry());
+                //deployedRift.SetActive(true);
             }
         }
+    }
+
+    private IEnumerator PeriodiclyFoldGeometry()
+    {
+        yield return new WaitForSeconds(0f);
+        UndoGeometricCuts();
+        ApplyGeometricCuts();
     }
 
     private void ApplyGeometricCuts()
     {
         if (!deployedRift) return;
+        collapsedDistance = 0;
+        collapsedDirection = new Vector3();
         // Find all slice-able meshes
         foreach (var sliceableMesh in FindObjectsByType<MeshSlicer>(FindObjectsSortMode.None))
         {
@@ -143,7 +146,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 // Direction
                 collapsedDirection = deployedRift.GetComponent<Rift>().visualPlaneA.gameObject.transform.up;
 
-                deployedRift.SetActive(false);
+                //deployedRift.SetActive(false);
             }
         }
 
@@ -158,23 +161,9 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             {
                 sliceableMesh.gameObject.transform.position -= (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
             }
-            StartCoroutine(MoveAfterSlice(sliceableMesh));
         }
-        // Reposition objects in A space to match the change in distance between the markers
-        deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
-        foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInASpace)
-        {
-            _actor.gameObject.transform.position += (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
-        }
-        foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInBSpace)
-        {
-            _actor.gameObject.transform.position -= (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
-        }
-    }
 
-    private IEnumerator MoveAfterSlice(MeshSlicer _sliceableMesh)
-    {
-        yield return new WaitForSeconds(2f);
+        OffsetActorsAccordingToConvergenceDistance(_collapsing:true);
     }
 
     private void UndoGeometricCuts()
@@ -189,6 +178,43 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             else
             {
                 sliceableMesh.gameObject.SetActive(true);
+            }
+        }
+        
+        OffsetActorsAccordingToConvergenceDistance(false);
+    }
+
+    private void OffsetActorsAccordingToConvergenceDistance(bool _collapsing)
+    {
+        if (!deployedRift) return;
+        // Reposition objects in A & B space to match the change in distance between the markers
+        // We divide by two, so we can get half of the distance
+        var convergeDistance = (collapsedDirection * collapsedDistance) / 2;
+        
+        if (_collapsing)
+        {
+            // Push actors closer together
+            deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
+            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInASpace)
+            {
+                _actor.gameObject.transform.position += convergeDistance;
+            }
+            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInBSpace)
+            {
+                _actor.gameObject.transform.position -= convergeDistance;
+            }
+        }
+        else
+        {
+            // Pull actors further apart
+            deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
+            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInASpace)
+            {
+                _actor.gameObject.transform.position -= convergeDistance;
+            }
+            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInBSpace)
+            {
+                _actor.gameObject.transform.position += convergeDistance;
             }
         }
     }

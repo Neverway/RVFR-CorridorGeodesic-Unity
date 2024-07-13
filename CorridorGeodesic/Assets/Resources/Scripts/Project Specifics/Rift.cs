@@ -46,10 +46,10 @@ public class Rift : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void DivergePortals(float distance, float speed)
+    public void DivergePortals(float speed)
     {
-        portalA.transform.localPosition = Vector3.Lerp(portalA.transform.localPosition, -Vector3.forward*distanceToMarker, Time.deltaTime);
-        portalB.transform.localPosition = Vector3.Lerp(portalB.transform.localPosition, Vector3.forward*distanceToMarker, Time.deltaTime);
+        portalA.transform.localPosition = Vector3.Lerp(portalA.transform.localPosition, -Vector3.forward*distanceToMarker, speed*Time.deltaTime);
+        portalB.transform.localPosition = Vector3.Lerp(portalB.transform.localPosition, Vector3.forward*distanceToMarker, speed*Time.deltaTime);
     }
 
     public void GetObjectSpacialLists()
