@@ -202,13 +202,16 @@ public class MeshSlicer : MonoBehaviour
                 var lerp2 = enter2 / dir2.magnitude;
 
                 // Add the intersecting edges to the partMesh
-                AddEdge(i,
+                if (bridgeMeshGaps) 
+                {
+                    AddEdge(i,
                         partMesh,
                         left ? plane.normal * -1f : plane.normal,
                         ray1.origin + ray1.direction.normalized * enter1,
                         ray2.origin + ray2.direction.normalized * enter2,
                         Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
                         Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
+                }
 
                 // If only one vertex is on the specified side, create a new triangle using the intersection points
                 if (sideCount == 1)
@@ -230,27 +233,27 @@ public class MeshSlicer : MonoBehaviour
                 // If two vertices are on the specified side, create two new triangles using the intersection points
                 if (sideCount == 2)
                 {
-                    partMesh.AddTriangle(i,
-                                        ray1.origin + ray1.direction.normalized * enter1,
-                                        original.Vertices[triangles[j + ((singleIndex + 1) % 3)]],
-                                        original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        original.Normals[triangles[j + ((singleIndex + 1) % 3)]],
-                                        original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        original.UV[triangles[j + ((singleIndex + 1) % 3)]],
-                                        original.UV[triangles[j + ((singleIndex + 2) % 3)]]);
-                    partMesh.AddTriangle(i,
-                                        ray1.origin + ray1.direction.normalized * enter1,
-                                        original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
-                                        ray2.origin + ray2.direction.normalized * enter2,
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        original.UV[triangles[j + ((singleIndex + 2) % 3)]],
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
-                    continue;
+                        partMesh.AddTriangle(i,
+                                            ray1.origin + ray1.direction.normalized * enter1,
+                                            original.Vertices[triangles[j + ((singleIndex + 1) % 3)]],
+                                            original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
+                                            Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                            original.Normals[triangles[j + ((singleIndex + 1) % 3)]],
+                                            original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
+                                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                            original.UV[triangles[j + ((singleIndex + 1) % 3)]],
+                                            original.UV[triangles[j + ((singleIndex + 2) % 3)]]);
+                        partMesh.AddTriangle(i,
+                                            ray1.origin + ray1.direction.normalized * enter1,
+                                            original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
+                                            ray2.origin + ray2.direction.normalized * enter2,
+                                            Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                            original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
+                                            Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
+                                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                            original.UV[triangles[j + ((singleIndex + 2) % 3)]],
+                                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
+                        continue;
                 }
             }
         }
@@ -274,24 +277,24 @@ public class MeshSlicer : MonoBehaviour
         }
         else
         {
-            if (bridgeMeshGaps)
-            {
-                // If it's not the first edge, create a plane using three points
-                edgePlane.Set3Points(edgeVertex, vertex1, vertex2);
+            // If it's not the first edge, create a plane using three points
+            edgePlane.Set3Points(edgeVertex, vertex1, vertex2);
 
-                // Add a triangle to the partMesh with vertices and UVs
-                // Determine the correct orientation of the vertices based on the side of the plane
-                partMesh.AddTriangle(subMesh,
-                    edgeVertex,
-                    edgePlane.GetSide(edgeVertex + normal) ? vertex1 : vertex2,
-                    edgePlane.GetSide(edgeVertex + normal) ? vertex2 : vertex1,
-                    normal, // Normal for all vertices is the same
-                    normal,
-                    normal,
-                    edgeUV, // UV coordinates for the vertices
-                    uv1,
-                    uv2);
-            }
+            // Debug information for the plane and vertices
+
+            // Determine the correct orientation of the vertices based on the side of the plane
+            bool side1 = edgePlane.GetSide(edgeVertex + normal);
+            bool side2 = edgePlane.GetSide(vertex1 + normal);
+            bool side3 = edgePlane.GetSide(vertex2 + normal);
+
+            
+            partMesh.AddTriangle(subMesh, edgeVertex, side1 ? vertex1 : vertex2, side1 ? vertex2 : vertex1,
+                normal, // Normal for all vertices is the same
+                normal,
+                normal,
+                edgeUV, // UV coordinates for the vertices
+                uv1,
+                uv2);
         }
     }
 
