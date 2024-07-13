@@ -18,7 +18,9 @@ public class MeshSlicer : MonoBehaviour
     public List<GameObject> cutPlanes = new List<GameObject>();
     public bool isCascadeSegment;
     public int segmentId; // This value is used to keep track of what cut this is, 0 is uncut, 1 is a weird cut glitch, 0 is true A-Space, 2 is B-Space, 3 is Null-Space
+    [Header("Debugging")]
     public bool isConvex;
+    public bool bridgeMeshGaps;
 
 
     //=-----------------=
@@ -272,21 +274,24 @@ public class MeshSlicer : MonoBehaviour
         }
         else
         {
-            // If it's not the first edge, create a plane using three points
-            edgePlane.Set3Points(edgeVertex, vertex1, vertex2);
+            if (bridgeMeshGaps)
+            {
+                // If it's not the first edge, create a plane using three points
+                edgePlane.Set3Points(edgeVertex, vertex1, vertex2);
 
-            // Add a triangle to the partMesh with vertices and UVs
-            // Determine the correct orientation of the vertices based on the side of the plane
-            partMesh.AddTriangle(subMesh,
-                edgeVertex,
-                edgePlane.GetSide(edgeVertex + normal) ? vertex1 : vertex2,
-                edgePlane.GetSide(edgeVertex + normal) ? vertex2 : vertex1,
-                normal, // Normal for all vertices is the same
-                normal,
-                normal,
-                edgeUV, // UV coordinates for the vertices
-                uv1,
-                uv2);
+                // Add a triangle to the partMesh with vertices and UVs
+                // Determine the correct orientation of the vertices based on the side of the plane
+                partMesh.AddTriangle(subMesh,
+                    edgeVertex,
+                    edgePlane.GetSide(edgeVertex + normal) ? vertex1 : vertex2,
+                    edgePlane.GetSide(edgeVertex + normal) ? vertex2 : vertex1,
+                    normal, // Normal for all vertices is the same
+                    normal,
+                    normal,
+                    edgeUV, // UV coordinates for the vertices
+                    uv1,
+                    uv2);
+            }
         }
     }
 
