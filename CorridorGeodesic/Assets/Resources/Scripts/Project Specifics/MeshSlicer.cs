@@ -18,6 +18,7 @@ public class MeshSlicer : MonoBehaviour
     public List<GameObject> cutPlanes = new List<GameObject>();
     public bool isCascadeSegment;
     public int segmentId; // This value is used to keep track of what cut this is, 0 is uncut, 1 is a weird cut glitch, 0 is true A-Space, 2 is B-Space, 3 is Null-Space
+    public bool isConvex;
 
 
     //=-----------------=
@@ -393,9 +394,9 @@ public class PartMesh
         var filter = _GameObject.AddComponent<MeshFilter>();
         filter.mesh = mesh;
 
-        // Add a MeshCollider component and set it to NON convex, because objects can't exist inside convex spaces
+        // Add a MeshCollider component and set it to whatever convex state we specified, because objects can't exist inside convex spaces
         var collider = _GameObject.AddComponent<MeshCollider>();
-        collider.convex = false;
+        collider.convex = original.isConvex;
 
         // Add a MeshDestroy component and copy the settings from the original
         var meshDestroy = _GameObject.AddComponent<MeshSlicer>();
