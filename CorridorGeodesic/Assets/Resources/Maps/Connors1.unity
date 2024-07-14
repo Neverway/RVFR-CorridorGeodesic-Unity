@@ -439,7 +439,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &431583522
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -484,7 +484,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &454047953
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -612,7 +612,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &539719771
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -688,7 +688,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &658838389
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1035,7 +1035,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &804921423
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1080,7 +1080,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &941614963
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1125,7 +1125,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &950982800
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1179,6 +1179,7 @@ Transform:
   m_Children:
   - {fileID: 358027011}
   - {fileID: 1027243776}
+  - {fileID: 1837162130}
   m_Father: {fileID: 150366772}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1024035397 stripped
@@ -1203,7 +1204,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &1024035402
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1426,7 +1427,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &1177049001
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1510,7 +1511,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &1582355052
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1694,7 +1695,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &1622535445
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1850,6 +1851,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8d400a19ab2190fe92e4e1757b7fd55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1837162130 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+    type: 3}
+  m_PrefabInstance: {fileID: 6682682261215880564}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1965473564 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -466329591000292508, guid: 5e570dcab2cae0342a9b680bec865f45,
@@ -1872,7 +1879,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &1965473569
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1917,7 +1924,7 @@ MonoBehaviour:
   isCascadeSegment: 0
   segmentId: 0
   isConvex: 1
-  bridgeMeshGaps: 1
+  bridgeMeshGaps: 0
 --- !u!64 &2062169830
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1940,6 +1947,74 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2477511411847689622, guid: 5e570dcab2cae0342a9b680bec865f45, type: 3}
+--- !u!1001 &6682682261215880564
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 975131431}
+    m_Modifications:
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -28.063
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70660347
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7076097
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782432929076539559, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90.082
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266200849948650013, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90,
+        type: 3}
+      propertyPath: m_Name
+      value: Laser
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ebcfad6b1b0f1c047ae86b92fe8b0d90, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
