@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6158657588474393904}
   - component: {fileID: 7136938579374011020}
+  - component: {fileID: 6460672219481479519}
   m_Layer: 0
   m_Name: Halo1
   m_TagString: Untagged
@@ -44,6 +45,20 @@ Halo:
     serializedVersion: 2
     rgba: 4278190335
   m_Size: 0.2
+--- !u!114 &6460672219481479519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877144347615538437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8227ff25effc78545a8dc69937e608c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 0.2
+  variance: 0.05
 --- !u!1 &2567881888294581424
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +112,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e61b442df36e3df4b91ccc7a24fa66e9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -128,8 +143,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.26712418
+        time: 0.0030136108
+        value: 0.506855
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -247,7 +262,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e61b442df36e3df4b91ccc7a24fa66e9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -278,8 +293,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.0030136108
-        value: 0.095890045
+        time: 0.0000038146973
+        value: 0.26027298
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -340,6 +355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8797629049234564188}
   - component: {fileID: 1026994633699342880}
+  - component: {fileID: 3530214517329798229}
   m_Layer: 0
   m_Name: Halo2
   m_TagString: Untagged
@@ -358,7 +374,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.519}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4782432929076539559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -374,6 +390,20 @@ Halo:
     serializedVersion: 2
     rgba: 4278190335
   m_Size: 0.2
+--- !u!114 &3530214517329798229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5597218182861872600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8227ff25effc78545a8dc69937e608c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 0.2
+  variance: 0.05
 --- !u!1 &8260233181625863253
 GameObject:
   m_ObjectHideFlags: 0
