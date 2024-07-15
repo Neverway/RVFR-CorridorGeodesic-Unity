@@ -1,7 +1,10 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Split a mesh into three slices and remove the center slice
+// Notes: This code was "Super Expertly Adapted" from the source code created by
+//          @DitzelGames on YouTube. (See source)
+//          Also thanks to Connorses for helping fix the bridgeMeshGaps function
+//          and for putting up with my crazed rambling about polygons. ~Liz
 // Source: https://www.youtube.com/watch?v=VwGiwDLQ40A
 //
 //=============================================================================
@@ -15,12 +18,19 @@ public class MeshSlicer : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [Tooltip("Two objects in space, that use their rotation to specify where a cut will be made on this mesh")]
     public List<GameObject> cutPlanes = new List<GameObject>();
+    [Tooltip("A variable used by other scripts to identify parts that have already been cut (Usually so we know not to cut them a second time)")]
     public bool isCascadeSegment;
-    public int segmentId; // This value is used to keep track of what cut this is, 0 is uncut, 1 is a weird cut glitch, 0 is true A-Space, 2 is B-Space, 3 is Null-Space
+    [Tooltip("A variable used to identify which part of this mesh is once it's been cut (This is currently used so we can delete the center slice to collapse space)")]
+    public int segmentId; // This value is used to keep track of what cut this is, 0 is uncut, 1 is a weird empty-cut glitch, 0 is the left slice, 2 is the right slice, 3 is the center slice
+    
     [Header("Debugging")]
     public bool isConvex;
+    [Tooltip("If enabled, once an object has been sliced, this will attempt to fill in the new hole created in the mesh from where it was cut")]
     public bool bridgeMeshGaps;
+    [Tooltip("Check this box in the inspector to run the ApplyCuts() function")]
+    public bool testCut;
 
 
     //=-----------------=
@@ -45,11 +55,16 @@ public class MeshSlicer : MonoBehaviour
     //=-----------------=
     void Update()
     {
-        if (Input.GetMouseButtonDown(2))
+        if (testCut)
         {
+            ApplyCuts();
+            testCut = false;
         }
     }
-
+    
+    /// <summary>
+    /// Take the 
+    /// </summary>
     private void GenerateCutPlanes()
     {
         cutNormals.Clear();
@@ -67,6 +82,7 @@ public class MeshSlicer : MonoBehaviour
         }
     }
 
+    
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -141,7 +157,6 @@ public class MeshSlicer : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-
     
     private PartMesh GenerateMesh(PartMesh original, Plane plane, bool left)
     {
@@ -211,6 +226,14 @@ public class MeshSlicer : MonoBehaviour
                         ray2.origin + ray2.direction.normalized * enter2,
                         Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
                         Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
+
+                    AddEdge(i,
+                        partMesh,
+                        left ? plane.normal * -1f : plane.normal,
+                        ray1.origin + ray1.direction.normalized * enter1,
+                        ray2.origin + ray2.direction.normalized * enter2,
+                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
                 }
 
                 // If only one vertex is on the specified side, create a new triangle using the intersection points
@@ -263,8 +286,7 @@ public class MeshSlicer : MonoBehaviour
 
         return partMesh;
     }
-
-     
+    
     private void AddEdge(int subMesh, PartMesh partMesh, Vector3 normal, Vector3 vertex1, Vector3 vertex2, Vector2 uv1, Vector2 uv2)
     {
         // Check if this is the first edge to be added
@@ -297,9 +319,8 @@ public class MeshSlicer : MonoBehaviour
                 uv2);
         }
     }
-
-
-
+    
+    
     //=-----------------=
     // External Functions
     //=-----------------=
