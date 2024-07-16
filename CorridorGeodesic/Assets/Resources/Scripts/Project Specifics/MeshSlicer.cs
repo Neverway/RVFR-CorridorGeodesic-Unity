@@ -122,22 +122,35 @@ public class MeshSlicer : MonoBehaviour
         // Add the main part to the list of parts
         parts.Add(mainPart);
 
-        // Iterate through the number of cut cascades
+        // Iterate through the number of cut planes TODO (THIS VALUE IS ONLY EVER TWO LARGE)
         for (var c = 0; c < cutPlanes.Count; c++)
         {
-            print(cutPlanes.Count);
             // For each part, generate two new sub-parts using a random plane
             for (var i = 0; i < parts.Count; i++)
             {
+                // TODO Currently, regardless of if the cut plane actually intersects a part,
+                // the part is duplicating itself and running through the slice operation
+                // Need to add a exit case where if the plane is not intersected, it is ignored by the slicer
                 var bounds = parts[i].Bounds;
                 bounds.Expand(0.5f);  // Expand the bounds slightly
-
-                // Create a random plane within the bounds
-                //var plane = new Plane(UnityEngine.Random.onUnitSphere, new Vector3(UnityEngine.Random.Range(bounds.min.x, bounds.max.x), Random.Range(bounds.min.y, bounds.max.y), Random.Range(bounds.min.z, bounds.max.z)));
+                
+                // Use the values from GenerateCutPlanes() to actually create the planes that will be used to slice all the objects
                 var plane = new Plane(cutNormals[i], inPointDistances[i]);
                 
+                // This is a possible future optimization, but everything is buggy as hell, so we'll worry about this later ~Liz
+                /*
+                // Check if the plane intersects the bounds of the part
+                var minSide = plane.GetSide(bounds.min);
+                var maxSide = plane.GetSide(bounds.max);
 
-                // Generate the two sub-parts
+                // If the plane does not intersect the bounds, skip this part
+                if (minSide == maxSide)
+                {
+                    subParts.Add(parts[i]);
+                    continue;
+                }*/
+                
+                // Generate the two sub-parts if the plane intersects the bounds
                 subParts.Add(GenerateMesh(parts[i], plane, true));
                 subParts.Add(GenerateMesh(parts[i], plane, false));
             }
@@ -151,8 +164,6 @@ public class MeshSlicer : MonoBehaviour
         for (var i = 0; i < parts.Count; i++)
         {
             parts[i].MakeGameObject(this, i);
-            // Uncomment the line below to add explosion force to the parts
-            // parts[i].GameObject.GetComponent<Rigidbody>().AddForceAtPosition(parts[i].Bounds.center * ExplodeForce, transform.position);
         }
 
         // Destroy the original game object
@@ -227,13 +238,6 @@ public class MeshSlicer : MonoBehaviour
                 // Add the intersecting edges to the partMesh
                 if (bridgeMeshGaps) 
                 {
-                    AddEdge(i,
-                        partMesh,
-                        left ? plane.normal * -1f : plane.normal,
-                        ray1.origin + ray1.direction.normalized * enter1,
-                        ray2.origin + ray2.direction.normalized * enter2,
-                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
 
                     AddEdge(i,
                         partMesh,
