@@ -63,15 +63,19 @@ public class MeshSlicer : MonoBehaviour
     }
     
     /// <summary>
-    /// Take the 
+    /// Take the objects referenced in the cutPlanes list and generate an infinite plane, according to the direction
+    /// and rotation of the reference object, for use in cutting the mesh
     /// </summary>
+    // TODO This function just gets the values for generating the planes, it does not actually generate them here
     private void GenerateCutPlanes()
     {
+        // Clear the lists
+        // TODO What are these lists supposed to be used for???? ~Liz
         cutNormals.Clear();
         inPointDistances.Clear();
         for (int i = 0; i < cutPlanes.Count; i++)
         {
-            // Get the cut direction based on the cutPlane
+            // Get the cut direction based on the up direction of the reference object
             cutNormals.Add(cutPlanes[i].transform.up);
         
             // Calculate the vector from the plane's position to the object's position
@@ -89,10 +93,13 @@ public class MeshSlicer : MonoBehaviour
     private void DestroyMesh()
     {
         // Get the original mesh from the MeshFilter component
-        var originalMesh = GetComponent<MeshFilter>().mesh;
-        originalMesh.RecalculateBounds();  // Recalculate the mesh bounds
+        var originalMesh = GetComponent<MeshFilter>().mesh;  
+        // Recalculate the mesh render bounds
+        // (This tells the game how big, and where, the object is. If it's small enough or out of view the game doesn't render it)
+        originalMesh.RecalculateBounds();
 
         // Create lists to store parts and sub-parts of the mesh
+        // ToDo What are parts and sub-parts??? ~Liz
         var parts = new List<PartMesh>();
         var subParts = new List<PartMesh>();
 
