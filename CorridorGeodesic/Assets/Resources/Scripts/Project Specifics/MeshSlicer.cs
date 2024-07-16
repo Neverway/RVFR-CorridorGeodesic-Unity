@@ -125,6 +125,7 @@ public class MeshSlicer : MonoBehaviour
         // Iterate through the number of cut cascades
         for (var c = 0; c < cutPlanes.Count; c++)
         {
+            print(cutPlanes.Count);
             // For each part, generate two new sub-parts using a random plane
             for (var i = 0; i < parts.Count; i++)
             {
