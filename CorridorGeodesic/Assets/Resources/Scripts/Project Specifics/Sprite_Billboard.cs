@@ -1,7 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Always make a gameobject face the camera 
+// Notes: (usually used for 2D objects like sprites to make them appear 3D)
 //
 //=============================================================================
 
@@ -9,12 +9,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class GameObject_Billboard : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public List<Camera> cameras;
 
 
     //=-----------------=
@@ -25,6 +24,7 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private CameraManager cameraManager;
 
 
     //=-----------------=
@@ -32,15 +32,20 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-    
+        cameraManager = FindObjectOfType<CameraManager>();
     }
 
     private void Update()
     {
-        cameras.Clear();
-        foreach (var camera in FindObjectsOfType<Camera>())
+        if (!cameraManager)
         {
-            cameras.Add(camera);
+            cameraManager = FindObjectOfType<CameraManager>();
+            return;
+        }
+
+        if (cameraManager.GetActiveRenderingCamera())
+        {
+            transform.LookAt(cameraManager.GetActiveRenderingCamera().transform.position, cameraManager.GetActiveRenderingCamera().transform.up);
         }
     }
 
@@ -52,15 +57,4 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public Camera GetActiveRenderingCamera()
-    {
-        foreach (Camera cam in cameras)
-        {
-            if (cam.isActiveAndEnabled && cam.targetTexture == null)
-            {
-                return cam;
-            }
-        }
-        return null;
-    }
 }

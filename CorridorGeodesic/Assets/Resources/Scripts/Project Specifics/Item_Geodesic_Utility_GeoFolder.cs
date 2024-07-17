@@ -161,6 +161,11 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             {
                 sliceableMesh.gameObject.transform.position -= (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
             }
+            // Any segment with the id of 1 is the result of some wierd artifacting, so we BURN IT IN A FIRELY BLAZE OF GLORY
+            else if (sliceableMesh.segmentId == 1)
+            {
+                Destroy(sliceableMesh.gameObject);
+            }
         }
 
         OffsetActorsAccordingToConvergenceDistance(_collapsing:true);

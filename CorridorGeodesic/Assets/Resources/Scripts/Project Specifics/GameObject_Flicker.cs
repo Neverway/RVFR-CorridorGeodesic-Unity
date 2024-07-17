@@ -1,7 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Randomly change the size of a gameobject to give the apperence of a flicker
+// Notes: We love Unity!!! (Editor note: We do not.)
 //
 //=============================================================================
 
@@ -9,18 +9,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class GameObject_Flicker : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public List<Camera> cameras;
+    [SerializeField] private float size = .2f;
+    [SerializeField] private float variance = 0.1f;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-
+    
 
     //=-----------------=
     // Reference Variables
@@ -30,20 +31,12 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-    
-    }
-
     private void Update()
     {
-        cameras.Clear();
-        foreach (var camera in FindObjectsOfType<Camera>())
-        {
-            cameras.Add(camera);
-        }
+        gameObject.transform.localScale = Vector3.one *  Random.Range (size - variance, size + variance);
     }
-
+    
+    
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -52,15 +45,4 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public Camera GetActiveRenderingCamera()
-    {
-        foreach (Camera cam in cameras)
-        {
-            if (cam.isActiveAndEnabled && cam.targetTexture == null)
-            {
-                return cam;
-            }
-        }
-        return null;
-    }
 }
