@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Laser_Raycast : MonoBehaviour
@@ -8,9 +5,9 @@ public class Laser_Raycast : MonoBehaviour
 
     //===================== (Neverway 2024) Written by Connorses =====================
     //
-    // Purpose: Lines up a line renderer with a raycast aimed at the gameobject's forward vector, and places halo objects at both ends.
-    // Notes:
-    // Source:
+    // Purpose: Recursively bounces a raycast off reflective surfaces. Also places laser prefabs to render each line/halo effect.
+    // Notes: Checks for the IsReflective component when deciding if it can bounce.
+    // Source: https://stackoverflow.com/questions/51931455/unity3d-bouncing-reflecting-raycast
     //
     //=============================================================================
 
@@ -19,7 +16,8 @@ public class Laser_Raycast : MonoBehaviour
     [SerializeField] private float maxStepDistance = 200f;
     [SerializeField] private LineRenderer prefabLine;
     private LineRenderer[] lineRenderers;
-   
+    [SerializeField] Material reflectiveMaterial;
+
     private void Start ()
     {
         lineRenderers = new LineRenderer[maxReflectionCount];
@@ -33,21 +31,6 @@ public class Laser_Raycast : MonoBehaviour
     private void Update ()
     {
         ShootLaser ();
-        /*
-        RaycastHit hit;
-        if (Physics.Raycast (transform.position, transform.TransformDirection (Vector3.forward), out hit, 100f))
-        {
-            Debug.DrawRay (transform.position, transform.TransformDirection (Vector3.forward) * hit.distance, Color.red);
-            lineRenderer.SetPosition (0, transform.position);
-            lineRenderer.SetPosition (1, hit.point);
-            halo.gameObject.SetActive (true);
-            halo.transform.position = hit.point;
-        }
-        else
-        {
-            halo.gameObject.SetActive (false);
-        }
-        */
     }
 
     private void ShootLaser ()
@@ -59,16 +42,18 @@ public class Laser_Raycast : MonoBehaviour
         DrawReflectionPattern (this.transform.position + this.transform.forward * 0.75f, this.transform.forward, maxReflectionCount);
     }
 
-    private void DrawReflectionPattern (Vector3 position, Vector3 direction, int reflectionsRemaining, bool previousHit = true)
+    private void DrawReflectionPattern (Vector3 position, Vector3 direction, int reflectionsRemaining, bool bounce = true)
     {
         if (reflectionsRemaining == 0)
         {
             return;
         }
-        if (!previousHit)
+        //if one of the hits didn't bounce then the rest of the recursions just set the linerenderers inactive.
+        if (!bounce)
         {
             lineRenderers[reflectionsRemaining - 1].gameObject.SetActive (false);
-            DrawReflectionPattern (position, direction, reflectionsRemaining - 1, previousHit);
+            DrawReflectionPattern (position, direction, reflectionsRemaining - 1, bounce);
+            return;
         }
 
         Vector3 startingPosition = position;
@@ -80,9 +65,18 @@ public class Laser_Raycast : MonoBehaviour
         {
             direction = Vector3.Reflect (direction, hit.normal);
             position = hit.point;
+
+            if (hit.collider.gameObject.TryGetComponent<MeshSlicer> (out var slicer))
+            {
+                if (!slicer.isReflective)
+                {
+                    bounce = false;
+                }
+            }
         }
         else
         {
+            bounce = false;
             position += direction * maxStepDistance;
         }
 
@@ -95,7 +89,7 @@ public class Laser_Raycast : MonoBehaviour
         line.SetPosition (0, startingPosition);
         line.SetPosition (1, position);
 
-        DrawReflectionPattern (position, direction, reflectionsRemaining - 1, didHit);
+        DrawReflectionPattern (position, direction, reflectionsRemaining - 1, bounce);
     }
 
 }
