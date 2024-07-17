@@ -27,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877144347615538437}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.519}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1220001}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1539156247005254693}
-  m_Father: {fileID: 4782432929076539559}
+  m_Father: {fileID: 7494835609028266522}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6460672219481479519
 MonoBehaviour:
@@ -539,8 +539,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7494835609028266522}
+  - component: {fileID: 7661118531738600569}
   - component: {fileID: 3078301542554758665}
-  - component: {fileID: 7120556096909761810}
   m_Layer: 0
   m_Name: LaserShooter
   m_TagString: Untagged
@@ -557,12 +557,30 @@ Transform:
   m_GameObject: {fileID: 6954839324215909268}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: 1.397}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6158657588474393904}
   m_Father: {fileID: 4782432929076539559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7661118531738600569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6954839324215909268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a4367a8604169d4e8307aa6355db903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  halo: {fileID: 0}
+  maxReflectionCount: 5
+  maxStepDistance: 200
+  prefabLine: {fileID: 1875282707177570320, guid: a446d575cd64c82449b8eded92bf056a,
+    type: 3}
 --- !u!120 &3078301542554758665
 LineRenderer:
   serializedVersion: 2
@@ -667,19 +685,6 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &7120556096909761810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6954839324215909268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a4367a8604169d4e8307aa6355db903, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  halo: {fileID: 8797629049234564188}
 --- !u!1 &8260233181625863253
 GameObject:
   m_ObjectHideFlags: 0
@@ -844,10 +849,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8114728397968744817}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1f16e2ae91531974a8407503cf46dbc2,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6158657588474393904}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1f16e2ae91531974a8407503cf46dbc2,
         type: 3}
       insertIndex: -1
