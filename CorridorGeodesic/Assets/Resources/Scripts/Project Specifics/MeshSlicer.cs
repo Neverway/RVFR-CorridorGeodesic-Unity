@@ -241,8 +241,6 @@ public class MeshSlicer : MonoBehaviour
                 // Add the intersecting edges to the partMesh
                 if (bridgeMeshGaps)
                 {
-                    print($"E1 {enter1} E2 {enter2}");
-                    print($"L1 {lerp1} L2 {lerp2}");
                     AddEdge(i,
                         partMesh,
                         left ? plane.normal * -1f : plane.normal,
