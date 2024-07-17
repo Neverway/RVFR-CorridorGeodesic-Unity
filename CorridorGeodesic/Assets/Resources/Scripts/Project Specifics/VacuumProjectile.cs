@@ -15,6 +15,9 @@ public class VacuumProjectile : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [SerializeField] private float castRadius;
+    [SerializeField] private Vector3 castOffset;
+    [SerializeField] private float pinOffset;
 
 
     //=-----------------=
@@ -30,7 +33,6 @@ public class VacuumProjectile : MonoBehaviour
     private Rigidbody objectRigidbody;
     private RaycastHit faceHit;
     [SerializeField] private LayerMask layerMask;
-    [SerializeField] private float radius;
 
 
     //=-----------------=
@@ -54,13 +56,15 @@ public class VacuumProjectile : MonoBehaviour
     //=-----------------=
     public void IsPinned()
     {
-        if (Physics.SphereCast(transform.position, radius, transform.forward, out faceHit, layerMask))
+        if (Physics.SphereCast(transform.position+castOffset, castRadius, transform.forward, out faceHit, layerMask))
         {
             // Disable physics
             objectRigidbody.isKinematic = true;
             
             // Set rotation to match face normal
             transform.rotation = Quaternion.LookRotation(-faceHit.normal);
+            transform.position = faceHit.point;
+            transform.localPosition += faceHit.normal*pinOffset;
             
             pinned = true;
         }
