@@ -62,6 +62,7 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Bladed.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Head.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Volume2D_LayerChange.cs" />
+     <Compile Include="Assets/Resources/Scripts/Integratables/CorGeo/GameObject_Flicker.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/ApplicationFontSetter.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Sprite_DataExposer.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/VacuumProjectile.cs" />
@@ -83,7 +84,6 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Magic.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Volume2D_Warp.cs" />
-     <Compile Include="Assets/SimpleLightProbePlacer/Scripts/LightProbeGroupControl.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Utility_Throwable.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Object_LiveThrowable.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Utility_Consumable.cs" />
@@ -105,7 +105,6 @@
      <Compile Include="Assets/Resources/Scripts/Components/Button_Selector.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/ControlBindingEntry.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Utility.cs" />
-     <Compile Include="Assets/SimpleLightProbePlacer/Scripts/LightProbeVolume.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Back.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Button_Sounds.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Legs.cs" />
@@ -114,7 +113,6 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/DataObject.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_DepthAssigner.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Volume2D_Force.cs" />
-     <Compile Include="Assets/SimpleLightProbePlacer/Scripts/Volume.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/PortalTextureSetup.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/Pawn.cs" />
      <Compile Include="Assets/Darkbringer Shader/Preview/DarkbringerUIPreview.cs" />
@@ -126,12 +124,12 @@
      <Compile Include="Assets/Resources/Levels/LB_Travel.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/MeshSlicer.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/CanvasForceGetActiveCamera.cs" />
-     <Compile Include="Assets/SimpleLightProbePlacer/Scripts/TransformVolume.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Volume2D_Damage.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Text_EntityHealth.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_MemoryBrowser_Item.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Text_EntityName.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/Sprite_Billboard.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Projectile.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Particle_DataExposer.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Title.cs" />
@@ -170,13 +168,12 @@
      <Compile Include="Assets/Resources/Scripts/Gamemodes/FPS/PlayerController_FirstPersonShooter.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/ProjectDatabase.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/ActorData.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/HaloFlicker.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Text_EntityItems.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_MemoryBrowser.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor.cs" />
      <Folder Include="Assets" />
+     <Folder Include="Assets/Resources/Scripts/Integratables/CorGeo" />
      <Folder Include="Assets/Resources/Maps" />
-     <Folder Include="Assets/Resources/Materials/ShaderGraphs" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Arrows" />
      <Folder Include="Assets/Resources/Models" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Wii" />
@@ -199,11 +196,9 @@
      <Folder Include="Assets/Packages/Xelu_Prompts/Keyboard &amp; Mouse/Blanks" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader" />
      <Folder Include="Assets/Resources/Actors/Items" />
-     <None Include="Assets/SimpleLightProbePlacer/README.txt" />
      <Folder Include="Assets/Packages/Xelu_Prompts" />
      <Folder Include="Assets/Resources/Widgets/Integratables" />
      <Folder Include="Assets/Resources/Widgets" />
-     <Folder Include="Assets/SimpleLightProbePlacer/Scenes" />
      <Folder Include="Assets/Darkbringer Shader/Preview/Models" />
      <Folder Include="Assets/TextMesh Pro/Resources/Fonts &amp; Materials" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro_Mobile.cginc" />
@@ -218,7 +213,6 @@
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/PS3" />
      <Folder Include="Assets/Resources/Models/Vaccum.Mat" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Amazon Luna" />
-     <Folder Include="Assets/SimpleLightProbePlacer" />
      <Folder Include="Assets/Resources/Scripts/Framework" />
      <Folder Include="Assets/ProBuilder Data" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Xbox Series" />
@@ -236,7 +230,6 @@
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/PS4" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Surface.shader" />
      <Folder Include="Assets/Resources/Scripts/Integratables" />
-     <Folder Include="Assets/SimpleLightProbePlacer/Scenes/Demo" />
      <None Include="Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap-Custom-Atlas.shader" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF.shader" />
@@ -249,6 +242,7 @@
      <Folder Include="Assets/Resources/Actors/Props" />
      <Folder Include="Assets/Resources" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro_Properties.cginc" />
+     <Folder Include="Assets/Resources/Models/Laser.Mat" />
      <Folder Include="Assets/Resources/Levels/World2" />
      <Folder Include="Assets/Darkbringer Shader" />
      <Folder Include="Assets/Packages/Fonts" />
@@ -275,7 +269,6 @@
      <None Include="Assets/TextMesh Pro/Resources/LineBreaking Following Characters.txt" />
      <Folder Include="Assets/Resources/Scripts/Project Specifics" />
      <Folder Include="Assets/Resources/Sprites/Characters" />
-     <Folder Include="Assets/SimpleLightProbePlacer/Scripts" />
      <Folder Include="Assets/Resources/Sound" />
      <Folder Include="Assets/Resources/Scripts/Gamemodes/Default" />
      <Folder Include="Assets/Resources/Scripts/Gamemodes" />
