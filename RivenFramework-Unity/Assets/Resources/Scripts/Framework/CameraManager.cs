@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -30,11 +31,6 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-    
-    }
-
     private void Update()
     {
         cameras.Clear();
@@ -54,9 +50,13 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     public Camera GetActiveRenderingCamera()
     {
-        Camera[] cameras = Camera.allCameras;
         foreach (Camera cam in cameras)
         {
+            if (cam.IsUnityNull())
+            {
+                cameras.Remove(cam);
+                return null;
+            }
             if (cam.isActiveAndEnabled && cam.targetTexture == null)
             {
                 return cam;
