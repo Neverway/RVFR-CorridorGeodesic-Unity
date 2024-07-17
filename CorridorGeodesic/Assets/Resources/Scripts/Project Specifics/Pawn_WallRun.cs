@@ -61,6 +61,26 @@ public class Pawn_WallRun : MonoBehaviour
         applicationSettings = FindObjectOfType<ApplicationSettings>();
     }
 
+    private void Update()
+    {
+        // Wall kick
+        if (fpsActions.Jump.WasPressedThisFrame() && CanWallRun())
+        {
+            if (wallLeft)
+            {
+                Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal;
+                objectRigidbody.velocity = new Vector3(objectRigidbody.velocity.x, objectRigidbody.velocity.y);
+                objectRigidbody.AddForce(wallRunJumpDirection * (wallJumpForce * 10), ForceMode.Impulse);
+            }
+            else if (wallRight)
+            {
+                Vector3 wallRunJumpDirection = transform.up + rightWallHit.normal;
+                objectRigidbody.velocity = new Vector3(objectRigidbody.velocity.x, objectRigidbody.velocity.y);
+                objectRigidbody.AddForce(wallRunJumpDirection * (wallJumpForce * 10), ForceMode.Impulse);
+            }
+        }
+    }
+
     private void FixedUpdate()
     {
         CheckWall();
@@ -104,21 +124,6 @@ public class Pawn_WallRun : MonoBehaviour
     {
         objectRigidbody.useGravity = false;
         objectRigidbody.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
-        if (fpsActions.Jump.WasPressedThisFrame())
-        {
-            if (wallLeft)
-            {
-                Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal;
-                objectRigidbody.velocity = new Vector3(objectRigidbody.velocity.x, objectRigidbody.velocity.y);
-                objectRigidbody.AddForce(wallRunJumpDirection * (wallJumpForce * 100), ForceMode.Force);
-            }
-            else if (wallRight)
-            {
-                Vector3 wallRunJumpDirection = transform.up + rightWallHit.normal;
-                objectRigidbody.velocity = new Vector3(objectRigidbody.velocity.x, objectRigidbody.velocity.y);
-                objectRigidbody.AddForce(wallRunJumpDirection * (wallJumpForce * 100), ForceMode.Force);
-            }
-        }
         
         // Camera effects
         viewCamera.fieldOfView = Mathf.Lerp(viewCamera.fieldOfView,

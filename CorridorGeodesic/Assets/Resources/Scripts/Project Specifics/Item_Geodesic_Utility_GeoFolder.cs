@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,8 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     // Reference Variables
     //=-----------------=
     [SerializeField] private Transform barrelTransform;
+    [SerializeField] private Transform centerViewTransform;
+    [SerializeField] private GameObject debugObject;
     [SerializeField] private GameObject vacuumProjectile;
     [SerializeField] private GameObject riftObject;
     [SerializeField] private float projectileForce;
@@ -65,7 +68,12 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         collapsedDistance = 0;
         collapsedDirection = new Vector3();
     }
-    
+
+    public void Update()
+    {
+        AimTowardsCenterOfView();
+    }
+
 
     //=-----------------=
     // Internal Functions
@@ -89,8 +97,8 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         if (currentAmmo <= 0) return;
         currentAmmo--;
-        var projectile = Instantiate(vacuumProjectile, barrelTransform.transform.position, barrelTransform.transform.rotation, null);
-        projectile.GetComponent<Rigidbody>().AddForce(transform.forward * -projectileForce, ForceMode.Impulse);
+        var projectile = Instantiate(vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
+        projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * projectileForce, ForceMode.Impulse);
         projectile.GetComponent<VacuumProjectile>().geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
         deployedInfinityMarkers.Add(projectile);
     }
@@ -222,6 +230,14 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 _actor.gameObject.transform.position += convergeDistance;
             }
         }
+    }
+
+    private void AimTowardsCenterOfView()
+    {
+        RaycastHit viewPoint = new RaycastHit();
+        Physics.Raycast(centerViewTransform.position, centerViewTransform.forward, out viewPoint);
+        Debug.DrawRay(centerViewTransform.position, centerViewTransform.forward, Color.cyan);
+        barrelTransform.LookAt(viewPoint.point);
     }
 
 
