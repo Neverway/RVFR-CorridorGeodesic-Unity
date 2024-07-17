@@ -32,6 +32,8 @@ public class MeshSlicer : MonoBehaviour
     public bool bridgeMeshGaps;
     [Tooltip("Check this box in the inspector to run the ApplyCuts() function")]
     public bool testCut;
+    [Tooltip ("If true, this object's collider reflects lasers.")]
+    public bool isReflective = false;
 
 
     //=-----------------=
@@ -447,6 +449,7 @@ public class PartMesh
         {
             meshDestroy.gameObject.SetActive(false);
         }
+        meshDestroy.isReflective = original.isReflective;
     }
 }
 
