@@ -11,6 +11,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class MeshSlicer : MonoBehaviour
@@ -227,18 +228,21 @@ public class MeshSlicer : MonoBehaviour
                 var dir1 = original.Vertices[triangles[j + ((singleIndex + 1) % 3)]] - original.Vertices[triangles[j + singleIndex]];
                 ray1.direction = dir1;
                 plane.Raycast(ray1, out var enter1);
+                enter1 = Mathf.Round(enter1 * 1000.0f) * 0.001f; // Testing value to round enter1 to nearest tenth (0.000)
                 var lerp1 = enter1 / dir1.magnitude;
 
                 ray2.origin = original.Vertices[triangles[j + singleIndex]];
                 var dir2 = original.Vertices[triangles[j + ((singleIndex + 2) % 3)]] - original.Vertices[triangles[j + singleIndex]];
                 ray2.direction = dir2;
                 plane.Raycast(ray2, out var enter2);
+                enter2 = Mathf.Round(enter2 * 1000.0f) * 0.001f; // Testing value to round enter2 to nearest tenth (0.000)
                 var lerp2 = enter2 / dir2.magnitude;
 
                 // Add the intersecting edges to the partMesh
-                if (bridgeMeshGaps) 
+                if (bridgeMeshGaps)
                 {
-
+                    print($"E1 {enter1} E2 {enter2}");
+                    print($"L1 {lerp1} L2 {lerp2}");
                     AddEdge(i,
                         partMesh,
                         left ? plane.normal * -1f : plane.normal,
@@ -302,14 +306,7 @@ public class MeshSlicer : MonoBehaviour
     private void AddEdge(int subMesh, PartMesh partMesh, Vector3 normal, Vector3 vertex1, Vector3 vertex2, Vector2 uv1, Vector2 uv2)
     {
         // Check if this is the first edge to be added
-        if (!edgeSet)
-        {
-            // If it is the first edge, set the edge vertex and UV coordinates
-            edgeSet = true;
-            edgeVertex = vertex1;
-            edgeUV = uv1;
-        }
-        else
+        if (edgeSet)
         {
             // If it's not the first edge, create a plane using three points
             edgePlane.Set3Points(edgeVertex, vertex1, vertex2);
@@ -318,10 +315,8 @@ public class MeshSlicer : MonoBehaviour
 
             // Determine the correct orientation of the vertices based on the side of the plane
             bool side1 = edgePlane.GetSide(edgeVertex + normal);
-            bool side2 = edgePlane.GetSide(vertex1 + normal);
-            bool side3 = edgePlane.GetSide(vertex2 + normal);
 
-            
+
             partMesh.AddTriangle(subMesh, edgeVertex, side1 ? vertex1 : vertex2, side1 ? vertex2 : vertex1,
                 normal, // Normal for all vertices is the same
                 normal,
@@ -329,6 +324,13 @@ public class MeshSlicer : MonoBehaviour
                 edgeUV, // UV coordinates for the vertices
                 uv1,
                 uv2);
+        }
+        else
+        {
+            // If it is the first edge, set the edge vertex and UV coordinates
+            edgeSet = true;
+            edgeVertex = vertex1;
+            edgeUV = uv1;
         }
     }
     
