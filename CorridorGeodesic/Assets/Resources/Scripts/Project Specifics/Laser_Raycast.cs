@@ -26,7 +26,7 @@ public class Laser_Raycast : MonoBehaviour
         for (int i = 0; i < maxReflectionCount; i++)
         {
             lineRenderers[i] = Instantiate (prefabLine);
-            lineRenderers[i].gameObject.SetActive (false);
+            //lineRenderers[i].gameObject.SetActive (false);
         }
     }
 
@@ -54,16 +54,21 @@ public class Laser_Raycast : MonoBehaviour
     {
         foreach (var l in lineRenderers)
         {
-            l.gameObject.SetActive (false);
+            //l.gameObject.SetActive (false);
         }
         DrawReflectionPattern (this.transform.position + this.transform.forward * 0.75f, this.transform.forward, maxReflectionCount);
     }
 
-    private void DrawReflectionPattern (Vector3 position, Vector3 direction, int reflectionsRemaining)
+    private void DrawReflectionPattern (Vector3 position, Vector3 direction, int reflectionsRemaining, bool previousHit = true)
     {
         if (reflectionsRemaining == 0)
         {
             return;
+        }
+        if (!previousHit)
+        {
+            lineRenderers[reflectionsRemaining - 1].gameObject.SetActive (false);
+            DrawReflectionPattern (position, direction, reflectionsRemaining - 1, previousHit);
         }
 
         Vector3 startingPosition = position;
@@ -84,15 +89,13 @@ public class Laser_Raycast : MonoBehaviour
         Debug.DrawLine (startingPosition, position, Color.blue);
 
         LineRenderer line = lineRenderers[reflectionsRemaining - 1];
-        line.gameObject.SetActive (true);
+        if (!line.gameObject.activeSelf)
+            line.gameObject.SetActive (true);
         line.transform.position = position;
         line.SetPosition (0, startingPosition);
         line.SetPosition (1, position);
 
-        if (didHit)
-        {
-            DrawReflectionPattern (position, direction, reflectionsRemaining - 1);
-        }
+        DrawReflectionPattern (position, direction, reflectionsRemaining - 1, didHit);
     }
 
 }
