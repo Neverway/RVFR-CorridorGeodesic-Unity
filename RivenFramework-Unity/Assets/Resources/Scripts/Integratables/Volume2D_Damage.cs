@@ -7,7 +7,7 @@
 
 using UnityEngine;
 
-public class Volume2D_Damage : Volume2D
+public class Volume2D_Damage : Volume
 {
     //=-----------------=
     // Public Variables

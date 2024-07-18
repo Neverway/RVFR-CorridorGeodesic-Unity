@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Logic_Processor))]
-public class Trigger2D_Interactable : Volume2D
+public class Trigger2D_Interactable : Volume
 {
     //=-----------------=
     // Public Variables

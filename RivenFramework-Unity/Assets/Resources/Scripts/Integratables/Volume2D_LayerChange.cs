@@ -7,7 +7,7 @@
 
 using UnityEngine;
 
-public class Volume2D_LayerChange : Volume2D
+public class Volume2D_LayerChange : Volume
 {
     //=-----------------=
     // Public Variables

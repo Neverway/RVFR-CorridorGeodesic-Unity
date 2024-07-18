@@ -7,7 +7,7 @@
 
 using UnityEngine;
 
-public class Volume2D_Warp : Volume2D
+public class Volume2D_Warp : Volume
 {
     //=-----------------=
     // Public Variables

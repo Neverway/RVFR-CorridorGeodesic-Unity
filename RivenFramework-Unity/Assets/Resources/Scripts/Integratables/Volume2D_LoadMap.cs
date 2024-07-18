@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Volume2D_LoadMap : Volume2D
+public class Volume2D_LoadMap : Volume
 {
     //=-----------------=
     // Public Variables

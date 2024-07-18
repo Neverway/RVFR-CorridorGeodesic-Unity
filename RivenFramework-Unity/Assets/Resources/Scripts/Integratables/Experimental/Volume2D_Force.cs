@@ -13,7 +13,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class Volume2D_Force : Volume2D
+public class Volume2D_Force : Volume
 {
     //=-----------------=
     // Public Variables

@@ -24,6 +24,8 @@ public class Pawn : MonoBehaviour
     public bool isInvulnerable;
     public bool isDead;
     public bool isNearInteractable; // Imported from old system
+    public bool destroyOnDeath; // Should this object be deleted once it dies
+    public float destroyOnDeathDelay; // How long, in seconds, should we wait before deleting the pawn after death
 
     public event Action OnPawnHurt;
     public event Action OnPawnHeal;
@@ -169,6 +171,10 @@ public class Pawn : MonoBehaviour
             GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.death);
             OnPawnDeath?.Invoke();
             isDead = true;
+            if (destroyOnDeath)
+            {
+                Destroy(gameObject, destroyOnDeathDelay);
+            }
         }
 
         if (currentState.health + _value > currentState.health) currentState.health = defaultState.health;
@@ -179,6 +185,7 @@ public class Pawn : MonoBehaviour
     public void Kill()
     {
         // Instantly sets the pawns health to zero, firing its onDeath event
+        ModifyHealth(-999999);
     }
     
     public void GetPawnController()

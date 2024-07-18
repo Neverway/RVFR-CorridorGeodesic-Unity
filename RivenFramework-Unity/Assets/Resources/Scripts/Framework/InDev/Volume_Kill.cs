@@ -9,14 +9,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trigger2D_Pickup : Volume
+public class Volume_Kill : Volume
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string itemID;
-    public Item item;
-    public bool useItemIDOverride;
 
 
     //=-----------------=
@@ -27,22 +24,29 @@ public class Trigger2D_Pickup : Volume
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private SpriteRenderer spriteRenderer;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
+    private new void OnTriggerEnter2D(Collider2D _other)
     {
+        base.OnTriggerEnter2D(_other); // Call the base class method
+        if (_other.CompareTag("Pawn"))
+        {
+            _other.GetComponent<Pawn>().Kill();
+        }
+    }
     
-    }
-
-    private void Update()
+    private new void OnTriggerEnter(Collider _other)
     {
-        if (useItemIDOverride) item = FindObjectOfType<ProjectData>().GetItemFromMemory(itemID);
-        if (spriteRenderer && item) spriteRenderer.sprite = item.icon;
+        base.OnTriggerEnter(_other); // Call the base class method
+        if (_other.CompareTag("Pawn"))
+        {
+            _other.GetComponent<Pawn>().Kill();
+        }
     }
+    
 
     //=-----------------=
     // Internal Functions
@@ -52,11 +56,4 @@ public class Trigger2D_Pickup : Volume
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void activate()
-    {
-        if (GetPlayerInTrigger().GetComponent<Pawn_Inventory>().AddItem(item))
-        {
-            Destroy(gameObject);
-        }
-    }
 }

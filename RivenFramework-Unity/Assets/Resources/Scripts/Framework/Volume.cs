@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Volume2D : MonoBehaviour
+public class Volume : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -67,6 +67,57 @@ public class Volume2D : MonoBehaviour
     }
 
     protected void OnTriggerExit2D(Collider2D _other)
+    {
+        // An Pawn has exited the trigger
+        if (_other.CompareTag("Pawn"))
+        {
+            // Get a reference to the entity component
+            targetEnt = _other.gameObject.transform.parent.GetComponent<Pawn>();
+            // Remove the entity to the list if they are not already absent
+            if(pawnsInTrigger.Contains(targetEnt)) { pawnsInTrigger.Remove(targetEnt); }
+        }
+        
+        // A physics prop has entered the trigger
+        if (_other.CompareTag("PhysProp"))
+        {
+            // Get a reference to the entity component
+            targetProp = _other.gameObject.transform.parent.GetComponent<Prop>();
+            // Add the entity to the list if they are not already present
+            if(propsInTrigger.Contains(targetProp)) { propsInTrigger.Remove(targetProp); }
+        }
+    }
+    protected void OnTriggerEnter(Collider _other)
+    {
+        // An Pawn has entered the trigger
+        if (_other.CompareTag("Pawn"))
+        {
+            // Get a reference to the entity component
+            targetEnt = _other.gameObject.transform.parent.GetComponent<Pawn>();
+            // Exit if they are not on the effected team
+            if (!IsOnAffectedTeam(targetEnt)) return;
+            // Add the entity to the list if they are not already present
+            if (!pawnsInTrigger.Contains(targetEnt))
+            {
+                pawnsInTrigger.Add(targetEnt);
+            }
+        }
+        
+        // A physics prop has entered the trigger
+        if (_other.CompareTag("PhysProp"))
+        {
+            // Don't register held objects
+            if (_other.gameObject.transform.parent.GetComponent<Object_Grabbable>()) { if (_other.gameObject.transform.parent.GetComponent<Object_Grabbable>().isHeld) { return; } }
+            // Get a reference to the entity component
+            targetProp = _other.gameObject.transform.parent.GetComponent<Prop>();
+            // Add the entity to the list if they are not already present
+            if (!propsInTrigger.Contains(targetProp))
+            {
+                propsInTrigger.Add(targetProp);
+            }
+        }
+    }
+
+    protected void OnTriggerExit(Collider _other)
     {
         // An Pawn has exited the trigger
         if (_other.CompareTag("Pawn"))
