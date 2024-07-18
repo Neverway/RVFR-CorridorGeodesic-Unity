@@ -35,7 +35,7 @@ public class Volume2D_LayerChange : Volume2D
         base.OnTriggerEnter2D(_other); // Call the base class method
         if (_other.CompareTag("Pawn"))
         {
-            SetTargetDepth(targetEnt.GetComponent<Object_DepthAssigner>());
+            SetTargetDepth(targetEnt.GetComponent<Object_DepthAssigner2D>());
         }
         if (_other.CompareTag("PhysProp") && targetProp)
         {
@@ -46,7 +46,7 @@ public class Volume2D_LayerChange : Volume2D
                     return;
                 }
             }
-            SetTargetDepth(targetProp.AssociatedGameObject.GetComponent<Object_DepthAssigner>());
+            SetTargetDepth(targetProp.AssociatedGameObject.GetComponent<Object_DepthAssigner2D>());
         }
     }
 
@@ -54,7 +54,7 @@ public class Volume2D_LayerChange : Volume2D
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void SetTargetDepth(Object_DepthAssigner _targetObject)
+    private void SetTargetDepth(Object_DepthAssigner2D _targetObject)
     {
         _targetObject.depthLayer = exitLayer;
         if (fallTime <= 0) return;

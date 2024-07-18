@@ -147,7 +147,7 @@ public class Pawn_Inventory : MonoBehaviour
             // spawn a generic bladed weapon,
             var liveItem = Instantiate(bladedWeaponPrefab, this.transform.position, pawn.faceDirection, this.transform);
             // set the depth layer
-            liveItem.GetComponent<Object_DepthAssigner>().depthLayer = GetComponent<Object_DepthAssigner>().depthLayer;
+            liveItem.GetComponent<Object_DepthAssigner2D>().depthLayer = GetComponent<Object_DepthAssigner2D>().depthLayer;
             // set the graphic,
             liveItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = equippedItems[currentAction].icon;
             // set the damage team,
@@ -187,7 +187,7 @@ public class Pawn_Inventory : MonoBehaviour
             // spawn a generic bladed weapon,
             var liveItem = Instantiate(throwableUtilityPrefab, this.transform.position, pawn.faceDirection);
             // set the depth layer
-            liveItem.GetComponent<Object_DepthAssigner>().depthLayer = GetComponent<Object_DepthAssigner>().depthLayer;
+            liveItem.GetComponent<Object_DepthAssigner2D>().depthLayer = GetComponent<Object_DepthAssigner2D>().depthLayer;
             // set the graphic,
             liveItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = equippedItems[currentAction].icon;
             // set the damage team,

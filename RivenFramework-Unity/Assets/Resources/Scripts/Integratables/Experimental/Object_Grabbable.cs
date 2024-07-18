@@ -41,7 +41,7 @@ public class Object_Grabbable : MonoBehaviour
         }
         GetComponent<Trigger2D_Interactable>().hideIndicator=true;
         transform.parent.position = targetPawn.transform.position + GetTargetPawnOffset();
-        transform.parent.GetComponent<Object_DepthAssigner>().depthLayer = targetPawn.GetComponent<Object_DepthAssigner>().depthLayer;
+        transform.parent.GetComponent<Object_DepthAssigner2D>().depthLayer = targetPawn.GetComponent<Object_DepthAssigner2D>().depthLayer;
     }
 
     //=-----------------=

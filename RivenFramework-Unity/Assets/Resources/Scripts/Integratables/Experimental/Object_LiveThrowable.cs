@@ -60,7 +60,7 @@ public class Object_LiveThrowable : MonoBehaviour
         else
         {
             var liveItem = Instantiate(throwable.hitObject, transform.position, new Quaternion());
-            liveItem.GetComponent<Object_DepthAssigner>().depthLayer = GetComponent<Object_DepthAssigner>().depthLayer;
+            liveItem.GetComponent<Object_DepthAssigner2D>().depthLayer = GetComponent<Object_DepthAssigner2D>().depthLayer;
             Destroy(liveItem, 1f);
             Destroy(gameObject);
         }

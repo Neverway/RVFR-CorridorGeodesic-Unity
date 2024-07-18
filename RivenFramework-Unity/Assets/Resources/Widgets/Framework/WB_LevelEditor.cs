@@ -914,9 +914,9 @@ public class WB_LevelEditor : MonoBehaviour
                 break;
         }
         
-        if(!assetRef.GetComponent<Object_DepthAssigner>()) return;
+        if(!assetRef.GetComponent<Object_DepthAssigner2D>()) return;
 
-        assetRef.GetComponent<Object_DepthAssigner>().depthLayer = currentLayer;
+        assetRef.GetComponent<Object_DepthAssigner2D>().depthLayer = currentLayer;
         
         
     }
