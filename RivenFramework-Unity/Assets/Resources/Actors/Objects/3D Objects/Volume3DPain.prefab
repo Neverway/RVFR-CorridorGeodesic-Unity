@@ -66,10 +66,39 @@ PrefabInstance:
     - target: {fileID: 6276463742160257089, guid: c14d3f99c71d2f5c5920d5892075b3f3,
         type: 3}
       propertyPath: m_Name
-      value: Volume3D Variant
+      value: Volume3DPain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6276463742160257089, guid: c14d3f99c71d2f5c5920d5892075b3f3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1930297489875407180}
   m_SourcePrefab: {fileID: 100100000, guid: c14d3f99c71d2f5c5920d5892075b3f3, type: 3}
+--- !u!1 &2547068569816496482 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6276463742160257089, guid: c14d3f99c71d2f5c5920d5892075b3f3,
+    type: 3}
+  m_PrefabInstance: {fileID: 8377675910210238755}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1930297489875407180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2547068569816496482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ab53dbc5cb90ae3bb360a501fdeb100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owningTeam: 
+  affectsOwnTeam: 0
+  pawnsInTrigger: []
+  propsInTrigger: []
+  targetEnt: {fileID: 0}
+  targetProp: {fileID: 0}
+  damageAmount: 10

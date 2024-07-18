@@ -14,13 +14,13 @@ public class Volume_Pain : Volume
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [Tooltip("Negative values will heal pawns")]
+    [SerializeField] private float damageAmount;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [Tooltip("Negative values will heal pawns")]
-    [SerializeField] private float damageAmount;
 
 
     //=-----------------=
