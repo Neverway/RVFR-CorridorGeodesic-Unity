@@ -9,28 +9,28 @@
 //
 //=============================================================================
 
-using System.Collections;
+using BzKovSoft.ObjectSlicer;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
+[RequireComponent (typeof (BzSliceableObject))]
 public class MeshSlicer : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [Tooltip("Two objects in space, that use their rotation to specify where a cut will be made on this mesh")]
-    public List<GameObject> cutPlanes = new List<GameObject>();
-    [Tooltip("A variable used by other scripts to identify parts that have already been cut (Usually so we know not to cut them a second time)")]
+    [Tooltip ("Two objects in space, that use their rotation to specify where a cut will be made on this mesh")]
+    public List<GameObject> cutPlanes = new List<GameObject> ();
+    [Tooltip ("A variable used by other scripts to identify parts that have already been cut (Usually so we know not to cut them a second time)")]
     public bool isCascadeSegment;
-    [Tooltip("A variable used to identify which part of this mesh is once it's been cut (This is currently used so we can delete the center slice to collapse space)")]
+    [Tooltip ("A variable used to identify which part of this mesh is once it's been cut (This is currently used so we can delete the center slice to collapse space)")]
     public int segmentId; // This value is used to keep track of what cut this is, 0 is uncut, 1 is a weird empty-cut glitch, 0 is the left slice, 2 is the right slice, 3 is the center slice
-    
-    [Header("Debugging")]
+
+    [Header ("Debugging")]
     public bool isConvex;
-    [Tooltip("If enabled, once an object has been sliced, this will attempt to fill in the new hole created in the mesh from where it was cut")]
+    [Tooltip ("If enabled, once an object has been sliced, this will attempt to fill in the new hole created in the mesh from where it was cut")]
     public bool bridgeMeshGaps;
-    [Tooltip("Check this box in the inspector to run the ApplyCuts() function")]
+    [Tooltip ("Check this box in the inspector to run the ApplyCuts() function")]
     public bool testCut;
     [Tooltip ("If true, this object's collider reflects lasers.")]
     public bool isReflective = false;
@@ -42,10 +42,12 @@ public class MeshSlicer : MonoBehaviour
     private bool edgeSet = false;
     private Vector3 edgeVertex = Vector3.zero;
     private Vector2 edgeUV = Vector2.zero;
-    private Plane edgePlane = new Plane();
+    private Plane edgePlane = new Plane ();
     private bool destroyOriginal;
-    private List<Vector3> cutNormals = new List<Vector3>();
-    private List<float> inPointDistances = new List<float>();
+    private List<Vector3> cutNormals = new List<Vector3> ();
+    private List<float> inPointDistances = new List<float> ();
+    private BzSliceableObject sliceableObject;
+    private IBzMeshSlicer meshSlicer;
 
 
     //=-----------------=
@@ -56,58 +58,65 @@ public class MeshSlicer : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    void Update()
+
+    private void Start ()
+    {
+        meshSlicer = GetComponent<IBzMeshSlicer> ();
+        sliceableObject = GetComponent<BzSliceableObject> ();
+    }
+
+    void Update ()
     {
         if (testCut)
         {
-            ApplyCuts();
+            ApplyCuts ();
             testCut = false;
         }
     }
-    
+
     /// <summary>
     /// Take the objects referenced in the cutPlanes list and generate an infinite plane, according to the direction
     /// and rotation of the reference object, for use in cutting the mesh
     /// </summary>
     // TODO This function just gets the values for generating the planes, it does not actually generate them here
-    private void GenerateCutPlanes()
+    private void GenerateCutPlanes ()
     {
         // Clear the lists
         // TODO What are these lists supposed to be used for???? ~Liz
-        cutNormals.Clear();
-        inPointDistances.Clear();
+        cutNormals.Clear ();
+        inPointDistances.Clear ();
         for (int i = 0; i < cutPlanes.Count; i++)
         {
             // Get the cut direction based on the up direction of the reference object
-            cutNormals.Add(cutPlanes[i].transform.up);
-        
+            cutNormals.Add (cutPlanes[i].transform.up);
+
             // Calculate the vector from the plane's position to the object's position
             Vector3 planeToObject = gameObject.transform.position - cutPlanes[i].transform.position;
 
             // Project this vector onto the cutNormal to get the distance
-            inPointDistances.Add(Vector3.Dot(planeToObject, cutNormals[i]));
+            inPointDistances.Add (Vector3.Dot (planeToObject, cutNormals[i]));
         }
     }
 
-    
+
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void DestroyMesh()
+    private void DestroyMesh ()
     {
         // Get the original mesh from the MeshFilter component
-        var originalMesh = GetComponent<MeshFilter>().mesh;  
+        var originalMesh = GetComponent<MeshFilter> ().mesh;
         // Recalculate the mesh render bounds
         // (This tells the game how big, and where, the object is. If it's small enough or out of view the game doesn't render it)
-        originalMesh.RecalculateBounds();
+        originalMesh.RecalculateBounds ();
 
         // Create lists to store parts and sub-parts of the mesh
         // ToDo What are parts and sub-parts??? ~Liz
-        var parts = new List<PartMesh>();
-        var subParts = new List<PartMesh>();
+        var parts = new List<PartMesh> ();
+        var subParts = new List<PartMesh> ();
 
         // Create the main part of the mesh
-        var mainPart = new PartMesh()
+        var mainPart = new PartMesh ()
         {
             UV = originalMesh.uv,
             Vertices = originalMesh.vertices,
@@ -119,11 +128,11 @@ public class MeshSlicer : MonoBehaviour
         // Copy the triangles for each sub-mesh
         for (int i = 0; i < originalMesh.subMeshCount; i++)
         {
-            mainPart.Triangles[i] = originalMesh.GetTriangles(i);
+            mainPart.Triangles[i] = originalMesh.GetTriangles (i);
         }
 
         // Add the main part to the list of parts
-        parts.Add(mainPart);
+        parts.Add (mainPart);
 
         // Iterate through the number of cut planes TODO (THIS VALUE IS ONLY EVER TWO LARGE)
         for (var c = 0; c < cutPlanes.Count; c++)
@@ -135,11 +144,11 @@ public class MeshSlicer : MonoBehaviour
                 // the part is duplicating itself and running through the slice operation
                 // Need to add a exit case where if the plane is not intersected, it is ignored by the slicer
                 var bounds = parts[i].Bounds;
-                bounds.Expand(0.5f);  // Expand the bounds slightly
-                
+                bounds.Expand (0.5f);  // Expand the bounds slightly
+
                 // Use the values from GenerateCutPlanes() to actually create the planes that will be used to slice all the objects
-                var plane = new Plane(cutNormals[i], inPointDistances[i]);
-                
+                var plane = new Plane (cutNormals[i], inPointDistances[i]);
+
                 // This is a possible future optimization, but everything is buggy as hell, so we'll worry about this later ~Liz
                 /*
                 // Check if the plane intersects the bounds of the part
@@ -152,40 +161,40 @@ public class MeshSlicer : MonoBehaviour
                     subParts.Add(parts[i]);
                     continue;
                 }*/
-                
+
                 // Generate the two sub-parts if the plane intersects the bounds
-                subParts.Add(GenerateMesh(parts[i], plane, true));
-                subParts.Add(GenerateMesh(parts[i], plane, false));
+                subParts.Add (GenerateMesh (parts[i], plane, true));
+                subParts.Add (GenerateMesh (parts[i], plane, false));
             }
 
             // Replace the parts list with the new sub-parts and clear subParts list
-            parts = new List<PartMesh>(subParts);
-            subParts.Clear();
+            parts = new List<PartMesh> (subParts);
+            subParts.Clear ();
         }
 
         // Create GameObjects for each part and add explosion force
         for (var i = 0; i < parts.Count; i++)
         {
-            parts[i].MakeGameObject(this, i);
+            parts[i].MakeGameObject (this, i);
         }
 
         // Destroy the original game object
         if (destroyOriginal)
         {
-            Destroy(gameObject);
+            Destroy (gameObject);
         }
         else
         {
-            gameObject.SetActive(false);
+            gameObject.SetActive (false);
         }
     }
-    
-    private PartMesh GenerateMesh(PartMesh original, Plane plane, bool left)
+
+    private PartMesh GenerateMesh (PartMesh original, Plane plane, bool left)
     {
         // Create a new PartMesh instance to store the generated mesh
-        var partMesh = new PartMesh() { };
-        var ray1 = new Ray();
-        var ray2 = new Ray();
+        var partMesh = new PartMesh () { };
+        var ray1 = new Ray ();
+        var ray2 = new Ray ();
 
         // Loop through all triangles in the original mesh
         for (var i = 0; i < original.Triangles.Length; i++)
@@ -197,9 +206,9 @@ public class MeshSlicer : MonoBehaviour
             for (var j = 0; j < triangles.Length; j = j + 3)
             {
                 // Determine on which side of the plane each vertex of the triangle lies
-                var sideA = plane.GetSide(original.Vertices[triangles[j]]) == left;
-                var sideB = plane.GetSide(original.Vertices[triangles[j + 1]]) == left;
-                var sideC = plane.GetSide(original.Vertices[triangles[j + 2]]) == left;
+                var sideA = plane.GetSide (original.Vertices[triangles[j]]) == left;
+                var sideB = plane.GetSide (original.Vertices[triangles[j + 1]]) == left;
+                var sideC = plane.GetSide (original.Vertices[triangles[j + 2]]) == left;
 
                 // Count how many vertices are on the specified side
                 var sideCount = (sideA ? 1 : 0) +
@@ -215,7 +224,7 @@ public class MeshSlicer : MonoBehaviour
                 // If all vertices are on the specified side, add the whole triangle to the partMesh
                 if (sideCount == 3)
                 {
-                    partMesh.AddTriangle(i,
+                    partMesh.AddTriangle (i,
                                          original.Vertices[triangles[j]], original.Vertices[triangles[j + 1]], original.Vertices[triangles[j + 2]],
                                          original.Normals[triangles[j]], original.Normals[triangles[j + 1]], original.Normals[triangles[j + 2]],
                                          original.UV[triangles[j]], original.UV[triangles[j + 1]], original.UV[triangles[j + 2]]);
@@ -229,95 +238,95 @@ public class MeshSlicer : MonoBehaviour
                 ray1.origin = original.Vertices[triangles[j + singleIndex]];
                 var dir1 = original.Vertices[triangles[j + ((singleIndex + 1) % 3)]] - original.Vertices[triangles[j + singleIndex]];
                 ray1.direction = dir1;
-                plane.Raycast(ray1, out var enter1);
-                enter1 = Mathf.Round(enter1 * 1000.0f) * 0.001f; // Testing value to round enter1 to nearest tenth (0.000)
+                plane.Raycast (ray1, out var enter1);
+                enter1 = Mathf.Round (enter1 * 1000.0f) * 0.001f; // Testing value to round enter1 to nearest tenth (0.000)
                 var lerp1 = enter1 / dir1.magnitude;
 
                 ray2.origin = original.Vertices[triangles[j + singleIndex]];
                 var dir2 = original.Vertices[triangles[j + ((singleIndex + 2) % 3)]] - original.Vertices[triangles[j + singleIndex]];
                 ray2.direction = dir2;
-                plane.Raycast(ray2, out var enter2);
-                enter2 = Mathf.Round(enter2 * 1000.0f) * 0.001f; // Testing value to round enter2 to nearest tenth (0.000)
+                plane.Raycast (ray2, out var enter2);
+                enter2 = Mathf.Round (enter2 * 1000.0f) * 0.001f; // Testing value to round enter2 to nearest tenth (0.000)
                 var lerp2 = enter2 / dir2.magnitude;
 
                 // Add the intersecting edges to the partMesh
                 if (bridgeMeshGaps)
                 {
-                    AddEdge(i,
+                    AddEdge (i,
                         partMesh,
                         left ? plane.normal * -1f : plane.normal,
                         ray1.origin + ray1.direction.normalized * enter1,
                         ray2.origin + ray2.direction.normalized * enter2,
-                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
+                        Vector2.Lerp (original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                        Vector2.Lerp (original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
                 }
 
                 // If only one vertex is on the specified side, create a new triangle using the intersection points
                 if (sideCount == 1)
                 {
-                    partMesh.AddTriangle(i,
+                    partMesh.AddTriangle (i,
                                         original.Vertices[triangles[j + singleIndex]],
                                         ray1.origin + ray1.direction.normalized * enter1,
                                         ray2.origin + ray2.direction.normalized * enter2,
                                         original.Normals[triangles[j + singleIndex]],
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
+                                        Vector3.Lerp (original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                        Vector3.Lerp (original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
                                         original.UV[triangles[j + singleIndex]],
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
-                    
+                                        Vector2.Lerp (original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                        Vector2.Lerp (original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
+
                     continue;
                 }
 
                 // If two vertices are on the specified side, create two new triangles using the intersection points
                 if (sideCount == 2)
                 {
-                        partMesh.AddTriangle(i,
-                                            ray1.origin + ray1.direction.normalized * enter1,
-                                            original.Vertices[triangles[j + ((singleIndex + 1) % 3)]],
-                                            original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
-                                            Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                            original.Normals[triangles[j + ((singleIndex + 1) % 3)]],
-                                            original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
-                                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                            original.UV[triangles[j + ((singleIndex + 1) % 3)]],
-                                            original.UV[triangles[j + ((singleIndex + 2) % 3)]]);
-                        partMesh.AddTriangle(i,
-                                            ray1.origin + ray1.direction.normalized * enter1,
-                                            original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
-                                            ray2.origin + ray2.direction.normalized * enter2,
-                                            Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                            original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
-                                            Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
-                                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                            original.UV[triangles[j + ((singleIndex + 2) % 3)]],
-                                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
-                        continue;
+                    partMesh.AddTriangle (i,
+                                        ray1.origin + ray1.direction.normalized * enter1,
+                                        original.Vertices[triangles[j + ((singleIndex + 1) % 3)]],
+                                        original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
+                                        Vector3.Lerp (original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                        original.Normals[triangles[j + ((singleIndex + 1) % 3)]],
+                                        original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
+                                        Vector2.Lerp (original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                        original.UV[triangles[j + ((singleIndex + 1) % 3)]],
+                                        original.UV[triangles[j + ((singleIndex + 2) % 3)]]);
+                    partMesh.AddTriangle (i,
+                                        ray1.origin + ray1.direction.normalized * enter1,
+                                        original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
+                                        ray2.origin + ray2.direction.normalized * enter2,
+                                        Vector3.Lerp (original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                        original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
+                                        Vector3.Lerp (original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
+                                        Vector2.Lerp (original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                                        original.UV[triangles[j + ((singleIndex + 2) % 3)]],
+                                        Vector2.Lerp (original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
+                    continue;
                 }
             }
         }
 
         // Finalize the mesh arrays
-        partMesh.FillArrays();
+        partMesh.FillArrays ();
 
         return partMesh;
     }
-    
-    private void AddEdge(int subMesh, PartMesh partMesh, Vector3 normal, Vector3 vertex1, Vector3 vertex2, Vector2 uv1, Vector2 uv2)
+
+    private void AddEdge (int subMesh, PartMesh partMesh, Vector3 normal, Vector3 vertex1, Vector3 vertex2, Vector2 uv1, Vector2 uv2)
     {
         // Check if this is the first edge to be added
         if (edgeSet)
         {
             // If it's not the first edge, create a plane using three points
-            edgePlane.Set3Points(edgeVertex, vertex1, vertex2);
+            edgePlane.Set3Points (edgeVertex, vertex1, vertex2);
 
             // Debug information for the plane and vertices
 
             // Determine the correct orientation of the vertices based on the side of the plane
-            bool side1 = edgePlane.GetSide(edgeVertex + normal);
+            bool side1 = edgePlane.GetSide (edgeVertex + normal);
 
 
-            partMesh.AddTriangle(subMesh, edgeVertex, side1 ? vertex1 : vertex2, side1 ? vertex2 : vertex1,
+            partMesh.AddTriangle (subMesh, edgeVertex, side1 ? vertex1 : vertex2, side1 ? vertex2 : vertex1,
                 normal, // Normal for all vertices is the same
                 normal,
                 normal,
@@ -333,25 +342,73 @@ public class MeshSlicer : MonoBehaviour
             edgeUV = uv1;
         }
     }
-    
-    
+
+
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void ApplyCuts()
+    public async void ApplyCuts ()
     {
-        GenerateCutPlanes();
-        DestroyMesh();
+        //Slice the object
+        var result = await sliceableObject.SliceAsync (Item_Geodesic_Utility_GeoFolder.plane1, meshSlicer);
+        if (result.sliced)
+        {
+            foreach (var obj in result.resultObjects)
+            {
+                if (obj.side)
+                {
+                    //Slice the new object on the positive side of the cut, this time with the other plane
+                    IBzMeshSlicer objSlicer = obj.gameObject.GetComponent<IBzMeshSlicer> ();
+                    var result2 = await objSlicer.SliceAsync (Item_Geodesic_Utility_GeoFolder.plane2);
+                    if (result2.sliced)
+                    {
+                        //add the positive sides to the null list
+                        foreach (var obj2 in result2.resultObjects)
+                        {
+                            if (obj2.side)
+                            {
+                                Item_Geodesic_Utility_GeoFolder.nullSlices.Add (obj2.gameObject);
+                            }
+                            else
+                            {
+                                obj2.gameObject.transform.SetParent (Item_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //if slice 2 failed, we still add this object
+                        Item_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
+                    }
+                }
+            }
+        }
+
+        else //if we didn't slice, we still try slicing with plane2
+        {
+            var result2 = await sliceableObject.SliceAsync (Item_Geodesic_Utility_GeoFolder.plane2, meshSlicer);
+            if (result2.sliced)
+            {
+                foreach (var obj in result2.resultObjects)
+                {
+                    if (obj.side)
+                    {
+                        Item_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
+                    }
+                }
+            }
+        }
+
     }
 }
 
 public class PartMesh
 {
     // Lists to store the mesh data
-    private List<Vector3> _Vertices = new List<Vector3>();
-    private List<Vector3> _Normals = new List<Vector3>();
-    private List<List<int>> _Triangles = new List<List<int>>();
-    private List<Vector2> _UVs = new List<Vector2>();
+    private List<Vector3> _Vertices = new List<Vector3> ();
+    private List<Vector3> _Normals = new List<Vector3> ();
+    private List<List<int>> _Triangles = new List<List<int>> ();
+    private List<Vector2> _UVs = new List<Vector2> ();
 
     // Arrays to store the finalized mesh data
     public Vector3[] Vertices;
@@ -361,93 +418,93 @@ public class PartMesh
 
     // GameObject to represent this mesh in the scene
     public GameObject _GameObject;
-    
+
     // Bounds to keep track of the mesh's boundaries
-    public Bounds Bounds = new Bounds();
+    public Bounds Bounds = new Bounds ();
 
     // Default constructor
-    public PartMesh() {}
+    public PartMesh () { }
 
     // Method to add a triangle to the mesh
-    public void AddTriangle(int submesh, Vector3 vert1, Vector3 vert2, Vector3 vert3, Vector3 normal1, Vector3 normal2, Vector3 normal3, Vector2 uv1, Vector2 uv2, Vector2 uv3)
+    public void AddTriangle (int submesh, Vector3 vert1, Vector3 vert2, Vector3 vert3, Vector3 normal1, Vector3 normal2, Vector3 normal3, Vector2 uv1, Vector2 uv2, Vector2 uv3)
     {
         // Ensure the submesh list is large enough
         if (_Triangles.Count - 1 < submesh)
-            _Triangles.Add(new List<int>());
+            _Triangles.Add (new List<int> ());
 
         // Add vertices and their indices to the lists
-        _Triangles[submesh].Add(_Vertices.Count);
-        _Vertices.Add(vert1);
-        _Triangles[submesh].Add(_Vertices.Count);
-        _Vertices.Add(vert2);
-        _Triangles[submesh].Add(_Vertices.Count);
-        _Vertices.Add(vert3);
-        _Normals.Add(normal1);
-        _Normals.Add(normal2);
-        _Normals.Add(normal3);
-        _UVs.Add(uv1);
-        _UVs.Add(uv2);
-        _UVs.Add(uv3);
+        _Triangles[submesh].Add (_Vertices.Count);
+        _Vertices.Add (vert1);
+        _Triangles[submesh].Add (_Vertices.Count);
+        _Vertices.Add (vert2);
+        _Triangles[submesh].Add (_Vertices.Count);
+        _Vertices.Add (vert3);
+        _Normals.Add (normal1);
+        _Normals.Add (normal2);
+        _Normals.Add (normal3);
+        _UVs.Add (uv1);
+        _UVs.Add (uv2);
+        _UVs.Add (uv3);
 
         // Update the bounds of the mesh
-        Bounds.min = Vector3.Min(Bounds.min, vert1);
-        Bounds.min = Vector3.Min(Bounds.min, vert2);
-        Bounds.min = Vector3.Min(Bounds.min, vert3);
-        Bounds.max = Vector3.Max(Bounds.max, vert1);
-        Bounds.max = Vector3.Max(Bounds.max, vert2);
-        Bounds.max = Vector3.Max(Bounds.max, vert3);
+        Bounds.min = Vector3.Min (Bounds.min, vert1);
+        Bounds.min = Vector3.Min (Bounds.min, vert2);
+        Bounds.min = Vector3.Min (Bounds.min, vert3);
+        Bounds.max = Vector3.Max (Bounds.max, vert1);
+        Bounds.max = Vector3.Max (Bounds.max, vert2);
+        Bounds.max = Vector3.Max (Bounds.max, vert3);
     }
 
     // Method to fill the arrays from the lists
-    public void FillArrays()
+    public void FillArrays ()
     {
-        Vertices = _Vertices.ToArray();
-        Normals = _Normals.ToArray();
-        UV = _UVs.ToArray();
+        Vertices = _Vertices.ToArray ();
+        Normals = _Normals.ToArray ();
+        UV = _UVs.ToArray ();
         Triangles = new int[_Triangles.Count][];
         for (var i = 0; i < _Triangles.Count; i++)
-            Triangles[i] = _Triangles[i].ToArray();
+            Triangles[i] = _Triangles[i].ToArray ();
     }
 
     // Method to create a GameObject from the mesh data
-    public void MakeGameObject(MeshSlicer original, int _segmentId)
+    public void MakeGameObject (MeshSlicer original, int _segmentId)
     {
         // Create a new GameObject and set its transform to match the original
-        _GameObject = new GameObject(original.name);
+        _GameObject = new GameObject (original.name);
         _GameObject.transform.position = original.transform.position;
         _GameObject.transform.rotation = original.transform.rotation;
         _GameObject.transform.localScale = original.transform.localScale;
 
         // Create a new Mesh and assign the vertex, normal, and UV data
-        var mesh = new Mesh();
-        mesh.name = original.GetComponent<MeshFilter>().mesh.name;
+        var mesh = new Mesh ();
+        mesh.name = original.GetComponent<MeshFilter> ().mesh.name;
 
         mesh.vertices = Vertices;
         mesh.normals = Normals;
         mesh.uv = UV;
         for (var i = 0; i < Triangles.Length; i++)
-            mesh.SetTriangles(Triangles[i], i, true);
+            mesh.SetTriangles (Triangles[i], i, true);
         Bounds = mesh.bounds;
 
         // Add a MeshRenderer component and assign the materials from the original
-        var renderer = _GameObject.AddComponent<MeshRenderer>();
-        renderer.materials = original.GetComponent<MeshRenderer>().materials;
+        var renderer = _GameObject.AddComponent<MeshRenderer> ();
+        renderer.materials = original.GetComponent<MeshRenderer> ().materials;
 
         // Add a MeshFilter component and assign the generated mesh
-        var filter = _GameObject.AddComponent<MeshFilter>();
+        var filter = _GameObject.AddComponent<MeshFilter> ();
         filter.mesh = mesh;
 
         // Add a MeshCollider component and set it to whatever convex state we specified, because objects can't exist inside convex spaces
-        var collider = _GameObject.AddComponent<MeshCollider>();
+        var collider = _GameObject.AddComponent<MeshCollider> ();
         collider.convex = original.isConvex;
 
         // Add a MeshDestroy component and copy the settings from the original
-        var meshDestroy = _GameObject.AddComponent<MeshSlicer>();
+        var meshDestroy = _GameObject.AddComponent<MeshSlicer> ();
         meshDestroy.isCascadeSegment = true;
         meshDestroy.segmentId = _segmentId;
         if (meshDestroy.segmentId == 3)
         {
-            meshDestroy.gameObject.SetActive(false);
+            meshDestroy.gameObject.SetActive (false);
         }
         meshDestroy.isReflective = original.isReflective;
     }
