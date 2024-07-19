@@ -17,6 +17,8 @@ public class Volume_MusicChange : Volume
     public AudioClip musicTrack;
     public float transitionTime=1;
     [SerializeField] private bool pawnActivates=true;
+    [Tooltip("Requires that pawnActivates is set to true")]
+    [SerializeField] private bool onlyPlayerControllerPawns=true;
     [SerializeField] private bool physPropActivates;
 
 
@@ -39,8 +41,11 @@ public class Volume_MusicChange : Volume
         base.OnTriggerEnter2D(_other); // Call the base class method
         if (_other.CompareTag("Pawn") && pawnActivates)
         {
-            if (!musicManager) musicManager = FindObjectOfType<MusicManager>();
-            musicManager.CrossfadeTracks(transitionTime, musicTrack);
+            if (onlyPlayerControllerPawns && GetPlayerInTrigger() || onlyPlayerControllerPawns == false)
+            {
+                if (!musicManager) musicManager = FindObjectOfType<MusicManager>();
+                musicManager.CrossfadeTracks(transitionTime, musicTrack);
+            }
         }
         if (_other.CompareTag("PhysProp") && physPropActivates)
         {
@@ -54,8 +59,11 @@ public class Volume_MusicChange : Volume
         base.OnTriggerEnter(_other); // Call the base class method
         if (_other.CompareTag("Pawn") && pawnActivates)
         {
-            if (!musicManager) musicManager = FindObjectOfType<MusicManager>();
-            musicManager.CrossfadeTracks(transitionTime, musicTrack);
+            if (onlyPlayerControllerPawns && GetPlayerInTrigger() || onlyPlayerControllerPawns == false)
+            {
+                if (!musicManager) musicManager = FindObjectOfType<MusicManager>();
+                musicManager.CrossfadeTracks(transitionTime, musicTrack);
+            }
         }
         if (_other.CompareTag("PhysProp") && physPropActivates)
         {
