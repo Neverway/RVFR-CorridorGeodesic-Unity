@@ -1,7 +1,7 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Connorses =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Shoots a raycast and scales Laser Wall based on the distance of the raycast.
+// Notes: LayerMask on the prefab is configured to hit certain layers, ignoring the player, projectiles and other laserwalls.
 //
 //=============================================================================
 
@@ -11,10 +11,6 @@ using UnityEngine;
 
 public class LaserWallShooter : MonoBehaviour
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
 
     //=-----------------=
     // Private Variables
@@ -26,30 +22,12 @@ public class LaserWallShooter : MonoBehaviour
     private Vector3 extents = new Vector3 (0.05f, 1f, 0.05f);
 
     //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-    
-    }
 
     private void Update()
     {
         Physics.Raycast (transform.position, transform.forward, out hit, 100f, layerMask);
         laserWall.transform.localScale = new Vector3 (1, .05f, hit.distance);
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }
