@@ -40,7 +40,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private float projectileForce;
     [SerializeField] private AnimationCurve riftAnimationCurve;
     public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
-    public GameObject deployedRift;
+    public static GameObject deployedRift;
     private MeshSlicer[] meshSlicers;
 
     //Statics for MeshSlicer to use
@@ -63,7 +63,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //Rift collapse lerp 
     private float riftTimer = 0f;
     private float maxRiftTimer = 2f;
-    private float riftWidth;
+    public static float riftWidth;
     private Vector3 plane2StartPos;
 
     private bool isCutPreviewActive = false;
@@ -205,16 +205,24 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     private void RecallInfinityMarkers ()
     {
-        //todo: rewrite this function to fit the new setup
-
-        isCutPreviewActive = false;
-        isCollapseStarted = false;
-
         var projectiles = FindObjectsOfType<VacuumProjectile> ();
         foreach (var projectile in projectiles)
         {
             Destroy (projectile.gameObject);
         }
+
+        cutPreviews[0].transform.SetParent (null);
+        cutPreviews[1].transform.SetParent (null);
+        cutPreviews[0].SetActive (false);
+        cutPreviews[1].SetActive (false);
+
+        if (isCollapseStarted == false)
+        {
+            return;
+        }
+
+        isCutPreviewActive = false;
+        isCollapseStarted = false;
 
         foreach (ActorData a in actorDatas)
         {
@@ -224,10 +232,6 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
         }
 
-        if (deployedRift)
-        {
-            StartCoroutine(DestroyWorker (deployedRift));
-        }
         currentAmmo = maxAmmo;
         deployedInfinityMarkers.Clear ();
 
@@ -241,15 +245,18 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             g.gameObject.SetActive (true);
         }
         backupMeshes.Clear ();
+
         Destroy (plane2Meshes);
-        cutPreviews[1]=Instantiate (cutPreviewPrefab);
-        cutPreviews[1].SetActive (false);
+        if (deployedRift)
+        {
+            StartCoroutine (DestroyWorker (deployedRift));
+        }
     }
 
     private IEnumerator DestroyWorker (GameObject go)
     {
         yield return new WaitForEndOfFrame ();
-        //Destroy (go);
+        Destroy (go);
     }
 
     private void DeployInfinityMarker ()
@@ -345,7 +352,9 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         foreach (var actor in nullSpaceObjects)
         {
+            actor.homePosition = actor.transform.position;
             actor.transform.SetParent (deployedRift.transform);
+            actor.nullSpace = true;
         }
         cutPreviews[1].transform.SetParent (plane2Meshes.transform);
     }

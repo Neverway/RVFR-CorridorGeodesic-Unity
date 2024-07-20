@@ -23,7 +23,7 @@ public class ActorData : MonoBehaviour
     public string actorId;
     public List<ScriptData> scriptDataList;
     [HideInInspector] public List<VariableData> storedVariableData; // The variable's name, type, and value that we are storing in the actor data
-
+    public bool nullSpace = false;
 
     //=-----------------=
     // Private Variables
@@ -109,8 +109,16 @@ public class ActorData : MonoBehaviour
     public void GoHome ()
     {
         transform.SetParent(homeParent);
-        transform.position = homePosition;
         transform.localScale = homeScale;
+        if (nullSpace)
+        {
+            transform.position = homePosition;
+            return;
+        }
+        if (Item_Geodesic_Utility_GeoFolder.plane1.GetDistanceToPoint (transform.position) > 0)
+        {
+            transform.position += Item_Geodesic_Utility_GeoFolder.deployedRift.transform.forward * Item_Geodesic_Utility_GeoFolder.riftWidth;
+        }
     }
 
     /// <summary>

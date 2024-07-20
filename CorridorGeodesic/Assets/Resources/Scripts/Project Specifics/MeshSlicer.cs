@@ -11,6 +11,7 @@
 
 using BzKovSoft.ObjectSlicer;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [RequireComponent (typeof (BzSliceableObject))]
@@ -104,10 +105,13 @@ public class MeshSlicer : MonoBehaviour
         backup.gameObject.SetActive (false);
         Item_Geodesic_Utility_GeoFolder.backupMeshes.Add (backup);
 
+        bool sliced = false;
+
         //Slice the object
         var result = await sliceableObject.SliceAsync (Item_Geodesic_Utility_GeoFolder.plane1, meshSlicer);
         if (result.sliced)
         {
+            sliced = true;
             foreach (var obj in result.resultObjects)
             {
                 Item_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
@@ -118,6 +122,7 @@ public class MeshSlicer : MonoBehaviour
                     var result2 = await objSlicer.SliceAsync (Item_Geodesic_Utility_GeoFolder.plane2);
                     if (result2.sliced)
                     {
+                        sliced = true;
                         //add the positive sides to the null list
                         foreach (var obj2 in result2.resultObjects)
                         {
@@ -146,6 +151,7 @@ public class MeshSlicer : MonoBehaviour
             var result2 = await sliceableObject.SliceAsync (Item_Geodesic_Utility_GeoFolder.plane2, meshSlicer);
             if (result2.sliced)
             {
+                sliced = true;
                 foreach (var obj in result2.resultObjects)
                 {
                     Item_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
@@ -160,6 +166,38 @@ public class MeshSlicer : MonoBehaviour
                 }
             }
         }
+
+
+        if (!sliced)
+        {
+            //If all the slices miss, we have to figure out where this mesh is.
+
+            MeshFilter meshFilter = GetComponent<MeshFilter> ();
+            if (meshFilter != null)
+            {
+                var vert = meshFilter.mesh.vertices[0];
+                Vector3 testPoint = new Vector3 (vert.x, vert.y, vert.z);
+                Vector3 worldPoint = transform.TransformPoint(testPoint);
+                if (Item_Geodesic_Utility_GeoFolder.plane1.GetDistanceToPoint (worldPoint) < 0)
+                {
+                    return;
+                } else
+                {
+                    if (Item_Geodesic_Utility_GeoFolder.plane2.GetDistanceToPoint (worldPoint) < 0)
+                    {
+                        transform.SetParent (Item_Geodesic_Utility_GeoFolder.plane2Meshes.transform);
+                        return;
+                    }
+                    else
+                    {
+                        Item_Geodesic_Utility_GeoFolder.nullSlices.Add (gameObject);
+                        return;
+                    }
+                }
+            }
+        }
+
+
     }
 
     public void OnReset ()
