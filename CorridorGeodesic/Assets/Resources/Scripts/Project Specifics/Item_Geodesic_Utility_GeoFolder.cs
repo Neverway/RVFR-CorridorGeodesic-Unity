@@ -110,7 +110,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 1 - lerpAmount
                 ) ;
 
-            Vector3 targetOffset = (deployedRift.transform.forward * deployedRift.GetComponent<Rift> ().distanceToMarker);
+            Vector3 targetOffset = (deployedRift.transform.forward * deployedRift.GetComponent<Rift> ().riftWidth);
 
             plane2Meshes.transform.position = Vector3.Lerp (plane2StartPos, plane2StartPos + targetOffset, lerpAmount);
 
@@ -121,7 +121,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
             if (riftTimer > maxRiftTimer)
             {
-                Destroy (deployedRift);
+                deployedRift.SetActive (false);
             }
         }
     }
@@ -161,23 +161,22 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             if (!deployedRift)
             {
-                Vector3 midPoint = (deployedInfinityMarkers[0].transform.position + deployedInfinityMarkers[1].transform.position) * 0.5f;
-                deployedRift = Instantiate(riftObject, midPoint, new Quaternion());
-                deployedRift.transform.LookAt(deployedInfinityMarkers[0].transform);
-                if (allowNoLinearSlicing) deployedRift.transform.rotation = new Quaternion(deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
-                else deployedRift.transform.rotation = new Quaternion(0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
-                deployedRift.GetComponent<Rift>().distanceToMarker = Vector3.Distance(deployedInfinityMarkers[0].transform.position, deployedInfinityMarkers[1].transform.position);
-
                 //riftNormal should point from marker 0 to marker 1
                 Vector3 riftNormal = (deployedInfinityMarkers[1].transform.position - deployedInfinityMarkers[0].transform.position).normalized;
 
                 Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * .25f;
                 Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * .25f;
 
+                deployedRift = Instantiate(riftObject);
+                deployedRift.transform.position = pos1;
+                deployedRift.transform.LookAt(deployedInfinityMarkers[0].transform);
+                if (allowNoLinearSlicing) deployedRift.transform.rotation = new Quaternion(deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
+                else deployedRift.transform.rotation = new Quaternion(0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
+                
+                deployedRift.GetComponent<Rift> ().riftWidth = Vector3.Distance (pos1, pos2);
+
                 plane1 = new Plane (riftNormal, pos1);
                 plane2 = new Plane (-riftNormal, pos2);
-
-                deployedRift.transform.position = pos1;
 
                 nullSlices = new List<GameObject> ();
                 plane2Meshes = Instantiate (new GameObject());
