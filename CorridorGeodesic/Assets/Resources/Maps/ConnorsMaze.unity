@@ -170,6 +170,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []
@@ -591,6 +593,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []
@@ -772,6 +776,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []
@@ -1131,6 +1137,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []
@@ -1310,6 +1318,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []
@@ -1463,6 +1473,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []
@@ -1675,6 +1687,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []
@@ -2174,70 +2188,6 @@ MonoBehaviour:
   asynchronously: 0
   waitIfBusy: 0
   objectGrouping: 0
---- !u!1 &1702874188 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -208595431880416365, guid: e5377fcbd2ba88a4ab95ce2e5d01dc90,
-    type: 3}
-  m_PrefabInstance: {fileID: 2070407985}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &1702874192
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1702874188}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3329902420748629119, guid: e5377fcbd2ba88a4ab95ce2e5d01dc90, type: 3}
---- !u!114 &1702874193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1702874188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc47032d0314a378ca9a30e472e9fe41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cutPlanes: []
-  isCascadeSegment: 0
-  segmentId: 0
-  isConvex: 1
-  bridgeMeshGaps: 1
-  testCut: 0
-  isReflective: 0
---- !u!114 &1702874197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1702874188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a18ef726ebacf474d95108bf4d4980b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultSliceMaterial: {fileID: -876546973899608171, guid: 9fa47e7c06cd6df44802a4c3eea3b392,
-    type: 3}
-  asynchronously: 0
-  waitIfBusy: 0
-  objectGrouping: 0
 --- !u!1001 &1759177570
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2449,6 +2399,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []
@@ -2673,7 +2625,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 4fa0a80a54f62cbc18c05224ccf60099, type: 2}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -208595431880416365, guid: e5377fcbd2ba88a4ab95ce2e5d01dc90, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: e5377fcbd2ba88a4ab95ce2e5d01dc90,
@@ -2760,18 +2713,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 479027214}
-    - targetCorrespondingSourceObject: {fileID: -208595431880416365, guid: e5377fcbd2ba88a4ab95ce2e5d01dc90,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1702874193}
-    - targetCorrespondingSourceObject: {fileID: -208595431880416365, guid: e5377fcbd2ba88a4ab95ce2e5d01dc90,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1702874192}
-    - targetCorrespondingSourceObject: {fileID: -208595431880416365, guid: e5377fcbd2ba88a4ab95ce2e5d01dc90,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1702874197}
     - targetCorrespondingSourceObject: {fileID: 281855664364225751, guid: e5377fcbd2ba88a4ab95ce2e5d01dc90,
         type: 3}
       insertIndex: -1
@@ -2855,6 +2796,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []
@@ -3030,6 +2973,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
   actorId: 
   scriptDataList: []
   storedVariableData: []

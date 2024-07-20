@@ -18,6 +18,8 @@ public class ActorData : MonoBehaviour
     // Public Variables
     //=-----------------=
     public Vector3 homePosition;
+    public Vector3 homeScale;
+    public Transform homeParent;
     public string actorId;
     public List<ScriptData> scriptDataList;
     [HideInInspector] public List<VariableData> storedVariableData; // The variable's name, type, and value that we are storing in the actor data
@@ -37,6 +39,13 @@ public class ActorData : MonoBehaviour
     // Mono Functions
     //=-----------------=
 
+    private void Start ()
+    {
+        homePosition = transform.position;
+        homeScale = transform.localScale;
+        homeParent = transform.parent;
+        Item_Geodesic_Utility_GeoFolder.actorDatas.Add(this);
+    }
 
     //=-----------------=
     // Internal Functions
@@ -96,6 +105,14 @@ public class ActorData : MonoBehaviour
     {
         
     }
+
+    public void GoHome ()
+    {
+        transform.SetParent(homeParent);
+        transform.position = homePosition;
+        transform.localScale = homeScale;
+    }
+
     /// <summary>
     /// Looks at the variables we can see in our game objects and creates a list of information about them.
     /// </summary>
