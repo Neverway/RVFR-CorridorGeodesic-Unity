@@ -147,6 +147,10 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             if (riftTimer > maxRiftTimer)
             {
                 deployedRift.SetActive (false);
+                foreach (var plane in cutPreviews)
+                {
+                    plane.SetActive(false);
+                }
             }
         }
     }
