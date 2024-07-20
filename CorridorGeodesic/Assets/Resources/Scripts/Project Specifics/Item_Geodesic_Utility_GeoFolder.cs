@@ -210,6 +210,8 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             Destroy (projectile.gameObject);
         }
+        deployedInfinityMarkers.Clear ();
+        currentAmmo = 2;        
 
         cutPreviews[0].transform.SetParent (null);
         cutPreviews[1].transform.SetParent (null);
