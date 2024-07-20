@@ -5,7 +5,6 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +40,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private float projectileForce;
     [SerializeField] private AnimationCurve riftAnimationCurve;
     public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
-    public GameObject deployedRift;
+    public static GameObject deployedRift;
     private MeshSlicer[] meshSlicers;
 
     //Statics for MeshSlicer to use
@@ -49,17 +48,23 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public static Plane plane2;
     public static List<GameObject> nullSlices;
     public static GameObject plane2Meshes;
-    private Vector3 plane2StartPos;
+    public static List<MeshSlicer> backupMeshes = new List<MeshSlicer> ();
+    public static List<GameObject> slicedMeshes = new List<GameObject> ();
+    public static List<ActorData> actorDatas = new List<ActorData> ();
+
 
     //Object groups for moving slice
     private List<ActorData> plane1Objects;
     private List<ActorData> plane2Objects;
     private List<ActorData> nullSpaceObjects;
 
+    //Object groups for resetting
+
     //Rift collapse lerp 
     private float riftTimer = 0f;
     private float maxRiftTimer = 2f;
-    private float riftWidth;
+    public static float riftWidth;
+    private Vector3 plane2StartPos;
 
     private bool isCutPreviewActive = false;
     private bool isCollapseStarted = false;
@@ -106,7 +111,6 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public override void UseSpecial ()
     {
         RecallInfinityMarkers ();
-        UndoGeometricCuts ();
         collapsedDistance = 0;
         collapsedDirection = new Vector3 ();
     }
@@ -115,7 +119,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         AimTowardsCenterOfView ();
 
-        if (!isCutPreviewActive )
+        if (!isCutPreviewActive)
         {
             if (AreMarkersPinned ())
             {
@@ -147,6 +151,10 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             if (riftTimer > maxRiftTimer)
             {
                 deployedRift.SetActive (false);
+                foreach (var plane in cutPreviews)
+                {
+                    plane.SetActive (false);
+                }
             }
         }
     }
@@ -156,7 +164,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         //riftNormal should point from marker 0 to marker 1
 
-        deployedRift = Instantiate (new GameObject());
+        deployedRift = Instantiate (new GameObject ());
         deployedRift.name = "Rift";
         deployedRift.transform.position = deployedInfinityMarkers[0].transform.position;
         deployedRift.transform.LookAt (deployedInfinityMarkers[1].transform);
@@ -202,14 +210,57 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             Destroy (projectile.gameObject);
         }
+        deployedInfinityMarkers.Clear ();
+        currentAmmo = 2;        
 
-        if (deployedRift)
+        cutPreviews[0].transform.SetParent (null);
+        cutPreviews[1].transform.SetParent (null);
+        cutPreviews[0].SetActive (false);
+        cutPreviews[1].SetActive (false);
+
+        if (isCollapseStarted == false)
         {
-            Destroy (deployedRift);
+            return;
         }
+
+        isCutPreviewActive = false;
+        isCollapseStarted = false;
+
+        foreach (ActorData a in actorDatas)
+        {
+            if (a)
+            {
+                a.GoHome ();
+            }
+        }
+
         currentAmmo = maxAmmo;
         deployedInfinityMarkers.Clear ();
+
+        foreach (var g in slicedMeshes)
+        {
+            if (g) Destroy (g);
+        }
+        slicedMeshes.Clear ();
+        foreach (var g in backupMeshes)
+        {
+            g.gameObject.SetActive (true);
+        }
+        backupMeshes.Clear ();
+
+        Destroy (plane2Meshes);
+        if (deployedRift)
+        {
+            StartCoroutine (DestroyWorker (deployedRift));
+        }
     }
+
+    private IEnumerator DestroyWorker (GameObject go)
+    {
+        yield return new WaitForEndOfFrame ();
+        Destroy (go);
+    }
+
     private void DeployInfinityMarker ()
     {
         if (currentAmmo <= 0) return;
@@ -243,10 +294,12 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             return;
         }
-        if (AreMarkersPinned())
+        if (AreMarkersPinned ())
         {
             if (deployedRift)
             {
+                Debug.Log ("CONVERGING");
+                meshSlicers = FindObjectsOfType<MeshSlicer> ();
                 nullSlices = new List<GameObject> ();
                 plane2Meshes = Instantiate (new GameObject ());
                 plane2Meshes.name = "plane2Meshes";
@@ -262,26 +315,9 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 }
                 ParentCollapseObjects ();
                 isCollapseStarted = true;
+                riftTimer = 0f;
             }
         }
-    }
-
-    private void UndoGeometricCuts ()
-    {
-        // Find all slice-able meshes
-        foreach (var sliceableMesh in FindObjectsByType<MeshSlicer> (FindObjectsInactive.Include, FindObjectsSortMode.None))
-        {
-            if (sliceableMesh.isCascadeSegment)
-            {
-                Destroy (sliceableMesh.gameObject);
-            }
-            else
-            {
-                sliceableMesh.gameObject.SetActive (true);
-            }
-        }
-
-        ParentCollapseObjects ();
     }
 
     private void ParentCollapseObjects ()
@@ -318,7 +354,9 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         foreach (var actor in nullSpaceObjects)
         {
+            actor.homePosition = actor.transform.position;
             actor.transform.SetParent (deployedRift.transform);
+            actor.nullSpace = true;
         }
         cutPreviews[1].transform.SetParent (plane2Meshes.transform);
     }
