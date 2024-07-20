@@ -18,12 +18,12 @@ public class VacuumProjectile : MonoBehaviour
     [SerializeField] private float castRadius;
     [SerializeField] private Vector3 castOffset;
     [SerializeField] private float pinOffset;
+    [HideInInspector] public bool pinned;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private bool pinned;
 
 
     //=-----------------=
@@ -48,13 +48,13 @@ public class VacuumProjectile : MonoBehaviour
     private void Update()
     {
         if (pinned) return;
-        IsPinned();
+        CollisionTest();
     }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    public void IsPinned()
+    private void CollisionTest()
     {
         if (Physics.SphereCast(transform.position+castOffset, castRadius, transform.forward, out faceHit, layerMask))
         {

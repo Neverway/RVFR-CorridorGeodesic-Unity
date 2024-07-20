@@ -17,6 +17,7 @@ public class ActorData : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public Vector3 homePosition;
     public string actorId;
     public List<ScriptData> scriptDataList;
     [HideInInspector] public List<VariableData> storedVariableData; // The variable's name, type, and value that we are storing in the actor data

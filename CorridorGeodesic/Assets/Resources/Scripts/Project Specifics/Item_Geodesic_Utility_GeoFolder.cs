@@ -15,11 +15,11 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public int maxAmmo=2;
-    public int currentAmmo=2;
+    public int maxAmmo = 2;
+    public int currentAmmo = 2;
     public bool allowNoLinearSlicing;
-    public float convergenceSpeed=0.25f;
-    
+    public float convergenceSpeed = 0.25f;
+
 
     //=-----------------=
     // Private Variables
@@ -36,208 +36,299 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private GameObject debugObject;
     [SerializeField] private GameObject vacuumProjectile;
     [SerializeField] private GameObject riftObject;
+    [SerializeField] private GameObject cutPreviewPrefab;
+    private GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
-    public List<GameObject> deployedInfinityMarkers = new List<GameObject>();
+    [SerializeField] private AnimationCurve riftAnimationCurve;
+    public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
     public GameObject deployedRift;
+    private MeshSlicer[] meshSlicers;
 
+    //Statics for MeshSlicer to use
+    public static Plane plane1;
+    public static Plane plane2;
+    public static List<GameObject> nullSlices;
+    public static GameObject plane2Meshes;
+    private Vector3 plane2StartPos;
+
+    //Object groups for moving slice
+    private List<ActorData> plane1Objects;
+    private List<ActorData> plane2Objects;
+    private List<ActorData> nullSpaceObjects;
+
+    //Rift collapse lerp 
+    private float riftTimer = 0f;
+    private float maxRiftTimer = 2f;
+    private float riftWidth;
+
+    private bool isCutPreviewActive = false;
+    private bool isCollapseStarted = false;
+
+    enum SliceSpace
+    {
+        Plane1,
+        Plane2,
+        Null
+    }
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    public override void UsePrimary()
+
+    private void Start ()
     {
-        DeployInfinityMarker();
+        meshSlicers = FindObjectsByType<MeshSlicer> (FindObjectsSortMode.None);
+        cutPreviews = new GameObject[2];
+        for (int i = 0; i < cutPreviews.Length; i++)
+        {
+            cutPreviews[i] = Instantiate (cutPreviewPrefab);
+            cutPreviews[i].SetActive (false);
+        }
     }
-    
-    public override void UseSecondary()
+
+    public override void UsePrimary ()
     {
-        ConvergeInfinityMarkers();
+        DeployInfinityMarker ();
     }
-    
-    public override void ReleaseSecondary()
+
+    public override void UseSecondary ()
+    {
+        ConvergeInfinityMarkers ();
+    }
+
+    public override void ReleaseSecondary ()
     {
         //StopCoroutine(PeriodiclyFoldGeometry());
         //UndoGeometricCuts();
         //ApplyGeometricCuts();
     }
-    
-    public override void UseSpecial()
+
+    public override void UseSpecial ()
     {
-        RecallInfinityMarkers();
-        UndoGeometricCuts();
+        RecallInfinityMarkers ();
+        UndoGeometricCuts ();
         collapsedDistance = 0;
-        collapsedDirection = new Vector3();
+        collapsedDirection = new Vector3 ();
     }
 
-    public void Update()
+    public void Update ()
     {
-        AimTowardsCenterOfView();
+        AimTowardsCenterOfView ();
+
+        if (!isCutPreviewActive )
+        {
+            if (AreMarkersPinned ())
+            {
+                DeployRiftAndPreview ();
+            }
+        }
+
+        if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
+        {
+            riftTimer += Time.deltaTime;
+            float p = Mathf.Clamp ((riftTimer / maxRiftTimer), 0, 1);
+            float lerpAmount = riftAnimationCurve.Evaluate (p);
+
+            deployedRift.transform.localScale = new Vector3 (
+                1,
+                1,
+                1 - lerpAmount
+                );
+
+            Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
+
+            plane2Meshes.transform.position = Vector3.Lerp (plane2StartPos, plane2StartPos + targetOffset, lerpAmount);
+
+            foreach (ActorData obj in plane2Objects)
+            {
+                obj.transform.position = Vector3.Lerp (obj.homePosition, obj.homePosition + targetOffset, lerpAmount);
+            }
+
+            if (riftTimer > maxRiftTimer)
+            {
+                deployedRift.SetActive (false);
+            }
+        }
+    }
+
+    private void DeployRiftAndPreview ()
+    {
+
+        //riftNormal should point from marker 0 to marker 1
+
+        deployedRift = Instantiate (new GameObject());
+        deployedRift.name = "Rift";
+        deployedRift.transform.position = deployedInfinityMarkers[0].transform.position;
+        deployedRift.transform.LookAt (deployedInfinityMarkers[1].transform);
+        if (allowNoLinearSlicing) deployedRift.transform.rotation = new Quaternion (deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
+        else deployedRift.transform.rotation = new Quaternion (0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
+
+        Vector3 riftNormal = deployedRift.transform.forward;
+
+        Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * .25f;
+        Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * .25f;
+
+        if (allowNoLinearSlicing)
+        {
+            riftWidth = Vector3.Distance (pos1, pos2);
+        }
+        else
+        {
+            riftWidth = Vector3.Distance (new Vector3 (pos1.x, 0, pos1.z), new Vector3 (pos2.x, 0, pos2.z));
+        }
+
+        deployedRift.transform.position = pos1;
+
+        plane1 = new Plane (riftNormal, pos1);
+        plane2 = new Plane (-riftNormal, pos2);
+
+        cutPreviews[0].SetActive (true);
+        cutPreviews[1].SetActive (true);
+        cutPreviews[0].transform.position = pos1;
+        cutPreviews[1].transform.position = pos2;
+        cutPreviews[0].transform.rotation = deployedRift.transform.rotation;
+        cutPreviews[1].transform.rotation = deployedRift.transform.rotation;
+        isCutPreviewActive = true;
     }
 
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void RecallInfinityMarkers()
+    private void RecallInfinityMarkers ()
     {
-        var projectiles = FindObjectsOfType<VacuumProjectile>();
+        var projectiles = FindObjectsOfType<VacuumProjectile> ();
         foreach (var projectile in projectiles)
         {
-            Destroy(projectile.gameObject);
+            Destroy (projectile.gameObject);
         }
 
         if (deployedRift)
         {
-            Destroy(deployedRift);
+            Destroy (deployedRift);
         }
         currentAmmo = maxAmmo;
-        deployedInfinityMarkers.Clear();
+        deployedInfinityMarkers.Clear ();
     }
-    private void DeployInfinityMarker()
+    private void DeployInfinityMarker ()
     {
         if (currentAmmo <= 0) return;
         currentAmmo--;
-        var projectile = Instantiate(vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
-        projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * projectileForce, ForceMode.Impulse);
-        projectile.GetComponent<VacuumProjectile>().geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
-        deployedInfinityMarkers.Add(projectile);
+        var projectile = Instantiate (vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
+        projectile.GetComponent<Rigidbody> ().AddForce (projectile.transform.forward * projectileForce, ForceMode.Impulse);
+        projectile.GetComponent<VacuumProjectile> ().geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+        deployedInfinityMarkers.Add (projectile);
     }
 
-    private void ConvergeInfinityMarkers()
+    private bool AreMarkersPinned ()
     {
+        //Return true if 2 vacuum tubes are deployed and pinned.
         if (deployedInfinityMarkers.Count >= 2)
         {
-            if (!deployedRift)
+            foreach (var marker in deployedInfinityMarkers)
             {
-                Vector3 midPoint = (deployedInfinityMarkers[0].transform.position + deployedInfinityMarkers[1].transform.position) * 0.5f;
-                deployedRift = Instantiate(riftObject, midPoint, new Quaternion());
-                deployedRift.transform.LookAt(deployedInfinityMarkers[0].transform);
-                if (allowNoLinearSlicing) deployedRift.transform.rotation = new Quaternion(deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
-                else deployedRift.transform.rotation = new Quaternion(0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
-                deployedRift.GetComponent<Rift>().distanceToMarker = Vector3.Distance(deployedInfinityMarkers[0].transform.position, deployedInfinityMarkers[1].transform.position) * 0.5f;
+                if (marker.GetComponent<VacuumProjectile> ().pinned == false)
+                {
+                    return false;
+                }
             }
-            else
-            {
-                deployedRift.GetComponent<Rift>().DivergePortals(1);
-                StartCoroutine(PeriodiclyFoldGeometry());
-                //deployedRift.SetActive(true);
-            }
+            return true;
         }
+        return false;
     }
 
-    private IEnumerator PeriodiclyFoldGeometry()
+    private void ConvergeInfinityMarkers ()
     {
-        yield return new WaitForSeconds(0f);
-        UndoGeometricCuts();
-        ApplyGeometricCuts();
-    }
-
-    private void ApplyGeometricCuts()
-    {
-        if (!deployedRift) return;
-        collapsedDistance = 0;
-        collapsedDirection = new Vector3();
-        // Find all slice-able meshes
-        foreach (var sliceableMesh in FindObjectsByType<MeshSlicer>(FindObjectsSortMode.None))
+        if (isCollapseStarted)
         {
-            // Avoid cutting segments that are already cut
-            if (!sliceableMesh.isCascadeSegment)
+            return;
+        }
+        if (AreMarkersPinned())
+        {
+            if (deployedRift)
             {
-                sliceableMesh.cutPlanes.Clear();
-                sliceableMesh.cutPlanes.Add(deployedRift.GetComponent<Rift>().visualPlaneA);
-                sliceableMesh.cutPlanes.Add(deployedRift.GetComponent<Rift>().visualPlaneB);
-                sliceableMesh.ApplyCuts();
-                
-                // Collapse the space between the planes
-                // Float
-                collapsedDistance = Vector3.Distance(deployedRift.GetComponent<Rift>().visualPlaneA.transform.position, deployedRift.GetComponent<Rift>().visualPlaneB.transform.position);
-                // Direction
-                collapsedDirection = deployedRift.GetComponent<Rift>().visualPlaneA.gameObject.transform.up;
-
-                //deployedRift.SetActive(false);
+                nullSlices = new List<GameObject> ();
+                plane2Meshes = Instantiate (new GameObject ());
+                plane2Meshes.name = "plane2Meshes";
+                plane2StartPos = plane2Meshes.transform.position;
+                // Find all slice-able meshes
+                foreach (var sliceableMesh in meshSlicers)
+                {
+                    sliceableMesh.ApplyCuts ();
+                }
+                foreach (GameObject obj in nullSlices)
+                {
+                    obj.transform.SetParent (deployedRift.transform, true);
+                }
+                ParentCollapseObjects ();
+                isCollapseStarted = true;
             }
         }
-
-        // Delay the movement until after the cut has been fully created
-        foreach (var sliceableMesh in FindObjectsByType<MeshSlicer>(FindObjectsSortMode.None))
-        {
-            if (sliceableMesh.segmentId == 2)
-            {
-                sliceableMesh.gameObject.transform.position += (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
-            }
-            else if (sliceableMesh.segmentId == 0)
-            {
-                sliceableMesh.gameObject.transform.position -= (collapsedDirection*collapsedDistance)/2;// We divide by two, so we can get half of the distance
-            }
-            // Any segment with the id of 1 is the result of some wierd artifacting, so we BURN IT IN A FIRELY BLAZE OF GLORY
-            else if (sliceableMesh.segmentId == 1)
-            {
-                Destroy(sliceableMesh.gameObject);
-            }
-        }
-
-        OffsetActorsAccordingToConvergenceDistance(_collapsing:true);
     }
 
-    private void UndoGeometricCuts()
+    private void UndoGeometricCuts ()
     {
         // Find all slice-able meshes
-        foreach (var sliceableMesh in FindObjectsByType<MeshSlicer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        foreach (var sliceableMesh in FindObjectsByType<MeshSlicer> (FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
             if (sliceableMesh.isCascadeSegment)
             {
-                Destroy(sliceableMesh.gameObject);
+                Destroy (sliceableMesh.gameObject);
             }
             else
             {
-                sliceableMesh.gameObject.SetActive(true);
+                sliceableMesh.gameObject.SetActive (true);
             }
         }
-        
-        OffsetActorsAccordingToConvergenceDistance(false);
+
+        ParentCollapseObjects ();
     }
 
-    private void OffsetActorsAccordingToConvergenceDistance(bool _collapsing)
+    private void ParentCollapseObjects ()
     {
         if (!deployedRift) return;
         // Reposition objects in A & B space to match the change in distance between the markers
-        // We divide by two, so we can get half of the distance
-        var convergeDistance = (collapsedDirection * collapsedDistance) / 2;
-        
-        if (_collapsing)
+
+        plane1Objects = new List<ActorData> ();
+        plane2Objects = new List<ActorData> ();
+        nullSpaceObjects = new List<ActorData> ();
+
+        foreach (var actor in FindObjectsOfType<ActorData> ())
         {
-            // Push actors closer together
-            deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
-            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInASpace)
+            float distance1 = plane1.GetDistanceToPoint (actor.transform.position);
+
+            if (distance1 < 0)
             {
-                _actor.gameObject.transform.position += convergeDistance;
+                plane1Objects.Add (actor);
+                continue;
             }
-            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInBSpace)
+
+            float distance2 = plane2.GetDistanceToPoint (actor.transform.position);
+
+            if (distance2 < 0)
             {
-                _actor.gameObject.transform.position -= convergeDistance;
+                plane2Objects.Add (actor);
+                actor.homePosition = actor.transform.position;
+                continue;
             }
+
+            //if both distances are >= 0, we are in null space.
+            nullSpaceObjects.Add (actor);
         }
-        else
+
+        foreach (var actor in nullSpaceObjects)
         {
-            // Pull actors further apart
-            deployedRift.GetComponent<Rift>().GetObjectSpacialLists();
-            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInASpace)
-            {
-                _actor.gameObject.transform.position -= convergeDistance;
-            }
-            foreach (var _actor in deployedRift.GetComponent<Rift>().objectsInBSpace)
-            {
-                _actor.gameObject.transform.position += convergeDistance;
-            }
+            actor.transform.SetParent (deployedRift.transform);
         }
+        cutPreviews[1].transform.SetParent (plane2Meshes.transform);
     }
 
-    private void AimTowardsCenterOfView()
+    private void AimTowardsCenterOfView ()
     {
-        RaycastHit viewPoint = new RaycastHit();
-        Physics.Raycast(centerViewTransform.position, centerViewTransform.forward, out viewPoint);
-        Debug.DrawRay(centerViewTransform.position, centerViewTransform.forward, Color.cyan);
-        barrelTransform.LookAt(viewPoint.point);
+        RaycastHit viewPoint = new RaycastHit ();
+        Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out viewPoint);
+        Debug.DrawRay (centerViewTransform.position, centerViewTransform.forward, Color.cyan);
+        barrelTransform.LookAt (viewPoint.point);
     }
 
 
