@@ -395,6 +395,10 @@ public class MeshSlicer : MonoBehaviour
                     {
                         Item_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
                     }
+                    else
+                    {
+                        obj.gameObject.transform.SetParent (Item_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
+                    }
                 }
             }
         }
