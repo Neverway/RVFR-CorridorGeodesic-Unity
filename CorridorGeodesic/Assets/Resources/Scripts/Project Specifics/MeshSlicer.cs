@@ -65,32 +65,7 @@ public class MeshSlicer : MonoBehaviour
         meshSlicer = GetComponent<IBzMeshSlicer> ();
         sliceableObject = GetComponent<BzSliceableObject> ();
     }
-
-    /// <summary>
-    /// Take the objects referenced in the cutPlanes list and generate an infinite plane, according to the direction
-    /// and rotation of the reference object, for use in cutting the mesh
-    /// </summary>
-    // TODO This function just gets the values for generating the planes, it does not actually generate them here
-    private void GenerateCutPlanes ()
-    {
-        // Clear the lists
-        // TODO What are these lists supposed to be used for???? ~Liz
-        cutNormals.Clear ();
-        inPointDistances.Clear ();
-        for (int i = 0; i < cutPlanes.Count; i++)
-        {
-            // Get the cut direction based on the up direction of the reference object
-            cutNormals.Add (cutPlanes[i].transform.up);
-
-            // Calculate the vector from the plane's position to the object's position
-            Vector3 planeToObject = gameObject.transform.position - cutPlanes[i].transform.position;
-
-            // Project this vector onto the cutNormal to get the distance
-            inPointDistances.Add (Vector3.Dot (planeToObject, cutNormals[i]));
-        }
-    }
-
-
+    
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -102,6 +77,7 @@ public class MeshSlicer : MonoBehaviour
     public async void ApplyCuts ()
     {
         MeshSlicer backup = Instantiate (this, transform.position, transform.rotation);
+        backup.gameObject.name = name + "Backup";
         backup.gameObject.SetActive (false);
         Item_Geodesic_Utility_GeoFolder.backupMeshes.Add (backup);
 
@@ -180,6 +156,7 @@ public class MeshSlicer : MonoBehaviour
                 Vector3 worldPoint = transform.TransformPoint(testPoint);
                 if (Item_Geodesic_Utility_GeoFolder.plane1.GetDistanceToPoint (worldPoint) < 0)
                 {
+                    Destroy (backup.gameObject); //If we're not even moving of course we don't need this
                     return;
                 } else
                 {
@@ -198,12 +175,6 @@ public class MeshSlicer : MonoBehaviour
         }
 
 
-    }
-
-    public void OnReset ()
-    {
-        backup.SetActive (true);
-        Destroy (this);
     }
 
 }

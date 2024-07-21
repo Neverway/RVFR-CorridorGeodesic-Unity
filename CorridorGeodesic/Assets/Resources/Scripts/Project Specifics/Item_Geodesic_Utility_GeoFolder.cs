@@ -205,25 +205,26 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     private void RecallInfinityMarkers ()
     {
-        var projectiles = FindObjectsOfType<VacuumProjectile> ();
-        foreach (var projectile in projectiles)
+        foreach (var projectile in deployedInfinityMarkers)
         {
             Destroy (projectile.gameObject);
         }
         deployedInfinityMarkers.Clear ();
-        currentAmmo = 2;        
+        currentAmmo = 2;
 
         cutPreviews[0].transform.SetParent (null);
         cutPreviews[1].transform.SetParent (null);
         cutPreviews[0].SetActive (false);
         cutPreviews[1].SetActive (false);
+        isCutPreviewActive = false;
+
+        isCutPreviewActive = false;
 
         if (isCollapseStarted == false)
         {
+            Destroy(deployedRift.gameObject);
             return;
         }
-
-        isCutPreviewActive = false;
         isCollapseStarted = false;
 
         foreach (ActorData a in actorDatas)
@@ -235,24 +236,24 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         }
 
         currentAmmo = maxAmmo;
-        deployedInfinityMarkers.Clear ();
 
         foreach (var g in slicedMeshes)
         {
             if (g) Destroy (g);
         }
         slicedMeshes.Clear ();
-        foreach (var g in backupMeshes)
+        foreach (MeshSlicer g in backupMeshes)
         {
-            g.gameObject.SetActive (true);
+            if (g) g.gameObject.SetActive (true);
         }
-        backupMeshes.Clear ();
 
         Destroy (plane2Meshes);
         if (deployedRift)
         {
             StartCoroutine (DestroyWorker (deployedRift));
         }
+
+        StartCoroutine(WitchHunt ());
     }
 
     private IEnumerator DestroyWorker (GameObject go)
@@ -369,6 +370,17 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         barrelTransform.LookAt (viewPoint.point);
     }
 
+    private IEnumerator WitchHunt ()
+    {
+        var everything = FindObjectsOfType<GameObject> ();
+        foreach (GameObject obj in everything) {
+            yield return new WaitForEndOfFrame ();
+            if (obj && obj.name == "New Game Object")
+            {
+                    Destroy (obj);
+            }
+        }
+    }
 
     //=-----------------=
     // External Functions
