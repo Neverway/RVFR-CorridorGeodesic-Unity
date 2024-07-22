@@ -101,6 +101,7 @@ public class Laser_Raycast : MonoBehaviour
                 {
                     bounce = false;
                 }
+                OnHit (hit);
             }
         }
         else
@@ -119,6 +120,14 @@ public class Laser_Raycast : MonoBehaviour
         line.SetPosition (1, position);
 
         DrawReflectionPattern (position, direction, reflectionsRemaining - 1, bounce);
+    }
+
+    private void OnHit (RaycastHit hit)
+    {
+        if (hit.collider.gameObject.TryGetComponent<Laser_Detector> (out var detector))
+        {
+            detector.OnHit ();
+        }
     }
 
 }
