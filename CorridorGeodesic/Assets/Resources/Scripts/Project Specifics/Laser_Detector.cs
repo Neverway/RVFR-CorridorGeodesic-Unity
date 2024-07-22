@@ -24,12 +24,12 @@ public class Laser_Detector : MonoBehaviour
     [SerializeField] private GameObject light;
     private bool isActive = false;
 
-
     //=-----------------=
     // Reference Variables
     //=-----------------=
 
     private Renderer renderer;
+    private MeshSlicer meshSlicer;
 
 
     //=-----------------=
@@ -39,6 +39,7 @@ public class Laser_Detector : MonoBehaviour
     private void Start ()
     {
         renderer = GetComponent<Renderer> ();
+        meshSlicer = GetComponent<MeshSlicer> ();
         renderer.material = offMaterial;
         light.SetActive (false);
     }
@@ -46,7 +47,7 @@ public class Laser_Detector : MonoBehaviour
     private void Update ()
     {
         timeSinceHit += Time.deltaTime;
-        if (timeSinceHit > timeToCancelHit)
+        if (timeSinceHit > timeToCancelHit || meshSlicer.isCut)
         {
             if (isActive)
             {

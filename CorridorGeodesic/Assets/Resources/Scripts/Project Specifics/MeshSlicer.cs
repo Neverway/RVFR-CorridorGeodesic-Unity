@@ -34,6 +34,8 @@ public class MeshSlicer : MonoBehaviour
     [Tooltip ("If true, this object's collider reflects lasers.")]
     public bool isReflective = false;
 
+    public bool isCut = false;
+
 
     //=-----------------=
     // Private Variables
@@ -79,6 +81,7 @@ public class MeshSlicer : MonoBehaviour
         MeshSlicer backup = Instantiate (this, transform.position, transform.rotation);
         backup.gameObject.name = name + "Backup";
         backup.gameObject.SetActive (false);
+        backup.isCut = false;
         Item_Geodesic_Utility_GeoFolder.backupMeshes.Add (backup);
 
         bool sliced = false;
@@ -90,6 +93,7 @@ public class MeshSlicer : MonoBehaviour
             sliced = true;
             foreach (var obj in result.resultObjects)
             {
+                obj.gameObject.GetComponent<MeshSlicer>().isCut = true;
                 Item_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
                 if (obj.side)
                 {
@@ -102,6 +106,7 @@ public class MeshSlicer : MonoBehaviour
                         //add the positive sides to the null list
                         foreach (var obj2 in result2.resultObjects)
                         {
+                            obj.gameObject.GetComponent<MeshSlicer> ().isCut = true;
                             Item_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
                             if (obj2.side)
                             {
@@ -130,6 +135,7 @@ public class MeshSlicer : MonoBehaviour
                 sliced = true;
                 foreach (var obj in result2.resultObjects)
                 {
+                    obj.gameObject.GetComponent<MeshSlicer> ().isCut = true;
                     Item_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
                     if (obj.side)
                     {
