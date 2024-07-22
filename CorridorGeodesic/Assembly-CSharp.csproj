@@ -51,6 +51,7 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Bludgeoning.cs" />
      <Compile Include="Assets/Resources/Levels/LB_Error.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Feet.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/LaserWallShooter.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_Speedometer.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Prop.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Trigger2D_Pickup.cs" />
@@ -62,6 +63,7 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Bladed.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Head.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Volume2D_LayerChange.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/Laser_Detector.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/CorGeo/GameObject_Flicker.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/ApplicationFontSetter.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Sprite_DataExposer.cs" />
@@ -167,6 +169,7 @@
      <Compile Include="Assets/Resources/Scripts/Components/ActorData.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Text_EntityItems.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_MemoryBrowser.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/Door_Sliding.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/Resources/Scripts/Integratables/CorGeo" />
@@ -216,6 +219,7 @@
      <Folder Include="Assets/Samples" />
      <Folder Include="Assets/Resources/Materials/Portals" />
      <Folder Include="Assets/TextMesh Pro" />
+     <Folder Include="Assets/BzKovSoft" />
      <Folder Include="Assets/Resources/Widgets/Components" />
      <Folder Include="Assets/Packages" />
      <Folder Include="Assets/Resources/Sprites/System" />
@@ -1119,6 +1123,18 @@
      </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="BzKovSoft.CharacterSlicer.csproj">
+      <Project>{8389891c-098e-9ee0-9aa2-f432f2d2c605}</Project>
+      <Name>BzKovSoft.CharacterSlicer</Name>
+    </ProjectReference>
+    <ProjectReference Include="BzKovSoft.ObjectSlicer.Samples.csproj">
+      <Project>{725eb526-cefa-789c-140a-ce5c488f3646}</Project>
+      <Name>BzKovSoft.ObjectSlicer.Samples</Name>
+    </ProjectReference>
+    <ProjectReference Include="BzKovSoft.ObjectSlicer.csproj">
+      <Project>{ffe1588c-a391-115f-d0b1-6df2e88b0d65}</Project>
+      <Name>BzKovSoft.ObjectSlicer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

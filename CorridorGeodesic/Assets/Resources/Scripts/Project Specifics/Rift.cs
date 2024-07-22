@@ -30,7 +30,7 @@ public class Rift : MonoBehaviour
     public GameObject CenterPlane;
     public GameObject portalA, portalB;
     public GameObject visualPlaneA, visualPlaneB;
-    public float distanceToMarker;
+    public float riftWidth;
     
 
     //=-----------------=
@@ -48,8 +48,8 @@ public class Rift : MonoBehaviour
     //=-----------------=
     public void DivergePortals(float speed)
     {
-        portalA.transform.localPosition = Vector3.Lerp(portalA.transform.localPosition, -Vector3.forward*distanceToMarker, speed*Time.deltaTime);
-        portalB.transform.localPosition = Vector3.Lerp(portalB.transform.localPosition, Vector3.forward*distanceToMarker, speed*Time.deltaTime);
+        portalA.transform.localPosition = Vector3.Lerp(portalA.transform.localPosition, -Vector3.forward*riftWidth, speed*Time.deltaTime);
+        portalB.transform.localPosition = Vector3.Lerp(portalB.transform.localPosition, Vector3.forward*riftWidth, speed*Time.deltaTime);
     }
 
     public void GetObjectSpacialLists()

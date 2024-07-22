@@ -11,12 +11,17 @@ public class Laser_Raycast : MonoBehaviour
     //
     //=============================================================================
 
+    //=-----------------=
+    // Reference Variables
+    //=-----------------=
     [SerializeField] private Transform halo;
     [SerializeField] private int maxReflectionCount = 5;
     [SerializeField] private float maxStepDistance = 200f;
     [SerializeField] private LineRenderer prefabLine;
+    //=-----------------=
+    // Private Variables
+    //=-----------------=
     private LineRenderer[] lineRenderers;
-    [SerializeField] Material reflectiveMaterial;
 
     private void Start ()
     {
@@ -28,10 +33,34 @@ public class Laser_Raycast : MonoBehaviour
         }
     }
 
+    //=-----------------=
+    // Mono Functions
+    //=-----------------=
+
     private void Update ()
     {
         ShootLaser ();
     }
+
+    private void OnDisable ()
+    {
+        foreach (var line in lineRenderers)
+        {
+            line.gameObject.SetActive (false);
+        }
+    }
+
+    private void OnDestroy ()
+    {
+        foreach (var line in lineRenderers)
+        {
+            Destroy(line.gameObject);
+        }
+    }
+
+    //=-----------------=
+    // Internal Functions
+    //=-----------------=
 
     private void ShootLaser ()
     {
@@ -72,6 +101,7 @@ public class Laser_Raycast : MonoBehaviour
                 {
                     bounce = false;
                 }
+                OnHit (hit);
             }
         }
         else
@@ -90,6 +120,14 @@ public class Laser_Raycast : MonoBehaviour
         line.SetPosition (1, position);
 
         DrawReflectionPattern (position, direction, reflectionsRemaining - 1, bounce);
+    }
+
+    private void OnHit (RaycastHit hit)
+    {
+        if (hit.collider.gameObject.TryGetComponent<Laser_Detector> (out var detector))
+        {
+            detector.OnHit ();
+        }
     }
 
 }
