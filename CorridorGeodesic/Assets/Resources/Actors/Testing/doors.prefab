@@ -90,14 +90,38 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2605410636548324671}
+    - targetCorrespondingSourceObject: {fileID: -8061497654786543199, guid: e2ab5260c741b6f47aced10a8b5cb319,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 583271837176533742}
+    - targetCorrespondingSourceObject: {fileID: -8061497654786543199, guid: e2ab5260c741b6f47aced10a8b5cb319,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4674648005966732215}
     - targetCorrespondingSourceObject: {fileID: -6948632732658236248, guid: e2ab5260c741b6f47aced10a8b5cb319,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3261840417647918727}
+    - targetCorrespondingSourceObject: {fileID: -6948632732658236248, guid: e2ab5260c741b6f47aced10a8b5cb319,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3269466315633472286}
+    - targetCorrespondingSourceObject: {fileID: -6948632732658236248, guid: e2ab5260c741b6f47aced10a8b5cb319,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3969441417916825161}
     - targetCorrespondingSourceObject: {fileID: 1921403343257670700, guid: e2ab5260c741b6f47aced10a8b5cb319,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6365447820912339174}
+    - targetCorrespondingSourceObject: {fileID: 1921403343257670700, guid: e2ab5260c741b6f47aced10a8b5cb319,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6437027393657708632}
+    - targetCorrespondingSourceObject: {fileID: 1921403343257670700, guid: e2ab5260c741b6f47aced10a8b5cb319,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2608053345209978135}
   m_SourcePrefab: {fileID: 100100000, guid: e2ab5260c741b6f47aced10a8b5cb319, type: 3}
 --- !u!1 &354361336773786870 stripped
 GameObject:
@@ -127,6 +151,42 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 9023796950703523539, guid: e2ab5260c741b6f47aced10a8b5cb319, type: 3}
+--- !u!114 &583271837176533742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354361336773786870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18ef726ebacf474d95108bf4d4980b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultSliceMaterial: {fileID: -876546973899608171, guid: 9fa47e7c06cd6df44802a4c3eea3b392,
+    type: 3}
+  asynchronously: 0
+  waitIfBusy: 0
+  objectGrouping: 0
+--- !u!114 &4674648005966732215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354361336773786870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc47032d0314a378ca9a30e472e9fe41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cutPlanes: []
+  isCascadeSegment: 0
+  segmentId: 0
+  isConvex: 0
+  bridgeMeshGaps: 0
+  isReflective: 0
+  isCut: 0
 --- !u!1 &820851410748049919 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6948632732658236248, guid: e2ab5260c741b6f47aced10a8b5cb319,
@@ -155,6 +215,42 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5225641529676788, guid: e2ab5260c741b6f47aced10a8b5cb319, type: 3}
+--- !u!114 &3269466315633472286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820851410748049919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18ef726ebacf474d95108bf4d4980b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultSliceMaterial: {fileID: -876546973899608171, guid: 9fa47e7c06cd6df44802a4c3eea3b392,
+    type: 3}
+  asynchronously: 0
+  waitIfBusy: 0
+  objectGrouping: 0
+--- !u!114 &3969441417916825161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820851410748049919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc47032d0314a378ca9a30e472e9fe41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cutPlanes: []
+  isCascadeSegment: 0
+  segmentId: 0
+  isConvex: 0
+  bridgeMeshGaps: 0
+  isReflective: 0
+  isCut: 0
 --- !u!1 &1035561227853109627 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1921403343257670700, guid: e2ab5260c741b6f47aced10a8b5cb319,
@@ -183,6 +279,42 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7636907590721165001, guid: e2ab5260c741b6f47aced10a8b5cb319, type: 3}
+--- !u!114 &6437027393657708632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035561227853109627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18ef726ebacf474d95108bf4d4980b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultSliceMaterial: {fileID: -876546973899608171, guid: 9fa47e7c06cd6df44802a4c3eea3b392,
+    type: 3}
+  asynchronously: 0
+  waitIfBusy: 0
+  objectGrouping: 0
+--- !u!114 &2608053345209978135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035561227853109627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc47032d0314a378ca9a30e472e9fe41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cutPlanes: []
+  isCascadeSegment: 0
+  segmentId: 0
+  isConvex: 0
+  bridgeMeshGaps: 0
+  isReflective: 0
+  isCut: 0
 --- !u!1 &1744114114932256774 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e2ab5260c741b6f47aced10a8b5cb319,
@@ -205,7 +337,7 @@ MonoBehaviour:
   doorRight: {fileID: 4638673611515080890}
   open: 0
   timeToOpenSeconds: 0.6
-  xDistance: 1
+  xDistance: -1.2
 --- !u!4 &2721861386924620517 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5678825993448753230, guid: e2ab5260c741b6f47aced10a8b5cb319,
