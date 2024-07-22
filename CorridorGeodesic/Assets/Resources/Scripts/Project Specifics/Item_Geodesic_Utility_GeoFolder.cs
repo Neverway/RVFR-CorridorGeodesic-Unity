@@ -114,7 +114,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 deployedRift.transform.LookAt(deployedInfinityMarkers[0].transform);
                 if (allowNoLinearSlicing) deployedRift.transform.rotation = new Quaternion(deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
                 else deployedRift.transform.rotation = new Quaternion(0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
-                deployedRift.GetComponent<Rift>().distanceToMarker = Vector3.Distance(deployedInfinityMarkers[0].transform.position, deployedInfinityMarkers[1].transform.position) * 0.5f;
+                deployedRift.GetComponent<Rift>().riftWidth = Vector3.Distance(deployedInfinityMarkers[0].transform.position, deployedInfinityMarkers[1].transform.position) * 0.5f;
             }
             else
             {

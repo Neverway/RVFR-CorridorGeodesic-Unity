@@ -47,7 +47,7 @@ public class Laser_Detector : MonoBehaviour
     private void Update ()
     {
         timeSinceHit += Time.deltaTime;
-        if (timeSinceHit > timeToCancelHit || meshSlicer.isCut)
+        if (timeSinceHit > timeToCancelHit)//if (timeSinceHit > timeToCancelHit || meshSlicer.isCut)
         {
             if (isActive)
             {
