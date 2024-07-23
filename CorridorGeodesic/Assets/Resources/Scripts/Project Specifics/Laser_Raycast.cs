@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Laser_Raycast : MonoBehaviour
@@ -54,7 +55,15 @@ public class Laser_Raycast : MonoBehaviour
     {
         foreach (var line in lineRenderers)
         {
-            Destroy(line.gameObject);
+            try
+            {
+                Destroy(line.gameObject);
+            }
+            catch (Exception e)
+            {            
+                Debug.LogWarning("A Known bug has occured. Blame Liz.");
+                //throw;
+            }
         }
     }
 

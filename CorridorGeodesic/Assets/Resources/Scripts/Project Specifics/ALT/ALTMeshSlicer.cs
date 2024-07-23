@@ -9,6 +9,7 @@
 //
 //=============================================================================
 
+using System;
 using BzKovSoft.ObjectSlicer;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -87,66 +88,74 @@ public class ALTMeshSlicer : MonoBehaviour
         bool sliced = false;
 
         //Slice the object
-        var result = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane1, meshSlicer);
-        if (result.sliced)
+        try
         {
-            sliced = true;
-            foreach (var obj in result.resultObjects)
+            var result = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane1, meshSlicer);
+            if (result.sliced)
             {
-                obj.gameObject.GetComponent<ALTMeshSlicer>().isCut = true;
-                ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
-                if (obj.side)
+                sliced = true;
+                foreach (var obj in result.resultObjects)
                 {
-                    //Slice the new object on the positive side of the cut, this time with the other plane
-                    IBzMeshSlicer objSlicer = obj.gameObject.GetComponent<IBzMeshSlicer> ();
-                    var result2 = await objSlicer.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane2);
-                    if (result2.sliced)
+                    obj.gameObject.GetComponent<ALTMeshSlicer>().isCut = true;
+                    ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
+                    if (obj.side)
                     {
-                        sliced = true;
-                        //add the positive sides to the null list
-                        foreach (var obj2 in result2.resultObjects)
+                        //Slice the new object on the positive side of the cut, this time with the other plane
+                        IBzMeshSlicer objSlicer = obj.gameObject.GetComponent<IBzMeshSlicer> ();
+                        var result2 = await objSlicer.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane2);
+                        if (result2.sliced)
                         {
-                            obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
-                            ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
-                            if (obj2.side)
+                            sliced = true;
+                            //add the positive sides to the null list
+                            foreach (var obj2 in result2.resultObjects)
                             {
-                                ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj2.gameObject);
-                            }
-                            else
-                            {
-                                obj2.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
+                                obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
+                                ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
+                                if (obj2.side)
+                                {
+                                    ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj2.gameObject);
+                                }
+                                else
+                                {
+                                    obj2.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
+                                }
                             }
                         }
+                        else
+                        {
+                            //if slice 2 failed, we still add this object
+                            ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
+                        }
                     }
-                    else
+                }
+            }
+
+            else //if we didn't slice, we still try slicing with plane2
+            {
+                var result2 = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane2, meshSlicer);
+                if (result2.sliced)
+                {
+                    sliced = true;
+                    foreach (var obj in result2.resultObjects)
                     {
-                        //if slice 2 failed, we still add this object
-                        ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
+                        obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
+                        ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
+                        if (obj.side)
+                        {
+                            ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
+                        }
+                        else
+                        {
+                            obj.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
+                        }
                     }
                 }
             }
         }
-
-        else //if we didn't slice, we still try slicing with plane2
+        catch (Exception e)
         {
-            var result2 = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane2, meshSlicer);
-            if (result2.sliced)
-            {
-                sliced = true;
-                foreach (var obj in result2.resultObjects)
-                {
-                    obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
-                    ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
-                    if (obj.side)
-                    {
-                        ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
-                    }
-                    else
-                    {
-                        obj.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
-                    }
-                }
-            }
+            Debug.LogWarning("A gameobject has the ALTMeshSlicer component, but it's disabled in the inspector! Please remove this script if you wanted to disable slicing on this object!");
+            //throw;
         }
 
 
