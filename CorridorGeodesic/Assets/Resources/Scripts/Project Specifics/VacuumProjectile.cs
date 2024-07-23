@@ -29,7 +29,7 @@ public class VacuumProjectile : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [HideInInspector] public Item_Geodesic_Utility_GeoFolder geoFolder; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+    [HideInInspector] public GameObject geoFolder; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
     private Rigidbody objectRigidbody;
     private RaycastHit faceHit;
     [SerializeField] private LayerMask layerMask;
@@ -77,12 +77,24 @@ public class VacuumProjectile : MonoBehaviour
         // Give the projectile back to the weapon
         if (geoFolder)
         {
-            if (geoFolder.currentAmmo < geoFolder.maxAmmo)
+            if (geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>())
             {
-                geoFolder.currentAmmo++;
-            }
+                if (geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>().currentAmmo < geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>().maxAmmo)
+                {
+                    geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>().currentAmmo++;
+                }
 
-            geoFolder.deployedInfinityMarkers.Remove(gameObject);
+                geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>().deployedInfinityMarkers.Remove(gameObject);
+            }
+            if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>())
+            {
+                if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>().currentAmmo < geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>().maxAmmo)
+                {
+                    geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>().currentAmmo++;
+                }
+
+                geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>().deployedInfinityMarkers.Remove(gameObject);
+            }
         }
         // Erase the projectile
         Destroy(gameObject);

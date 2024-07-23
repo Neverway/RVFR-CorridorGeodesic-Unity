@@ -99,7 +99,7 @@ public class Item_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         currentAmmo--;
         var projectile = Instantiate(vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
         projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * projectileForce, ForceMode.Impulse);
-        projectile.GetComponent<VacuumProjectile>().geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+        projectile.GetComponent<VacuumProjectile>().geoFolder = gameObject; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
         deployedInfinityMarkers.Add(projectile);
     }
 
