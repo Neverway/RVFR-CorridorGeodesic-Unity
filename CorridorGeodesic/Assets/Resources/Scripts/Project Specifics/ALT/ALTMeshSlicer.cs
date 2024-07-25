@@ -51,8 +51,8 @@ public class ALTMeshSlicer : MonoBehaviour
     private IBzMeshSlicer meshSlicer;
     private Vector3 homePosition;
     private Vector3 homeScale;
+    private Quaternion homeRotation;
     private Transform homeParent;
-    private GameObject backup;
 
 
     //=-----------------=
@@ -92,6 +92,7 @@ public class ALTMeshSlicer : MonoBehaviour
         homePosition = transform.position;
         homeScale = transform.localScale;
         homeParent = transform.parent;
+        homeRotation = transform.rotation;
         sliceThis.SliceClone (gameObject);
     }
 
@@ -129,7 +130,7 @@ public class ALTMeshSlicer : MonoBehaviour
                             }
                             else
                             {
-                                obj2.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
+                                obj2.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform);
                             }
                         }
                     }
@@ -159,7 +160,7 @@ public class ALTMeshSlicer : MonoBehaviour
                     }
                     else
                     {
-                        obj.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
+                        obj.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform);
                     }
                 }
             }
@@ -208,10 +209,11 @@ public class ALTMeshSlicer : MonoBehaviour
 
     public void GoHome ()
     {
-        transform.SetParent(homeParent, false);
+        transform.SetParent(homeParent);
         gameObject.SetActive (true);
         transform.position = homePosition;
         transform.localScale = homeScale;
+        transform.rotation = homeRotation;
     }
 
 }

@@ -250,6 +250,13 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         Destroy (plane2Meshes);
         if (deployedRift)
         {
+            foreach (var n in nullSlices)
+            {
+                if (n)
+                {
+                n.GetComponent<ALTMeshSlicer>().GoHome ();
+                }
+            }
             StartCoroutine (DestroyWorker (deployedRift));
         }
 
