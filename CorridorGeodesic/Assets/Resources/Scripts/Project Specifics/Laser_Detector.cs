@@ -21,14 +21,14 @@ public class Laser_Detector : MonoBehaviour
     private float timeToCancelHit = 0.1f;
     [SerializeField] private Material offMaterial;
     [SerializeField] private Material onMaterial;
-    [SerializeField] private GameObject light;
+    [SerializeField] private GameObject laserLight;
     private bool isActive = false;
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
 
-    private Renderer renderer;
+    private Renderer laserRenderer;
     private MeshSlicer meshSlicer;
 
 
@@ -38,10 +38,10 @@ public class Laser_Detector : MonoBehaviour
 
     private void Start ()
     {
-        renderer = GetComponent<Renderer> ();
+        laserRenderer = GetComponent<Renderer> ();
         meshSlicer = GetComponent<MeshSlicer> ();
-        renderer.material = offMaterial;
-        light.SetActive (false);
+        laserRenderer.material = offMaterial;
+        laserLight.SetActive(false);
     }
 
     private void Update ()
@@ -52,8 +52,8 @@ public class Laser_Detector : MonoBehaviour
             if (isActive)
             {
                 isActive = false;
-                renderer.material = offMaterial;
-                light.SetActive (false);
+                laserRenderer.material = offMaterial;
+                laserLight.SetActive (false);
             }
         }
     }
@@ -73,8 +73,8 @@ public class Laser_Detector : MonoBehaviour
         if (!isActive)
         {
             isActive = true;
-            renderer.material = onMaterial;
-            light.SetActive(true);
+            laserRenderer.material = onMaterial;
+            laserLight.SetActive(true);
         }
     }
 

@@ -41,10 +41,10 @@ public class ALTMeshSlicer : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private bool edgeSet = false;
+    //private bool edgeSet = false;
     private Vector3 edgeVertex = Vector3.zero;
     private Vector2 edgeUV = Vector2.zero;
-    private Plane edgePlane = new Plane ();
+    //private Plane edgePlane = new Plane ();
     private bool destroyOriginal;
     private List<Vector3> cutNormals = new List<Vector3> ();
     private List<float> inPointDistances = new List<float> ();
@@ -152,7 +152,7 @@ public class ALTMeshSlicer : MonoBehaviour
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Debug.LogWarning("A gameobject has the ALTMeshSlicer component, but it's disabled in the inspector! Please remove this script if you wanted to disable slicing on this object!");
             //throw;

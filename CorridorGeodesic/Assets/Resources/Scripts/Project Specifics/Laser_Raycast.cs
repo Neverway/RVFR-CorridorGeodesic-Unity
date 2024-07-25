@@ -59,7 +59,7 @@ public class Laser_Raycast : MonoBehaviour
             {
                 Destroy(line.gameObject);
             }
-            catch (Exception e)
+            catch (Exception)
             {            
                 Debug.LogWarning("A Known bug has occured. Blame Liz.");
                 //throw;
