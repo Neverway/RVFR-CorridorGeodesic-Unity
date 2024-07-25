@@ -220,7 +220,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         isCutPreviewActive = false;
 
-        if (isCollapseStarted == false)
+        if (isCollapseStarted == false && deployedRift)
         {
             Destroy(deployedRift.gameObject);
             return;
