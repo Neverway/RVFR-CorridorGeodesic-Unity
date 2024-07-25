@@ -158,7 +158,17 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
             if (riftTimer > maxRiftTimer)
             {
-                deployedRift.SetActive (false);
+                for (int i = 0; i < deployedRift.transform.childCount; i++)
+                {
+                    if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
+                    {
+                        if (actor.activeInNullSpace)
+                        {
+                            continue;
+                        }
+                    }
+                    deployedRift.transform.GetChild (i).gameObject.SetActive (false);
+                }
                 foreach (var plane in cutPreviews)
                 {
                     plane.SetActive (false);

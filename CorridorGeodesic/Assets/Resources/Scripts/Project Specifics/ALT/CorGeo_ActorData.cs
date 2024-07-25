@@ -18,7 +18,7 @@ public class CorGeo_ActorData : MonoBehaviour
     [HideInInspector] public Vector3 homeScale;
     [HideInInspector] public Transform homeParent;
     [HideInInspector] public bool nullSpace = false;
-
+    [SerializeField] public bool activeInNullSpace = false;
 
     //=-----------------=
     // Private Variables
@@ -40,6 +40,10 @@ public class CorGeo_ActorData : MonoBehaviour
         homeScale = transform.localScale;
         homeParent = transform.parent;
         ALTItem_Geodesic_Utility_GeoFolder.CorGeo_ActorDatas.Add(this);
+        if (TryGetComponent<Light> (out Light light))
+        {
+            activeInNullSpace = true;
+        }
     }
 
     //=-----------------=
@@ -48,6 +52,7 @@ public class CorGeo_ActorData : MonoBehaviour
 
     public void GoHome ()
     {
+        gameObject.SetActive (true);
         transform.SetParent(homeParent);
         transform.localScale = homeScale;
         if (nullSpace)
