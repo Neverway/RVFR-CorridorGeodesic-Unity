@@ -14,11 +14,10 @@ public class CorGeo_ActorData : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public Vector3 homePosition;
-    public Vector3 homeScale;
-    public Transform homeParent;
-    public string actorId;
-    public bool nullSpace = false;
+    [HideInInspector] public Vector3 homePosition;
+    [HideInInspector] public Vector3 homeScale;
+    [HideInInspector] public Transform homeParent;
+    [HideInInspector] public bool nullSpace = false;
 
 
     //=-----------------=
