@@ -65,6 +65,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     private float maxRiftTimer = 2f;
     public static float riftWidth;
     private Vector3 plane2StartPos;
+    private bool secondaryHeld = false;
 
     private bool isCutPreviewActive = false;
     private bool isCollapseStarted = false;
@@ -99,6 +100,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public override void UseSecondary ()
     {
         ConvergeInfinityMarkers ();
+        secondaryHeld = true;
     }
 
     public override void ReleaseSecondary ()
@@ -106,6 +108,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         //StopCoroutine(PeriodiclyFoldGeometry());
         //UndoGeometricCuts();
         //ApplyGeometricCuts();
+        secondaryHeld = false;
     }
 
     public override void UseSpecial ()
@@ -129,7 +132,10 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
-            riftTimer += Time.deltaTime;
+            if (secondaryHeld)
+            {
+                riftTimer += Time.deltaTime;
+            }
             float p = Mathf.Clamp ((riftTimer / maxRiftTimer), 0, 1);
             float lerpAmount = riftAnimationCurve.Evaluate (p);
 
