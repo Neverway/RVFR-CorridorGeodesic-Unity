@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Volume : MonoBehaviour
+public class Volume2D : MonoBehaviour
 {
     //=-----------------=
     // Public Variables

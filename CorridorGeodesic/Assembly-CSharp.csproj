@@ -53,8 +53,12 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Feet.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/LaserWallShooter.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_Speedometer.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_LevelStreaming.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Prop.cs" />
+     <Compile Include="Assets/Resources/Scripts/Components/Object_Flicker.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_TriggerEvent.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Trigger2D_Pickup.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/Volume.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Settings_Gameplay.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/Item_Geodesic_Utility_GeoFolder.cs" />
      <Compile Include="Assets/Resources/Levels/LB_LevelEditor.cs" />
@@ -69,6 +73,7 @@
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Sprite_DataExposer.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/VacuumProjectile.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Image_EntityPortrait.cs" />
+     <Compile Include="Assets/Resources/Scripts/Components/Object_DepthAssigner2D.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/WorldSettings.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Hitscan.cs" />
      <Compile Include="Assets/Resources/Levels/LB_World.cs" />
@@ -90,7 +95,10 @@
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Object_LiveThrowable.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Utility_Consumable.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/Actor.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_TriggerInteractable.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Ranking.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/MusicManager.cs" />
+     <Compile Include="Assets/Resources/Scripts/Components/Object_Billboard.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_MemoryBrowser_GroupButton.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/Laser_Raycast.cs" />
      <Compile Include="Assets/Resources/Scripts/Gamemodes/Spectator/PlayerController_Spectator2D.cs" />
@@ -104,7 +112,7 @@
      <Compile Include="Assets/Resources/Scripts/Integratables/LogicGate_And.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Settings_Graphics.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/ApplicationKeybindsData.cs" />
-     <Compile Include="Assets/Resources/Scripts/Integratables/Trigger2D_Interaction.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_MusicChange.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Button_Selector.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/ALT/ALTMeshSlicer.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/ControlBindingEntry.cs" />
@@ -149,15 +157,20 @@
      <Compile Include="Assets/Resources/Scripts/Integratables/CorGeo/GameObject_Billboard.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/Volume2D.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_VariableExposer_Transform.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_Pain.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Image_EntityItems.cs" />
      <Compile Include="Assets/test.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Volume2D_LoadMap.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/PersistentSingleton.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Text_ProjectVersion.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_LevelChange.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/InDev/Trigger2D_Interaction.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Extras.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Trigger2D_Event.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_Physics.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/temp.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Image_EntityEquippedItems.cs" />
+     <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_Kill.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Text_SliderValue.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Trigger2D_Interactable.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_Inspector.cs" />
@@ -178,6 +191,7 @@
      <Folder Include="Assets/Resources/Scripts/Integratables/CorGeo" />
      <Folder Include="Assets/Resources/Maps" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Arrows" />
+     <Folder Include="Assets/Resources/Scripts/Framework/InDev" />
      <Folder Include="Assets/Resources/Models" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Wii" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
@@ -188,14 +202,14 @@
      <Folder Include="Assets/Resources/Models/MapModels" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Steam Deck" />
      <Folder Include="Assets/TextMesh Pro/Sprites" />
-     <Folder Include="Assets/Resources/Materials/Textures" />
      <Folder Include="Assets/Resources/Models/Materials" />
      <Folder Include="Assets/Samples/Input System/1.7.0" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/VR" />
      <Folder Include="Assets/TextMesh Pro/Resources/Sprite Assets" />
-     <Folder Include="Assets/Resources/Actors/Data Props" />
+     <Folder Include="Assets/Resources/Actors/Objects/2D Objects" />
      <Folder Include="Assets/Resources/Widgets/Framework" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Xbox 360" />
+     <Folder Include="Assets/Resources/Actors/Objects/2D Objects/Depreciated" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Keyboard &amp; Mouse/Blanks" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader" />
      <Folder Include="Assets/Resources/Actors/Items" />
@@ -206,8 +220,10 @@
      <None Include="Assets/TextMesh Pro/Shaders/TMPro_Mobile.cginc" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/PS Move" />
      <Folder Include="Assets/Resources/Scripts/Integratables/Experimental" />
+     <Folder Include="Assets/Resources/Actors/Framework" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF SSD.shader" />
      <Folder Include="Assets/TextMesh Pro/Resources" />
+     <Folder Include="Assets/Resources/Sprites/System/Materials" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Switch" />
      <Folder Include="Assets/Resources/Sprites/Level" />
      <Folder Include="Assets/Resources/Actors" />
@@ -227,6 +243,7 @@
      <Folder Include="Assets/Resources/Widgets/Components" />
      <Folder Include="Assets/Packages" />
      <Folder Include="Assets/Resources/Sprites/System" />
+     <Folder Include="Assets/Resources/Actors/Objects/3D Objects" />
      <Folder Include="Assets/Resources/Sprites/Tilesets/Collision" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Keyboard &amp; Mouse" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/PS4" />
@@ -245,6 +262,7 @@
      <Folder Include="Assets/Resources/Actors/Props" />
      <Folder Include="Assets/Resources" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro_Properties.cginc" />
+     <Folder Include="Assets/Resources/Actors/Data Items" />
      <Folder Include="Assets/Resources/Models/Laser.Mat" />
      <Folder Include="Assets/Resources/Levels/World2" />
      <Folder Include="Assets/Packages/Fonts" />
@@ -277,8 +295,8 @@
      <Folder Include="Assets/Resources/Sound/Music" />
      <Folder Include="Assets/Resources/Scripts/Gamemodes/Spectator" />
      <Folder Include="Assets/Resources/Scripts/Gamemodes/Default" />
+     <Folder Include="Assets/Resources/Actors/Data Characters" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Positional Prompts" />
-     <Folder Include="Assets/Resources/Sprites/System/Materials" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/VR/Oculus" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF Overlay.shader" />
      <Folder Include="Assets/Resources/Sprites/Effects" />
@@ -292,15 +310,18 @@
      <Folder Include="Assets/Resources/Scripts/Components" />
      <Folder Include="Assets/Resources/Scripts/Framework Customs" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader" />
+     <Folder Include="Assets/Resources/Actors/Framework Customs" />
      <Folder Include="Assets/Resources/Sound/Effects" />
      <None Include="Assets/TextMesh Pro/Sprites/EmojiOne.json" />
      <Folder Include="Assets/Resources/Sprites/Characters/Portraits" />
+     <Folder Include="Assets/Resources/Actors/Data Props" />
      <Folder Include="Assets/Resources/Sprites/Widgets" />
      <Folder Include="Assets/Packages/Xelu_Prompts/PS5" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Sprite.shader" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Xbox One" />
      <Folder Include="Assets/Resources/Actors/Testing" />
+     <Folder Include="Assets/Resources/Materials/Textures" />
      <Reference Include="UnityEngine">
      <HintPath>/home/lizband/Unity/Hub/Editor/2022.3.15f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
      </Reference>

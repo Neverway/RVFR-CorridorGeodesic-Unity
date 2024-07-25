@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
-public class Object_DepthAssigner2D : MonoBehaviour
+public class Object_DepthAssigner : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
