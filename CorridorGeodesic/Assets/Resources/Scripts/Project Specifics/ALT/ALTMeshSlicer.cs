@@ -9,10 +9,9 @@
 //
 //=============================================================================
 
-using System;
 using BzKovSoft.ObjectSlicer;
+using JetBrains.Annotations;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [RequireComponent (typeof (BzSliceableObject))]
@@ -51,6 +50,8 @@ public class ALTMeshSlicer : MonoBehaviour
     private BzSliceableObject sliceableObject;
     private IBzMeshSlicer meshSlicer;
     private Vector3 homePosition;
+    private Vector3 homeScale;
+    private Transform homeParent;
     private GameObject backup;
 
 
@@ -68,7 +69,7 @@ public class ALTMeshSlicer : MonoBehaviour
         meshSlicer = GetComponent<IBzMeshSlicer> ();
         sliceableObject = GetComponent<BzSliceableObject> ();
     }
-    
+
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -79,83 +80,89 @@ public class ALTMeshSlicer : MonoBehaviour
 
     public async void ApplyCuts ()
     {
-        ALTMeshSlicer backup = Instantiate (this, transform.position, transform.rotation);
-        backup.gameObject.name = name + "Backup";
-        backup.gameObject.SetActive (false);
-        backup.isCut = false;
-        ALTItem_Geodesic_Utility_GeoFolder.backupMeshes.Add (backup);
-
-        bool sliced = false;
-
-        //Slice the object
-        try
+        if (!enabled)
         {
-            var result = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane1, meshSlicer);
-            if (result.sliced)
+            Debug.LogWarning ("ALTMeshSlicer must be enabled to slice! If you wanted to use the old MeshSlicer, remove this from gameObjects");
+            return;
+        }
+        ALTMeshSlicer sliceThis = Instantiate (this, transform.position, transform.rotation);
+        sliceThis.gameObject.name = name + "(Sliced)";
+        isCut = false;
+        ALTItem_Geodesic_Utility_GeoFolder.originalSliceableObjects.Add (this);
+        homePosition = transform.position;
+        homeScale = transform.localScale;
+        homeParent = transform.parent;
+        sliceThis.SliceClone (gameObject);
+    }
+
+    public async void SliceClone (GameObject original)
+    {
+        bool sliced = false;
+        sliceableObject= GetComponent<BzSliceableObject> ();
+        //Slice the object
+        var result = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane1, meshSlicer);
+        if (result.sliced)
+        {
+            original.SetActive (false);
+            sliced = true;
+            foreach (var obj in result.resultObjects)
             {
-                sliced = true;
-                foreach (var obj in result.resultObjects)
+                obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
+                ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
+                if (obj.side)
                 {
-                    obj.gameObject.GetComponent<ALTMeshSlicer>().isCut = true;
-                    ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
-                    if (obj.side)
+                    //Slice the new object on the positive side of the cut, this time with the other plane
+                    IBzMeshSlicer objSlicer = obj.gameObject.GetComponent<IBzMeshSlicer> ();
+                    var result2 = await objSlicer.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane2);
+                    if (result2.sliced)
                     {
-                        //Slice the new object on the positive side of the cut, this time with the other plane
-                        IBzMeshSlicer objSlicer = obj.gameObject.GetComponent<IBzMeshSlicer> ();
-                        var result2 = await objSlicer.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane2);
-                        if (result2.sliced)
+                        sliced = true;
+                        original.SetActive (false);
+                        //add the positive sides to the null list
+                        foreach (var obj2 in result2.resultObjects)
                         {
-                            sliced = true;
-                            //add the positive sides to the null list
-                            foreach (var obj2 in result2.resultObjects)
+                            obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
+                            ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
+                            if (obj2.side)
                             {
-                                obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
-                                ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
-                                if (obj2.side)
-                                {
-                                    ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj2.gameObject);
-                                }
-                                else
-                                {
-                                    obj2.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
-                                }
+                                ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj2.gameObject);
+                            }
+                            else
+                            {
+                                obj2.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
                             }
                         }
-                        else
-                        {
-                            //if slice 2 failed, we still add this object
-                            ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
-                        }
                     }
-                }
-            }
-
-            else //if we didn't slice, we still try slicing with plane2
-            {
-                var result2 = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane2, meshSlicer);
-                if (result2.sliced)
-                {
-                    sliced = true;
-                    foreach (var obj in result2.resultObjects)
+                    else
                     {
-                        obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
-                        ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
-                        if (obj.side)
-                        {
-                            ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
-                        }
-                        else
-                        {
-                            obj.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
-                        }
+                        //if slice 2 failed, we still add this object
+                        ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
                     }
                 }
             }
         }
-        catch (Exception)
+
+        else //if we didn't slice, we still try slicing with plane2
         {
-            Debug.LogWarning("A gameobject has the ALTMeshSlicer component, but it's disabled in the inspector! Please remove this script if you wanted to disable slicing on this object!");
-            //throw;
+            var result2 = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane2, meshSlicer);
+            if (result2.sliced)
+            {
+                original.SetActive (false);
+                sliced = true;
+                foreach (var obj in result2.resultObjects)
+                {
+                    obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
+                    ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
+                    if (obj.side)
+                    {
+                        ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
+                    }
+                    else
+                    {
+                        obj.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform, true);
+                    }
+                }
+            }
         }
 
 
@@ -168,28 +175,43 @@ public class ALTMeshSlicer : MonoBehaviour
             {
                 var vert = meshFilter.mesh.vertices[0];
                 Vector3 testPoint = new Vector3 (vert.x, vert.y, vert.z);
-                Vector3 worldPoint = transform.TransformPoint(testPoint);
+                Vector3 worldPoint = transform.TransformPoint (testPoint);
                 if (ALTItem_Geodesic_Utility_GeoFolder.plane1.GetDistanceToPoint (worldPoint) < 0)
                 {
-                    Destroy (backup.gameObject); //If we're not even moving of course we don't need this
+                    //Entire object was outside nullspace plane1
+                    original.gameObject.SetActive (true);
+                    Destroy (gameObject);
                     return;
-                } else
+                }
+                else
                 {
                     if (ALTItem_Geodesic_Utility_GeoFolder.plane2.GetDistanceToPoint (worldPoint) < 0)
                     {
-                        transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform);
+                        //entire object was outside nullspace plane2
+                        original.SetActive (true);
+                        original.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.plane2Meshes.transform);
+                        Destroy (gameObject);
                         return;
                     }
                     else
                     {
-                        ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (gameObject);
+                        //Entire object was in the nullspace
+                        ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (original);
+                        Destroy (gameObject);
                         return;
                     }
                 }
             }
         }
 
+    }
 
+    public void GoHome ()
+    {
+        transform.SetParent(homeParent, false);
+        gameObject.SetActive (true);
+        transform.position = homePosition;
+        transform.localScale = homeScale;
     }
 
 }

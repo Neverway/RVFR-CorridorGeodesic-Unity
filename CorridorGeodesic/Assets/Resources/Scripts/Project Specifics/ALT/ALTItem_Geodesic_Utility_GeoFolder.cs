@@ -48,7 +48,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public static Plane plane2;
     public static List<GameObject> nullSlices;
     public static GameObject plane2Meshes;
-    public static List<ALTMeshSlicer> backupMeshes = new List<ALTMeshSlicer> ();
+    public static List<ALTMeshSlicer> originalSliceableObjects = new List<ALTMeshSlicer> ();
     public static List<GameObject> slicedMeshes = new List<GameObject> ();
     public static List<CorGeo_ActorData> CorGeo_ActorDatas = new List<CorGeo_ActorData> ();
 
@@ -242,9 +242,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             if (g) Destroy (g);
         }
         slicedMeshes.Clear ();
-        foreach (ALTMeshSlicer g in backupMeshes)
+        foreach (ALTMeshSlicer g in originalSliceableObjects)
         {
-            if (g) g.gameObject.SetActive (true);
+            if (g) g.GoHome ();
         }
 
         Destroy (plane2Meshes);
