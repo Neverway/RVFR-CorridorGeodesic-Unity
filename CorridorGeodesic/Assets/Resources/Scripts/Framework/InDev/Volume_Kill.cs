@@ -41,8 +41,10 @@ public class Volume_Kill : Volume
     private new void OnTriggerEnter(Collider _other)
     {
         base.OnTriggerEnter(_other); // Call the base class method
+        print("Connors stole something.");
         if (_other.CompareTag("Pawn"))
         {
+            print("Connors Has a hat!");
             _other.GetComponent<Pawn>().Kill();
         }
     }

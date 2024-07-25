@@ -70,6 +70,22 @@ public class Volume_TriggerInteractable : Volume
         if (_other.CompareTag("Pawn")) if (targetEnt.isPossessed) targetEnt.isNearInteractable = false;
         SetInteractionIndicatorState();
     }
+    
+    private new void OnTriggerEnter(Collider _other)
+    {
+        base.OnTriggerEnter(_other); // Call the base class method
+        // Check for interaction
+        var interaction = _other.GetComponent<Trigger2D_Interaction>();
+        if (interaction) Interact();
+        SetInteractionIndicatorState();
+    }
+
+    private new void OnTriggerExit(Collider _other)
+    {
+        base.OnTriggerExit(_other); // Call the base class method
+        if (_other.CompareTag("Pawn")) if (targetEnt.isPossessed) targetEnt.isNearInteractable = false;
+        SetInteractionIndicatorState();
+    }
 
     //=-----------------=
     // Internal Functions

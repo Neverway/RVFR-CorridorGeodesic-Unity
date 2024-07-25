@@ -92,7 +92,7 @@ public class Volume : MonoBehaviour
         if (_other.CompareTag("Pawn"))
         {
             // Get a reference to the entity component
-            targetEnt = _other.gameObject.transform.parent.GetComponent<Pawn>();
+            targetEnt = _other.gameObject.GetComponent<Pawn>();
             // Exit if they are not on the effected team
             if (!IsOnAffectedTeam(targetEnt)) return;
             // Add the entity to the list if they are not already present
@@ -106,9 +106,9 @@ public class Volume : MonoBehaviour
         if (_other.CompareTag("PhysProp"))
         {
             // Don't register held objects
-            if (_other.gameObject.transform.parent.GetComponent<Object_Grabbable>()) { if (_other.gameObject.transform.parent.GetComponent<Object_Grabbable>().isHeld) { return; } }
+            if (_other.gameObject.GetComponent<Object_Grabbable>()) { if (_other.gameObject.GetComponent<Object_Grabbable>().isHeld) { return; } }
             // Get a reference to the entity component
-            targetProp = _other.gameObject.transform.parent.GetComponent<Prop>();
+            targetProp = _other.gameObject.GetComponent<Prop>();
             // Add the entity to the list if they are not already present
             if (!propsInTrigger.Contains(targetProp))
             {
@@ -123,7 +123,7 @@ public class Volume : MonoBehaviour
         if (_other.CompareTag("Pawn"))
         {
             // Get a reference to the entity component
-            targetEnt = _other.gameObject.transform.parent.GetComponent<Pawn>();
+            targetEnt = _other.gameObject.GetComponent<Pawn>();
             // Remove the entity to the list if they are not already absent
             if(pawnsInTrigger.Contains(targetEnt)) { pawnsInTrigger.Remove(targetEnt); }
         }
@@ -132,7 +132,7 @@ public class Volume : MonoBehaviour
         if (_other.CompareTag("PhysProp"))
         {
             // Get a reference to the entity component
-            targetProp = _other.gameObject.transform.parent.GetComponent<Prop>();
+            targetProp = _other.gameObject.GetComponent<Prop>();
             // Add the entity to the list if they are not already present
             if(propsInTrigger.Contains(targetProp)) { propsInTrigger.Remove(targetProp); }
         }

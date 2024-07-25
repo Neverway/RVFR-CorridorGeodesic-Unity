@@ -57,6 +57,18 @@ public class Pawn : MonoBehaviour
 
     private void Update()
     {
+        // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
+        if (FindObjectOfType<GameInstance>())
+        {
+            if (FindObjectOfType<GameInstance>().PlayerControllerClasses.Contains(currentController))
+            {
+                isPossessed = true;
+            }
+            else
+            {
+                isPossessed = false;
+            }
+        }
         gameInstance = FindObjectOfType<GameInstance>();
         CheckCameraState();
         if (isDead) return;
