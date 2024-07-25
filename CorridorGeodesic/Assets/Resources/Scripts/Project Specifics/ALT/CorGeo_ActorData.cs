@@ -57,7 +57,8 @@ public class CorGeo_ActorData : MonoBehaviour
         }
         if (ALTItem_Geodesic_Utility_GeoFolder.plane1.GetDistanceToPoint (transform.position) > 0)
         {
-            transform.position += ALTItem_Geodesic_Utility_GeoFolder.deployedRift.transform.forward * ALTItem_Geodesic_Utility_GeoFolder.riftWidth;
+            //move actor away from collapse direction scaled by the rift timer's progress
+            transform.position += ALTItem_Geodesic_Utility_GeoFolder.deployedRift.transform.forward * ALTItem_Geodesic_Utility_GeoFolder.riftWidth * (ALTItem_Geodesic_Utility_GeoFolder.lerpAmount);
         }
     }
 

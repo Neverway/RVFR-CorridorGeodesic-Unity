@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,7 +39,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private GameObject cutPreviewPrefab;
     private GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
-    [SerializeField] private AnimationCurve riftAnimationCurve;
+    //[SerializeField] private AnimationCurve riftAnimationCurve;
     public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
     public static GameObject deployedRift;
     private ALTMeshSlicer[] meshSlicers;
@@ -63,6 +64,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //Rift collapse lerp 
     private float riftTimer = 0f;
     private float maxRiftTimer = 2f;
+    public static float lerpAmount;
+    [SerializeField] private float riftSecondsPerUnit = 1f;
     public static float riftWidth;
     private Vector3 plane2StartPos;
     private bool secondaryHeld = false;
@@ -136,8 +139,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             {
                 riftTimer += Time.deltaTime;
             }
-            float p = Mathf.Clamp ((riftTimer / maxRiftTimer), 0, 1);
-            float lerpAmount = riftAnimationCurve.Evaluate (p);
+            lerpAmount = Mathf.Clamp ((riftTimer / maxRiftTimer), 0, 1);
 
             deployedRift.transform.localScale = new Vector3 (
                 1,
@@ -330,6 +332,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 ParentCollapseObjects ();
                 isCollapseStarted = true;
                 riftTimer = 0f;
+                maxRiftTimer = riftWidth * riftSecondsPerUnit;
             }
         }
     }
