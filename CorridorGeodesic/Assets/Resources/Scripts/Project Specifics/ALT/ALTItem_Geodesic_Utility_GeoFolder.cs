@@ -338,6 +338,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 foreach (GameObject obj in nullSlices)
                 {
                     obj.transform.SetParent (deployedRift.transform, true);
+                    //remove extra meshes (there were un-sliced meshes sticking around)
+                        var meshes = obj.GetComponents<MeshCollider> ();
+                        if (meshes.Length > 1)
+                        {
+                            Destroy (meshes[0]);
+                        }
                 }
                 ParentCollapseObjects ();
                 isCollapseStarted = true;
