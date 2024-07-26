@@ -19,7 +19,7 @@ public class VacuumProjectile : MonoBehaviour
     [SerializeField] private Vector3 castOffset;
     [SerializeField] private float pinOffset;
     [HideInInspector] public bool pinned;
-
+    [SerializeField] private GameObject spawnOnDeath;
 
     //=-----------------=
     // Private Variables
@@ -58,6 +58,12 @@ public class VacuumProjectile : MonoBehaviour
     {
         if (Physics.SphereCast(transform.position+castOffset, castRadius, transform.forward, out faceHit, layerMask))
         {
+            if (faceHit.collider.gameObject.TryGetComponent<AntiProjectile> (out var component))
+            {
+                KillProjectile ();
+                return;
+            }
+
             // Disable physics
             objectRigidbody.isKinematic = true;
             
@@ -74,30 +80,41 @@ public class VacuumProjectile : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         if (pinned) yield break; // Exit if the lamp has landed 
+        KillProjectile ();
+    }
+
+    private void KillProjectile ()
+    {
         // Give the projectile back to the weapon
         if (geoFolder)
         {
-            if (geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>())
+            if (geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ())
             {
-                if (geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>().currentAmmo < geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>().maxAmmo)
+                if (geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().currentAmmo < geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().maxAmmo)
                 {
-                    geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>().currentAmmo++;
+                    geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().currentAmmo++;
                 }
 
-                geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder>().deployedInfinityMarkers.Remove(gameObject);
+                geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
             }
-            if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>())
+            if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ())
             {
-                if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>().currentAmmo < geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>().maxAmmo)
+                if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().currentAmmo < geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().maxAmmo)
                 {
-                    geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>().currentAmmo++;
+                    geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().currentAmmo++;
                 }
 
-                geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder>().deployedInfinityMarkers.Remove(gameObject);
+                geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
             }
         }
         // Erase the projectile
-        Destroy(gameObject);
+        Destroy (gameObject);
+
+        //Spawn particle effect
+        if (spawnOnDeath)
+        {
+            Instantiate (spawnOnDeath, transform.position, Quaternion.identity);
+        }
     }
 
 

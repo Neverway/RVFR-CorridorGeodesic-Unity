@@ -650,6 +650,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 377624038038618786}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 33d15ef1a4fd1446290f59e20692dbcd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8263753077447970619}
   m_SourcePrefab: {fileID: 100100000, guid: 33d15ef1a4fd1446290f59e20692dbcd, type: 3}
 --- !u!4 &8540479716774181155 stripped
 Transform:
@@ -705,6 +709,9 @@ MonoBehaviour:
   castRadius: 0.1
   castOffset: {x: 0, y: 0, z: 0}
   pinOffset: 0.5
+  pinned: 0
+  spawnOnDeath: {fileID: 3487281038522578191, guid: 4ca8399e504203046be61b0ad89f0fe3,
+    type: 3}
   geoFolder: {fileID: 0}
   layerMask:
     serializedVersion: 2
@@ -747,3 +754,20 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-8263753077447970619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9065237667694814105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9328f886ac63731bba9d85776baa2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
+  actorId: 
+  nullSpace: 0
