@@ -41,11 +41,11 @@ public class Volume_Physics : Volume
             {
                 if (entity.gameObject.GetComponent<Rigidbody>())
                 {
-                    entity.gameObject.GetComponent<Rigidbody>().AddForce(forceDirection.localRotation.eulerAngles*forceIntensity, ForceMode.Force);
+                    entity.gameObject.GetComponent<Rigidbody>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode.Force);
                 }
                 else if (entity.gameObject.GetComponent<Rigidbody2D>())
                 {
-                    entity.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.localRotation.eulerAngles*forceIntensity, ForceMode2D.Force);
+                    entity.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode2D.Force);
                 }
             }
             // If teams match and self-infliction enabled
@@ -53,11 +53,11 @@ public class Volume_Physics : Volume
             {
                 if (entity.gameObject.GetComponent<Rigidbody>())
                 {
-                    entity.gameObject.GetComponent<Rigidbody>().AddForce(forceDirection.localRotation.eulerAngles*forceIntensity, ForceMode.Force);
+                    entity.gameObject.GetComponent<Rigidbody>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode.Force);
                 }
                 else if (entity.gameObject.GetComponent<Rigidbody2D>())
                 {
-                    entity.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.localRotation.eulerAngles*forceIntensity, ForceMode2D.Force);
+                    entity.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode2D.Force);
                 }
             }
             // If teams don't match and self-infliction disabled
@@ -65,11 +65,11 @@ public class Volume_Physics : Volume
             {
                 if (entity.gameObject.GetComponent<Rigidbody>())
                 {
-                    entity.gameObject.GetComponent<Rigidbody>().AddForce(forceDirection.localRotation.eulerAngles*forceIntensity, ForceMode.Force);
+                    entity.gameObject.GetComponent<Rigidbody>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode.Force);
                 }
                 else if (entity.gameObject.GetComponent<Rigidbody2D>())
                 {
-                    entity.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.localRotation.eulerAngles*forceIntensity, ForceMode2D.Force);
+                    entity.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode2D.Force);
                 }
             }
         }
@@ -77,11 +77,11 @@ public class Volume_Physics : Volume
         {
             if (entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody>())
             {
-                entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody>().AddForce(forceDirection.localRotation.eulerAngles*forceIntensity, ForceMode.Force);
+                entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode.Force);
             }
             else if (entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody2D>())
             {
-                entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.localRotation.eulerAngles*forceIntensity, ForceMode2D.Force);
+                entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode2D.Force);
             }
         }
     }
