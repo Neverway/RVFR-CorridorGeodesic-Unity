@@ -78,7 +78,7 @@ public class ALTMeshSlicer : MonoBehaviour
     // External Functions
     //=-----------------=
 
-    public async void ApplyCuts ()
+    public void ApplyCuts ()
     {
         if (!enabled)
         {
