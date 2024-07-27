@@ -8,7 +8,7 @@
 using UnityEngine;
 
 public class Volume2D_Warp : Volume
-{
+{/*
     //=-----------------=
     // Public Variables
     //=-----------------=
@@ -79,5 +79,5 @@ public class Volume2D_Warp : Volume
 
     //=-----------------=
     // External Functions
-    //=-----------------=
+    //=-----------------=*/
 }

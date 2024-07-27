@@ -75,13 +75,13 @@ public class Volume_Physics : Volume
         }
         foreach (var entity in propsInTrigger)
         {
-            if (entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody>())
+            if (entity.GetComponent<Rigidbody>())
             {
-                entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode.Force);
+                entity.GetComponent<Rigidbody>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode.Force);
             }
-            else if (entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody2D>())
+            else if (entity.gameObject.GetComponent<Rigidbody2D>())
             {
-                entity.AssociatedGameObject.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode2D.Force);
+                entity.gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection.transform.forward*forceIntensity, ForceMode2D.Force);
             }
         }
     }

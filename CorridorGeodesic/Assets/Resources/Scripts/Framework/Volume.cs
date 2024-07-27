@@ -27,9 +27,9 @@ public class Volume : MonoBehaviour
     // Reference Variables
     //=-----------------=
     [HideInInspector] public List<Pawn> pawnsInTrigger = new List<Pawn>();
-    [HideInInspector] public List<Prop> propsInTrigger = new List<Prop>();
+    [HideInInspector] public List<GameObject> propsInTrigger = new List<GameObject>();
     [HideInInspector] public Pawn targetEnt;
-    [HideInInspector] public Prop targetProp;
+    [HideInInspector] public GameObject targetProp;
 
 
     //=-----------------=
@@ -57,7 +57,7 @@ public class Volume : MonoBehaviour
             // Don't register held objects
             if (_other.gameObject.transform.parent.GetComponent<Object_Grabbable>()) { if (_other.gameObject.transform.parent.GetComponent<Object_Grabbable>().isHeld) { return; } }
             // Get a reference to the entity component
-            targetProp = _other.gameObject.transform.parent.GetComponent<Prop>();
+            targetProp = _other.gameObject.transform.parent.gameObject;
             // Add the entity to the list if they are not already present
             if (!propsInTrigger.Contains(targetProp))
             {
@@ -81,7 +81,7 @@ public class Volume : MonoBehaviour
         if (_other.CompareTag("PhysProp"))
         {
             // Get a reference to the entity component
-            targetProp = _other.gameObject.transform.parent.GetComponent<Prop>();
+            targetProp = _other.gameObject.transform.parent.gameObject;
             // Add the entity to the list if they are not already present
             if(propsInTrigger.Contains(targetProp)) { propsInTrigger.Remove(targetProp); }
         }
@@ -108,7 +108,7 @@ public class Volume : MonoBehaviour
             // Don't register held objects
             if (_other.gameObject.GetComponent<Object_Grabbable>()) { if (_other.gameObject.GetComponent<Object_Grabbable>().isHeld) { return; } }
             // Get a reference to the entity component
-            targetProp = _other.gameObject.GetComponent<Prop>();
+            targetProp = _other.gameObject;
             // Add the entity to the list if they are not already present
             if (!propsInTrigger.Contains(targetProp))
             {
@@ -132,7 +132,7 @@ public class Volume : MonoBehaviour
         if (_other.CompareTag("PhysProp"))
         {
             // Get a reference to the entity component
-            targetProp = _other.gameObject.GetComponent<Prop>();
+            targetProp = _other.gameObject;
             // Add the entity to the list if they are not already present
             if(propsInTrigger.Contains(targetProp)) { propsInTrigger.Remove(targetProp); }
         }

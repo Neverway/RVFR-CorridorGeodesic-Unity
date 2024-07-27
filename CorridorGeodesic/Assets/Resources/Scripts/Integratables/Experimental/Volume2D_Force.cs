@@ -14,7 +14,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 public class Volume2D_Force : Volume
-{
+{/*
     //=-----------------=
     // Public Variables
     //=-----------------=
@@ -72,7 +72,7 @@ public class Volume2D_Force : Volume
 	    yield return new WaitForSeconds(removeEffectDelay);
 	    pawnsInTrigger.Remove(_targetEnt);
     }
-    private IEnumerator RemoveProp(Prop _targetProp)
+    private IEnumerator RemoveProp(Actor _targetProp)
     {
 	    yield return new WaitForSeconds(removeEffectDelay);
 	    propsInTrigger.Remove(_targetProp);
@@ -81,6 +81,6 @@ public class Volume2D_Force : Volume
 
     //=-----------------=
     // External Functions
-    //=-----------------=
+    //=-----------------=*/
 }
 

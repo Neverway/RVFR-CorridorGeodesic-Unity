@@ -8,7 +8,7 @@
 using UnityEngine;
 
 public class Volume2D_LayerChange : Volume
-{
+{/*
     //=-----------------=
     // Public Variables
     //=-----------------=
@@ -60,7 +60,7 @@ public class Volume2D_LayerChange : Volume
         if (fallTime <= 0) return;
         _targetObject.fallTime = fallTime;
         _targetObject.Fall();
-    }
+    }*/
 
 
     //=-----------------=

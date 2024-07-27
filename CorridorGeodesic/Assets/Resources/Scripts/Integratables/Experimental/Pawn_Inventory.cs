@@ -157,9 +157,9 @@ public class Pawn_Inventory : MonoBehaviour
             // set the damage type,
             // Damage trigger does not accept damage type yet
             // set the knock back force,
-            liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().forceStrength = itemWeapon.knockbackForce;
+            //liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().forceStrength = itemWeapon.knockbackForce;
             // set the knock back delay,
-            liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().removeEffectDelay = itemWeapon.knockbackForceDuration;
+            //liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().removeEffectDelay = itemWeapon.knockbackForceDuration;
             // set the object's life time
             Destroy(liveItem, 0.5f);
             StartCoroutine(UseDelay(0.75f));
@@ -197,9 +197,9 @@ public class Pawn_Inventory : MonoBehaviour
             // set the damage type,
             // Damage trigger does not accept damage type yet
             // set the knock back force,
-            liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().forceStrength = itemUtilityThrowable.forceStrength;
+            //liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().forceStrength = itemUtilityThrowable.forceStrength;
             // set the knock back delay,
-            liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().removeEffectDelay = itemUtilityThrowable.removeForceDelay;
+            //liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().removeEffectDelay = itemUtilityThrowable.removeForceDelay;
             // set the knock back team,
             liveItem.transform.GetChild(2).GetComponent<Volume2D_Force>().owningTeam = pawn.currentState.team;
             // set the speed of the object
