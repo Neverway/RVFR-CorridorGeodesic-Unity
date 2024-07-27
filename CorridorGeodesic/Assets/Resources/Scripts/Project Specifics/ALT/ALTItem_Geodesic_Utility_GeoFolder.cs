@@ -26,6 +26,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     public float collapsedDistance;
     public Vector3 collapsedDirection;
+    public Vector3 previousPlanePosition;
 
 
     //=-----------------=
@@ -91,6 +92,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         for (int i = 0; i < cutPreviews.Length; i++)
         {
             cutPreviews[i] = Instantiate (cutPreviewPrefab);
+            cutPreviews[i].GetComponent<CutPreviewTracker>().cutPreviewID = i; // Label them so we know whether they are a or b space's side preview
             cutPreviews[i].SetActive (false);
         }
     }
@@ -135,39 +137,45 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
+            // If converging, increase the riftTimer and relocate actors and meshes
             if (secondaryHeld)
             {
                 riftTimer += Time.deltaTime;
+            
+                // Calculate offset
+                Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
+                lerpAmount = Mathf.Clamp ((riftTimer / maxRiftTimer), 0, 1);
+
+                // Squish null-space parent
+                deployedRift.transform.localScale = new Vector3 (1, 1, 1 - lerpAmount);
+            
+                // Collapse meshes in plane2/B-Space
+                plane2Meshes.transform.position = Vector3.Lerp (plane2StartPos, plane2StartPos + targetOffset, lerpAmount);
+                
+                // Collapse actors in plane2/B-Space
+                foreach (CorGeo_ActorData obj in plane2Objects)
+                {
+                    //obj.transform.position = Vector3.Lerp(obj.homePosition, obj.homePosition + targetOffset, lerpAmount);
+                    
+                    obj.transform.position += cutPreviews[1].transform.position - previousPlanePosition;
+                }
+
+                previousPlanePosition = cutPreviews[1].transform.position;
             }
-            lerpAmount = Mathf.Clamp ((riftTimer / maxRiftTimer), 0, 1);
 
-            deployedRift.transform.localScale = new Vector3 (
-                1,
-                1,
-                1 - lerpAmount
-                );
-
-            Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
-
-            plane2Meshes.transform.position = Vector3.Lerp (plane2StartPos, plane2StartPos + targetOffset, lerpAmount);
-
-            foreach (CorGeo_ActorData obj in plane2Objects)
-            {
-                obj.transform.position = Vector3.Lerp (obj.homePosition, obj.homePosition + targetOffset, lerpAmount);
-            }
-
+            // If we've converged the rift all the way, deactivate null-space actors and meshes
             if (riftTimer > maxRiftTimer)
             {
                 for (int i = 0; i < deployedRift.transform.childCount; i++)
                 {
-                    if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
+                    if (deployedRift.transform.GetChild(i).TryGetComponent<CorGeo_ActorData>(out var actor))
                     {
                         if (actor.activeInNullSpace)
                         {
                             continue;
                         }
                     }
-                    deployedRift.transform.GetChild (i).gameObject.SetActive (false);
+                    deployedRift.transform.GetChild(i).gameObject.SetActive(false);
                 }
                 foreach (var plane in cutPreviews)
                 {
@@ -223,6 +231,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     private void RecallInfinityMarkers ()
     {
+        if (currentAmmo >= 2) return;
         foreach (var projectile in deployedInfinityMarkers)
         {
             projectile.GetComponent<VacuumProjectile>().KillProjectile(false);
@@ -349,6 +358,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 isCollapseStarted = true;
                 riftTimer = 0f;
                 maxRiftTimer = riftWidth * riftSecondsPerUnit;
+                previousPlanePosition = cutPreviews[1].transform.position;
             }
         }
     }
