@@ -225,7 +225,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         foreach (var projectile in deployedInfinityMarkers)
         {
-            Destroy (projectile.gameObject);
+            projectile.GetComponent<VacuumProjectile>().KillProjectile(false);
         }
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;
@@ -245,34 +245,34 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         }
         isCollapseStarted = false;
 
-        foreach (CorGeo_ActorData a in CorGeo_ActorDatas)
+        foreach (CorGeo_ActorData _actor in CorGeo_ActorDatas)
         {
-            if (a)
+            if (_actor)
             {
-                a.GoHome ();
+                _actor.GoHome ();
             }
         }
 
         currentAmmo = maxAmmo;
 
-        foreach (var g in slicedMeshes)
+        foreach (var _gameObject in slicedMeshes)
         {
-            if (g) Destroy (g);
+            if (_gameObject) Destroy (_gameObject);
         }
         slicedMeshes.Clear ();
-        foreach (ALTMeshSlicer g in originalSliceableObjects)
+        foreach (ALTMeshSlicer _gameObject in originalSliceableObjects)
         {
-            if (g) g.GoHome ();
+            if (_gameObject) _gameObject.GoHome ();
         }
 
         Destroy (plane2Meshes);
         if (deployedRift)
         {
-            foreach (var n in nullSlices)
+            foreach (var _gameObject in nullSlices)
             {
-                if (n)
+                if (_gameObject)
                 {
-                n.GetComponent<ALTMeshSlicer>().GoHome ();
+                    _gameObject.GetComponent<ALTMeshSlicer>().GoHome ();
                 }
             }
             StartCoroutine (DestroyWorker (deployedRift));
@@ -281,10 +281,10 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         StartCoroutine(WitchHunt ());
     }
 
-    private IEnumerator DestroyWorker (GameObject go)
+    private IEnumerator DestroyWorker (GameObject _gameObject)
     {
         yield return new WaitForEndOfFrame ();
-        Destroy (go);
+        Destroy (_gameObject);
     }
 
     private void DeployInfinityMarker ()

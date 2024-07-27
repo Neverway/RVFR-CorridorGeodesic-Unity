@@ -83,8 +83,11 @@ public class VacuumProjectile : MonoBehaviour
         KillProjectile ();
     }
 
-    private void KillProjectile ()
+    public void KillProjectile (bool removeProjectileFromList = true)
     {
+        // Note: I added removeProjectileFromList because otherwise, calling this function from the geoFolder, will
+        // update the list while the utility is trying to iterate through it (That's no good!) ~Liz
+        
         // Give the projectile back to the weapon
         if (geoFolder)
         {
@@ -95,7 +98,7 @@ public class VacuumProjectile : MonoBehaviour
                     geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().currentAmmo++;
                 }
 
-                geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
+                if (removeProjectileFromList) geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
             }
             if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ())
             {
@@ -104,17 +107,18 @@ public class VacuumProjectile : MonoBehaviour
                     geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().currentAmmo++;
                 }
 
-                geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
+                if (removeProjectileFromList) geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
             }
         }
-        // Erase the projectile
-        Destroy (gameObject);
 
         //Spawn particle effect
         if (spawnOnDeath)
         {
             Instantiate (spawnOnDeath, transform.position, Quaternion.identity);
         }
+        
+        // Erase the projectile
+        Destroy (gameObject);
     }
 
 
