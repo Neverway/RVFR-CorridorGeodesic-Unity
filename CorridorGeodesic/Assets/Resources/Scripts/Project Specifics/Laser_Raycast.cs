@@ -75,7 +75,7 @@ public class Laser_Raycast : MonoBehaviour
     {
         foreach (var l in lineRenderers)
         {
-            //l.gameObject.SetActive (false);
+            l.gameObject.SetActive (false);
         }
         DrawReflectionPattern (this.transform.position + this.transform.forward * 0.75f, this.transform.forward, maxReflectionCount);
     }

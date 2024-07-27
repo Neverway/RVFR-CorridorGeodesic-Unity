@@ -782,15 +782,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7406508485276304133, guid: ff3469225baab858c9ebc9e25666dba4,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9098543258830866782}
-    - targetCorrespondingSourceObject: {fileID: 7406508485276304133, guid: ff3469225baab858c9ebc9e25666dba4,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6527129231594446977}
     - targetCorrespondingSourceObject: {fileID: 7406508485276304133, guid: ff3469225baab858c9ebc9e25666dba4,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5868365051958077408}
+    - targetCorrespondingSourceObject: {fileID: 7406508485276304133, guid: ff3469225baab858c9ebc9e25666dba4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5828619690642228414}
   m_SourcePrefab: {fileID: 100100000, guid: ff3469225baab858c9ebc9e25666dba4, type: 3}
 --- !u!1 &2448181450499351524 stripped
 GameObject:
@@ -896,23 +896,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1
---- !u!114 &9098543258830866782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2448181450499351524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba9328f886ac63731bba9d85776baa2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  homePosition: {x: 0, y: 0, z: 0}
-  homeScale: {x: 0, y: 0, z: 0}
-  homeParent: {fileID: 0}
-  nullSpace: 0
-  activeInNullSpace: 1
 --- !u!82 &6527129231594446977
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1024,6 +1007,23 @@ MonoBehaviour:
   pitchVariance: {x: 0.8, y: 1.2}
   playOnAwake: 0
   playOnAwakeDelay: 0
+--- !u!114 &-5828619690642228414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2448181450499351524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9328f886ac63731bba9d85776baa2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
+  nullSpace: 0
+  activeInNullSpace: 1
 --- !u!4 &5128313973611898881 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7857472642894048, guid: ff3469225baab858c9ebc9e25666dba4,
