@@ -104,13 +104,17 @@ public class Laser_Raycast : MonoBehaviour
             direction = Vector3.Reflect (direction, hit.normal);
             position = hit.point;
 
-            if (hit.collider.gameObject.TryGetComponent<MeshSlicer> (out var slicer))
+            if (hit.collider.gameObject.TryGetComponent<ALTMeshSlicer> (out var slicer))
             {
                 if (!slicer.isReflective)
                 {
                     bounce = false;
                 }
-                OnHit (hit);
+                OnHit(hit);
+            }
+            else
+            {
+                bounce = false;
             }
         }
         else

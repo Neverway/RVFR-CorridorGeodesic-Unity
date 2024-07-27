@@ -1,4 +1,4 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Liz M. & Connorses =====================
 //
 // Purpose:
 // Notes:

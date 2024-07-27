@@ -6,6 +6,7 @@
 //=============================================================================
 
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Laser_Detector : MonoBehaviour
 {
@@ -27,9 +28,10 @@ public class Laser_Detector : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-
     private Renderer laserRenderer;
     private MeshSlicer meshSlicer;
+    public UnityEvent OnPowered;
+    public UnityEvent OnNotPowered;
 
 
     //=-----------------=
@@ -54,6 +56,7 @@ public class Laser_Detector : MonoBehaviour
                 isActive = false;
                 laserRenderer.material = offMaterial;
                 laserLight.SetActive (false);
+                OnNotPowered.Invoke();
             }
         }
     }
@@ -72,6 +75,7 @@ public class Laser_Detector : MonoBehaviour
         timeSinceHit = 0f;
         if (!isActive)
         {
+            OnPowered.Invoke();
             isActive = true;
             laserRenderer.material = onMaterial;
             laserLight.SetActive(true);

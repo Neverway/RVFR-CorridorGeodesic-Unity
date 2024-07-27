@@ -1,4 +1,4 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Liz M. & Connorses =====================
 //
 // Purpose: Split a mesh into three slices and remove the center slice
 // Notes: This code was "Super Expertly Adapted" from the source code created by
