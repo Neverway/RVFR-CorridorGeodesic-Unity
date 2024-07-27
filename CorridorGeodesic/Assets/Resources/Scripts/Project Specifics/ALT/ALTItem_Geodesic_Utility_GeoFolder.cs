@@ -182,6 +182,27 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                     plane.SetActive (false);
                 }
             }
+            else
+            {
+                for (int i = 0; i < deployedRift.transform.childCount; i++)
+                {
+                    if (deployedRift.transform.GetChild(i).TryGetComponent<CorGeo_ActorData>(out var actor))
+                    {
+                        if (actor.activeInNullSpace)
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if (deployedRift.transform.GetChild(i).GetComponents<MeshCollider>().Length > 1)
+                        {
+                            print("THIS OBJECT IS HORDING MESH COLLIDERS! GET 'EM BOYS!");
+                            Destroy(deployedRift.transform.GetChild(i).GetComponents<MeshCollider>()[0]);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -348,11 +369,11 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 {
                     obj.transform.SetParent (deployedRift.transform, true);
                     //remove extra meshes (there were un-sliced meshes sticking around)
-                        var meshes = obj.GetComponents<MeshCollider> ();
-                        if (meshes.Length > 1)
-                        {
-                            Destroy (meshes[0]);
-                        }
+                    var meshColliders = GetComponents<MeshCollider> ();
+                    if (meshColliders.Length > 1)
+                    {
+                        Destroy (meshColliders[0]);
+                    }
                 }
                 ParentCollapseObjects ();
                 isCollapseStarted = true;
