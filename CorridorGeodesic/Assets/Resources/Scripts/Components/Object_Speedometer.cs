@@ -46,6 +46,7 @@ public class UI_Text_Speedometer : MonoBehaviour
     {
         if (UseLocalPlayer && !entityRigidbody)
         {
+            gameInstance = FindObjectOfType<GameInstance>();
             if (gameInstance.localPlayerCharacter.GetComponent<Rigidbody>()) entityRigidbody = gameInstance.localPlayerCharacter.GetComponent<Rigidbody>();
         }
         if (!entityRigidbody) return;
