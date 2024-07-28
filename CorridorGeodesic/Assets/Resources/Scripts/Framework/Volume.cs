@@ -16,7 +16,8 @@ public class Volume : MonoBehaviour
     //=-----------------=
     public string owningTeam; // Which team owns the trigger
     public bool affectsOwnTeam; // If true, the trigger will only affect objects that are a part of the owning team
-
+    public bool ignoreHeldObjects = true;
+    
 
     //=-----------------=
     // Private Variables
@@ -106,7 +107,7 @@ public class Volume : MonoBehaviour
         if (_other.CompareTag("PhysProp"))
         {
             // Don't register held objects
-            if (_other.gameObject.GetComponent<Object_Grabbable>()) { if (_other.gameObject.GetComponent<Object_Grabbable>().isHeld) { return; } }
+            if (_other.gameObject.GetComponent<Object_Grabbable>() && ignoreHeldObjects) { if (_other.gameObject.GetComponent<Object_Grabbable>().isHeld) { return; } }
             // Get a reference to the entity component
             targetProp = _other.gameObject;
             // Add the entity to the list if they are not already present

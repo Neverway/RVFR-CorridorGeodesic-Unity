@@ -138,7 +138,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         {
             var interaction = Instantiate(interactionVolume, viewCamera.transform);
             interaction.transform.GetChild(0).GetComponent<Volume_TriggerInteraction>().targetPawn = _pawn;
-            Destroy(interaction, 0.25f);
+            Destroy(interaction, 0.15f);
         }
     }
 

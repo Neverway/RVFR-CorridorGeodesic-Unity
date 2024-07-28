@@ -63,6 +63,7 @@ public class Object_Grabbable : MonoBehaviour
             var targetRotation = targetPawn.physObjectAttachmentPoint.transform.localRotation;
             transform.rotation = new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
             GetComponent<Rigidbody>().useGravity = false;
+            GetComponent<Rigidbody>().velocity = new Vector3();
         }
     }
 
