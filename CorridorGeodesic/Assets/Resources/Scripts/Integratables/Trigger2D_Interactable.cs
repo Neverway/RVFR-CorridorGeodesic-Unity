@@ -49,7 +49,7 @@ public class Trigger2D_Interactable : Volume
     {
         base.OnTriggerEnter2D(_other); // Call the base class method
         // Check for interaction
-        var interaction = _other.GetComponent<Trigger2D_Interaction>();
+        var interaction = _other.GetComponent<Volume_TriggerInteraction>();
         if (interaction) Interact();
         SetInteractionState();
     }

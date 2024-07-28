@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trigger2D_Interaction : Volume
+public class Volume_TriggerInteraction : Volume
 {
     //=-----------------=
     // Public Variables

@@ -27,8 +27,12 @@ public class Volume_TriggerInteractable : Volume
     public bool hideIndicator;
     [Tooltip("If this is false, a little indicator will appear above this volume to show the player it can be interacted with")]
     public bool useTalkIndicator;
+    [Tooltip("If this is true, then we want the actor who created the interaction volume to also be inside this trigger.")]
+    public bool requireActivatingActorInside = true;
     [Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
     public UnityEvent onInteract;
+    public UnityEvent onPowered;
+    public UnityEvent onUnpowered;
 
 
     //=-----------------=
@@ -59,8 +63,8 @@ public class Volume_TriggerInteractable : Volume
     {
         base.OnTriggerEnter2D(_other); // Call the base class method
         // Check for interaction
-        var interaction = _other.GetComponent<Trigger2D_Interaction>();
-        if (interaction) Interact();
+        var interaction = _other.GetComponent<Volume_TriggerInteraction>();
+        if (interaction) Interact(interaction);
         SetInteractionIndicatorState();
     }
 
@@ -75,8 +79,8 @@ public class Volume_TriggerInteractable : Volume
     {
         base.OnTriggerEnter(_other); // Call the base class method
         // Check for interaction
-        var interaction = _other.GetComponent<Trigger2D_Interaction>();
-        if (interaction) Interact();
+        var interaction = _other.GetComponent<Volume_TriggerInteraction>();
+        if (interaction) Interact(interaction);
         SetInteractionIndicatorState();
     }
 
@@ -104,13 +108,17 @@ public class Volume_TriggerInteractable : Volume
         }
     }
     
-    private void Interact()
+    private void Interact(Volume_TriggerInteraction _interaction)
     {
-        if (onInteractSignal == "" || hasBeenTriggered && !resetsAutomatically){ return;}
+        //if (onInteractSignal == "" || hasBeenTriggered && !resetsAutomatically){ return;}
+        if (hasBeenTriggered && !resetsAutomatically){ return;}
+        if (requireActivatingActorInside && !pawnsInTrigger.Contains(_interaction.targetPawn)) {return;}
         onInteract.Invoke(); // Dear future me, please keep in mind that this will not be called unless the onInteractSignal is set. I don't know if I intended for it to work that way. (P.S. I am using "-" for empty activations) ~Past Liz M.
         
         // Flip the current activation state
         isPowered = !isPowered;
+        if (isPowered) onPowered.Invoke();
+        else onUnpowered.Invoke();
         previousIsPoweredState = isPowered;
         
         // Update connected devices

@@ -21,6 +21,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [SerializeField] public float throwForce=150;
 
 
     //=-----------------=
@@ -39,6 +40,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     public InputActions.FirstPersonShooterActions fpsActions;
     private Rigidbody rigidbody;
     private Camera viewCamera;
+    [SerializeField] private GameObject interactionVolume;
 
 
     //=-----------------=
@@ -75,32 +77,45 @@ public class PlayerController_FirstPersonShooter : PawnController
         Cursor.visible = false;
         
         // Item usage
-        if (fpsActions.Primary.WasPressedThisFrame())
+        if (!_pawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject)
         {
-            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+            if (fpsActions.Primary.WasPressedThisFrame())
             {
-                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UsePrimary();
+                if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+                {
+                    _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UsePrimary();
+                }
+            }
+            if (fpsActions.Secondary.IsPressed())
+            {
+                if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+                {
+                    _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSecondary();
+                }
+            }
+            if (fpsActions.Secondary.WasReleasedThisFrame())
+            {
+                if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+                {
+                    _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).ReleaseSecondary();
+                }
+            }
+            if (fpsActions.Action.WasPressedThisFrame())
+            {
+                if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+                {
+                    _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
+                }
             }
         }
-        if (fpsActions.Secondary.IsPressed())
+        else
         {
-            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+            // Throw object
+            if (fpsActions.Primary.WasPressedThisFrame())
             {
-                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSecondary();
-            }
-        }
-        if (fpsActions.Secondary.WasReleasedThisFrame())
-        {
-            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
-            {
-                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).ReleaseSecondary();
-            }
-        }
-        if (fpsActions.Interact.WasPressedThisFrame())
-        {
-            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
-            {
-                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
+                _pawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject.
+                    GetComponent<Rigidbody>().AddForce(_pawn.physObjectAttachmentPoint.transform.forward*throwForce, ForceMode.Impulse);
+                _pawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject.GetComponent<Object_Grabbable>().ToggleHeld();
             }
         }
         
@@ -116,6 +131,14 @@ public class PlayerController_FirstPersonShooter : PawnController
         if (Input.GetKeyDown(KeyCode.Delete))
         {
             Destroy(_pawn.gameObject);
+        }
+        
+        // Interacting
+        if (fpsActions.Interact.WasPressedThisFrame())
+        {
+            var interaction = Instantiate(interactionVolume, viewCamera.transform);
+            interaction.transform.GetChild(0).GetComponent<Volume_TriggerInteraction>().targetPawn = _pawn;
+            Destroy(interaction, 0.25f);
         }
     }
 

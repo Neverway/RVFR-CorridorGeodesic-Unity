@@ -44,6 +44,7 @@ public class Pawn : MonoBehaviour
     private GameInstance gameInstance;
     public Quaternion faceDirection; // Imported from old system
     public RaycastHit slopeHit;
+    public GameObject physObjectAttachmentPoint;
 
 
     //=-----------------=
