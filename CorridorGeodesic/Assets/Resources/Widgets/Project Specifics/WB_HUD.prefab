@@ -511,6 +511,8 @@ GameObject:
   - component: {fileID: 972502918751877133}
   - component: {fileID: 8730106809340042669}
   - component: {fileID: 6977980548523111505}
+  - component: {fileID: 2214441737602076005}
+  - component: {fileID: 6543076128769477932}
   m_Layer: 0
   m_Name: Pain
   m_TagString: Untagged
@@ -575,6 +577,42 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2214441737602076005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8629236179701815004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97d08aac249c3360aa92eade49f3e720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPawn: {fileID: 0}
+  findPossessedPawn: 1
+  fadeSpeed: 1
+--- !u!95 &6543076128769477932
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8629236179701815004}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9230324d2ee3488cc8bcd46ce092a417, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &101663654406370268
 PrefabInstance:
   m_ObjectHideFlags: 0

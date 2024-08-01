@@ -28,7 +28,7 @@ public class Laser_Detector : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private Renderer laserRenderer;
+    [SerializeField] private Renderer laserRenderer;
     private MeshSlicer meshSlicer;
     public UnityEvent OnPowered;
     public UnityEvent OnNotPowered;
@@ -40,7 +40,6 @@ public class Laser_Detector : MonoBehaviour
 
     private void Start ()
     {
-        laserRenderer = GetComponent<Renderer> ();
         meshSlicer = GetComponent<MeshSlicer> ();
         laserRenderer.material = offMaterial;
         laserLight.SetActive(false);

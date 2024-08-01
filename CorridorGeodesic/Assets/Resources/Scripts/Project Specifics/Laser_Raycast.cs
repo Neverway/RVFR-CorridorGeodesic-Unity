@@ -112,6 +112,11 @@ public class Laser_Raycast : MonoBehaviour
                 }
                 OnHit(hit);
             }
+            else if (hit.collider.gameObject.TryGetComponent<Laser_Detector> (out var detector))
+            {
+                bounce = false;
+                OnHit(hit);
+            }
             else
             {
                 bounce = false;
