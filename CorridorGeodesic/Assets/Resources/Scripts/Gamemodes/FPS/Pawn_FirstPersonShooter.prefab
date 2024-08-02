@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91bb67116f18d64a4823df6d4137ac1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOccupied: 0
+  heldObject: {fileID: 0}
 --- !u!1 &8893412746463795353
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,6 +758,11 @@ PrefabInstance:
         type: 3}
       propertyPath: near clip plane
       value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012740365997609049, guid: ff3469225baab858c9ebc9e25666dba4,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 14327
       objectReference: {fileID: 0}
     - target: {fileID: 7391132662113807829, guid: ff3469225baab858c9ebc9e25666dba4,
         type: 3}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1604816167086699018}
   - component: {fileID: 6023148079239543006}
   - component: {fileID: 2396191649429294172}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,6 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owningTeam: 
   affectsOwnTeam: 0
+  ignoreHeldObjects: 1
   pawnsInTrigger: []
   propsInTrigger: []
   targetEnt: {fileID: 0}
@@ -240,7 +241,14 @@ MonoBehaviour:
   resetsAutomatically: 1
   hideIndicator: 0
   useTalkIndicator: 0
+  requireActivatingActorInside: 1
   onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  onPowered:
+    m_PersistentCalls:
+      m_Calls: []
+  onUnpowered:
     m_PersistentCalls:
       m_Calls: []
   hasBeenTriggered: 0
