@@ -47,4 +47,8 @@ public class CharacterState
     public float sprintSpeedMultiplier;
     [Tooltip("Essentially how long it takes you to get up to speed while sprinting")]
     public float sprintAcceleration;
+    [Tooltip("The maximum a player can set upwards in units when they hit a wall that's potentially a step")]
+    public float maxStepHeight;
+    [Tooltip("How much to overshoot into the direction a potential step in units when testing. High values prevent player from walking up tiny steps but may cause problems.")]
+    public float stepSearchOvershoot;
 }

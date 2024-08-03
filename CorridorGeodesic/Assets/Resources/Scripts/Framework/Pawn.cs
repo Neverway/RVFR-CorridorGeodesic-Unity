@@ -44,7 +44,7 @@ public class Pawn : MonoBehaviour
     private GameInstance gameInstance;
     public Quaternion faceDirection; // Imported from old system
     public RaycastHit slopeHit;
-    public GameObject physObjectAttachmentPoint;
+    public Pawn_AttachmentPoint physObjectAttachmentPoint;
 
 
     //=-----------------=
@@ -129,6 +129,8 @@ public class Pawn : MonoBehaviour
         currentState.jumpForce = defaultState.jumpForce;
         currentState.sprintSpeedMultiplier = defaultState.sprintSpeedMultiplier;
         currentState.sprintAcceleration = defaultState.sprintAcceleration;
+        currentState.maxStepHeight = defaultState.maxStepHeight;
+        currentState.stepSearchOvershoot = defaultState.stepSearchOvershoot;
     }
     // ------------------------------------------------------------------
 
