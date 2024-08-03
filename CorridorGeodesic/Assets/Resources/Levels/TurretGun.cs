@@ -21,6 +21,10 @@ public class TurretGun : MonoBehaviour
     [SerializeField] private GameObject flash;
     [SerializeField] private LayerMask mask;
 
+    [SerializeField] private Transform gunBarrel;
+    private float maxSpin = 720f;
+    private float timeSinceFired = 0f;
+
     //=-----------------=
     // Private Variables
     //=-----------------=
@@ -52,6 +56,12 @@ public class TurretGun : MonoBehaviour
             time -= fireDelay;
             DoRaycast ();
         }
+
+        if (timeSinceFired < fireDelay)
+        {
+            gunBarrel.Rotate (maxSpin * Time.deltaTime, 0, 0);
+        }
+        timeSinceFired += Time.deltaTime;
     }
 
     //=-----------------=
@@ -68,6 +78,7 @@ public class TurretGun : MonoBehaviour
                 pawn.ModifyHealth (damage);
                 flash.SetActive (true);
                 StartCoroutine (FlashOffWorker());
+                timeSinceFired = 0f;
             }
         }
         

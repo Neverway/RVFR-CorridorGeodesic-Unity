@@ -358,11 +358,11 @@ Transform:
   m_GameObject: {fileID: 5163932774398910807}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000059604638, y: -0.7071068, z: 0.000000119209275, w: 0.70710677}
-  m_LocalPosition: {x: -0.01764, y: -0, z: 0}
+  m_LocalPosition: {x: -0.017640006, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3399302147570840638}
+  m_Father: {fileID: 5993462027868119504}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &5670503946478517267
 MonoBehaviour:
@@ -383,6 +383,7 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 8
+  gunBarrel: {fileID: 3399302147570840638}
 --- !u!1 &5804392044924630140
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,8 +414,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5153190078186247934}
+  m_Children: []
   m_Father: {fileID: 5993462027868119504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &414031016025461264
@@ -635,6 +635,7 @@ Transform:
   m_Children:
   - {fileID: 3399302147570840638}
   - {fileID: 3531711955984606872}
+  - {fileID: 5153190078186247934}
   m_Father: {fileID: 3717709800258221257}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &73323517748304010

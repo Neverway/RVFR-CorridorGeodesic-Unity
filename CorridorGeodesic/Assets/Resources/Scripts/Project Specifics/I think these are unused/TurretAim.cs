@@ -44,10 +44,14 @@ public class TurretAim : MonoBehaviour
         }
 
         Camera cam = cameraManager.GetActiveRenderingCamera ();
+        if (cam == null)
+        {
+            return;
+        }
 
         forwardness = Vector3.Dot (turretMount.transform.forward, cam.transform.position - transform.position);
 
-        if (cam && forwardness > 0)
+        if (forwardness > 0)
         {
             aimTarget.LookAt (cam.transform.position, turretMount.transform.forward);
         }
