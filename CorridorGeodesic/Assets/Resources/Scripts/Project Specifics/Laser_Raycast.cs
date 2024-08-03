@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http.Headers;
 using UnityEngine;
 
 public class Laser_Raycast : MonoBehaviour
@@ -19,6 +20,9 @@ public class Laser_Raycast : MonoBehaviour
     [SerializeField] private int maxReflectionCount = 5;
     [SerializeField] private float maxStepDistance = 200f;
     [SerializeField] private LineRenderer prefabLine;
+    public bool isPowered;
+    public Transform laserFireTransform;
+    
     //=-----------------=
     // Private Variables
     //=-----------------=
@@ -77,7 +81,11 @@ public class Laser_Raycast : MonoBehaviour
         {
             l.gameObject.SetActive (false);
         }
-        DrawReflectionPattern (this.transform.position + this.transform.forward * 0.75f, this.transform.forward, maxReflectionCount);
+        if (!isPowered)
+        {
+            return;
+        }
+        DrawReflectionPattern (laserFireTransform.position + laserFireTransform.forward * 0.75f, laserFireTransform.forward, maxReflectionCount);
     }
 
     private void DrawReflectionPattern (Vector3 position, Vector3 direction, int reflectionsRemaining, bool bounce = true)
@@ -112,6 +120,11 @@ public class Laser_Raycast : MonoBehaviour
                 }
                 OnHit(hit);
             }
+            else if (hit.collider.gameObject.TryGetComponent<Laser_Detector> (out var detector))
+            {
+                bounce = false;
+                OnHit(hit);
+            }
             else
             {
                 bounce = false;
@@ -141,6 +154,11 @@ public class Laser_Raycast : MonoBehaviour
         {
             detector.OnHit ();
         }
+    }
+
+    public void SetIsPowered(bool _isPowered)
+    {
+        isPowered = _isPowered;
     }
 
 }

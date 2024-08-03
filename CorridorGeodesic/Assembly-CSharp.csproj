@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_Layers.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/PortalCamera.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/Widget_Depth.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_Grabbable.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Bludgeoning.cs" />
@@ -61,11 +60,12 @@
      <Compile Include="Assets/Resources/Scripts/Integratables/Trigger2D_Pickup.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/Volume.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Settings_Gameplay.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/Item_Geodesic_Utility_GeoFolder.cs" />
      <Compile Include="Assets/Resources/Levels/LB_LevelEditor.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/ApplicationSettingsData.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Bladed.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/I think these are unused/Door_Sliding.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Head.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/OLD/PortalTeleporter.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Volume2D_LayerChange.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/Laser_Detector.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/CorGeo/GameObject_Flicker.cs" />
@@ -96,6 +96,7 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Utility_Consumable.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/Actor.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_TriggerInteractable.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/I think these are unused/CutPreviewTracker.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/MusicManager.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Ranking.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_Billboard.cs" />
@@ -107,7 +108,6 @@
      <Compile Include="Assets/Resources/Scripts/Integratables/LogicGate_Or.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/GameInstance.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/CorGeo/Pawn_AttachmentPoint.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/Rift.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/PawnController.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/LogicGate_And.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Settings_Graphics.cs" />
@@ -119,21 +119,24 @@
      <Compile Include="Assets/Resources/Scripts/Gamemodes/PawnController_Default.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Utility.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Back.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/OLD/TEMP_Volume3D_Kill.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Button_Sounds.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Legs.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_KeepWorldScale.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/UI_Image_EntityPain.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/I think these are unused/TurretAim.cs" />
      <Compile Include="Assets/Resources/Levels/LB_Title.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/DataObject.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_DepthAssigner.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/OLD/PortalTextureSetup.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Volume2D_Force.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/PortalTextureSetup.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/OLD/Item_Geodesic_Utility.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/AntiProjectile.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/Pawn.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_VariableExposer_Light.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Pause.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Pawn_Inventory.cs" />
      <Compile Include="Assets/Resources/Levels/LB_Travel.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/MeshSlicer.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/CanvasForceGetActiveCamera.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Volume2D_Damage.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Text_EntityHealth.cs" />
@@ -141,6 +144,7 @@
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Text_EntityName.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon.cs" />
      <Compile Include="Assets/Resources/Scripts/Project Specifics/ALT/CorGeo_ActorData.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/OLD/Item_Geodesic_Utility_GeoFolder.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Projectile.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/Particle_DataExposer.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Title.cs" />
@@ -149,8 +153,6 @@
      <Compile Include="Assets/Resources/Scripts/Framework/WorldLoader.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework Customs/WB_Settings_Controls.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/ApplicationKeybinds.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/TEMP_Volume3D_Kill.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/Item_Geodesic_Utility.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/CameraManager.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Defense_Chest.cs" />
      <Compile Include="Assets/Resources/Scripts/Gamemodes/PlayerController_Spectator2D.cs" />
@@ -160,7 +162,10 @@
      <Compile Include="Assets/Resources/Scripts/Framework/Volume2D.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/Object_VariableExposer_Transform.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/InDev/Volume_Pain.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/OLD/PortalCamera.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/OLD/MeshSlicer.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Image_EntityItems.cs" />
+     <Compile Include="Assets/Resources/Scripts/Project Specifics/I think these are unused/Rift.cs" />
      <Compile Include="Assets/test.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Volume2D_LoadMap.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/PersistentSingleton.cs" />
@@ -180,16 +185,12 @@
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item_Weapon_Polearm.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/Item.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework/GameMode.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/PortalTeleporter.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Logic_Interactable.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/CutPreviewTracker.cs" />
      <Compile Include="Assets/Resources/Scripts/Gamemodes/FPS/PlayerController_FirstPersonShooter.cs" />
      <Compile Include="Assets/Resources/Scripts/Framework Customs/ProjectDatabase.cs" />
      <Compile Include="Assets/Resources/Scripts/Components/ActorData.cs" />
      <Compile Include="Assets/Resources/Scripts/Integratables/Experimental/UI_Text_EntityItems.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor_MemoryBrowser.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/TurretAim.cs" />
-     <Compile Include="Assets/Resources/Scripts/Project Specifics/Door_Sliding.cs" />
      <Compile Include="Assets/Resources/Widgets/Framework/WB_LevelEditor.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/Resources/Scripts/Integratables/CorGeo" />
@@ -203,7 +204,7 @@
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Gestures" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Overlay.shader" />
      <Folder Include="Assets/Samples/Input System" />
-     <Folder Include="Assets/Resources/Models/MapModels" />
+     <Folder Include="Assets/Resources/Models/Old/MapModels" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Steam Deck" />
      <Folder Include="Assets/TextMesh Pro/Sprites" />
      <Folder Include="Assets/Resources/Models/Materials" />
@@ -214,6 +215,7 @@
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Xbox 360" />
      <Folder Include="Assets/Resources/Actors/Objects/2D Objects/Depreciated" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Keyboard &amp; Mouse/Blanks" />
+     <Folder Include="Assets/Resources/Scripts/Project Specifics/OLD" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader" />
      <Folder Include="Assets/Resources/Actors/Data Items" />
      <Folder Include="Assets/Resources/Models/Old" />
@@ -231,13 +233,13 @@
      <Folder Include="Assets/Resources/Sprites/Level" />
      <Folder Include="Assets/Resources/Actors" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/PS3" />
-     <Folder Include="Assets/Resources/Models/Vaccum.Mat" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Amazon Luna" />
      <Folder Include="Assets/Resources/Scripts/Framework" />
      <Folder Include="Assets/ProBuilder Data" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Xbox Series" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Surface-Mobile.shader" />
      <Folder Include="Assets/Resources/Actors/Framework" />
+     <Folder Include="Assets/Resources/Materials/Physics" />
      <Folder Include="Assets/Resources/Widgets/Framework Customs" />
      <Folder Include="Assets/Samples" />
      <Folder Include="Assets/Resources/Materials/Portals" />
@@ -246,6 +248,7 @@
      <Folder Include="Assets/Resources/Widgets/Components" />
      <Folder Include="Assets/Packages" />
      <Folder Include="Assets/Resources/Sprites/System" />
+     <Folder Include="Assets/Resources/Scripts/Project Specifics/I think these are unused" />
      <Folder Include="Assets/Resources/Actors/Objects/3D Objects" />
      <Folder Include="Assets/Resources/Sprites/Tilesets/Collision" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Keyboard &amp; Mouse" />
@@ -264,7 +267,6 @@
      <Folder Include="Assets/Resources/Actors/Data Props" />
      <Folder Include="Assets/Resources" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro_Properties.cginc" />
-     <Folder Include="Assets/Resources/Models/Laser.Mat" />
      <Folder Include="Assets/Packages/Fonts" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Google Stadia" />
      <Folder Include="Assets/Resources/Sprites/Tilesets/Dev" />
@@ -304,6 +306,7 @@
      <Folder Include="Assets/Packages/Xelu_Prompts/Keyboard &amp; Mouse/Dark" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap-Mobile.shader" />
      <None Include="Assets/Resources/Materials/Shaders/Blur.shader" />
+     <Folder Include="Assets/Resources/Materials/Skyboxes" />
      <Folder Include="Assets/Packages/Xelu_Prompts/Others/Steam" />
      <None Include="Assets/TextMesh Pro/Fonts/LiberationSans - OFL.txt" />
      <Folder Include="Assets/TextMesh Pro/Documentation" />
