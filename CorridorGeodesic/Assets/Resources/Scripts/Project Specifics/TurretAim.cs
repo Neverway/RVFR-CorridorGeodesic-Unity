@@ -5,8 +5,6 @@
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TurretAim : MonoBehaviour
@@ -20,13 +18,14 @@ public class TurretAim : MonoBehaviour
     // Private Variables
     //=-----------------=
     [SerializeField] private GameObject turretMount;
-
+    [SerializeField] private Transform aimTarget;
+    [SerializeField] private float degreesPerSecond = 70f;
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
     private CameraManager cameraManager;
-
+    public float forwardness;
 
     //=-----------------=
     // Mono Functions
@@ -36,7 +35,7 @@ public class TurretAim : MonoBehaviour
         cameraManager = FindObjectOfType<CameraManager> ();
     }
 
-    private void Update()
+    private void Update ()
     {
         if (!cameraManager)
         {
@@ -44,11 +43,26 @@ public class TurretAim : MonoBehaviour
             return;
         }
 
-        if (cameraManager.GetActiveRenderingCamera ())
+        Camera cam = cameraManager.GetActiveRenderingCamera ();
+
+        forwardness = Vector3.Dot (turretMount.transform.forward, cam.transform.position - transform.position);
+
+        if (cam && forwardness > 0)
         {
-            transform.LookAt (cameraManager.GetActiveRenderingCamera ().transform.position, turretMount.transform.forward);
+            aimTarget.LookAt (cam.transform.position, turretMount.transform.forward);
         }
 
+        else
+        {
+            aimTarget.LookAt (turretMount.transform.position + turretMount.transform.forward, turretMount.transform.forward);
+        }
+
+        float diff = Quaternion.Angle(aimTarget.rotation, transform.rotation);
+
+        float t = (degreesPerSecond*Time.deltaTime) / diff;
+        if (t > 1) t = 1;
+
+        transform.rotation = Quaternion.Lerp (transform.rotation, aimTarget.rotation, t);
     }
 
     //=-----------------=
