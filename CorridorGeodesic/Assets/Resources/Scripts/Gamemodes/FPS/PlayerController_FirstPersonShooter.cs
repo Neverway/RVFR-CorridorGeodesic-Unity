@@ -1,8 +1,10 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
 // Purpose:
-// Notes: This player controller is based off of the tutorial series by Plai
-// Source: https://www.youtube.com/watch?v=LqnPeqoJRFY
+// Notes: This player controller is based off of the tutorial series by Plai,
+//      The Source Engine style step-up method is by Cobertos
+// Plai Source: https://www.youtube.com/watch?v=LqnPeqoJRFY
+// Cobertos Source: https://cobertos.com/blog/post/how-to-climb-stairs-unity3d
 //
 //=============================================================================
 
