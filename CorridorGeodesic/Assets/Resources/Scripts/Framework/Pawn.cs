@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Pawn : MonoBehaviour
@@ -26,6 +27,8 @@ public class Pawn : MonoBehaviour
     public bool isNearInteractable; // Imported from old system
     public bool destroyOnDeath; // Should this object be deleted once it dies
     public float destroyOnDeathDelay; // How long, in seconds, should we wait before deleting the pawn after death
+    
+    private List<ContactPoint> contactPoints = new List<ContactPoint>(); // Used to perform advanced collision checks (like step-up checks)
 
     public event Action OnPawnHurt;
     public event Action OnPawnHeal;
@@ -80,6 +83,16 @@ public class Pawn : MonoBehaviour
     {
         if (isDead) return;
         currentController.PawnFixedUpdate(this);
+    }
+    
+    void OnCollisionEnter(Collision col)
+    {
+        contactPoints.AddRange(col.contacts);
+    }
+    
+    void OnCollisionStay(Collision col)
+    {
+        contactPoints.AddRange(col.contacts);
     }
     
 
