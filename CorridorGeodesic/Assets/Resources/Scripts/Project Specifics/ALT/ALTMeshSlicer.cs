@@ -99,6 +99,8 @@ public class ALTMeshSlicer : MonoBehaviour
     public async void SliceClone (GameObject original)
     {
         bool sliced = false;
+        Collider coll = GetComponent<Collider> ();
+        bool isTrigger = coll.isTrigger;
         sliceableObject= GetComponent<BzSliceableObject> ();
         //Slice the object
         var result = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane1, meshSlicer);
@@ -109,6 +111,10 @@ public class ALTMeshSlicer : MonoBehaviour
             foreach (var obj in result.resultObjects)
             {
                 obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
+                foreach (Collider collider in obj.gameObject.GetComponents<Collider> ())
+                {
+                    collider.isTrigger = isTrigger;
+                }
                 ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
                 if (obj.side)
                 {
@@ -122,6 +128,14 @@ public class ALTMeshSlicer : MonoBehaviour
                         //add the positive sides to the null list
                         foreach (var obj2 in result2.resultObjects)
                         {
+                            foreach (Collider collider in obj2.gameObject.GetComponents<Collider> ())
+                            {
+                                collider.isTrigger = isTrigger;
+                            }
+                            if (obj2.gameObject.TryGetComponent<Collider> (out coll))
+                            {
+                                coll.isTrigger = isTrigger;
+                            }
                             obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
                             ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
                             if (obj2.side)
@@ -152,6 +166,10 @@ public class ALTMeshSlicer : MonoBehaviour
                 sliced = true;
                 foreach (var obj in result2.resultObjects)
                 {
+                    foreach (Collider collider in obj.gameObject.GetComponents<Collider> ())
+                    {
+                        collider.isTrigger = isTrigger;
+                    }
                     obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
                     ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
                     if (obj.side)

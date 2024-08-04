@@ -47,6 +47,13 @@ public class Volume_Kill : Volume
             print("Connors Has a hat!");
             _other.GetComponent<Pawn>().Kill();
         }
+        if (_other.TryGetComponent<CorGeo_ActorData> (out CorGeo_ActorData actor))
+        {
+            if (actor.diesInKillTrigger)
+            {
+                Destroy(_other.gameObject);
+            }
+        }
     }
     
 
