@@ -1,6 +1,6 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Connorses =====================
 //
-// Purpose:
+// Purpose: Controls the gun portion of the turrets
 // Notes:
 //
 //=============================================================================
@@ -22,8 +22,14 @@ public class TurretGun : MonoBehaviour
     [SerializeField] private LayerMask mask;
 
     [SerializeField] private Transform gunBarrel;
-    private float maxSpin = 720f;
+    private AudioSource audioSource;
+    [SerializeField] private float maxSpinSpeed = 720f;
     private float timeSinceFired = 0f;
+
+    [SerializeField] private float spottedDelay = 0.2f;
+    private float hitPawnTime = 0f;
+    private bool hitPawn = false;
+    [SerializeField] AudioClip warningSound;
 
     //=-----------------=
     // Private Variables
@@ -40,7 +46,7 @@ public class TurretGun : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-    
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -50,16 +56,33 @@ public class TurretGun : MonoBehaviour
             Debug.LogError ("FireDelay is too low which causes an infinite loop. Returning.");
             return;
         }
-        time += Time.deltaTime;
-        while (time > fireDelay)
+
+        if (RaycastCheckForPawn ())
         {
-            time -= fireDelay;
-            DoRaycast ();
+            if (hitPawn == false)
+            {
+                PlayWarningSound ();
+            }
+            hitPawn = true;
         }
+        else
+        {
+            hitPawn = false;
+        }
+
+        if (hitPawn)
+        {
+            hitPawnTime += Time.deltaTime;
+        }
+        else
+        {
+            hitPawnTime = 0f;
+        }
+
 
         if (timeSinceFired < fireDelay)
         {
-            gunBarrel.Rotate (maxSpin * Time.deltaTime, 0, 0);
+            gunBarrel.Rotate (maxSpinSpeed * Time.deltaTime, 0, 0);
         }
         timeSinceFired += Time.deltaTime;
     }
@@ -68,26 +91,37 @@ public class TurretGun : MonoBehaviour
     // Internal Functions
     //=-----------------=
 
-    private void DoRaycast ()
+    private bool RaycastCheckForPawn ()
     {
         RaycastHit hit;
         if (Physics.Raycast (transform.position, transform.TransformDirection (Vector3.forward), out hit, Mathf.Infinity))
         {
             if (hit.collider.gameObject.TryGetComponent<Pawn> (out var pawn))
             {
-                pawn.ModifyHealth (damage);
-                flash.SetActive (true);
-                StartCoroutine (FlashOffWorker());
-                timeSinceFired = 0f;
+                if (timeSinceFired > fireDelay && hitPawnTime > spottedDelay)
+                {
+                    pawn.ModifyHealth (damage);
+                    flash.SetActive (true);
+                    StartCoroutine (FlashOffWorker ());
+                    timeSinceFired = 0f;
+                    audioSource.Stop ();
+                    audioSource.Play ();
+                }
+                return true;
             }
         }
-        
+        return false;
     }
 
     private IEnumerator FlashOffWorker ()
     {
         yield return new WaitForSeconds (0.05f);
         flash.SetActive (false);
+    }
+
+    private void PlayWarningSound ()
+    {
+        audioSource.PlayOneShot (warningSound);
     }
 
 
