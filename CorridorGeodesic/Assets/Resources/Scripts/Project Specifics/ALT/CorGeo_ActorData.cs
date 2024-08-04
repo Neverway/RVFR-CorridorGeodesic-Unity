@@ -19,6 +19,7 @@ public class CorGeo_ActorData : MonoBehaviour
     [HideInInspector] public Transform homeParent;
     [HideInInspector] public bool nullSpace = false;
     [SerializeField] public bool activeInNullSpace = false;
+    [SerializeField] public bool diesInKillTrigger;
 
     //=-----------------=
     // Private Variables

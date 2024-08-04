@@ -21,6 +21,8 @@ public class Respawner : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
+    [SerializeField] private float spawnDelay;
+    private Coroutine spawnWorker;
 
 
     //=-----------------=
@@ -38,9 +40,9 @@ public class Respawner : MonoBehaviour
 
     private void Update()
     {
-        if (spawnedObject == null)
+        if (spawnedObject == null && spawnWorker == null)
         {
-            spawnedObject = Instantiate(prefabToSpawn, transform.position, transform.rotation);
+            spawnWorker = StartCoroutine(SpawnWorker());
         }
     }
 
@@ -48,6 +50,12 @@ public class Respawner : MonoBehaviour
     // Internal Functions
     //=-----------------=
 
+    private IEnumerator SpawnWorker ()
+    {
+        yield return new WaitForSeconds(spawnDelay);
+        spawnedObject = Instantiate (prefabToSpawn, transform.position, transform.rotation);
+        spawnWorker = null;
+    }
 
     //=-----------------=
     // External Functions
