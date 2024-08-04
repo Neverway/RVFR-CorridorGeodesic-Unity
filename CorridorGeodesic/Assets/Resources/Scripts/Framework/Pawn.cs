@@ -83,6 +83,7 @@ public class Pawn : MonoBehaviour
     {
         if (isDead) return;
         currentController.PawnFixedUpdate(this);
+        contactPoints.Clear(); //Deletes all ContactPoints collected from the last physics frame
     }
     
     void OnCollisionEnter(Collision col)

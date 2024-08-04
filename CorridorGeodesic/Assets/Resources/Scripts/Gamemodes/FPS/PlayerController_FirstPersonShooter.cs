@@ -126,6 +126,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     private void UpdateInteractionUsage(Pawn _pawn)
     {
         // Item usage
+        if (!_pawn.physObjectAttachmentPoint) return;
         if (!_pawn.physObjectAttachmentPoint.heldObject)
         {
             if (fpsActions.Primary.WasPressedThisFrame())
