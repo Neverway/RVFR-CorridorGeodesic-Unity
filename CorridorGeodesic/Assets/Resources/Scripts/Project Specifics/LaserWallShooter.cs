@@ -20,6 +20,7 @@ public class LaserWallShooter : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
     RaycastHit hit;
     private Vector3 extents = new Vector3 (0.05f, 1f, 0.05f);
+    private bool active = true;
 
     //=-----------------=
     // Mono Functions
@@ -27,7 +28,18 @@ public class LaserWallShooter : MonoBehaviour
 
     private void Update()
     {
+        if (!active)
+        {
+            return;
+        }
         Physics.Raycast (transform.position, transform.forward, out hit, 100f, layerMask);
         laserWall.transform.localScale = new Vector3 (1, .05f, hit.distance);
     }
+
+    public void SetActive (bool _active)
+    {
+        active = _active;
+        laserWall.SetActive (active);
+    }
+
 }
