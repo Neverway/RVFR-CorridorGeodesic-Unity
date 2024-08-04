@@ -68,6 +68,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     {
         // Check for pause input and set cursor locking accordingly
         UpdatePauseMenu(_pawn);
+        if (_pawn.isPaused) return;
         UpdateInteractionUsage(_pawn);
         
         // Debug Respawn
