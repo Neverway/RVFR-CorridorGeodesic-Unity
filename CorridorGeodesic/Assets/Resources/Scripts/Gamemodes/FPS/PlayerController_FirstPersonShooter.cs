@@ -2,7 +2,7 @@
 //
 // Purpose:
 // Notes: This player controller is based off of the tutorial series by Plai,
-//      The Source Engine style step-up method is by Cobertos
+//  The Source Engine style step-up method is by Cobertos
 // Plai Source: https://www.youtube.com/watch?v=LqnPeqoJRFY
 // Cobertos Source: https://cobertos.com/blog/post/how-to-climb-stairs-unity3d
 //
@@ -39,7 +39,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     // Reference Variables
     //=-----------------=
     private GameInstance gameInstance;
-    public InputActions.FirstPersonShooterActions fpsActions;
+    private InputActions.FirstPersonShooterActions fpsActions;
     private Rigidbody rigidbody;
     private Camera viewCamera;
     [SerializeField] private GameObject interactionVolume;
@@ -50,19 +50,63 @@ public class PlayerController_FirstPersonShooter : PawnController
     //=-----------------=
     public override void PawnAwake(Pawn _pawn)
     {
+        // Get references
         gameInstance = FindObjectOfType<GameInstance>();
+        rigidbody = _pawn.GetComponent<Rigidbody>();
+        viewCamera = _pawn.GetComponentInChildren<Camera>();
+        
+        // Setup inputs
         fpsActions = new InputActions().FirstPersonShooter;
         fpsActions.Enable();
 
-        rigidbody = _pawn.GetComponent<Rigidbody>();
-        rigidbody.freezeRotation = true;
-
-        viewCamera = _pawn.GetComponentInChildren<Camera>();
+        // Assign initial values
         rigidbody.mass = _pawn.currentState.gravityMultiplier;
+        rigidbody.freezeRotation = true;
     }
     
     public override void PawnUpdate(Pawn _pawn)
     {
+        // Check for pause input and set cursor locking accordingly
+        UpdatePauseMenu(_pawn);
+        UpdateInteractionUsage(_pawn);
+        
+        // Debug Respawn
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            Destroy(_pawn.gameObject);
+        }
+        
+        UpdateMovement(_pawn);
+        UpdateRotation(_pawn);
+        UpdateJumping(_pawn);
+        
+        // Calculate Slope Movement
+        slopMoveDirection = Vector3.ProjectOnPlane(moveDirection, _pawn.slopeHit.normal);
+    }
+
+    public override void PawnFixedUpdate(Pawn _pawn)
+    {
+        MovePlayer(_pawn);
+        
+        // Set wall-running view tilt
+        if (_pawn.GetComponent<Pawn_WallRun>())
+        {
+            viewCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, _pawn.GetComponent<Pawn_WallRun>().tilt);
+        }
+        else
+        {
+            viewCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        }
+        _pawn.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+    }
+    
+
+    //=-----------------=
+    // Internal Functions
+    //=-----------------=
+    private void UpdatePauseMenu(Pawn _pawn)
+    {
+        // Pause Game
         if (fpsActions.Pause.WasPressedThisFrame()) gameInstance.UI_ShowPause();
 
         // Lock mouse when unpaused, unlock when paused
@@ -76,10 +120,14 @@ public class PlayerController_FirstPersonShooter : PawnController
             return;
         }
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        
+        Cursor.visible = false;    
+    }
+
+    private void UpdateInteractionUsage(Pawn _pawn)
+    {
         // Item usage
-        if (!_pawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject)
+        if (!_pawn.physObjectAttachmentPoint) return;
+        if (!_pawn.physObjectAttachmentPoint.heldObject)
         {
             if (fpsActions.Primary.WasPressedThisFrame())
             {
@@ -110,58 +158,25 @@ public class PlayerController_FirstPersonShooter : PawnController
                 }
             }
         }
+        // Throw object
         else
         {
-            // Throw object
             if (fpsActions.Primary.WasPressedThisFrame())
             {
-                _pawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject.
+                _pawn.physObjectAttachmentPoint.heldObject.
                     GetComponent<Rigidbody>().AddForce(_pawn.physObjectAttachmentPoint.transform.forward*throwForce, ForceMode.Impulse);
-                _pawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject.GetComponent<Object_Grabbable>().ToggleHeld();
+                _pawn.physObjectAttachmentPoint.heldObject.GetComponent<Object_Grabbable>().ToggleHeld();
             }
         }
-        
-        UpdateMovement(_pawn);
-        UpdateRotation(_pawn);
-        UpdateJumping(_pawn);
-        
-        // Calculate Slope Movement
-        //Debug.Log(slopMoveDirection);
-        slopMoveDirection = Vector3.ProjectOnPlane(moveDirection, _pawn.slopeHit.normal);
-        
-        // Debug Respawn
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            Destroy(_pawn.gameObject);
-        }
-        
-        // Interacting
+        // Interact
         if (fpsActions.Interact.WasPressedThisFrame())
         {
             var interaction = Instantiate(interactionVolume, viewCamera.transform);
             interaction.transform.GetChild(0).GetComponent<Volume_TriggerInteraction>().targetPawn = _pawn;
-            Destroy(interaction, 0.15f);
+            Destroy(interaction, 0.1f);
         }
-    }
-
-    public override void PawnFixedUpdate(Pawn _pawn)
-    {
-        MovePlayer(_pawn);
-        if (_pawn.GetComponent<Pawn_WallRun>())
-        {
-            viewCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, _pawn.GetComponent<Pawn_WallRun>().tilt);
-        }
-        else
-        {
-            viewCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-        }
-        _pawn.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
     
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
     private void UpdateMovement(Pawn _pawn)
     {
         // Pawn movement
