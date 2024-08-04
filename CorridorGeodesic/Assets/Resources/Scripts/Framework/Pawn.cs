@@ -116,7 +116,7 @@ public class Pawn : MonoBehaviour
     private IEnumerator InvulnerabilityCooldown()
     {
         isInvulnerable = true;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(currentState.invulnerabilityTime);
         isInvulnerable = false;
     }
     
@@ -127,6 +127,7 @@ public class Pawn : MonoBehaviour
     {
         currentState.characterName = defaultState.actorName;
         currentState.health = defaultState.health;
+        currentState.invulnerabilityTime = defaultState.invulnerabilityTime;
         currentState.movementSpeed = defaultState.movementSpeed;
         currentState.team = defaultState.team;
         currentState.animationController = defaultState.animationController;

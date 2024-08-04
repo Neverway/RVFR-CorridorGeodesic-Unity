@@ -76,7 +76,7 @@ public class UI_Image_EntityPain : MonoBehaviour
     {
         isInPain = true;
         GetComponent<Animator>().Play("PainFlash");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(targetPawn.currentState.invulnerabilityTime);
         isInPain = false;
     }
 

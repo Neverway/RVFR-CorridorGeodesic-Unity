@@ -28,6 +28,7 @@ public class CharacterState
     // DON'T FORGET TO MODIFY THE Pawn & CharacterData CLASS TO MATCH THIS DATA!!!
     public string characterName;
     public float health;
+    public float invulnerabilityTime;
     public float movementSpeed;
     public string team;
     public RuntimeAnimatorController animationController;
