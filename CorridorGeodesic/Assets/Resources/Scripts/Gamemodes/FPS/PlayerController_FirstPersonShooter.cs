@@ -128,16 +128,6 @@ public class PlayerController_FirstPersonShooter : PawnController
     {
         // Item usage
         if (!_pawn.physObjectAttachmentPoint) return;
-        if (!_pawn.physObjectAttachmentPoint.heldObject)
-        {
-            if (fpsActions.Primary.WasPressedThisFrame())
-            {
-                if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
-                {
-                    _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UsePrimary();
-                }
-            }
-        }
         if (fpsActions.Secondary.IsPressed())
         {
             if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
@@ -157,6 +147,16 @@ public class PlayerController_FirstPersonShooter : PawnController
             if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
             {
                 _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
+            }
+        }
+        if (!_pawn.physObjectAttachmentPoint.heldObject)
+        {
+            if (fpsActions.Primary.WasPressedThisFrame())
+            {
+                if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+                {
+                    _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UsePrimary();
+                }
             }
         }
         // Throw object
