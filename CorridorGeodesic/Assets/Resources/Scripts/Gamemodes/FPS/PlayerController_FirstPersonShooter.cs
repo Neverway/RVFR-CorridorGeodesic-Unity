@@ -151,12 +151,12 @@ public class PlayerController_FirstPersonShooter : PawnController
                     _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).ReleaseSecondary();
                 }
             }
-            if (fpsActions.Action.WasPressedThisFrame())
+        }
+        if (fpsActions.Action.WasPressedThisFrame())
+        {
+            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
             {
-                if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
-                {
-                    _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
-                }
+                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
             }
         }
         // Throw object
