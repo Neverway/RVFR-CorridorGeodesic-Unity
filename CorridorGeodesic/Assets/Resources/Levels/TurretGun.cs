@@ -16,7 +16,7 @@ public class TurretGun : MonoBehaviour
     //=-----------------=
 
     [SerializeField] private float fireDelay=0.2f;
-    [SerializeField] private float time=0;
+    //[SerializeField] private float time=0;
     [SerializeField] private float damage = -1f;
     [SerializeField] private GameObject flash;
     [SerializeField] private LayerMask mask;
