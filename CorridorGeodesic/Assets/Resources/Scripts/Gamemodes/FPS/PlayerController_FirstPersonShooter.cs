@@ -137,19 +137,19 @@ public class PlayerController_FirstPersonShooter : PawnController
                     _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UsePrimary();
                 }
             }
-            if (fpsActions.Secondary.IsPressed())
+        }
+        if (fpsActions.Secondary.IsPressed())
+        {
+            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
             {
-                if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
-                {
-                    _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSecondary();
-                }
+                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSecondary();
             }
-            if (fpsActions.Secondary.WasReleasedThisFrame())
+        }
+        if (fpsActions.Secondary.WasReleasedThisFrame())
+        {
+            if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
             {
-                if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
-                {
-                    _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).ReleaseSecondary();
-                }
+                _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).ReleaseSecondary();
             }
         }
         if (fpsActions.Action.WasPressedThisFrame())
