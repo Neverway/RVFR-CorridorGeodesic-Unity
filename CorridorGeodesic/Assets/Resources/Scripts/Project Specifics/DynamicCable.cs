@@ -21,13 +21,14 @@ public class DynamicCable : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private List<GameObject> waypoints;
-    [SerializeField] private Vector3 lastAnchorAPosition, lastAnchorBPosition;
+    private List<GameObject> waypoints = new List<GameObject>();
+    private Vector3 lastAnchorAPosition, lastAnchorBPosition;
 
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [SerializeField] private Material cableUnpowered, cablePowered;
     [SerializeField] private GameObject anchorPointA, anchorPointB;
     [SerializeField] private GameObject waypointsRoot;
     [SerializeField] private GameObject waypointReference; // Used as the instantiation reference when auto-generating cable
@@ -40,6 +41,7 @@ public class DynamicCable : MonoBehaviour
     private void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        //if (!generateWaypointsUsingLength) GatherWaypoints();
     }
 
     private void FixedUpdate()
@@ -133,4 +135,15 @@ public class DynamicCable : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void SetCablePowered(bool _isPowered)
+    {
+        if (_isPowered)
+        {
+            lineRenderer.material = cablePowered;
+        }
+        if (!_isPowered)
+        {
+            lineRenderer.material = cableUnpowered;
+        }
+    }
 }
