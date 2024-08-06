@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Object_Grabbable : MonoBehaviour
 {
@@ -59,11 +60,18 @@ public class Object_Grabbable : MonoBehaviour
         }
         else
         {
-            transform.position = targetPawn.physObjectAttachmentPoint.transform.position;
-            var targetRotation = targetPawn.physObjectAttachmentPoint.transform.localRotation;
-            transform.rotation = new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
+            //transform.position = targetPawn.physObjectAttachmentPoint.transform.position;
+            //var targetRotation = targetPawn.physObjectAttachmentPoint.transform.localRotation;
+            //transform.rotation = new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
+            targetPawn.physObjectAttachmentPoint.gameObject.GetComponent<FixedJoint>().connectedBody = GetComponent<Rigidbody>();
             GetComponent<Rigidbody>().useGravity = false;
             GetComponent<Rigidbody>().velocity = new Vector3();
+            // Drop the object if it's too far away
+            if (Vector3.Distance(gameObject.transform.position,
+                    targetPawn.physObjectAttachmentPoint.transform.position) > 2.5)
+            {
+                ToggleHeld();
+            }
         }
     }
 
@@ -125,6 +133,7 @@ public class Object_Grabbable : MonoBehaviour
             else
             {
                 GetComponent<Rigidbody>().useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
+                targetPawn.physObjectAttachmentPoint.gameObject.GetComponent<FixedJoint>().connectedBody = null;
                 targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
             }
             ToggleHeld();
@@ -161,6 +170,7 @@ public class Object_Grabbable : MonoBehaviour
         {
             GetComponent<Rigidbody>().useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
             targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
+            targetPawn.physObjectAttachmentPoint.gameObject.GetComponent<FixedJoint>().connectedBody = null;
         }
     }
 }
