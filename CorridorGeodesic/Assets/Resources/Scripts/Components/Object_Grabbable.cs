@@ -32,6 +32,7 @@ public class Object_Grabbable : MonoBehaviour
     public Pawn targetPawn;
     public Vector3 lastFaceDirection;
     private Volume_TriggerInteractable interactableTrigger;
+    private Rigidbody propRigidbody;
 
 
     //=-----------------=
@@ -41,9 +42,10 @@ public class Object_Grabbable : MonoBehaviour
     {
         if (transform.childCount == 0) return;
         interactableTrigger = transform.GetChild(0).GetComponent<Volume_TriggerInteractable>();
+        propRigidbody = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (!isHeld || !targetPawn)
         {
@@ -60,15 +62,25 @@ public class Object_Grabbable : MonoBehaviour
         }
         else
         {
-            //transform.position = targetPawn.physObjectAttachmentPoint.transform.position;
-            //var targetRotation = targetPawn.physObjectAttachmentPoint.transform.localRotation;
-            //transform.rotation = new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
-            targetPawn.physObjectAttachmentPoint.gameObject.GetComponent<FixedJoint>().connectedBody = GetComponent<Rigidbody>();
-            GetComponent<Rigidbody>().useGravity = false;
-            GetComponent<Rigidbody>().velocity = new Vector3();
+            var direction = targetPawn.physObjectAttachmentPoint.transform.position - gameObject.transform.position;
+            var distance = Vector3.Distance(targetPawn.physObjectAttachmentPoint.transform.position, gameObject.transform.position);
+            RaycastHit hit = new RaycastHit();
+            var rayToHold = Physics.Raycast(transform.position, direction, out hit, distance);
+            if (rayToHold)
+            {
+                transform.position = hit.point-(direction.normalized*0.5f);
+            }
+            else
+            {
+                transform.position = targetPawn.physObjectAttachmentPoint.transform.position;
+            }
+            var targetRotation = targetPawn.physObjectAttachmentPoint.transform.localRotation;
+            transform.rotation = new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
+            
+            propRigidbody.useGravity = false;
             // Drop the object if it's too far away
             if (Vector3.Distance(gameObject.transform.position,
-                    targetPawn.physObjectAttachmentPoint.transform.position) > 2.5)
+                    targetPawn.physObjectAttachmentPoint.transform.position) > 2)
             {
                 ToggleHeld();
             }
@@ -116,6 +128,7 @@ public class Object_Grabbable : MonoBehaviour
 
     private void OnTriggerEnter(Collider _other)
     {
+        propRigidbody = GetComponent<Rigidbody>();
         var interaction = _other.GetComponent<Volume_TriggerInteraction>();
         if (interaction)
         {
@@ -128,12 +141,12 @@ public class Object_Grabbable : MonoBehaviour
                     return;
                 }
                 targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = gameObject;
-                wasGravityEnabled=GetComponent<Rigidbody>().useGravity; // Store whether gravity was enabled before we get picked up
+                wasGravityEnabled = propRigidbody.useGravity; // Store whether gravity was enabled before we get picked up
+                // Lerp to the position of the object to go to the position of the holding point
             }
             else
             {
-                GetComponent<Rigidbody>().useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
-                targetPawn.physObjectAttachmentPoint.gameObject.GetComponent<FixedJoint>().connectedBody = null;
+                propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
                 targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
             }
             ToggleHeld();
@@ -168,9 +181,8 @@ public class Object_Grabbable : MonoBehaviour
         isHeld = !isHeld;
         if (!isHeld)
         {
-            GetComponent<Rigidbody>().useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
+            propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
             targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
-            targetPawn.physObjectAttachmentPoint.gameObject.GetComponent<FixedJoint>().connectedBody = null;
         }
     }
 }
