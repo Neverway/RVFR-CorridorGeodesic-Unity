@@ -279,7 +279,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             if (_actor)
             {
-                _actor.GoHome ();
+                _actor.GoHome();
             }
         }
 
