@@ -14,10 +14,10 @@ public class CorGeo_ActorData : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [HideInInspector] public Vector3 homePosition;
-    [HideInInspector] public Vector3 homeScale;
-    [HideInInspector] public Transform homeParent;
-    [HideInInspector] public bool nullSpace = false;
+    [SerializeField] public Vector3 homePosition;
+    [SerializeField] public Vector3 homeScale;
+    [SerializeField] public Transform homeParent;
+    [SerializeField] public bool nullSpace = false;
     [SerializeField] public bool activeInNullSpace = false;
     [SerializeField] public bool diesInKillTrigger;
 

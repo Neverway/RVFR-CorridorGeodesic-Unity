@@ -307,7 +307,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
             StartCoroutine (DestroyWorker (deployedRift));
         }
-
+        // Reset the value used to track if an actor is in null space
+        foreach (var actor in FindObjectsOfType<CorGeo_ActorData> ())
+        {
+            actor.nullSpace = false;
+        }
+        
         StartCoroutine(WitchHunt ());
     }
 
