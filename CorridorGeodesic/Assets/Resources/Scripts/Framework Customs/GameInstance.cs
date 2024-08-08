@@ -232,4 +232,10 @@ public class GameInstance : MonoBehaviour
     {
         AddWidget(UserInterfaceWidgets[6]);
     }
+
+    // 7
+    public void UI_ShowDeathScreen()
+    {
+        AddWidget(UserInterfaceWidgets[7]);
+    }
 }
