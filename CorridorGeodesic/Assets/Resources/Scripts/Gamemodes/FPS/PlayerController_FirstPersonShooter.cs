@@ -270,7 +270,13 @@ public class PlayerController_FirstPersonShooter : PawnController
     {
         var rotation = viewCamera.transform.localPosition;
         // Drop held items
-        _pawn.physObjectAttachmentPoint.heldObject.GetComponent<Object_Grabbable>().ToggleHeld();
+        if (_pawn.physObjectAttachmentPoint.heldObject)
+        {
+            if (_pawn.physObjectAttachmentPoint.heldObject.GetComponent<Object_Grabbable>())
+            {
+                _pawn.physObjectAttachmentPoint.heldObject.GetComponent<Object_Grabbable>().ToggleHeld();
+            }
+        }
         _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
         viewCamera.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y, -90);
     }
