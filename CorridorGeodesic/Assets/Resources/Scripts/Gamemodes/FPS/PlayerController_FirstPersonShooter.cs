@@ -62,10 +62,14 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Assign initial values
         rigidbody.mass = _pawn.currentState.gravityMultiplier;
         rigidbody.freezeRotation = true;
+        
+        // Subscribe to events
+        _pawn.OnPawnDeath += () => { OnDeath(_pawn); };
     }
     
     public override void PawnUpdate(Pawn _pawn)
     {
+        
         // Check for pause input and set cursor locking accordingly
         UpdatePauseMenu(_pawn);
         if (_pawn.isPaused) return;
@@ -87,6 +91,11 @@ public class PlayerController_FirstPersonShooter : PawnController
 
     public override void PawnFixedUpdate(Pawn _pawn)
     {
+        if (_pawn.isDead)
+        {
+            return;
+        }
+        
         MovePlayer(_pawn);
         
         // Set wall-running view tilt
@@ -255,6 +264,15 @@ public class PlayerController_FirstPersonShooter : PawnController
                 _pawn.defaultState.movementSpeed,
                 _pawn.currentState.sprintAcceleration * Time.deltaTime);
         }
+    }
+
+    private void OnDeath(Pawn _pawn)
+    {
+        var rotation = viewCamera.transform.localPosition;
+        // Drop held items
+        _pawn.physObjectAttachmentPoint.heldObject.GetComponent<Object_Grabbable>().ToggleHeld();
+        _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
+        viewCamera.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y, -90);
     }
 
 
