@@ -66,4 +66,10 @@ public class Elevator : MonoBehaviour
             OpenElevator();
         }
     }
+
+    public void DescendElevator()
+    {
+        if (!isPowered) return;
+        animator.Play("Elevator_Descending");
+    }
 }
