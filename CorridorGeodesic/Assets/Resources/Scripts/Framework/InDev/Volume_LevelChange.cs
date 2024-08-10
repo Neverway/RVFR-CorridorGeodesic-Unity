@@ -42,8 +42,9 @@ public class Volume_LevelChange : Volume
     
     private new void OnTriggerEnter(Collider _other)
     {
-        if (GetPlayerInTrigger())
+        if (_other.GetComponent<Pawn>())
         {
+            if (!_other.GetComponent<Pawn>().isPossessed) return;
             if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
             worldLoader.LoadWorld(worldID);
         }
