@@ -19,6 +19,7 @@ public class WorldLoader : MonoBehaviour
     [SerializeField] public float delayBeforeWorldChange = 0.25f;
     [SerializeField] public float minimumRequiredLoadTime = 1f;
     [SerializeField] private string loadingWorldID = "_Travel";
+    public string streamingWorldID = "_Streaming";
     public static event Action OnWorldLoaded;
     public bool isLoading;
 
@@ -38,7 +39,20 @@ public class WorldLoader : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    
+    private void Start()
+    {
+        // Make sure the streaming world is loaded, so we can store actors there if needed
+        if (!SceneManager.GetSceneByName(streamingWorldID).isLoaded)
+        {
+            SceneManager.LoadScene(streamingWorldID, LoadSceneMode.Additive);
+        }
+    }
+
+    private void Update()
+    {
+        print(SceneManager.GetActiveScene().name);
+    }
+
 
     //=-----------------=
     // Internal Functions
@@ -66,7 +80,8 @@ public class WorldLoader : MonoBehaviour
     private IEnumerator LoadAsyncOperation()
     {
         // Create an async operation (Will automatically switch to target scene once it's finished loading)
-        var targetLevel = SceneManager.LoadSceneAsync(targetWorldID);
+        
+        var targetLevel = SceneManager.LoadSceneAsync(targetWorldID, LoadSceneMode.Additive);
 	    
         while (targetLevel.progress < 1)
         {
@@ -79,7 +94,16 @@ public class WorldLoader : MonoBehaviour
         // Scene has finished loading, trigger the SceneLoaded event
         if (OnWorldLoaded != null)
         {
+            EjectStreamedActors();
             OnWorldLoaded.Invoke();
+        }
+    }
+
+    private void EjectStreamedActors()
+    {
+        foreach (var actor in SceneManager.GetSceneAt(1).GetRootGameObjects())
+        {
+            SceneManager.MoveGameObjectToScene(actor.gameObject, SceneManager.GetActiveScene());
         }
     }
 
