@@ -41,15 +41,15 @@ public class WorldLoader : MonoBehaviour
     //=-----------------=
     private void Start()
     {
+    }
+
+    private void Update()
+    {
         // Make sure the streaming world is loaded, so we can store actors there if needed
         if (!SceneManager.GetSceneByName(streamingWorldID).isLoaded)
         {
             SceneManager.LoadScene(streamingWorldID, LoadSceneMode.Additive);
         }
-    }
-
-    private void Update()
-    {
     }
 
 
