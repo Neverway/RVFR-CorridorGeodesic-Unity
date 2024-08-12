@@ -84,7 +84,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     // Mono Functions
     //=-----------------=
-
     private void Start ()
     {
         meshSlicers = FindObjectsByType<ALTMeshSlicer> (FindObjectsSortMode.None);

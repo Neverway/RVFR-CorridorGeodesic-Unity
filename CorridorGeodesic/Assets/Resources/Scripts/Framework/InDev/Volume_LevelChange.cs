@@ -46,7 +46,7 @@ public class Volume_LevelChange : Volume
         {
             if (!_other.GetComponent<Pawn>().isPossessed) return;
             if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
-            worldLoader.LoadWorld(worldID);
+            worldLoader.StreamLoadWorld(worldID);
         }
     }
 
