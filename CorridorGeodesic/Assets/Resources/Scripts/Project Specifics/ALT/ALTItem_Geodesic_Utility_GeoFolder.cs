@@ -87,13 +87,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     private void Start ()
     {
         meshSlicers = FindObjectsByType<ALTMeshSlicer> (FindObjectsSortMode.None);
-        cutPreviews = new GameObject[2];
-        for (int i = 0; i < cutPreviews.Length; i++)
-        {
-            cutPreviews[i] = Instantiate (cutPreviewPrefab);
-            cutPreviews[i].GetComponent<CutPreviewTracker>().cutPreviewID = i; // Label them so we know whether they are a or b space's side preview
-            cutPreviews[i].SetActive (false);
-        }
+
+        CreateCutPreviews();
     }
 
     public override void UsePrimary ()
@@ -236,6 +231,13 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         plane1 = new Plane (riftNormal, pos1);
         plane2 = new Plane (-riftNormal, pos2);
 
+        
+        // TODO make this neater tomorrow
+        if (!cutPreviews[0])
+        {
+            CreateCutPreviews();
+        }
+        
         cutPreviews[0].SetActive (true);
         cutPreviews[1].SetActive (true);
         cutPreviews[0].transform.position = pos1;
@@ -249,6 +251,17 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private void CreateCutPreviews()
+    {
+        cutPreviews = new GameObject[2];
+        for (int i = 0; i < cutPreviews.Length; i++)
+        {
+            cutPreviews[i] = Instantiate (cutPreviewPrefab);
+            cutPreviews[i].GetComponent<CutPreviewTracker>().cutPreviewID = i; // Label them so we know whether they are a or b space's side preview
+            cutPreviews[i].SetActive (false);
+        }
+    }
+    
     private void RecallInfinityMarkers ()
     {
         if (currentAmmo >= 2) return;
