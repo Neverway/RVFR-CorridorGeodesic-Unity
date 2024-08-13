@@ -144,8 +144,6 @@ public class Pawn : MonoBehaviour
         currentState.jumpForce = defaultState.jumpForce;
         currentState.sprintSpeedMultiplier = defaultState.sprintSpeedMultiplier;
         currentState.sprintAcceleration = defaultState.sprintAcceleration;
-        currentState.maxStepHeight = defaultState.maxStepHeight;
-        currentState.stepSearchOvershoot = defaultState.stepSearchOvershoot;
     }
     // ------------------------------------------------------------------
 
