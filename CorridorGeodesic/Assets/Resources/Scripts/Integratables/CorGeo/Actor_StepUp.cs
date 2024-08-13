@@ -59,7 +59,7 @@ public class Actor_StepUp : MonoBehaviour
         //Steps
         if(stepUp)
         {
-            print("Attempting stepup");
+            //print("Attempting stepup");
             this.GetComponent<Rigidbody>().position += stepUpOffset*additionalStepUpOffset;
             this.GetComponent<Rigidbody>().velocity = lastVelocity;
         }
@@ -127,7 +127,7 @@ public class Actor_StepUp : MonoBehaviour
             bool test = ResolveStepUp(out stepUpOffset, cp, groundCP);
             if (test)
             {
-                print("FindStep 1");
+                //print("FindStep 1");
                 return test;
             }
         }
@@ -152,12 +152,12 @@ public class Actor_StepUp : MonoBehaviour
             //print("Contact point was not flat enough");
             return false;
         }
-        print("Found a contact point that could be a step");
+        //print("Found a contact point that could be a step");
         
         //( 2 ) Make sure the contact point is low enough to be a step
         if( !(stepTestCP.point.y - groundCP.point.y < maxStepHeight) )
         {
-            print("Step distance was too high to step up");
+            //print("Step distance was too high to step up");
             return false;
         }
         
@@ -179,12 +179,12 @@ public class Actor_StepUp : MonoBehaviour
         Ray ray = new Ray(origin, direction);
         if (!stepCol.Raycast(ray, out hitInfo, maxStepHeight))
         {
-            Debug.Log("Raycast Failed - Ray did not hit any collider");
+            //Debug.Log("Raycast Failed - Ray did not hit any collider");
             return false;
         }
         else
         {
-            Debug.Log("Raycast Succeeded - Hit Point: " + hitInfo.point);
+            //Debug.Log("Raycast Succeeded - Hit Point: " + hitInfo.point);
         }
         
         //We have enough info to calculate the points
@@ -193,7 +193,7 @@ public class Actor_StepUp : MonoBehaviour
         
         //We passed all the checks! Calculate and return the point!
         stepUpOffset = stepUpPointOffset;
-        print("ResolveStepUp 1");
+        //print("ResolveStepUp 1");
         return true;
     }
 

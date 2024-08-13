@@ -100,6 +100,7 @@ public class ALTMeshSlicer : MonoBehaviour
     {
         bool sliced = false;
         Collider coll = GetComponent<Collider> ();
+        if (!coll) return;
         bool isTrigger = coll.isTrigger;
         sliceableObject= GetComponent<BzSliceableObject> ();
         //Slice the object
