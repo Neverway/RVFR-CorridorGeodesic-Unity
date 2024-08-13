@@ -17073,7 +17073,6 @@ Transform:
   - {fileID: 1689440162}
   - {fileID: 683921477}
   - {fileID: 1825272819}
-  - {fileID: 1221477438}
   - {fileID: 246363069}
   - {fileID: 2081569296}
   - {fileID: 1248166970}
@@ -24208,8 +24207,6 @@ GameObject:
   - component: {fileID: 1221477438}
   - component: {fileID: 1221477442}
   - component: {fileID: 1221477441}
-  - component: {fileID: 1221477440}
-  - component: {fileID: 1221477439}
   m_Layer: 0
   m_Name: Cylinder (1)
   m_TagString: Untagged
@@ -24225,48 +24222,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1221477437}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7557405, y: -0, z: -0, w: 0.6548713}
-  m_LocalPosition: {x: 4.61324, y: 1.1504974, z: -4.6956787}
-  m_LocalScale: {x: 35, y: 35, z: 35}
+  m_LocalRotation: {x: -0.9974533, y: -0, z: -0, w: -0.0713239}
+  m_LocalPosition: {x: 0, y: -0.017700182, z: -0.004299978}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 823248883}
+  m_Father: {fileID: 1825272819}
   m_LocalEulerAnglesHint: {x: -98.18, y: 0, z: 0}
---- !u!114 &1221477439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1221477437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f82c6a1759183168b083db79bcd1b54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cutPlanes: []
-  isCascadeSegment: 0
-  segmentId: 0
-  isConvex: 0
-  bridgeMeshGaps: 0
-  isReflective: 0
-  isCut: 0
---- !u!114 &1221477440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1221477437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a18ef726ebacf474d95108bf4d4980b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultSliceMaterial: {fileID: 0}
-  asynchronously: 0
-  waitIfBusy: 0
-  objectGrouping: 0
 --- !u!23 &1221477441
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -40590,7 +40552,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: e437c142f5953714399e87f085987a6e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 47dbc862e1b223c22b3c782867241ec7,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1221477438}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 47dbc862e1b223c22b3c782867241ec7,
         type: 3}

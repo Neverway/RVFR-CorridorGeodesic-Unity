@@ -56,7 +56,7 @@ public class VacuumProjectile : MonoBehaviour
     //=-----------------=
     private void CollisionTest()
     {
-        if (Physics.SphereCast(transform.position+castOffset, castRadius, transform.forward, out faceHit, Mathf.Infinity, layerMask))
+        if (Physics.SphereCast(transform.position+castOffset, castRadius, transform.forward, out faceHit, 1f, layerMask))
         {
             if (faceHit.collider.gameObject.TryGetComponent<AntiProjectile> (out var component))
             {
