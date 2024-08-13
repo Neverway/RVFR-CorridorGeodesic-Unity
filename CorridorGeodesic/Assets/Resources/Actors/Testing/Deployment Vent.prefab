@@ -60,6 +60,7 @@ GameObject:
   - component: {fileID: 8156136313057844841}
   - component: {fileID: 6393876627123720435}
   - component: {fileID: 2440835035758313123}
+  - component: {fileID: 2452619989630296260}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -156,6 +157,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2534964839176971238, guid: b0e3329bbc4994b1d8e26fb8a563389c, type: 3}
+--- !u!114 &2452619989630296260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716403059295217708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ee7726742cd257428b7781fcbdab99a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5579760388520281887
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,6 +180,8 @@ GameObject:
   - component: {fileID: 7407240667122644221}
   - component: {fileID: 166498051052877373}
   - component: {fileID: 6442931506749017750}
+  - component: {fileID: 6079424204530132017}
+  - component: {fileID: 1009608484573056361}
   m_Layer: 0
   m_Name: Cylinder.001
   m_TagString: Untagged
@@ -239,6 +254,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &6079424204530132017
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5579760388520281887}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7387706064836869012, guid: b0e3329bbc4994b1d8e26fb8a563389c, type: 3}
+--- !u!114 &1009608484573056361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5579760388520281887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ee7726742cd257428b7781fcbdab99a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &973147913282411387
 PrefabInstance:
   m_ObjectHideFlags: 0
