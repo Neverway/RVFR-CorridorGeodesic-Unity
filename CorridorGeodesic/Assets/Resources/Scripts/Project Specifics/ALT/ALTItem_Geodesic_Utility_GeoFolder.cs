@@ -19,6 +19,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public int currentAmmo = 2;
     public bool allowNoLinearSlicing;
     public float convergenceSpeed = 0.25f;
+    public LayerMask viewCastMask;
 
 
     //=-----------------=
@@ -445,9 +446,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     private void AimTowardsCenterOfView ()
     {
         RaycastHit viewPoint = new RaycastHit ();
-        Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out viewPoint);
-        Debug.DrawRay (centerViewTransform.position, centerViewTransform.forward, Color.cyan);
-        barrelTransform.LookAt (viewPoint.point);
+        // Perform the raycast, ignoring the trigger layer
+        if (Physics.Raycast(centerViewTransform.position, centerViewTransform.forward, out viewPoint, Mathf.Infinity, viewCastMask))
+        {
+            // If the raycast hits something, aim the barrel towards the hit point
+            barrelTransform.LookAt(viewPoint.point);
+        }
     }
 
     private IEnumerator WitchHunt ()
