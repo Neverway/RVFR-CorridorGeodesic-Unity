@@ -9,6 +9,7 @@
 //
 //=============================================================================
 
+using System;
 using BzKovSoft.ObjectSlicer;
 using JetBrains.Annotations;
 using System.Collections.Generic;
@@ -73,6 +74,14 @@ public class ALTMeshSlicer : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    public void Update()
+    {
+        foreach (var meshCollider in gameObject.GetComponents<MeshCollider>())
+        {
+            meshCollider.convex = false;
+            meshCollider.sharedMesh = meshCollider.sharedMesh;
+        }
+    }
 
     //=-----------------=
     // External Functions
@@ -107,6 +116,7 @@ public class ALTMeshSlicer : MonoBehaviour
         var result = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.plane1, meshSlicer);
         if (result.sliced)
         {
+
             original.SetActive (false);
             sliced = true;
             foreach (var obj in result.resultObjects)
@@ -116,6 +126,17 @@ public class ALTMeshSlicer : MonoBehaviour
                 {
                     collider.isTrigger = isTrigger;
                 }
+
+                // ATTEMPT TO RECALCULATE MESH COLLIDER
+                /*var meshCollider = obj.gameObject.GetComponent<MeshCollider>();
+                var meshFilter = obj.gameObject.GetComponent<MeshFilter>();
+                if (meshCollider && meshFilter)
+                {
+                    meshCollider.sharedMesh = null;
+                    meshCollider.sharedMesh = meshFilter.mesh;
+                    meshCollider.convex = false;
+                }*/
+                
                 ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
                 if (obj.side)
                 {
@@ -223,6 +244,7 @@ public class ALTMeshSlicer : MonoBehaviour
                 }
             }
         }
+
 
     }
 
