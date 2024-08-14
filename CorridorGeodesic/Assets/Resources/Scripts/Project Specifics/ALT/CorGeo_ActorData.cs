@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class CorGeo_ActorData : MonoBehaviour
     [SerializeField] public bool nullSpace = false;
     [SerializeField] public bool activeInNullSpace = false;
     [SerializeField] public bool diesInKillTrigger;
+    public event Action OnRiftRestore;
 
     //=-----------------=
     // Private Variables
@@ -53,6 +55,7 @@ public class CorGeo_ActorData : MonoBehaviour
 
     public void GoHome ()
     {
+        OnRiftRestore?.Invoke();
         gameObject.SetActive (true);
         transform.SetParent(homeParent);
         transform.localScale = homeScale;
