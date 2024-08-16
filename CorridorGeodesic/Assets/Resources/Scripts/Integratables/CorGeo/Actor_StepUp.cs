@@ -177,6 +177,7 @@ public class Actor_StepUp : MonoBehaviour
         Debug.Log("Max Step Height: " + maxStepHeight);*/
 
         Ray ray = new Ray(origin, direction);
+        if (!stepCol) return false;
         if (!stepCol.Raycast(ray, out hitInfo, maxStepHeight))
         {
             //Debug.Log("Raycast Failed - Ray did not hit any collider");
