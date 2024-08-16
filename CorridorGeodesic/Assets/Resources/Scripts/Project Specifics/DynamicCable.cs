@@ -16,6 +16,7 @@ public class DynamicCable : MonoBehaviour
     //=-----------------=
     public bool generateWaypointsUsingLength; // Auto-generate waypoints based on the distance between the two anchors
     public float waypointsPerUnit; // How many waypoints should be created per unit of distance between the anchors
+    public bool updateOnMove;
 
 
     //=-----------------=
@@ -42,11 +43,16 @@ public class DynamicCable : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
         //if (!generateWaypointsUsingLength) GatherWaypoints();
+        if (generateWaypointsUsingLength)
+        {
+            GenerateWaypoints();
+            //GatherWaypoints();
+        }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (AnchorPointsMoved() && generateWaypointsUsingLength)
+        if (AnchorPointsMoved() && generateWaypointsUsingLength && updateOnMove)
         {
             GenerateWaypoints();
             //GatherWaypoints();
