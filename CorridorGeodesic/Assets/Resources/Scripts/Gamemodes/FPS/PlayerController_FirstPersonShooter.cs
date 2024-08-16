@@ -32,8 +32,8 @@ public class PlayerController_FirstPersonShooter : PawnController
     //=-----------------=
     private Vector3 moveDirection;
     private Vector3 slopMoveDirection;
-    private float yRotation;
-    private float xRotation;
+    [HideInInspector] public float yRotation;
+    [HideInInspector] public float xRotation;
 
 
     //=-----------------=
