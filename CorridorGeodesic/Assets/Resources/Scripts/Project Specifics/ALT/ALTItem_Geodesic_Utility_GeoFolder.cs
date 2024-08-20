@@ -129,6 +129,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 DeployRiftAndPreview ();
             }
         }
+        // TODO Fix this dummy (This function is currently resetting null-space actors homeworld position which majorly breaks things)
+        CheckForActorSpaceChanges();
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
@@ -273,10 +275,16 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;
 
-        cutPreviews[0].transform.SetParent (null);
-        cutPreviews[1].transform.SetParent (null);
-        cutPreviews[0].SetActive (false);
-        cutPreviews[1].SetActive (false);
+        if (cutPreviews[0])
+        {
+            cutPreviews[0].transform.SetParent (null);
+            cutPreviews[0].SetActive (false);
+        }
+        if (cutPreviews[1])
+        {
+            cutPreviews[1].transform.SetParent (null);
+            cutPreviews[1].SetActive (false);
+        }
         isCutPreviewActive = false;
 
         isCutPreviewActive = false;
@@ -393,7 +401,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                         Destroy (meshColliders[0]);
                     }
                 }
-                ParentCollapseObjects ();
+                AssignActorsToRelativeSpace ();
                 isCollapseStarted = true;
                 riftTimer = 0f;
                 maxRiftTimer = riftWidth * riftSecondsPerUnit;
@@ -402,7 +410,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         }
     }
 
-    private void ParentCollapseObjects ()
+    private void AssignActorsToRelativeSpace ()
     {
         if (!deployedRift) return;
         // Reposition objects in A & B space to match the change in distance between the markers
@@ -431,6 +439,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
 
             //if both distances are >= 0, we are in null space.
+            
+            // Check to make sure the object we want to add is not the player (This is because the player should not be squished in null space)
+            //if (FindObjectOfType<GameInstance>().localPlayerCharacter == actor.GetComponent<Pawn>()) continue;
             nullSpaceObjects.Add (actor);
         }
 
@@ -441,6 +452,11 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             actor.nullSpace = true;
         }
         cutPreviews[1].transform.SetParent (plane2Meshes.transform);
+    }
+
+    private void CheckForActorSpaceChanges()
+    {
+        
     }
 
     private void AimTowardsCenterOfView ()
