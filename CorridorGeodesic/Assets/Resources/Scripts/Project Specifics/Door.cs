@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,11 +22,14 @@ public class Door : MonoBehaviour
     // Private Variables
     //=-----------------=
     [SerializeField] private Animator animator;
+    private bool isOpen;
 
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [SerializeField] private Material poweredMaterial, unpoweredMaterial;
+    [SerializeField] private GameObject indicatorMesh;
 
 
     //=-----------------=
@@ -35,7 +39,19 @@ public class Door : MonoBehaviour
     {
         animator.keepAnimatorStateOnDisable = true;
     }
-    
+
+    private void Update()
+    {
+        if (isPowered)
+        {
+            indicatorMesh.GetComponent<MeshRenderer>().material = poweredMaterial;
+        }
+        else
+        {
+            indicatorMesh.GetComponent<MeshRenderer>().material = unpoweredMaterial;
+        }
+    }
+
 
     //=-----------------=
     // Internal Functions
@@ -47,21 +63,24 @@ public class Door : MonoBehaviour
     //=-----------------=
     public void OpenDoor()
     {
-        if (isPowered) return;
+        if (!isPowered) return;
+        if (isOpen) return;
         animator.SetBool("IsPowered", true);
-        isPowered = true;
+        isOpen = true;
     }
     
     public void CloseDoor()
     {
         if (!isPowered) return;
+        if (!isOpen) return;
         animator.SetBool("IsPowered", false);
-        isPowered = false;
+        isOpen = false;
     }
     
     public void ToggleDoor()
     {
-        if (isPowered)
+        if (!isPowered) return;
+        if (isOpen)
         {
             CloseDoor();
         }
@@ -69,5 +88,10 @@ public class Door : MonoBehaviour
         {
             OpenDoor();
         }
+    }
+
+    public void SetPowered(bool _isPowered)
+    {
+        isPowered = _isPowered;
     }
 }

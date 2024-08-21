@@ -447,7 +447,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
     private void CheckForActorSpaceChanges()
     {
-        
+        // Check A-Space entities to see if they have exited A-Space
+        // Check B-Space entities to see if they have exited B-Space
+        // Check Null-Space entities to see if they have exited Null-Space (This one sucks!)
     }
 
     private void AimTowardsCenterOfView ()

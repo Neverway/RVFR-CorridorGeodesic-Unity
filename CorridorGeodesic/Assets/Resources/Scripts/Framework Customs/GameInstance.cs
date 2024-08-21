@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: A persistant script that stores values of variables globally for
+// Purpose: A persistent script that stores values of variables globally for
 // all players to access
 // Notes:
 //
