@@ -100,15 +100,6 @@ public class VacuumProjectile : MonoBehaviour
 
                 if (removeProjectileFromList) geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
             }
-            if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ())
-            {
-                if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().currentAmmo < geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().maxAmmo)
-                {
-                    geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().currentAmmo++;
-                }
-
-                if (removeProjectileFromList) geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
-            }
         }
 
         //Spawn particle effect
