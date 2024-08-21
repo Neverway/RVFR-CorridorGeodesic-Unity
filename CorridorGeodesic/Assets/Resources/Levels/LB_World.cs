@@ -42,7 +42,10 @@ public class LB_World : MonoBehaviour
     }
     private void Update()
     {
-        
+        if (shouldHaveGeoGun)
+        {
+            FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+        }
     }
     
 
