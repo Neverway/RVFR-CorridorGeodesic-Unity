@@ -18,15 +18,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public int maxAmmo = 2;
     public int currentAmmo = 2;
     public bool allowNoLinearSlicing;
-    public float convergenceSpeed = 0.25f;
     public LayerMask viewCastMask;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    public float collapsedDistance;
-    public Vector3 collapsedDirection;
     public Vector3 previousPlanePosition;
 
 
@@ -41,7 +38,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private GameObject cutPreviewPrefab;
     private GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
-    //[SerializeField] private AnimationCurve riftAnimationCurve;
     public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
     public static GameObject deployedRift;
     private ALTMeshSlicer[] meshSlicers;
@@ -105,17 +101,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
     public override void ReleaseSecondary ()
     {
-        //StopCoroutine(PeriodiclyFoldGeometry());
-        //UndoGeometricCuts();
-        //ApplyGeometricCuts();
         secondaryHeld = false;
     }
 
     public override void UseSpecial ()
     {
         RecallInfinityMarkers ();
-        collapsedDistance = 0;
-        collapsedDirection = new Vector3 ();
     }
 
     public void Update ()
