@@ -1,7 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
 // Purpose:
-// Notes: 
+// Notes:
 //
 //=============================================================================
 
@@ -9,12 +9,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LB_World : MonoBehaviour
+public class Pawn_WeaponInventory : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public bool shouldHaveGeoGun=true;
+    public bool hasGeoGun;
 
 
     //=-----------------=
@@ -25,7 +25,7 @@ public class LB_World : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private GameInstance gameInstance;
+    [SerializeField] private GameObject geoGun;
 
 
     //=-----------------=
@@ -33,18 +33,13 @@ public class LB_World : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-        gameInstance = FindObjectOfType<GameInstance>();
-        gameInstance.UI_ShowHUD();
-        if (shouldHaveGeoGun)
-        {
-            FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
-        }
+    
     }
+
     private void Update()
     {
-        
-    }
     
+    }
 
     //=-----------------=
     // Internal Functions
@@ -54,4 +49,14 @@ public class LB_World : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void GiveGeoGun()
+    {
+        print("GIVE ME THE DANG GUN pls ~Liz");
+        geoGun.SetActive(true);
+    }
+    
+    public void TakeGeoGun()
+    {
+        geoGun.SetActive(false);
+    }
 }
