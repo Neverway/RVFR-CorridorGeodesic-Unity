@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,7 +32,11 @@ public class Elevator : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    
+    private void Start()
+    {
+        animator.keepAnimatorStateOnDisable = true;
+    }
+
 
     //=-----------------=
     // Internal Functions
@@ -65,5 +70,11 @@ public class Elevator : MonoBehaviour
         {
             OpenElevator();
         }
+    }
+
+    public void DescendElevator()
+    {
+        if (!isPowered) return;
+        animator.Play("Elevator_Descending");
     }
 }

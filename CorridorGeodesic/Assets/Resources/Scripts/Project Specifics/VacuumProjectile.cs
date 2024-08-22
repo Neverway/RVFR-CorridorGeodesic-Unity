@@ -56,7 +56,7 @@ public class VacuumProjectile : MonoBehaviour
     //=-----------------=
     private void CollisionTest()
     {
-        if (Physics.SphereCast(transform.position+castOffset, castRadius, transform.forward, out faceHit, Mathf.Infinity, layerMask))
+        if (Physics.SphereCast(transform.position+castOffset, castRadius, transform.forward, out faceHit, 1f, layerMask))
         {
             if (faceHit.collider.gameObject.TryGetComponent<AntiProjectile> (out var component))
             {
@@ -99,15 +99,6 @@ public class VacuumProjectile : MonoBehaviour
                 }
 
                 if (removeProjectileFromList) geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
-            }
-            if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ())
-            {
-                if (geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().currentAmmo < geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().maxAmmo)
-                {
-                    geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().currentAmmo++;
-                }
-
-                if (removeProjectileFromList) geoFolder.GetComponent<Item_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
             }
         }
 

@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,12 +15,13 @@ public class CorGeo_ActorData : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [HideInInspector] public Vector3 homePosition;
-    [HideInInspector] public Vector3 homeScale;
-    [HideInInspector] public Transform homeParent;
-    [HideInInspector] public bool nullSpace = false;
+    [SerializeField] public Vector3 homePosition;
+    [SerializeField] public Vector3 homeScale;
+    [SerializeField] public Transform homeParent;
+    [SerializeField] public bool nullSpace = false;
     [SerializeField] public bool activeInNullSpace = false;
     [SerializeField] public bool diesInKillTrigger;
+    public event Action OnRiftRestore;
 
     //=-----------------=
     // Private Variables
@@ -53,6 +55,7 @@ public class CorGeo_ActorData : MonoBehaviour
 
     public void GoHome ()
     {
+        OnRiftRestore?.Invoke();
         gameObject.SetActive (true);
         transform.SetParent(homeParent);
         transform.localScale = homeScale;
@@ -63,6 +66,7 @@ public class CorGeo_ActorData : MonoBehaviour
         }
         if (ALTItem_Geodesic_Utility_GeoFolder.plane1.GetDistanceToPoint (transform.position) > 0)
         {
+            if (!ALTItem_Geodesic_Utility_GeoFolder.deployedRift) return;
             //move actor away from collapse direction scaled by the rift timer's progress
             transform.position += ALTItem_Geodesic_Utility_GeoFolder.deployedRift.transform.forward * 
                                   ALTItem_Geodesic_Utility_GeoFolder.riftWidth * 

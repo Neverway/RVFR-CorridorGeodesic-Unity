@@ -144,8 +144,6 @@ public class Pawn : MonoBehaviour
         currentState.jumpForce = defaultState.jumpForce;
         currentState.sprintSpeedMultiplier = defaultState.sprintSpeedMultiplier;
         currentState.sprintAcceleration = defaultState.sprintAcceleration;
-        currentState.maxStepHeight = defaultState.maxStepHeight;
-        currentState.stepSearchOvershoot = defaultState.stepSearchOvershoot;
     }
     // ------------------------------------------------------------------
 
@@ -198,7 +196,14 @@ public class Pawn : MonoBehaviour
                 break;
             case < 0:
                 if (isDead) return;
-                OnPawnHurt?.Invoke();
+                try 
+                {
+                    OnPawnHurt?.Invoke();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
                 if (currentState.characterSounds.hurt) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.hurt);
                 break;
         }

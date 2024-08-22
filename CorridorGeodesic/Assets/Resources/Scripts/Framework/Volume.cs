@@ -171,7 +171,10 @@ public class Volume : MonoBehaviour
     {
         foreach (var entity in pawnsInTrigger)
         {
-            if (entity.isPossessed) return entity;
+            if (entity.isPossessed)
+            {
+                return entity;
+            }
         }
         return null;
     }

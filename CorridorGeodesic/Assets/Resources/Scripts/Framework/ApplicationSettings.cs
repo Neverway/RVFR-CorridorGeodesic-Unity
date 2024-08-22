@@ -166,7 +166,7 @@ public class ApplicationSettings : MonoBehaviour
                 ScalableBufferManager.ResizeBuffers(1f, 1f);
                 break;
             case 4:
-                ScalableBufferManager.ResizeBuffers(2f, 2f);
+                ScalableBufferManager.ResizeBuffers(1f, 1f);
                 break;
         }
         // Shadow Quality

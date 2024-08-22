@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: A persistant script that stores values of variables globally for
+// Purpose: A persistent script that stores values of variables globally for
 // all players to access
 // Notes:
 //
@@ -231,5 +231,11 @@ public class GameInstance : MonoBehaviour
     public void UI_ShowFramecounter()
     {
         AddWidget(UserInterfaceWidgets[6]);
+    }
+
+    // 7
+    public void UI_ShowDeathScreen()
+    {
+        AddWidget(UserInterfaceWidgets[7]);
     }
 }

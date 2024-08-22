@@ -18,14 +18,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public int maxAmmo = 2;
     public int currentAmmo = 2;
     public bool allowNoLinearSlicing;
-    public float convergenceSpeed = 0.25f;
+    public LayerMask viewCastMask;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    public float collapsedDistance;
-    public Vector3 collapsedDirection;
     public Vector3 previousPlanePosition;
 
 
@@ -40,7 +38,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private GameObject cutPreviewPrefab;
     private GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
-    //[SerializeField] private AnimationCurve riftAnimationCurve;
     public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
     public static GameObject deployedRift;
     private ALTMeshSlicer[] meshSlicers;
@@ -84,17 +81,11 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     // Mono Functions
     //=-----------------=
-
     private void Start ()
     {
         meshSlicers = FindObjectsByType<ALTMeshSlicer> (FindObjectsSortMode.None);
-        cutPreviews = new GameObject[2];
-        for (int i = 0; i < cutPreviews.Length; i++)
-        {
-            cutPreviews[i] = Instantiate (cutPreviewPrefab);
-            cutPreviews[i].GetComponent<CutPreviewTracker>().cutPreviewID = i; // Label them so we know whether they are a or b space's side preview
-            cutPreviews[i].SetActive (false);
-        }
+
+        CreateCutPreviews();
     }
 
     public override void UsePrimary ()
@@ -110,17 +101,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
     public override void ReleaseSecondary ()
     {
-        //StopCoroutine(PeriodiclyFoldGeometry());
-        //UndoGeometricCuts();
-        //ApplyGeometricCuts();
         secondaryHeld = false;
     }
 
     public override void UseSpecial ()
     {
         RecallInfinityMarkers ();
-        collapsedDistance = 0;
-        collapsedDirection = new Vector3 ();
     }
 
     public void Update ()
@@ -134,6 +120,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 DeployRiftAndPreview ();
             }
         }
+        // TODO Fix this dummy (This function is currently resetting null-space actors homeworld position which majorly breaks things)
+        CheckForActorSpaceChanges();
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
@@ -237,6 +225,13 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         plane1 = new Plane (riftNormal, pos1);
         plane2 = new Plane (-riftNormal, pos2);
 
+        
+        // TODO make this neater tomorrow
+        if (!cutPreviews[0])
+        {
+            CreateCutPreviews();
+        }
+        
         cutPreviews[0].SetActive (true);
         cutPreviews[1].SetActive (true);
         cutPreviews[0].transform.position = pos1;
@@ -250,6 +245,17 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private void CreateCutPreviews()
+    {
+        cutPreviews = new GameObject[2];
+        for (int i = 0; i < cutPreviews.Length; i++)
+        {
+            cutPreviews[i] = Instantiate (cutPreviewPrefab);
+            cutPreviews[i].GetComponent<CutPreviewTracker>().cutPreviewID = i; // Label them so we know whether they are a or b space's side preview
+            cutPreviews[i].SetActive (false);
+        }
+    }
+    
     private void RecallInfinityMarkers ()
     {
         if (currentAmmo >= 2) return;
@@ -260,10 +266,16 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;
 
-        cutPreviews[0].transform.SetParent (null);
-        cutPreviews[1].transform.SetParent (null);
-        cutPreviews[0].SetActive (false);
-        cutPreviews[1].SetActive (false);
+        if (cutPreviews[0])
+        {
+            cutPreviews[0].transform.SetParent (null);
+            cutPreviews[0].SetActive (false);
+        }
+        if (cutPreviews[1])
+        {
+            cutPreviews[1].transform.SetParent (null);
+            cutPreviews[1].SetActive (false);
+        }
         isCutPreviewActive = false;
 
         isCutPreviewActive = false;
@@ -307,7 +319,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
             StartCoroutine (DestroyWorker (deployedRift));
         }
-
+        // Reset the value used to track if an actor is in null space
+        foreach (var actor in FindObjectsOfType<CorGeo_ActorData> ())
+        {
+            actor.nullSpace = false;
+        }
+        
         StartCoroutine(WitchHunt ());
     }
 
@@ -322,7 +339,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         if (currentAmmo <= 0) return;
         currentAmmo--;
         var projectile = Instantiate (vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
-        projectile.GetComponent<Rigidbody> ().AddForce (projectile.transform.forward * projectileForce, ForceMode.Impulse);
+        projectile.GetComponent<Rigidbody>().AddForce (projectile.transform.forward * projectileForce, ForceMode.Impulse);
         projectile.GetComponent<VacuumProjectile> ().geoFolder = gameObject; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
         deployedInfinityMarkers.Add (projectile);
     }
@@ -375,7 +392,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                         Destroy (meshColliders[0]);
                     }
                 }
-                ParentCollapseObjects ();
+                AssignActorsToRelativeSpace ();
                 isCollapseStarted = true;
                 riftTimer = 0f;
                 maxRiftTimer = riftWidth * riftSecondsPerUnit;
@@ -384,7 +401,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         }
     }
 
-    private void ParentCollapseObjects ()
+    private void AssignActorsToRelativeSpace ()
     {
         if (!deployedRift) return;
         // Reposition objects in A & B space to match the change in distance between the markers
@@ -413,6 +430,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
 
             //if both distances are >= 0, we are in null space.
+            
+            // Check to make sure the object we want to add is not the player (This is because the player should not be squished in null space)
+            //if (FindObjectOfType<GameInstance>().localPlayerCharacter == actor.GetComponent<Pawn>()) continue;
             nullSpaceObjects.Add (actor);
         }
 
@@ -425,12 +445,22 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         cutPreviews[1].transform.SetParent (plane2Meshes.transform);
     }
 
+    private void CheckForActorSpaceChanges()
+    {
+        // Check A-Space entities to see if they have exited A-Space
+        // Check B-Space entities to see if they have exited B-Space
+        // Check Null-Space entities to see if they have exited Null-Space (This one sucks!)
+    }
+
     private void AimTowardsCenterOfView ()
     {
         RaycastHit viewPoint = new RaycastHit ();
-        Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out viewPoint);
-        Debug.DrawRay (centerViewTransform.position, centerViewTransform.forward, Color.cyan);
-        barrelTransform.LookAt (viewPoint.point);
+        // Perform the raycast, ignoring the trigger layer
+        if (Physics.Raycast(centerViewTransform.position, centerViewTransform.forward, out viewPoint, Mathf.Infinity, viewCastMask))
+        {
+            // If the raycast hits something, aim the barrel towards the hit point
+            barrelTransform.LookAt(viewPoint.point);
+        }
     }
 
     private IEnumerator WitchHunt ()

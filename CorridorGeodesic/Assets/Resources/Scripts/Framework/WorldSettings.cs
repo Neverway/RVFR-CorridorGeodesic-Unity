@@ -82,7 +82,30 @@ public class WorldSettings : MonoBehaviour
     public void SpawnPlayerCharacter()
     {
         if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-
+        
+        // Perform a check first to see if there is already a local player character in the scene
+        Debug.Log("LocalPlayerCharacter is empty in the gameInstance! Has the player spawned yet? Checking...");
+        foreach (var pawn in FindObjectsOfType<Pawn>())
+        {
+            if (pawn.isPossessed)
+            {
+                gameInstance.localPlayerCharacter = pawn;
+                Debug.Log("A possessed actor was found, assigning them to be the LocalPlayerCharacter.");
+                return;
+            }
+        }
+        Debug.Log("No possessed actors found. Checking actor controllers to see if any of them are player driven...");
+        foreach (var pawn in FindObjectsOfType<Pawn>())
+        {
+            if (gameInstance.PlayerControllerClasses.Contains(pawn.currentController))
+            {
+                gameInstance.localPlayerCharacter = pawn;
+                Debug.Log("A valid controller actor was found, assigning them to be the LocalPlayerCharacter.");
+                return;
+            }
+        }
+        Debug.Log("No player found. Let's spawn a new one!");
+        
         var startPoint = GetPlayerStartPoint();
         
         // Determine the game mode to use - either the override or the default.

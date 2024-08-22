@@ -34,6 +34,7 @@ public class LB_Title : MonoBehaviour
     {
         gameInstance = FindObjectOfType<GameInstance>();
         gameInstance.UI_ShowTitle();
+        Cursor.lockState = CursorLockMode.None;
     }
     
 

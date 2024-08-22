@@ -25,6 +25,7 @@ public class Volume_LevelStreaming : Volume
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private WorldLoader worldLoader;
 
 
     //=-----------------=
@@ -32,22 +33,38 @@ public class Volume_LevelStreaming : Volume
     //=-----------------=
     private new void OnTriggerEnter2D(Collider2D _other)
     {
-        DontDestroyOnLoad(_other.gameObject);
+        worldLoader = FindObjectOfType<WorldLoader>();
+        if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
+        {
+            SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetSceneByName(worldLoader.streamingWorldID));
+        }
     }
     
     private new void OnTriggerEnter(Collider _other)
     {
-        DontDestroyOnLoad(_other.gameObject);
+        worldLoader = FindObjectOfType<WorldLoader>();
+        if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
+        {
+            SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetSceneByName(worldLoader.streamingWorldID));
+        }
     }
     
     private new void OnTriggerExit2D(Collider2D _other)
     {
-        SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetActiveScene());
+        worldLoader = FindObjectOfType<WorldLoader>();
+        if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
+        {
+            SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetActiveScene());
+        }
     }
     
     private new void OnTriggerExit(Collider _other)
     {
-        SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetActiveScene());
+        worldLoader = FindObjectOfType<WorldLoader>();
+        if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
+        {
+            SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetActiveScene());
+        }
     }
 
     //=-----------------=

@@ -11,6 +11,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using Quaternion = UnityEngine.Quaternion;
@@ -31,8 +32,8 @@ public class PlayerController_FirstPersonShooter : PawnController
     //=-----------------=
     private Vector3 moveDirection;
     private Vector3 slopMoveDirection;
-    private float yRotation;
-    private float xRotation;
+    [HideInInspector] public float yRotation;
+    [HideInInspector] public float xRotation;
 
 
     //=-----------------=
@@ -269,10 +270,28 @@ public class PlayerController_FirstPersonShooter : PawnController
     private void OnDeath(Pawn _pawn)
     {
         var rotation = viewCamera.transform.localPosition;
-        // Drop held items
-        _pawn.physObjectAttachmentPoint.heldObject.GetComponent<Object_Grabbable>().ToggleHeld();
+        
+        // Drop held props
+        if (_pawn.physObjectAttachmentPoint.heldObject)
+        {
+            if (_pawn.physObjectAttachmentPoint.heldObject.GetComponent<Object_Grabbable>())
+            {
+                _pawn.physObjectAttachmentPoint.heldObject.GetComponent<Object_Grabbable>().ToggleHeld();
+            }
+        }
+        
+        // Call the function on the georipper to remove all rifts
+        // TODO this currently assumes the player is ONLY ever holding the georipper
+        // An if statement should be added to check if there were any rifts or something
         _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
-        viewCamera.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y, -90);
+        
+        // Remove the HUD
+        Destroy(GameInstance.GetWidget("WB_HUD"));
+        // Add the respawn HUD
+        FindObjectOfType<GameInstance>().UI_ShowDeathScreen();
+        
+        // Play the death animation
+        _pawn.GetComponent<Animator>().Play("Death");
     }
 
 

@@ -38,7 +38,7 @@ public class PlayerStart : MonoBehaviour
         var fixedGizmoRotation = transform.rotation*Quaternion.AngleAxis(180, Vector3.up) * Quaternion.AngleAxis(-90, Vector3.right);
         if (debugShowMesh)
         {
-            Gizmos.DrawMesh(Resources.Load<Mesh>("Models/DevCharacter"), transform.position+(transform.up*-0.1f), fixedGizmoRotation, transform.localScale);
+            Gizmos.DrawMesh(Resources.Load<Mesh>("Models/DevCharacter"), transform.position+(transform.up*-0.1f), fixedGizmoRotation, transform.localScale*100);
         }
         Gizmos.DrawIcon(gameObject.transform.position,"player_start");
     }

@@ -14,6 +14,7 @@ public class LB_World : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public bool shouldHaveGeoGun=true;
 
 
     //=-----------------=
@@ -34,10 +35,17 @@ public class LB_World : MonoBehaviour
     {
         gameInstance = FindObjectOfType<GameInstance>();
         gameInstance.UI_ShowHUD();
+        if (shouldHaveGeoGun)
+        {
+            FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+        }
     }
     private void Update()
     {
-        
+        if (shouldHaveGeoGun)
+        {
+            FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+        }
     }
     
 
