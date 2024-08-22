@@ -28,8 +28,8 @@ public class WB_Title : MonoBehaviour
     private GameInstance gameInstance;
     private WorldLoader worldLoader;
     private LevelManager levelLoader; // Added for loading the overworld levels from Cartographer
-    [SerializeField] private Button buttonMainGame, buttonExtras, buttonRanking, buttonSettings, buttonQuit;
-    [SerializeField] private GameObject extrasWidget, rankingWidget, settingsWidget;
+    [SerializeField] private Button buttonMainGame, buttonExtras, buttonRanking, buttonSettings, buttonQuit, buttonCredits;
+    [SerializeField] private GameObject extrasWidget, rankingWidget, settingsWidget, creditsWidget;
 
 
     //=-----------------=
@@ -45,6 +45,7 @@ public class WB_Title : MonoBehaviour
         buttonRanking.onClick.AddListener(delegate { OnClick("buttonRanking"); });
         buttonSettings.onClick.AddListener(delegate { OnClick("buttonSettings"); });
         buttonQuit.onClick.AddListener(delegate { OnClick("buttonQuit"); });
+        buttonCredits.onClick.AddListener(delegate { OnClick("buttonCredits"); });
     }
 
     private void Update()
@@ -81,6 +82,10 @@ public class WB_Title : MonoBehaviour
                 break;
             case "buttonQuit":
                 Application.Quit();
+                break;
+            case "buttonCredits":
+                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                GameInstance.AddWidget(creditsWidget);
                 break;
         }
     }
