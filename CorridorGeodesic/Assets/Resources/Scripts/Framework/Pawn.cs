@@ -196,7 +196,14 @@ public class Pawn : MonoBehaviour
                 break;
             case < 0:
                 if (isDead) return;
-                OnPawnHurt?.Invoke();
+                try 
+                {
+                    OnPawnHurt?.Invoke();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
                 if (currentState.characterSounds.hurt) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.hurt);
                 break;
         }
