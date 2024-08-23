@@ -202,7 +202,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6276463742160257089, guid: c14d3f99c71d2f5c5920d5892075b3f3,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 63193195889382420}
+      addedObject: {fileID: 7273481327429923018}
   m_SourcePrefab: {fileID: 100100000, guid: c14d3f99c71d2f5c5920d5892075b3f3, type: 3}
 --- !u!4 &8767485977656216626 stripped
 Transform:
@@ -235,9 +235,7 @@ MonoBehaviour:
   propsInTrigger: []
   targetEnt: {fileID: 0}
   targetProp: {fileID: 0}
-  onInteractSignal: 
   isPowered: 0
-  resetSignal: 
   resetsAutomatically: 1
   hideIndicator: 0
   useTalkIndicator: 0
@@ -245,15 +243,9 @@ MonoBehaviour:
   onInteract:
     m_PersistentCalls:
       m_Calls: []
-  onPowered:
-    m_PersistentCalls:
-      m_Calls: []
-  onUnpowered:
-    m_PersistentCalls:
-      m_Calls: []
   hasBeenTriggered: 0
   interactionIndicator: {fileID: 2346912734273489087}
---- !u!114 &63193195889382420
+--- !u!114 &7273481327429923018
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -262,6 +254,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 9132002430392707332}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cbd4ca816db7d582bb85e40de55cba3, type: 3}
+  m_Script: {fileID: 11500000, guid: c4cf282e328f9af0fba187b2c794601e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPowered: 0
+  receivers: []

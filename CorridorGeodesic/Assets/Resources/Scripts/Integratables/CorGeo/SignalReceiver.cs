@@ -17,7 +17,7 @@ public class SignalReceiver : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [SerializeField] [ReadOnly(true)] private bool isPowered;
+    [ReadOnly(true)] public bool isPowered;
     public UnityEvent onPoweredEvent, onUnpoweredEvent;
     public event Action OnPowered, OnUnpowered;
 
@@ -25,6 +25,7 @@ public class SignalReceiver : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
+    private bool previousIsPoweredState; // this is used to check to see if the powered state has changed
 
 
     //=-----------------=
@@ -35,6 +36,23 @@ public class SignalReceiver : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Update()
+    {
+        if (isPowered != previousIsPoweredState)
+        {
+            if (isPowered)
+            {
+                onPoweredEvent?.Invoke();
+                OnPowered?.Invoke();
+            }
+            else
+            {
+                onUnpoweredEvent?.Invoke();
+                OnUnpowered?.Invoke();
+            }
+        }
+        previousIsPoweredState = isPowered;
+    }
 
 
     //=-----------------=
@@ -47,15 +65,6 @@ public class SignalReceiver : MonoBehaviour
     //=-----------------=
     public void SetIsPowered(bool _isPowered)
     {
-        if (isPowered)
-        {
-            onPoweredEvent?.Invoke();
-            OnPowered?.Invoke();
-        }
-        else
-        {
-            onUnpoweredEvent?.Invoke();
-            OnUnpowered?.Invoke();
-        }
+        isPowered = _isPowered;
     }
 }

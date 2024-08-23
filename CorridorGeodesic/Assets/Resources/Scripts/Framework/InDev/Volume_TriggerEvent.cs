@@ -10,19 +10,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Logic_Processor))]
+[RequireComponent(typeof(SignalTransmitter))]
 public class Volume_TriggerEvent : Volume
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string onOccupiedSignal;
-    public string onUnoccupiedSignal;
-    public string resetSignal;
+    //public string onOccupiedSignal;
+    //public string onUnoccupiedSignal;
+    //public string resetSignal;
     public bool resetsAutomatically = true;
     public bool checksOnlyForPlayer = true;
-    public UnityEvent onOccupied;
-    public UnityEvent onUnoccupied;
+    //public UnityEvent onOccupied;
+    //public UnityEvent onUnoccupied;
 
 
     //=-----------------=
@@ -35,7 +35,7 @@ public class Volume_TriggerEvent : Volume
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private Logic_Processor logicProcessor;
+    private SignalTransmitter signalTransmitter;
 
 
     //=-----------------=
@@ -43,7 +43,7 @@ public class Volume_TriggerEvent : Volume
     //=-----------------=
     private void Start()
     {
-        logicProcessor = GetComponent<Logic_Processor>();
+        signalTransmitter = GetComponent<SignalTransmitter>();
     }
 
     private new void OnTriggerEnter2D(Collider2D _other)
@@ -53,15 +53,17 @@ public class Volume_TriggerEvent : Volume
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
-            logicProcessor.UpdateState(onOccupiedSignal, true);
-            logicProcessor.UpdateState(onUnoccupiedSignal, false);
-            onOccupied.Invoke();
+            //logicProcessor.UpdateState(onOccupiedSignal, true);
+            //logicProcessor.UpdateState(onUnoccupiedSignal, false);
+            //onOccupied.Invoke();
+            signalTransmitter.isPowered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
-            logicProcessor.UpdateState(onOccupiedSignal, true);
-            logicProcessor.UpdateState(onUnoccupiedSignal, false);
-            onOccupied.Invoke();
+            //logicProcessor.UpdateState(onOccupiedSignal, true);
+            //logicProcessor.UpdateState(onUnoccupiedSignal, false);
+            //onOccupied.Invoke();
+            signalTransmitter.isPowered = true;
         }
         hasBeenTriggered = true;
     }
@@ -72,15 +74,17 @@ public class Volume_TriggerEvent : Volume
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
-            logicProcessor.UpdateState(onOccupiedSignal, false);
-            logicProcessor.UpdateState(onUnoccupiedSignal, true);
-            onUnoccupied.Invoke();
+            //logicProcessor.UpdateState(onOccupiedSignal, false);
+            //logicProcessor.UpdateState(onUnoccupiedSignal, true);
+            //onUnoccupied.Invoke();
+            signalTransmitter.isPowered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
-            logicProcessor.UpdateState(onOccupiedSignal, false);
-            logicProcessor.UpdateState(onUnoccupiedSignal, true);
-            onUnoccupied.Invoke();
+            //logicProcessor.UpdateState(onOccupiedSignal, false);
+            //logicProcessor.UpdateState(onUnoccupiedSignal, true);
+            //onUnoccupied.Invoke();
+            signalTransmitter.isPowered = false;
         }
         if (resetsAutomatically) hasBeenTriggered = false;
     }
@@ -92,15 +96,17 @@ public class Volume_TriggerEvent : Volume
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
-            logicProcessor.UpdateState(onOccupiedSignal, true);
-            logicProcessor.UpdateState(onUnoccupiedSignal, false);
-            onOccupied.Invoke();
+            //logicProcessor.UpdateState(onOccupiedSignal, true);
+            //logicProcessor.UpdateState(onUnoccupiedSignal, false);
+            //onOccupied.Invoke();
+            signalTransmitter.isPowered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
-            logicProcessor.UpdateState(onOccupiedSignal, true);
-            logicProcessor.UpdateState(onUnoccupiedSignal, false);
-            onOccupied.Invoke();
+            //logicProcessor.UpdateState(onOccupiedSignal, true);
+            //logicProcessor.UpdateState(onUnoccupiedSignal, false);
+            //onOccupied.Invoke();
+            signalTransmitter.isPowered = true;
         }
         hasBeenTriggered = true;
     }
@@ -111,15 +117,17 @@ public class Volume_TriggerEvent : Volume
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
-            logicProcessor.UpdateState(onOccupiedSignal, false);
-            logicProcessor.UpdateState(onUnoccupiedSignal, true);
-            onUnoccupied.Invoke();
+            //logicProcessor.UpdateState(onOccupiedSignal, false);
+            //logicProcessor.UpdateState(onUnoccupiedSignal, true);
+            //onUnoccupied.Invoke();
+            signalTransmitter.isPowered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
-            logicProcessor.UpdateState(onOccupiedSignal, false);
-            logicProcessor.UpdateState(onUnoccupiedSignal, true);
-            onUnoccupied.Invoke();
+            //logicProcessor.UpdateState(onOccupiedSignal, false);
+            //logicProcessor.UpdateState(onUnoccupiedSignal, true);
+            //onUnoccupied.Invoke();
+            signalTransmitter.isPowered = false;
         }
         if (resetsAutomatically) hasBeenTriggered = false;
     }

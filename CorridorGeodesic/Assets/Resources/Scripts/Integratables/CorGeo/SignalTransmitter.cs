@@ -38,10 +38,14 @@ public class SignalTransmitter : MonoBehaviour
     //=-----------------=
     private void Update()
     {
-        if (isPowered == previousIsPoweredState) return;
-        foreach (var receiver in receivers)
+        if (isPowered != previousIsPoweredState)
         {
-            receiver.SetIsPowered(isPowered);
+            foreach (var receiver in receivers)
+            {
+                print(isPowered);
+                receiver.SetIsPowered(isPowered);
+            }
+
         }
         previousIsPoweredState = isPowered;
     }

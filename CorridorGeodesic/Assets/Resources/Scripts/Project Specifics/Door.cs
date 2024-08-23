@@ -10,12 +10,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SignalReceiver))]
 public class Door : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public bool isPowered;
+    //public bool signalReceiver.isPowered;
 
 
     //=-----------------=
@@ -27,7 +28,8 @@ public class Door : MonoBehaviour
 
     //=-----------------=
     // Reference Variables
-    //=-----------------=
+    //=-----------------='
+    private SignalReceiver signalReceiver;
     [SerializeField] private Material poweredMaterial, unpoweredMaterial;
     [SerializeField] private GameObject indicatorMesh;
 
@@ -37,12 +39,13 @@ public class Door : MonoBehaviour
     //=-----------------=
     private void Start()
     {
+        signalReceiver = GetComponent<SignalReceiver>();
         animator.keepAnimatorStateOnDisable = true;
     }
 
     private void Update()
     {
-        if (isPowered)
+        if (signalReceiver.isPowered)
         {
             indicatorMesh.GetComponent<MeshRenderer>().material = poweredMaterial;
         }
@@ -63,7 +66,7 @@ public class Door : MonoBehaviour
     //=-----------------=
     public void OpenDoor()
     {
-        if (!isPowered) return;
+        if (!signalReceiver.isPowered) return;
         if (isOpen) return;
         animator.SetBool("IsPowered", true);
         isOpen = true;
@@ -71,7 +74,7 @@ public class Door : MonoBehaviour
     
     public void CloseDoor()
     {
-        if (!isPowered) return;
+        if (!signalReceiver.isPowered) return;
         if (!isOpen) return;
         animator.SetBool("IsPowered", false);
         isOpen = false;
@@ -79,7 +82,7 @@ public class Door : MonoBehaviour
     
     public void ToggleDoor()
     {
-        if (!isPowered) return;
+        if (!signalReceiver.isPowered) return;
         if (isOpen)
         {
             CloseDoor();
@@ -90,8 +93,8 @@ public class Door : MonoBehaviour
         }
     }
 
-    public void SetPowered(bool _isPowered)
+    /*public void SetPowered(bool _isPowered)
     {
-        isPowered = _isPowered;
-    }
+        signalReceiver.isPowered = _isPowered;
+    }*/
 }

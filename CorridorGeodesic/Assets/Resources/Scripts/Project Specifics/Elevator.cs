@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SignalReceiver))]
 public class Elevator : MonoBehaviour
 {
     //=-----------------=
@@ -26,6 +27,7 @@ public class Elevator : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private SignalReceiver signalReceiver;
     [SerializeField] private Animator animator;
 
 
@@ -34,6 +36,7 @@ public class Elevator : MonoBehaviour
     //=-----------------=
     private void Start()
     {
+        signalReceiver = GetComponent<SignalReceiver>();
         animator.keepAnimatorStateOnDisable = true;
     }
 
