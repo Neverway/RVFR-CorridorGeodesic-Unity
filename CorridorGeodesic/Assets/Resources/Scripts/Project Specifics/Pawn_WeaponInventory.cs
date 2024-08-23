@@ -51,7 +51,6 @@ public class Pawn_WeaponInventory : MonoBehaviour
     //=-----------------=
     public void GiveGeoGun()
     {
-        print("GIVE ME THE DANG GUN pls ~Liz");
         geoGun.SetActive(true);
     }
     
