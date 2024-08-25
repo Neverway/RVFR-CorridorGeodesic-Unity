@@ -7,22 +7,25 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(SignalTransmitter))]
 public class Volume_TriggerEvent : Volume
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    //public string onOccupiedSignal;
-    //public string onUnoccupiedSignal;
-    //public string resetSignal;
     public bool resetsAutomatically = true;
     public bool checksOnlyForPlayer = true;
-    //public UnityEvent onOccupied;
-    //public UnityEvent onUnoccupied;
+    
+    [Header("Channel Events")]
+    [Tooltip("A readable value to tell if this trigger is currently transmitting a power signal")]
+    [ReadOnly] public bool isPowered;
+    [Tooltip("Transmits a power signal to all devices when this volume has a target enter")]
+    public GameObject[] onOccupiedTransmit;
+    [Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
+    public UnityEvent onOccupied;
 
 
     //=-----------------=
@@ -35,7 +38,7 @@ public class Volume_TriggerEvent : Volume
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private SignalTransmitter signalTransmitter;
+    //private SignalTransmitter//signalTransmitter;
 
 
     //=-----------------=
@@ -43,7 +46,7 @@ public class Volume_TriggerEvent : Volume
     //=-----------------=
     private void Start()
     {
-        signalTransmitter = GetComponent<SignalTransmitter>();
+        //signalTransmitter = GetComponent<SignalTransmitter>();
     }
 
     private new void OnTriggerEnter2D(Collider2D _other)
@@ -56,14 +59,14 @@ public class Volume_TriggerEvent : Volume
             //logicProcessor.UpdateState(onOccupiedSignal, true);
             //logicProcessor.UpdateState(onUnoccupiedSignal, false);
             //onOccupied.Invoke();
-            signalTransmitter.isPowered = true;
+           //signalTransmitter.isPowered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
             //logicProcessor.UpdateState(onOccupiedSignal, true);
             //logicProcessor.UpdateState(onUnoccupiedSignal, false);
             //onOccupied.Invoke();
-            signalTransmitter.isPowered = true;
+           //signalTransmitter.isPowered = true;
         }
         hasBeenTriggered = true;
     }
@@ -77,14 +80,14 @@ public class Volume_TriggerEvent : Volume
             //logicProcessor.UpdateState(onOccupiedSignal, false);
             //logicProcessor.UpdateState(onUnoccupiedSignal, true);
             //onUnoccupied.Invoke();
-            signalTransmitter.isPowered = false;
+           //signalTransmitter.isPowered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
             //logicProcessor.UpdateState(onOccupiedSignal, false);
             //logicProcessor.UpdateState(onUnoccupiedSignal, true);
             //onUnoccupied.Invoke();
-            signalTransmitter.isPowered = false;
+           //signalTransmitter.isPowered = false;
         }
         if (resetsAutomatically) hasBeenTriggered = false;
     }
@@ -99,14 +102,14 @@ public class Volume_TriggerEvent : Volume
             //logicProcessor.UpdateState(onOccupiedSignal, true);
             //logicProcessor.UpdateState(onUnoccupiedSignal, false);
             //onOccupied.Invoke();
-            signalTransmitter.isPowered = true;
+           //signalTransmitter.isPowered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
             //logicProcessor.UpdateState(onOccupiedSignal, true);
             //logicProcessor.UpdateState(onUnoccupiedSignal, false);
             //onOccupied.Invoke();
-            signalTransmitter.isPowered = true;
+           //signalTransmitter.isPowered = true;
         }
         hasBeenTriggered = true;
     }
@@ -120,14 +123,14 @@ public class Volume_TriggerEvent : Volume
             //logicProcessor.UpdateState(onOccupiedSignal, false);
             //logicProcessor.UpdateState(onUnoccupiedSignal, true);
             //onUnoccupied.Invoke();
-            signalTransmitter.isPowered = false;
+           //signalTransmitter.isPowered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
             //logicProcessor.UpdateState(onOccupiedSignal, false);
             //logicProcessor.UpdateState(onUnoccupiedSignal, true);
             //onUnoccupied.Invoke();
-            signalTransmitter.isPowered = false;
+           //signalTransmitter.isPowered = false;
         }
         if (resetsAutomatically) hasBeenTriggered = false;
     }

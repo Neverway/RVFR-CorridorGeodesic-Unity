@@ -12,29 +12,28 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(SignalTransmitter))]
+//[RequireComponent(typeof(SignalTransmitter))]
 public class Volume_TriggerInteractable : Volume
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    //[Tooltip("Transmits a power signal to all devices with the same string when this volume is interacted with")]
-    //public string onInteractSignal;
-    [Tooltip("A readable value to tell if this trigger is currently transmitting a power signal")]
-    [ReadOnly] public bool isPowered;
-    //public string resetSignal;
     [Tooltip("If this is false, this trigger can only be activated once")]
     public bool resetsAutomatically = true;
     [Tooltip("If this is false, a little indicator will appear above this volume to show the player it can be interacted with")]
     public bool hideIndicator;
-    [Tooltip("If this is false, a little indicator will appear above this volume to show the player it can be interacted with")]
+    [Tooltip("If enabled, the indicator will show a speech bubble instead of the interact indicator")]
     public bool useTalkIndicator;
-    [Tooltip("If this is true, then we want the actor who created the interaction volume to also be inside this trigger.")]
+    [Tooltip("If enabled, then the actor who created the interaction volume must also be inside this trigger")]
     public bool requireActivatingActorInside = true;
+    
+    [Header("Channel Events")]
+    [Tooltip("A readable value to tell if this trigger is currently transmitting a power signal")]
+    [ReadOnly] public bool isPowered;
+    [Tooltip("Transmits a power signal to all devices when this volume is interacted with")]
+    public GameObject[] onInteractTransmit;
     [Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
     public UnityEvent onInteract;
-    //public UnityEvent onPowered;
-    //public UnityEvent onUnpowered;
 
 
     //=-----------------=
@@ -48,7 +47,6 @@ public class Volume_TriggerInteractable : Volume
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private SignalTransmitter signalTransmitter;
     [Tooltip("This is the object that displays the sprite showing this object can be interacted with")]
     [SerializeField] private GameObject interactionIndicator;
 
@@ -56,16 +54,6 @@ public class Volume_TriggerInteractable : Volume
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-        signalTransmitter = GetComponent<SignalTransmitter>();
-    }
-
-    private void Update()
-    {
-        
-    }
-
     private new void OnTriggerEnter2D(Collider2D _other)
     {
         base.OnTriggerEnter2D(_other); // Call the base class method
@@ -85,17 +73,27 @@ public class Volume_TriggerInteractable : Volume
     private new void OnTriggerEnter(Collider _other)
     {
         base.OnTriggerEnter(_other); // Call the base class method
+        SetInteractionIndicatorState();
+        
         // Check for interaction
         var interaction = _other.GetComponent<Volume_TriggerInteraction>();
-        if (interaction) Interact(interaction);
-        SetInteractionIndicatorState();
+        if (interaction)
+        {
+            Interact(interaction);
+        }
     }
 
     private new void OnTriggerExit(Collider _other)
     {
         base.OnTriggerExit(_other); // Call the base class method
-        if (_other.CompareTag("Pawn")) if (targetEnt.isPossessed) targetEnt.isNearInteractable = false;
         SetInteractionIndicatorState();
+
+        // Disable the indicator if the player left
+        // (Shouldn't `SetInteractionIndicatorState();` already take care of this?? ~Liz)
+        if (_other.CompareTag("Pawn") && targetEnt.isPossessed)
+        {
+            targetEnt.isNearInteractable = false;
+        }
     }
 
     //=-----------------=
@@ -124,7 +122,7 @@ public class Volume_TriggerInteractable : Volume
         
         // Flip the current activation state
         isPowered = !isPowered;
-        signalTransmitter.isPowered = isPowered;
+       //signalTransmitter.isPowered = isPowered;
         //if (isPowered) onPowered.Invoke();
         //else onUnpowered.Invoke();
         previousIsPoweredState = isPowered;

@@ -14,8 +14,11 @@ public class Volume : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [Tooltip("Depending on which team owns this trigger will change the functionality. For example, pain volumes normally don't affect their own team.")]
     public string owningTeam; // Which team owns the trigger
+    [Tooltip("If enabled, the trigger will only affect targets that are on the same team")]
     public bool affectsOwnTeam; // If true, the trigger will only affect objects that are a part of the owning team
+    [Tooltip("If enabled, physics props that are being held won't be effected by the volume (This is used for things like wind boxes)")]
     public bool ignoreHeldObjects = true;
     
 

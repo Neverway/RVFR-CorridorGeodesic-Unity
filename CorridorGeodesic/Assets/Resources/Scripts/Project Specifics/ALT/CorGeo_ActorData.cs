@@ -8,6 +8,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public class CorGeo_ActorData : MonoBehaviour
@@ -15,12 +16,13 @@ public class CorGeo_ActorData : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [SerializeField] public Vector3 homePosition;
-    [SerializeField] public Vector3 homeScale;
-    [SerializeField] public Transform homeParent;
-    [SerializeField] public bool nullSpace = false;
+    [Tooltip("If enabled, this object will not be disabled in in fully collapsed null-space")]
     [SerializeField] public bool activeInNullSpace = false;
-    [SerializeField] public bool diesInKillTrigger;
+    [Header("Debugging")]
+    [ReadOnly] [SerializeField] public Vector3 homePosition;
+    [ReadOnly] [SerializeField] public Vector3 homeScale;
+    [ReadOnly] [SerializeField] public Transform homeParent;
+    [ReadOnly] [SerializeField] public bool nullSpace = false;
     public event Action OnRiftRestore;
 
     //=-----------------=

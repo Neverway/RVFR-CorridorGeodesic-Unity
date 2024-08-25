@@ -58,7 +58,7 @@ public class VacuumProjectile : MonoBehaviour
     {
         if (Physics.SphereCast(transform.position+castOffset, castRadius, transform.forward, out faceHit, 1f, layerMask))
         {
-            if (faceHit.collider.gameObject.TryGetComponent<AntiProjectile> (out var component))
+            if (faceHit.collider.gameObject.TryGetComponent<CorGeo_AntiProjectile> (out var component))
             {
                 KillProjectile ();
                 return;

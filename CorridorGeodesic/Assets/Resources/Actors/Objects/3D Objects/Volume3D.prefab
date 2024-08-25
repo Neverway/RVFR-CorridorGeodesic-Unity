@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5768345158830630263}
   - component: {fileID: 7831677084479546310}
   - component: {fileID: 27439437415825257}
-  - component: {fileID: 4363178017767143748}
   - component: {fileID: 7037455207983105276}
+  - component: {fileID: 4363178017767143748}
   - component: {fileID: -3767469625591953124}
   m_Layer: 3
   m_Name: Volume3D
@@ -86,21 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4363178017767143748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6276463742160257089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d77637ce00b9546c94b8f2bc72af471, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actorId: 
-  scriptDataList: []
-  storedVariableData: []
 --- !u!65 &7037455207983105276
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -122,6 +107,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4363178017767143748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6276463742160257089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d77637ce00b9546c94b8f2bc72af471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actorId: 
+  scriptDataList: []
+  storedVariableData: []
 --- !u!114 &-3767469625591953124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,3 +139,4 @@ MonoBehaviour:
   homeParent: {fileID: 0}
   nullSpace: 0
   activeInNullSpace: 0
+  diesInKillTrigger: 0

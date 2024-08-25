@@ -199,10 +199,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6376975871621139151}
-    - targetCorrespondingSourceObject: {fileID: 6276463742160257089, guid: c14d3f99c71d2f5c5920d5892075b3f3,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7273481327429923018}
   m_SourcePrefab: {fileID: 100100000, guid: c14d3f99c71d2f5c5920d5892075b3f3, type: 3}
 --- !u!4 &8767485977656216626 stripped
 Transform:
@@ -236,26 +232,13 @@ MonoBehaviour:
   targetEnt: {fileID: 0}
   targetProp: {fileID: 0}
   isPowered: 0
+  onInteractTransmit: []
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
   resetsAutomatically: 1
   hideIndicator: 0
   useTalkIndicator: 0
   requireActivatingActorInside: 1
-  onInteract:
-    m_PersistentCalls:
-      m_Calls: []
   hasBeenTriggered: 0
   interactionIndicator: {fileID: 2346912734273489087}
---- !u!114 &7273481327429923018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9132002430392707332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4cf282e328f9af0fba187b2c794601e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPowered: 0
-  receivers: []
