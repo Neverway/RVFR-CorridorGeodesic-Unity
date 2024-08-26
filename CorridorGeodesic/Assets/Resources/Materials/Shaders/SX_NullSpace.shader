@@ -66,17 +66,13 @@ Shader "Soulex/SX_NullSpace"
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
-            float3 GetInternalProjectionUVs(float3 viewDir, float intensity){
-                float3 cubeSampleUVs = reflect(viewDir * -1, float3(0, 0, 1));
-
-                cubeSampleUVs = lerp(cubeSampleUVs, _WorldSpaceCameraPos.xyz, 0.01);
-
-                return cubeSampleUVs;
+            float3 GetInternalProjectionUVs(float3 viewDir){
+                return reflect(viewDir * -1, float3(0, 0, 1));
             }
             fixed4 frag (v2f i) : SV_Target
             {
                 float3 weights = abs(i.normal);
-                weights = weights / (weights.x, + weights.y + weights.z);
+                weights /= (weights.x + weights.y + weights.z);
 
                 float2 timeUV = float2(1, 1) * _Time.x;
                 float2 screenUV = (i.screenPos / i.screenPos.w);
@@ -86,25 +82,29 @@ Shader "Soulex/SX_NullSpace"
                 float2 uv_side = TRANSFORM_TEX(i.worldPos.zy, _MainTex) * 0.1 + timeUV;
                 float2 uv_top = TRANSFORM_TEX(i.worldPos.xz, _MainTex) * 0.1 + timeUV;
 
-                float3 distort = tex2D(_DistortTex, (screenUV + timeUV) * 0.25).rgb * _DistortIntensity;
+                float3 distort_front = tex2D(_DistortTex, uv_front * 0.25).rgb * _DistortIntensity;
+                float3 distort_side = tex2D(_DistortTex, uv_side * 0.25).rgb * _DistortIntensity;
+                float3 distort_top = tex2D(_DistortTex, uv_top * 0.25).rgb * _DistortIntensity;
 
-                fixed4 col_front = tex2D(_MainTex, uv_front + distort.rg);
-                fixed4 col_side = tex2D(_MainTex, uv_side + distort.bg);
-                fixed4 col_top = tex2D(_MainTex, uv_top + distort.rb);
+                float3 distort = distort_front * weights.z + distort_side * weights.x + distort_top * weights.y;
 
-                fixed4 col = (col_front * weights.z + col_side * weights.x + col_top * weights.y) * _Color;
+                float4 col_front = tex2D(_MainTex, uv_front + distort.rg);
+                float4 col_side = tex2D(_MainTex, uv_side + distort.bg);
+                float4 col_top = tex2D(_MainTex, uv_top + distort.rb);
+
+                float4 col = (col_front * weights.z + col_side * weights.x + col_top * weights.y) * _Color * 0.5;
 
                 float3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos);
 
-                col += texCUBE(_CubeMap, GetInternalProjectionUVs(viewDir, 0));
-                col += texCUBE(_CubeMap_1, GetInternalProjectionUVs(viewDir, 0.02));
-                col += texCUBE(_CubeMap_2, GetInternalProjectionUVs(viewDir, 0.05));
-
-                col /= 4;
+                float skyWeight = 0.5/3;
 
                 float stars = tex2D(_Stars, screenUV * 10 - timeUV).r;
 
                 stars = pow(stars, 5);
+
+                col += texCUBE(_CubeMap, GetInternalProjectionUVs(viewDir)) * skyWeight;
+                col += texCUBE(_CubeMap_1, GetInternalProjectionUVs(viewDir)) * skyWeight;
+                col += texCUBE(_CubeMap_2, GetInternalProjectionUVs(viewDir)) * skyWeight;
 
                 col += float4(stars, stars, stars, 0);
 
