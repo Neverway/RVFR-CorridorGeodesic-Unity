@@ -5,18 +5,21 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class LogicGate_Or : MonoBehaviour
+public class LogicGate_Counter : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
     [Tooltip("Channels to compare to see if it's powered")]
-    public NEW_LogicProcessor inputA, inputB;
+    public NEW_LogicProcessor addSignal;
+    public NEW_LogicProcessor subtractSignal;
+
+    public int currentValue;
 
 
     //=-----------------=
@@ -37,23 +40,19 @@ public class LogicGate_Or : MonoBehaviour
     {
         logicProcessor = GetComponent<NEW_LogicProcessor>();
     }
-    
+
     private void Update()
     {
-        if (!inputA || !inputB)
-        {
-            logicProcessor.isPowered = false;
-            return;
-        }
-        logicProcessor.isPowered = inputA.isPowered || inputB.isPowered;
+        if (addSignal && addSignal.hasPowerStateChanged && addSignal.isPowered) currentValue++;
+        if (subtractSignal && subtractSignal.hasPowerStateChanged && subtractSignal.isPowered) currentValue--;
     }
 
     private void OnDrawGizmos()
     {
-        if (inputA) Debug.DrawLine(gameObject.transform.position, inputA.transform.position, Color.red);
-        if (inputB) Debug.DrawLine(gameObject.transform.position, inputB.transform.position, Color.green);
+        if (addSignal) Debug.DrawLine(gameObject.transform.position, addSignal.transform.position, Color.green);
+        if (subtractSignal) Debug.DrawLine(gameObject.transform.position, subtractSignal.transform.position, Color.red);
     }
-
+    
 
     //=-----------------=
     // Internal Functions

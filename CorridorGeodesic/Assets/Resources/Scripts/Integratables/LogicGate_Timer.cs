@@ -7,16 +7,17 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class LogicGate_Or : MonoBehaviour
+public class LogicGate_Timer : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
     [Tooltip("Channels to compare to see if it's powered")]
-    public NEW_LogicProcessor inputA, inputB;
+    public NEW_LogicProcessor inputSignal;
+    public float timerDuration;
 
 
     //=-----------------=
@@ -40,24 +41,31 @@ public class LogicGate_Or : MonoBehaviour
     
     private void Update()
     {
-        if (!inputA || !inputB)
+        if (!inputSignal)
         {
-            logicProcessor.isPowered = false;
             return;
         }
-        logicProcessor.isPowered = inputA.isPowered || inputB.isPowered;
+
+        if (inputSignal.hasPowerStateChanged && inputSignal.isPowered)
+        {
+            StartCoroutine(Countdown());
+        }
     }
 
     private void OnDrawGizmos()
     {
-        if (inputA) Debug.DrawLine(gameObject.transform.position, inputA.transform.position, Color.red);
-        if (inputB) Debug.DrawLine(gameObject.transform.position, inputB.transform.position, Color.green);
+        if (inputSignal) Debug.DrawLine(gameObject.transform.position, inputSignal.transform.position, Color.red);
     }
-
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private IEnumerator Countdown()
+    {
+        logicProcessor.isPowered = true;
+        yield return new WaitForSeconds(timerDuration);
+        logicProcessor.isPowered = false;
+    }
 
 
     //=-----------------=

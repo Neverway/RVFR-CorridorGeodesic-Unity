@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Logic_Processor : MonoBehaviour
-{
+{/*
     //=-----------------=
     // Public Variables
     //=-----------------=
@@ -46,8 +46,8 @@ public class Logic_Processor : MonoBehaviour
     {
         foreach (var logicGate in FindObjectsOfType<LogicGate_And>())
         {
-            if (logicGate.inputSignalA == _targetSignalChannel) logicGate.isAPowered = _isPowered;
-            if (logicGate.inputSignalB == _targetSignalChannel) logicGate.isBPowered = _isPowered;
+            //if (logicGate.inputSignalA == _targetSignalChannel) logicGate.isAPowered = _isPowered;
+            //if (logicGate.inputSignalB == _targetSignalChannel) logicGate.isBPowered = _isPowered;
         }
 
         foreach (var logicGate in FindObjectsOfType<LogicGate_Not>())
@@ -88,5 +88,5 @@ public class Logic_Processor : MonoBehaviour
         UpdateLogicInteractables(_targetSignalChannel, _isPowered);
         UpdateLogicGates(_targetSignalChannel, _isPowered);
         ResetTriggers(_targetSignalChannel);
-    }
+    }*/
 }

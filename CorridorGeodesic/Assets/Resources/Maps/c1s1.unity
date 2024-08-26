@@ -3145,9 +3145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58b2a5f02556c4897347a45818c57a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_mergeDistance: 0.5
-  m_usePointLights: 1
-  m_pointLightRange: 1
 --- !u!220 &164691187
 LightProbeGroup:
   m_ObjectHideFlags: 0
@@ -34495,12 +34492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce72b8e8fac84047a96f26f2b28d1d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_volume:
-    m_origin: {x: 0, y: 0, z: 0}
-    m_size: {x: 100, y: 50, z: 100}
-  m_type: 0
-  m_densityFixed: {x: 10, y: 10, z: 10}
-  m_densityFloat: {x: 1, y: 1, z: 1}
 --- !u!1 &1346227747
 GameObject:
   m_ObjectHideFlags: 0
@@ -48378,7 +48369,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door Large
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7527268568049605683, guid: d7628ba72d77b715db03a2039df2864b,
+        type: 3}
+      propertyPath: isPowered
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2566766035439222878, guid: d7628ba72d77b715db03a2039df2864b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -37,14 +37,20 @@ public class LB_World : MonoBehaviour
         gameInstance.UI_ShowHUD();
         if (shouldHaveGeoGun)
         {
-            FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+            if (FindObjectOfType<Pawn_WeaponInventory>())
+            {
+                FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+            }
         }
     }
     private void Update()
     {
         if (shouldHaveGeoGun)
         {
-            FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+            if (FindObjectOfType<Pawn_WeaponInventory>())
+            {
+                FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+            }
         }
     }
     

@@ -6,13 +6,11 @@
 //=============================================================================
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-//[RequireComponent(typeof(SignalTransmitter))]
+[RequireComponent(typeof(NEW_LogicProcessor))]
 public class Volume_TriggerInteractable : Volume
 {
     //=-----------------=
@@ -27,18 +25,16 @@ public class Volume_TriggerInteractable : Volume
     [Tooltip("If enabled, then the actor who created the interaction volume must also be inside this trigger")]
     public bool requireActivatingActorInside = true;
     
-    [Header("Channel Events")]
-    [Tooltip("A readable value to tell if this trigger is currently transmitting a power signal")]
-    [ReadOnly] public bool isPowered;
-    [Tooltip("Transmits a power signal to all devices when this volume is interacted with")]
-    public GameObject[] onInteractTransmit;
-    [Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
-    public UnityEvent onInteract;
+    [Header("Signal Events")]
+    public NEW_LogicProcessor resetSignal;
+    //[Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
+    //public UnityEvent onInteract;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
+    private NEW_LogicProcessor logicProcessor;
     [Tooltip("A variable to keep track of if this volume has already been trigger")]
     [HideInInspector] public bool hasBeenTriggered;
     private bool previousIsPoweredState; // Used to check for any overrides to the initial isPowered state in the level editor
@@ -54,6 +50,24 @@ public class Volume_TriggerInteractable : Volume
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+        logicProcessor = GetComponent<NEW_LogicProcessor>();
+    }
+
+    private void Update()
+    {
+        /*foreach (var powerReceiver in onInteractTransmit)
+        {
+            powerReceiver.isPowered = logicProcessor.isPowered;
+        }*/
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (resetSignal) Debug.DrawLine(gameObject.transform.position, resetSignal.transform.position, new Color(1,0.5f,0,1));
+    }
+
     private new void OnTriggerEnter2D(Collider2D _other)
     {
         base.OnTriggerEnter2D(_other); // Call the base class method
@@ -115,20 +129,17 @@ public class Volume_TriggerInteractable : Volume
     
     private void Interact(Volume_TriggerInteraction _interaction)
     {
-        //if (onInteractSignal == "" || hasBeenTriggered && !resetsAutomatically){ return;}
-        if (hasBeenTriggered && !resetsAutomatically){ return;}
-        if (requireActivatingActorInside && !pawnsInTrigger.Contains(_interaction.targetPawn)) {return;}
-        onInteract.Invoke(); // Dear future me, please keep in mind that this will not be called unless the onInteractSignal is set. I don't know if I intended for it to work that way. (P.S. I am using "-" for empty activations) ~Past Liz M.
+        if (hasBeenTriggered && !resetsAutomatically || requireActivatingActorInside && !pawnsInTrigger.Contains(_interaction.targetPawn))
+        {
+            return;
+        }
+        //onInteract.Invoke(); // Dear future me, please keep in mind that this will not be called unless the onInteractSignal is set. I don't know if I intended for it to work that way. (P.S. I am using "-" for empty activations) ~Past Liz M.
         
         // Flip the current activation state
-        isPowered = !isPowered;
-       //signalTransmitter.isPowered = isPowered;
-        //if (isPowered) onPowered.Invoke();
-        //else onUnpowered.Invoke();
-        previousIsPoweredState = isPowered;
+        logicProcessor.isPowered = !logicProcessor.isPowered;
+        previousIsPoweredState = logicProcessor.isPowered;
         
         // Update connected devices
-        //logicProcessor.UpdateState(onInteractSignal, isPowered);
         hasBeenTriggered = true;
     }
 
