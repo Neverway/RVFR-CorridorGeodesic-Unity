@@ -84,23 +84,4 @@ public class Door : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-
-    /*
-    public void ToggleDoor()
-    {
-        if (!logicProcessor.isPowered) return;
-        if (isOpen)
-        {
-            CloseDoor();
-        }
-        else
-        {
-            OpenDoor();
-        }
-    }
-
-    public void SetPowered(bool _isPowered)
-    {
-        signalReceiver.isPowered = _isPowered;
-    }*/
 }

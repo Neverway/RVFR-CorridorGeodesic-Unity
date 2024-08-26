@@ -16,12 +16,14 @@ public class Elevator : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public bool isPowered;
+    public NEW_LogicProcessor doorSignal;
+    public NEW_LogicProcessor liftSignal;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
+    private bool elevatorActivated;
     
 
     //=-----------------=
@@ -40,6 +42,37 @@ public class Elevator : MonoBehaviour
         animator.keepAnimatorStateOnDisable = true;
     }
 
+    private void Update()
+    {
+        if (doorSignal && !liftSignal.isPowered)
+        {
+            logicProcessor.isPowered = doorSignal.isPowered;
+        
+            if (doorSignal.hasPowerStateChanged)
+            {
+                if (logicProcessor.isPowered)
+                {
+                    animator.Play("Elevator_Open");
+                }
+                else
+                {
+                    animator.Play("Elevator_Close");
+                }
+            }
+        }
+
+        if (liftSignal && liftSignal.isPowered && !elevatorActivated)
+        {
+            animator.Play("Elevator_Descending");
+            elevatorActivated = true;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (doorSignal) Debug.DrawLine(gameObject.transform.position, doorSignal.transform.position, Color.blue);
+    }
+
 
     //=-----------------=
     // Internal Functions
@@ -49,35 +82,4 @@ public class Elevator : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void OpenElevator()
-    {
-        if (isPowered) return;
-        animator.Play("Elevator_Open");
-        isPowered = true;
-    }
-    
-    public void CloseElevator()
-    {
-        if (!isPowered) return;
-        animator.Play("Elevator_Close");
-        isPowered = false;
-    }
-    
-    public void ToggleElevator()
-    {
-        if (isPowered)
-        {
-            CloseElevator();
-        }
-        else
-        {
-            OpenElevator();
-        }
-    }
-
-    public void DescendElevator()
-    {
-        if (!isPowered) return;
-        animator.Play("Elevator_Descending");
-    }
 }
