@@ -8,50 +8,50 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.Events;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class LogicGate_Not : MonoBehaviour
+public class SignalReceiver : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [Tooltip("Channels to compare to see if it's powered")]
-    public NEW_LogicProcessor inputSignal;
+    [ReadOnly(true)] public bool isPowered;
+    public UnityEvent onPoweredEvent, onUnpoweredEvent;
+    public event Action OnPowered, OnUnpowered;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
+    private bool previousIsPoweredState; // this is used to check to see if the powered state has changed
 
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-        logicProcessor = GetComponent<NEW_LogicProcessor>();
-    }
-    
     private void Update()
     {
-        if (!inputSignal)
+        if (isPowered != previousIsPoweredState)
         {
-            logicProcessor.isPowered = false;
-            return;
+            if (isPowered)
+            {
+                onPoweredEvent?.Invoke();
+                OnPowered?.Invoke();
+            }
+            else
+            {
+                onUnpoweredEvent?.Invoke();
+                OnUnpowered?.Invoke();
+            }
         }
-        logicProcessor.isPowered = !inputSignal.isPowered;
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (inputSignal) Debug.DrawLine(gameObject.transform.position, inputSignal.transform.position, Color.red);
+        previousIsPoweredState = isPowered;
     }
 
 
@@ -63,4 +63,8 @@ public class LogicGate_Not : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void SetIsPowered(bool _isPowered)
+    {
+        isPowered = _isPowered;
+    }
 }

@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 [RequireComponent(typeof(Logic_Processor))]
 public class Trigger2D_Interactable : Volume
-{
+{/*
     //=-----------------=
     // Public Variables
     //=-----------------=
@@ -108,5 +108,5 @@ public class Trigger2D_Interactable : Volume
         // Update connected devices
         logicProcessor.UpdateState(onInteractSignal, isPowered);
         hasBeenTriggered = true;
-    }
+    }*/
 }

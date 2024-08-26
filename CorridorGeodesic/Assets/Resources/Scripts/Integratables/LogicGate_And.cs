@@ -5,25 +5,17 @@
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 
-[RequireComponent(typeof(Logic_Processor))]
 public class LogicGate_And : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public string inputSignalA;
-    public string inputSignalB;
-    public string outputSignal;
-
-    public bool isAPowered;
-    public bool isBPowered;
-    public bool isOutputPowered;
+    [Tooltip("Channels to compare to see if it's powered")]
+    public NEW_LogicProcessor inputA, inputB;
 
 
     //=-----------------=
@@ -34,7 +26,7 @@ public class LogicGate_And : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private Logic_Processor logicProcessor;
+    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
@@ -42,24 +34,23 @@ public class LogicGate_And : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-        logicProcessor = GetComponent<Logic_Processor>();
+        logicProcessor = GetComponent<NEW_LogicProcessor>();
     }
     
     private void Update()
     {
-        // If the logic gate is not fully linked, set it's state to false
-        if (inputSignalA == "" || inputSignalB == "")
+        if (!inputA || !inputB)
         {
-            isOutputPowered = false;
-            logicProcessor.UpdateState(outputSignal, isOutputPowered);
+            logicProcessor.isPowered = false;
             return;
         }
-        
-        // Set isActive
-        isOutputPowered = isAPowered && isBPowered;
-        
-        // Update connected devices
-        logicProcessor.UpdateState(outputSignal, isOutputPowered);
+        logicProcessor.isPowered = inputA.isPowered && inputB.isPowered;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (inputA) Debug.DrawLine(gameObject.transform.position, inputA.transform.position, Color.red);
+        if (inputB) Debug.DrawLine(gameObject.transform.position, inputB.transform.position, Color.green);
     }
 
 

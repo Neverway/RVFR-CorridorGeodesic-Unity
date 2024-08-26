@@ -5,18 +5,21 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class LogicGate_Or : MonoBehaviour
+public class LogicGate_Comparator : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
     [Tooltip("Channels to compare to see if it's powered")]
-    public NEW_LogicProcessor inputA, inputB;
+    public LogicGate_Counter counterSignal;
+    public int targetValue;
+    [Header("0 - Less Than, 1 - Equal To, 2 - Greater Than")] 
+    [Range(0,3)] public int compareOperation=1;
 
 
     //=-----------------=
@@ -37,23 +40,31 @@ public class LogicGate_Or : MonoBehaviour
     {
         logicProcessor = GetComponent<NEW_LogicProcessor>();
     }
-    
+
     private void Update()
     {
-        if (!inputA || !inputB)
+        if (counterSignal)
         {
-            logicProcessor.isPowered = false;
-            return;
+            switch (compareOperation)
+            {
+                case 0:
+                    logicProcessor.isPowered = counterSignal.currentValue < targetValue;
+                    break;
+                case 1:
+                    logicProcessor.isPowered = counterSignal.currentValue == targetValue;
+                    break;
+                case 2:
+                    logicProcessor.isPowered = counterSignal.currentValue > targetValue;
+                    break;
+            }
         }
-        logicProcessor.isPowered = inputA.isPowered || inputB.isPowered;
     }
 
     private void OnDrawGizmos()
     {
-        if (inputA) Debug.DrawLine(gameObject.transform.position, inputA.transform.position, Color.red);
-        if (inputB) Debug.DrawLine(gameObject.transform.position, inputB.transform.position, Color.green);
+        if (counterSignal) Debug.DrawLine(gameObject.transform.position, counterSignal.transform.position, Color.red);
     }
-
+    
 
     //=-----------------=
     // Internal Functions

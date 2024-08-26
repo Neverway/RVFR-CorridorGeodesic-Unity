@@ -9,15 +9,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Timeline;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class LogicGate_Not : MonoBehaviour
+public class EventSignal_Interactable : EventSignal
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [Tooltip("Channels to compare to see if it's powered")]
-    public NEW_LogicProcessor inputSignal;
 
 
     //=-----------------=
@@ -28,31 +26,11 @@ public class LogicGate_Not : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-        logicProcessor = GetComponent<NEW_LogicProcessor>();
-    }
-    
-    private void Update()
-    {
-        if (!inputSignal)
-        {
-            logicProcessor.isPowered = false;
-            return;
-        }
-        logicProcessor.isPowered = !inputSignal.isPowered;
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (inputSignal) Debug.DrawLine(gameObject.transform.position, inputSignal.transform.position, Color.red);
-    }
 
 
     //=-----------------=

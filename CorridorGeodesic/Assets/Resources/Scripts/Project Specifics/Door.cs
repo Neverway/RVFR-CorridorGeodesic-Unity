@@ -9,27 +9,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
+[RequireComponent(typeof(NEW_LogicProcessor))]
 public class Door : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public bool isPowered;
+    public NEW_LogicProcessor inputSignal;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private Animator animator;
-    private bool isOpen;
 
 
     //=-----------------=
     // Reference Variables
-    //=-----------------=
+    //=-----------------='
+    private NEW_LogicProcessor logicProcessor;
+    [Header("References")]
+    [SerializeField] private Animator animator;
     [SerializeField] private Material poweredMaterial, unpoweredMaterial;
     [SerializeField] private GameObject indicatorMesh;
+    [HideInInspector] [SerializeField] private UnityEvent onPowered;
+    [HideInInspector] [SerializeField] private UnityEvent onUnpowered;
 
 
     //=-----------------=
@@ -37,19 +42,37 @@ public class Door : MonoBehaviour
     //=-----------------=
     private void Start()
     {
+        logicProcessor = GetComponent<NEW_LogicProcessor>();
         animator.keepAnimatorStateOnDisable = true;
     }
 
     private void Update()
     {
-        if (isPowered)
+        if (!inputSignal) return;
+        logicProcessor.isPowered = inputSignal.isPowered;
+        
+        if (inputSignal.hasPowerStateChanged)
         {
-            indicatorMesh.GetComponent<MeshRenderer>().material = poweredMaterial;
+            if (logicProcessor.isPowered)
+            {
+                onPowered.Invoke();
+                
+                animator.Play("Door_Open");
+                indicatorMesh.GetComponent<MeshRenderer>().material = poweredMaterial;
+            }
+            else
+            {
+                onUnpowered.Invoke();
+                
+                animator.Play("Door_Close");
+                indicatorMesh.GetComponent<MeshRenderer>().material = unpoweredMaterial;
+            }
         }
-        else
-        {
-            indicatorMesh.GetComponent<MeshRenderer>().material = unpoweredMaterial;
-        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (inputSignal) Debug.DrawLine(gameObject.transform.position, inputSignal.transform.position, Color.blue);
     }
 
 
@@ -61,25 +84,11 @@ public class Door : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void OpenDoor()
-    {
-        if (!isPowered) return;
-        if (isOpen) return;
-        animator.SetBool("IsPowered", true);
-        isOpen = true;
-    }
-    
-    public void CloseDoor()
-    {
-        if (!isPowered) return;
-        if (!isOpen) return;
-        animator.SetBool("IsPowered", false);
-        isOpen = false;
-    }
-    
+
+    /*
     public void ToggleDoor()
     {
-        if (!isPowered) return;
+        if (!logicProcessor.isPowered) return;
         if (isOpen)
         {
             CloseDoor();
@@ -92,6 +101,6 @@ public class Door : MonoBehaviour
 
     public void SetPowered(bool _isPowered)
     {
-        isPowered = _isPowered;
-    }
+        signalReceiver.isPowered = _isPowered;
+    }*/
 }

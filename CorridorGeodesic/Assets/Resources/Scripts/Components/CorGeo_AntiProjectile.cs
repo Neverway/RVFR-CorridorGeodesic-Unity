@@ -1,7 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes: 
+// Purpose: Attach this to a gameobject to make markers not be able to be placed on this
+// Notes:
 //
 //=============================================================================
 
@@ -9,12 +9,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LB_World : MonoBehaviour
+public class CorGeo_AntiProjectile : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public bool shouldHaveGeoGun=true;
 
 
     //=-----------------=
@@ -25,34 +24,11 @@ public class LB_World : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private GameInstance gameInstance;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-        gameInstance = FindObjectOfType<GameInstance>();
-        gameInstance.UI_ShowHUD();
-        if (shouldHaveGeoGun)
-        {
-            if (FindObjectOfType<Pawn_WeaponInventory>())
-            {
-                FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
-            }
-        }
-    }
-    private void Update()
-    {
-        if (shouldHaveGeoGun)
-        {
-            if (FindObjectOfType<Pawn_WeaponInventory>())
-            {
-                FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
-            }
-        }
-    }
     
 
     //=-----------------=
