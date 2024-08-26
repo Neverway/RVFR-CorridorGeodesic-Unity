@@ -44,7 +44,7 @@ public class Elevator : MonoBehaviour
 
     private void Update()
     {
-        if (doorSignal && !liftSignal.isPowered)
+        if (doorSignal)
         {
             logicProcessor.isPowered = doorSignal.isPowered;
         

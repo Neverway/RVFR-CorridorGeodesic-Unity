@@ -27333,6 +27333,11 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 986132740}
+    - target: {fileID: 8353503920951282747, guid: 30cce448912321f07a09630c025dab49,
+        type: 3}
+      propertyPath: doorSignal
+      value: 
+      objectReference: {fileID: 1847233708}
     - target: {fileID: 9058635717016611544, guid: 30cce448912321f07a09630c025dab49,
         type: 3}
       propertyPath: m_IsActive
@@ -27376,18 +27381,6 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 986132737}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &986132741 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3954070337248193709, guid: 30cce448912321f07a09630c025dab49,
-    type: 3}
-  m_PrefabInstance: {fileID: 986132737}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db763e7e7e0c8eb888d906d4bfd3cb7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1005952725
 GameObject:
   m_ObjectHideFlags: 0
@@ -49487,7 +49480,7 @@ PrefabInstance:
         type: 3}
       propertyPath: receivers.Array.data[0]
       value: 
-      objectReference: {fileID: 986132741}
+      objectReference: {fileID: 0}
     - target: {fileID: 8481769850307277354, guid: 73403a250b23478b4a05e7f933758a75,
         type: 3}
       propertyPath: m_IsActive
@@ -49514,6 +49507,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1847233706}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1847233708 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 422892383047066190, guid: 73403a250b23478b4a05e7f933758a75,
+    type: 3}
+  m_PrefabInstance: {fileID: 1847233706}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944402501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1851503205
 GameObject:
   m_ObjectHideFlags: 0
@@ -52620,7 +52625,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 32759
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
