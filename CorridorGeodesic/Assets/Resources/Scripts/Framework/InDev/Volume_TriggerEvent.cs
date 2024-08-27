@@ -30,7 +30,7 @@ public class Volume_TriggerEvent : Volume
     // Private Variables
     //=-----------------=
     [Tooltip("A variable to keep track of if this volume has already been trigger")]
-    [HideInInspector] public bool hasBeenTriggered;
+    public bool hasBeenTriggered;
 
 
     //=-----------------=
@@ -45,6 +45,7 @@ public class Volume_TriggerEvent : Volume
     private void Start()
     {
         logicProcessor = GetComponent<NEW_LogicProcessor>();
+        Reset();
     }
 
     private void Update()
@@ -70,13 +71,15 @@ public class Volume_TriggerEvent : Volume
             if (!targetEnt.isPossessed) return; 
             onOccupied.Invoke();
             logicProcessor.isPowered = true;
+            hasBeenTriggered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
             onOccupied.Invoke();
             logicProcessor.isPowered = true;
+            hasBeenTriggered = true;
         }
-        hasBeenTriggered = true;
+        print(_other.name);
     }
 
     private new void OnTriggerExit2D(Collider2D _other)
@@ -87,13 +90,14 @@ public class Volume_TriggerEvent : Volume
             if (!targetEnt.isPossessed) return;
             onUnoccupied.Invoke();
             logicProcessor.isPowered = false;
+            if (resetsAutomatically) hasBeenTriggered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
             onUnoccupied.Invoke();
             logicProcessor.isPowered = false;
+            if (resetsAutomatically) hasBeenTriggered = false;
         }
-        if (resetsAutomatically) hasBeenTriggered = false;
     }
 
     private new void OnTriggerEnter(Collider _other)
@@ -105,13 +109,14 @@ public class Volume_TriggerEvent : Volume
             if (!targetEnt.isPossessed) return;
             onOccupied.Invoke();
             logicProcessor.isPowered = true;
+            hasBeenTriggered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
             onOccupied.Invoke();
             logicProcessor.isPowered = true;
+            hasBeenTriggered = true;
         }
-        hasBeenTriggered = true;
     }
 
     private new void OnTriggerExit(Collider _other)
@@ -122,13 +127,14 @@ public class Volume_TriggerEvent : Volume
             if (!targetEnt.isPossessed) return;
             onUnoccupied.Invoke();
             logicProcessor.isPowered = false;
+            if (resetsAutomatically) hasBeenTriggered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
             onUnoccupied.Invoke();
             logicProcessor.isPowered = false;
+            if (resetsAutomatically) hasBeenTriggered = false;
         }
-        if (resetsAutomatically) hasBeenTriggered = false;
     }
 
     //=-----------------=
