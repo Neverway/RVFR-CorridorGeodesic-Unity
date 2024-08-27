@@ -537,15 +537,10 @@ PrefabInstance:
       propertyPath: receivers.Array.size
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 769179710277057802, guid: 25ecce1d4d40796fc80bc4111abf4700,
-        type: 3}
-      propertyPath: receivers.Array.data[0]
-      value: 
-      objectReference: {fileID: 8316236894342662429}
     - target: {fileID: 5051199325652713641, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
       propertyPath: resetsAutomatically
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5051199325652713641, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
@@ -693,6 +688,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2475764707079411600}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8172822758389047728 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5994322015025837600, guid: 25ecce1d4d40796fc80bc4111abf4700,
+    type: 3}
+  m_PrefabInstance: {fileID: 2475764707079411600}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4497799313178809538
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -782,10 +789,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7854679070043905460}
-    - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8316236894342662429}
   m_SourcePrefab: {fileID: 100100000, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
 --- !u!1 &7585677182710121538 stripped
 GameObject:
@@ -805,49 +808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2651e68dea1b0f1238bb0de91e4b0332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8316236894342662429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7585677182710121538}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db763e7e7e0c8eb888d906d4bfd3cb7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPowered: 0
-  onPoweredEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7854679070043905460}
-        m_TargetAssemblyTypeName: GeoGunGiver, Assembly-CSharp
-        m_MethodName: GiveGeoGun
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 4122024288354689568}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onUnpoweredEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  inputSignal: {fileID: 8172822758389047728}
 --- !u!4 &7949558051162055028 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,

@@ -23,7 +23,7 @@ public class Volume_TriggerEvent : Volume
     
     //[Header("Channel Events")]
     //[Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
-    //public UnityEvent onOccupied;
+    public UnityEvent onOccupied, onUnoccupied;
 
 
     //=-----------------=
@@ -68,10 +68,12 @@ public class Volume_TriggerEvent : Volume
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return; 
+            onOccupied.Invoke();
             logicProcessor.isPowered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
+            onOccupied.Invoke();
             logicProcessor.isPowered = true;
         }
         hasBeenTriggered = true;
@@ -83,10 +85,12 @@ public class Volume_TriggerEvent : Volume
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
+            onUnoccupied.Invoke();
             logicProcessor.isPowered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
+            onUnoccupied.Invoke();
             logicProcessor.isPowered = false;
         }
         if (resetsAutomatically) hasBeenTriggered = false;
@@ -99,19 +103,13 @@ public class Volume_TriggerEvent : Volume
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
+            onOccupied.Invoke();
             logicProcessor.isPowered = true;
-            //logicProcessor.UpdateState(onOccupiedSignal, true);
-            //logicProcessor.UpdateState(onUnoccupiedSignal, false);
-            //onOccupied.Invoke();
-           //signalTransmitter.isPowered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
+            onOccupied.Invoke();
             logicProcessor.isPowered = true;
-            //logicProcessor.UpdateState(onOccupiedSignal, true);
-            //logicProcessor.UpdateState(onUnoccupiedSignal, false);
-            //onOccupied.Invoke();
-           //signalTransmitter.isPowered = true;
         }
         hasBeenTriggered = true;
     }
@@ -122,19 +120,13 @@ public class Volume_TriggerEvent : Volume
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
+            onUnoccupied.Invoke();
             logicProcessor.isPowered = false;
-            //logicProcessor.UpdateState(onOccupiedSignal, false);
-            //logicProcessor.UpdateState(onUnoccupiedSignal, true);
-            //onUnoccupied.Invoke();
-           //signalTransmitter.isPowered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
+            onUnoccupied.Invoke();
             logicProcessor.isPowered = false;
-            //logicProcessor.UpdateState(onOccupiedSignal, false);
-            //logicProcessor.UpdateState(onUnoccupiedSignal, true);
-            //onUnoccupied.Invoke();
-           //signalTransmitter.isPowered = false;
         }
         if (resetsAutomatically) hasBeenTriggered = false;
     }

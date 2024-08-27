@@ -28,7 +28,7 @@ public class Volume_TriggerInteractable : Volume
     [Header("Signal Events")]
     public NEW_LogicProcessor resetSignal;
     //[Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
-    //public UnityEvent onInteract;
+    public UnityEvent onInteract;
 
 
     //=-----------------=
@@ -133,7 +133,9 @@ public class Volume_TriggerInteractable : Volume
         {
             return;
         }
-        //onInteract.Invoke(); // Dear future me, please keep in mind that this will not be called unless the onInteractSignal is set. I don't know if I intended for it to work that way. (P.S. I am using "-" for empty activations) ~Past Liz M.
+        onInteract.Invoke(); 
+        // Dear future me, please keep in mind that this will not be called unless the onInteractSignal is set. I don't know if I intended for it to work that way. (P.S. I am using "-" for empty activations) ~Past Liz M.
+        // Dear past me, you are a fool and a coward. I fixed it. ~Future Liz M.
         
         // Flip the current activation state
         logicProcessor.isPowered = !logicProcessor.isPowered;

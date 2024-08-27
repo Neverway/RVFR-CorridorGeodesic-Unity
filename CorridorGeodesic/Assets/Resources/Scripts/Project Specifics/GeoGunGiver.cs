@@ -9,11 +9,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(NEW_LogicProcessor))]
 public class GeoGunGiver : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public NEW_LogicProcessor inputSignal;
 
 
     //=-----------------=
@@ -24,6 +26,7 @@ public class GeoGunGiver : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
@@ -31,12 +34,20 @@ public class GeoGunGiver : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-    
+        logicProcessor = GetComponent<NEW_LogicProcessor>();
     }
 
     private void Update()
     {
-    
+        if (!inputSignal) return;
+        logicProcessor.isPowered = inputSignal.isPowered;
+        if (logicProcessor.hasPowerStateChanged)
+        {
+            if (logicProcessor.isPowered)
+            {
+                GiveGeoGun();
+            }
+        }
     }
 
     //=-----------------=
