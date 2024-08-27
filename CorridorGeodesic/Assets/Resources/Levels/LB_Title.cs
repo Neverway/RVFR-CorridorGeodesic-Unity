@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +37,12 @@ public class LB_Title : MonoBehaviour
         gameInstance.UI_ShowTitle();
         Cursor.lockState = CursorLockMode.None;
     }
-    
+
+    private void Update()
+    {
+        Cursor.lockState = CursorLockMode.None;
+    }
+
 
     //=-----------------=
     // Internal Functions

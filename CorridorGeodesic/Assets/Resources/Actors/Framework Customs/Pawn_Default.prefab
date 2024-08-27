@@ -51,6 +51,7 @@ MonoBehaviour:
   currentState:
     characterName: 
     health: 0
+    invulnerabilityTime: 0
     movementSpeed: 0
     team: 
     animationController: {fileID: 0}
@@ -64,6 +65,14 @@ MonoBehaviour:
     groundMask:
       serializedVersion: 2
       m_Bits: 0
+    groundDrag: 0
+    airDrag: 0
+    movementMultiplier: 0
+    airMovementMultiplier: 0
+    gravityMultiplier: 0
+    jumpForce: 0
+    sprintSpeedMultiplier: 0
+    sprintAcceleration: 0
   isPossessed: 0
   isPaused: 0
   wasPaused: 0
@@ -73,6 +82,7 @@ MonoBehaviour:
   destroyOnDeath: 0
   destroyOnDeathDelay: 0
   faceDirection: {x: 0, y: 0, z: 0, w: 0}
+  physObjectAttachmentPoint: {fileID: 0}
 --- !u!114 &-4335853035724456227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,6 +110,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686059954879625068, guid: 94967e615899f4eb88f9883b59fd0167,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 32759
       objectReference: {fileID: 0}
     - target: {fileID: 7556116041726341077, guid: 94967e615899f4eb88f9883b59fd0167,
         type: 3}
