@@ -96,7 +96,7 @@ public class Laser_Raycast : MonoBehaviour
         {
             l.gameObject.SetActive (false);
         }
-        if (logicProcessor != null && !logicProcessor.isPowered)
+        if (inputSignal != null && !logicProcessor.isPowered)
         {
             return;
         }
