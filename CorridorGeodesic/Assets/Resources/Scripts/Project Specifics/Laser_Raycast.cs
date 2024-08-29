@@ -47,6 +47,12 @@ public class Laser_Raycast : MonoBehaviour
 
     private void Update ()
     {
+        if (inputSignal == null)
+        {
+            ShootLaser ();
+            return;
+        }
+
         if (inputSignal.hasPowerStateChanged) logicProcessor.isPowered = inputSignal.isPowered;
         ShootLaser ();
     }
@@ -90,7 +96,7 @@ public class Laser_Raycast : MonoBehaviour
         {
             l.gameObject.SetActive (false);
         }
-        if (!logicProcessor.isPowered)
+        if (logicProcessor != null && !logicProcessor.isPowered)
         {
             return;
         }
