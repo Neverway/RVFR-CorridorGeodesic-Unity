@@ -2,6 +2,7 @@ using System;
 using System.Net.Http.Headers;
 using UnityEngine;
 
+[RequireComponent(typeof(NEW_LogicProcessor))]
 public class Laser_Raycast : MonoBehaviour
 {
 
@@ -16,20 +17,22 @@ public class Laser_Raycast : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    public NEW_LogicProcessor inputSignal;
     [SerializeField] private Transform halo;
     [SerializeField] private int maxReflectionCount = 5;
     [SerializeField] private float maxStepDistance = 200f;
     [SerializeField] private LineRenderer prefabLine;
-    public bool isPowered;
     public Transform laserFireTransform;
     
     //=-----------------=
     // Private Variables
     //=-----------------=
+    private NEW_LogicProcessor logicProcessor;
     private LineRenderer[] lineRenderers;
 
     private void Start ()
     {
+        logicProcessor = GetComponent<NEW_LogicProcessor>();
         lineRenderers = new LineRenderer[maxReflectionCount];
         for (int i = 0; i < maxReflectionCount; i++)
         {
@@ -44,7 +47,13 @@ public class Laser_Raycast : MonoBehaviour
 
     private void Update ()
     {
+        if (inputSignal.hasPowerStateChanged) logicProcessor.isPowered = inputSignal.isPowered;
         ShootLaser ();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (inputSignal) Debug.DrawLine(gameObject.transform.position, inputSignal.transform.position, Color.blue);
     }
 
     private void OnDisable ()
@@ -81,7 +90,7 @@ public class Laser_Raycast : MonoBehaviour
         {
             l.gameObject.SetActive (false);
         }
-        if (!isPowered)
+        if (!logicProcessor.isPowered)
         {
             return;
         }
@@ -154,11 +163,6 @@ public class Laser_Raycast : MonoBehaviour
         {
             detector.OnHit ();
         }
-    }
-
-    public void SetIsPowered(bool _isPowered)
-    {
-        isPowered = _isPowered;
     }
 
 }

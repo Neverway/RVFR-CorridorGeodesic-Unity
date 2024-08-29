@@ -50,10 +50,10 @@ public class Volume_Kill : Volume
         if (_other.TryGetComponent<CorGeo_ActorData> (out CorGeo_ActorData actor))
         {
             // Why was there a parameter to disable death in kill volumes? ~Liz
-            //if (actor.diesInKillTrigger)
-            //{
-            Destroy(_other.gameObject);
-            //}
+            if (actor.destroyedInKillTrigger)
+            {
+                Destroy(_other.gameObject);
+            }
         }
     }
     

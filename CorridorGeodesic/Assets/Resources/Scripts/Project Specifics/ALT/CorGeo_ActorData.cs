@@ -18,6 +18,9 @@ public class CorGeo_ActorData : MonoBehaviour
     //=-----------------=
     [Tooltip("If enabled, this object will not be disabled in in fully collapsed null-space")]
     [SerializeField] public bool activeInNullSpace = false;
+    [Tooltip("Uncheck this if the object has a special death animation")]
+    public bool destroyedInKillTrigger=true;
+    
     [Header("Debugging")]
     [ReadOnly] [SerializeField] public Vector3 homePosition;
     [ReadOnly] [SerializeField] public Vector3 homeScale;

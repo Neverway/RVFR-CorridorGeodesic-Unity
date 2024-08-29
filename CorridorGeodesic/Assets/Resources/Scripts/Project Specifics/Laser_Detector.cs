@@ -8,6 +8,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(NEW_LogicProcessor))]
 public class Laser_Detector : MonoBehaviour
 {
     //=-----------------=
@@ -28,6 +29,7 @@ public class Laser_Detector : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private NEW_LogicProcessor logicProcessor;
     [SerializeField] private Renderer laserRenderer;
     public UnityEvent OnPowered;
     public UnityEvent OnNotPowered;
@@ -39,6 +41,7 @@ public class Laser_Detector : MonoBehaviour
 
     private void Start ()
     {
+        logicProcessor = GetComponent<NEW_LogicProcessor>();
         laserRenderer.material = offMaterial;
         laserLight.SetActive(false);
     }
@@ -51,6 +54,7 @@ public class Laser_Detector : MonoBehaviour
             if (isActive)
             {
                 isActive = false;
+                logicProcessor.isPowered = false;
                 laserRenderer.material = offMaterial;
                 laserLight.SetActive (false);
                 OnNotPowered.Invoke();
@@ -74,6 +78,7 @@ public class Laser_Detector : MonoBehaviour
         {
             OnPowered.Invoke();
             isActive = true;
+            logicProcessor.isPowered = true;
             laserRenderer.material = onMaterial;
             laserLight.SetActive(true);
         }
