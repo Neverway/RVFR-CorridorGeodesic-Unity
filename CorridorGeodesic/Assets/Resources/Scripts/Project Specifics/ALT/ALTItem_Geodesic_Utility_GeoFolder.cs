@@ -36,7 +36,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private GameObject vacuumProjectile;
     [SerializeField] private GameObject riftObject;
     [SerializeField] private GameObject cutPreviewPrefab;
-    private GameObject[] cutPreviews;
     public GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
     public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
@@ -44,12 +43,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     private ALTMeshSlicer[] meshSlicers;
 
     //Statics for ALTMeshSlicer to use
-    public static Plane plane1;
-    public static Plane plane2;
     public static Plane planeA;
     public static Plane planeB;
     public static List<GameObject> nullSlices;
-    public static GameObject plane2Meshes;
     public static GameObject planeBMeshes;
     public static List<ALTMeshSlicer> originalSliceableObjects = new List<ALTMeshSlicer> ();
     public static List<GameObject> slicedMeshes = new List<GameObject> ();
@@ -57,9 +53,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
 
     //Object groups for moving slice
-    private List<CorGeo_ActorData> plane1Objects;
-    private List<CorGeo_ActorData> plane2Objects;
-    private List<CorGeo_ActorData> nullSpaceObjects;
     public List<CorGeo_ActorData> aSpaceObjects;
     public List<CorGeo_ActorData> bSpaceObjects;
     public List<CorGeo_ActorData> nullSpaceObjects;
@@ -72,7 +65,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public static float lerpAmount;
     [SerializeField] private float riftSecondsPerUnit = 1f;
     public static float riftWidth;
-    private Vector3 plane2StartPos;
     private Vector3 planeBStartPos;
     private bool secondaryHeld = false;
 
@@ -129,7 +121,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
         }
         // TODO Fix this dummy (This function is currently resetting null-space actors homeworld position which majorly breaks things)
-        CheckForActorSpaceChanges();
+        //CheckForActorSpaceChanges();
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
@@ -145,13 +137,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 // Squish null-space parent
                 deployedRift.transform.localScale = new Vector3 (1, 1, 1 - lerpAmount);
             
-                // Collapse meshes in plane2/B-Space
-                plane2Meshes.transform.position = Vector3.Lerp (plane2StartPos, plane2StartPos + targetOffset, lerpAmount);
                 // Collapse meshes in planeB/B-Space
                 planeBMeshes.transform.position = Vector3.Lerp (planeBStartPos, planeBStartPos + targetOffset, lerpAmount);
                 
-                // Collapse actors in plane2/B-Space
-                foreach (CorGeo_ActorData obj in plane2Objects)
                 // Collapse actors in planeB/B-Space
                 foreach (CorGeo_ActorData obj in bSpaceObjects)
                 {
@@ -234,8 +222,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         deployedRift.transform.position = pos1;
 
-        plane1 = new Plane (riftNormal, pos1);
-        plane2 = new Plane (-riftNormal, pos2);
         planeA = new Plane (riftNormal, pos1);
         planeB = new Plane (-riftNormal, pos2);
 
@@ -321,7 +307,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             if (_gameObject) _gameObject.GoHome ();
         }
 
-        Destroy (plane2Meshes);
         Destroy (planeBMeshes);
         if (deployedRift)
         {
@@ -389,9 +374,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 Debug.Log ("CONVERGING");
                 meshSlicers = FindObjectsOfType<ALTMeshSlicer> ();
                 nullSlices = new List<GameObject> ();
-                plane2Meshes = Instantiate (new GameObject ());
-                plane2Meshes.name = "plane2Meshes";
-                plane2StartPos = plane2Meshes.transform.position;
                 planeBMeshes = Instantiate (new GameObject ());
                 planeBMeshes.name = "planeBMeshes";
                 planeBStartPos = planeBMeshes.transform.position;
@@ -410,7 +392,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                         Destroy (meshColliders[0]);
                     }
                 }
-                AssignActorsToRelativeSpace ();
                 AssignInitialActorRiftSpace();
                 isCollapseStarted = true;
                 riftTimer = 0f;
@@ -420,33 +401,30 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         }
     }
 
-    private void AssignActorsToRelativeSpace ()
     private void AssignInitialActorRiftSpace ()
     {
         if (!deployedRift) return;
         // Reposition objects in A & B space to match the change in distance between the markers
 
-        plane1Objects = new List<CorGeo_ActorData> ();
-        plane2Objects = new List<CorGeo_ActorData> ();
         aSpaceObjects = new List<CorGeo_ActorData> ();
         bSpaceObjects = new List<CorGeo_ActorData> ();
         nullSpaceObjects = new List<CorGeo_ActorData> ();
 
         foreach (var actor in FindObjectsOfType<CorGeo_ActorData> ())
         {
-            float distance1 = plane1.GetDistanceToPoint (actor.transform.position);
+            float distance1 = planeA.GetDistanceToPoint (actor.transform.position);
 
             if (distance1 < 0)
             {
-                plane1Objects.Add (actor);
+                aSpaceObjects.Add (actor);
                 continue;
             }
 
-            float distance2 = plane2.GetDistanceToPoint (actor.transform.position);
+            float distance2 = planeB.GetDistanceToPoint (actor.transform.position);
 
             if (distance2 < 0)
             {
-                plane2Objects.Add (actor);
+                bSpaceObjects.Add (actor);
                 actor.homePosition = actor.transform.position;
                 continue;
             }
@@ -464,7 +442,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             actor.transform.SetParent (deployedRift.transform);
             actor.nullSpace = true;
         }
-        cutPreviews[1].transform.SetParent (plane2Meshes.transform);
         cutPreviews[1].transform.SetParent (planeBMeshes.transform);
     }
 
@@ -473,6 +450,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         // Check A-Space entities to see if they have exited A-Space
         // Check B-Space entities to see if they have exited B-Space
         // Check Null-Space entities to see if they have exited Null-Space (This one sucks!)
+        if (!deployedRift) return;
         foreach (var actor in FindObjectsOfType<CorGeo_ActorData> ())
         {
             switch (GetActorRiftSpace(actor))

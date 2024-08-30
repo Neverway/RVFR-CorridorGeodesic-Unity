@@ -71,7 +71,6 @@ public class CorGeo_ActorData : MonoBehaviour
             transform.position = homePosition;
             return;
         }
-        if (ALTItem_Geodesic_Utility_GeoFolder.plane1.GetDistanceToPoint (transform.position) > 0)
         if (ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (transform.position) > 0)
         {
             if (!ALTItem_Geodesic_Utility_GeoFolder.deployedRift) return;
