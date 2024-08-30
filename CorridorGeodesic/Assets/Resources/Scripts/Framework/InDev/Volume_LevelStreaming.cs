@@ -45,6 +45,7 @@ public class Volume_LevelStreaming : Volume
         worldLoader = FindObjectOfType<WorldLoader>();
         if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
         {
+            _other.transform.SetParent(null);
             SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetSceneByName(worldLoader.streamingWorldID));
         }
     }

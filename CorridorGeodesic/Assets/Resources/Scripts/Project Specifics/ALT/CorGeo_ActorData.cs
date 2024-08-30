@@ -20,6 +20,8 @@ public class CorGeo_ActorData : MonoBehaviour
     [SerializeField] public bool activeInNullSpace = false;
     [Tooltip("Uncheck this if the object has a special death animation")]
     public bool destroyedInKillTrigger=true;
+
+    public bool debugLogData;
     
     [Header("Debugging")]
     [ReadOnly] [SerializeField] public Vector3 homePosition;
@@ -69,10 +71,11 @@ public class CorGeo_ActorData : MonoBehaviour
             transform.position = homePosition;
             return;
         }
-        if (ALTItem_Geodesic_Utility_GeoFolder.plane1.GetDistanceToPoint (transform.position) > 0)
+        if (ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (transform.position) > 0)
         {
             if (!ALTItem_Geodesic_Utility_GeoFolder.deployedRift) return;
             //move actor away from collapse direction scaled by the rift timer's progress
+            // move actor away from collapse direction scaled by the rift timer's progress
             transform.position += ALTItem_Geodesic_Utility_GeoFolder.deployedRift.transform.forward * 
                                   ALTItem_Geodesic_Utility_GeoFolder.riftWidth * 
                                   (ALTItem_Geodesic_Utility_GeoFolder.lerpAmount);

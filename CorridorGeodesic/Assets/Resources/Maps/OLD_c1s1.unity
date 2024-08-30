@@ -1008,6 +1008,7 @@ GameObject:
   - component: {fileID: 44603212}
   - component: {fileID: 44603210}
   - component: {fileID: 44603211}
+  - component: {fileID: 44603213}
   m_Layer: 11
   m_Name: Cable (10)
   m_TagString: Untagged
@@ -1073,6 +1074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -1193,6 +1195,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &44603213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44603208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &89530727
 GameObject:
   m_ObjectHideFlags: 0
@@ -7865,6 +7882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeInNullSpace: 0
+  destroyedInKillTrigger: 1
   homePosition: {x: 0, y: 0, z: 0}
   homeScale: {x: 0, y: 0, z: 0}
   homeParent: {fileID: 0}
@@ -10548,6 +10566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeInNullSpace: 1
+  destroyedInKillTrigger: 1
   homePosition: {x: -3.5, y: 4, z: 229}
   homeScale: {x: 1, y: 1, z: 1}
   homeParent: {fileID: 823248883}
@@ -11375,6 +11394,7 @@ GameObject:
   - component: {fileID: 400616202}
   - component: {fileID: 400616200}
   - component: {fileID: 400616201}
+  - component: {fileID: 400616203}
   m_Layer: 11
   m_Name: Cable (09)
   m_TagString: Untagged
@@ -11440,6 +11460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -11559,6 +11580,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &400616203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400616198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!43 &405692584
 Mesh:
   m_ObjectHideFlags: 0
@@ -14283,6 +14319,7 @@ GameObject:
   - component: {fileID: 474394649}
   - component: {fileID: 474394647}
   - component: {fileID: 474394648}
+  - component: {fileID: 474394650}
   m_Layer: 11
   m_Name: Cable (7)
   m_TagString: Untagged
@@ -14348,6 +14385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -14467,6 +14505,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &474394650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474394645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &480056485
 GameObject:
   m_ObjectHideFlags: 0
@@ -15935,6 +15988,7 @@ GameObject:
   - component: {fileID: 554771407}
   - component: {fileID: 554771405}
   - component: {fileID: 554771406}
+  - component: {fileID: 554771408}
   m_Layer: 11
   m_Name: Cable (11)
   m_TagString: Untagged
@@ -16000,6 +16054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -16119,6 +16174,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &554771408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554771403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &566751646
 GameObject:
   m_ObjectHideFlags: 0
@@ -18147,6 +18217,7 @@ GameObject:
   - component: {fileID: 674580620}
   - component: {fileID: 674580618}
   - component: {fileID: 674580619}
+  - component: {fileID: 674580621}
   m_Layer: 11
   m_Name: Cable (2)
   m_TagString: Untagged
@@ -18212,6 +18283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -18331,6 +18403,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &674580621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674580616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &675042356
 GameObject:
   m_ObjectHideFlags: 0
@@ -18695,6 +18782,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeInNullSpace: 0
+  destroyedInKillTrigger: 1
   homePosition: {x: 0, y: 0, z: 0}
   homeScale: {x: 0, y: 0, z: 0}
   homeParent: {fileID: 0}
@@ -21515,6 +21603,7 @@ GameObject:
   - component: {fileID: 791996345}
   - component: {fileID: 791996343}
   - component: {fileID: 791996344}
+  - component: {fileID: 791996346}
   m_Layer: 11
   m_Name: Cable (6)
   m_TagString: Untagged
@@ -21580,6 +21669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -21700,6 +21790,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &791996346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791996341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!850595691 &793357494
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -24452,6 +24557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeInNullSpace: 0
+  destroyedInKillTrigger: 1
   homePosition: {x: 0, y: 0, z: 0}
   homeScale: {x: 0, y: 0, z: 0}
   homeParent: {fileID: 0}
@@ -24852,6 +24958,7 @@ GameObject:
   - component: {fileID: 858889954}
   - component: {fileID: 858889952}
   - component: {fileID: 858889953}
+  - component: {fileID: 858889955}
   m_Layer: 11
   m_Name: Cable (8)
   m_TagString: Untagged
@@ -24917,6 +25024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -25036,6 +25144,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &858889955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858889950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &859117519
 GameObject:
   m_ObjectHideFlags: 0
@@ -26137,6 +26260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeInNullSpace: 0
+  destroyedInKillTrigger: 1
   homePosition: {x: 0, y: 0, z: 0}
   homeScale: {x: 0, y: 0, z: 0}
   homeParent: {fileID: 0}
@@ -27281,7 +27405,7 @@ PrefabInstance:
     - target: {fileID: 6536829555207834286, guid: 30cce448912321f07a09630c025dab49,
         type: 3}
       propertyPath: worldID
-      value: c1s2
+      value: OLD_c1s2
       objectReference: {fileID: 0}
     - target: {fileID: 6545305707864854593, guid: 30cce448912321f07a09630c025dab49,
         type: 3}
@@ -30993,6 +31117,7 @@ GameObject:
   - component: {fileID: 1216489229}
   - component: {fileID: 1216489227}
   - component: {fileID: 1216489228}
+  - component: {fileID: 1216489230}
   m_Layer: 11
   m_Name: Cable (1)
   m_TagString: Untagged
@@ -31058,6 +31183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -31177,6 +31303,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &1216489230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216489225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &1221477437
 GameObject:
   m_ObjectHideFlags: 0
@@ -34497,6 +34638,7 @@ GameObject:
   - component: {fileID: 1346227751}
   - component: {fileID: 1346227749}
   - component: {fileID: 1346227750}
+  - component: {fileID: 1346227752}
   m_Layer: 11
   m_Name: Cable (5)
   m_TagString: Untagged
@@ -34562,6 +34704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -34681,6 +34824,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &1346227752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346227747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &1348010289
 GameObject:
   m_ObjectHideFlags: 0
@@ -39195,6 +39353,7 @@ GameObject:
   - component: {fileID: 1541912498}
   - component: {fileID: 1541912496}
   - component: {fileID: 1541912497}
+  - component: {fileID: 1541912499}
   m_Layer: 11
   m_Name: Cable (3)
   m_TagString: Untagged
@@ -39260,6 +39419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -39379,6 +39539,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &1541912499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541912494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &1542155856
 GameObject:
   m_ObjectHideFlags: 0
@@ -41333,6 +41508,7 @@ GameObject:
   - component: {fileID: 1607870529}
   - component: {fileID: 1607870527}
   - component: {fileID: 1607870528}
+  - component: {fileID: 1607870530}
   m_Layer: 11
   m_Name: Cable (06)
   m_TagString: Untagged
@@ -41398,6 +41574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -41518,6 +41695,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &1607870530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607870525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &1620954680
 GameObject:
   m_ObjectHideFlags: 0
@@ -44892,6 +45084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeInNullSpace: 0
+  destroyedInKillTrigger: 1
   homePosition: {x: 0, y: 0, z: 0}
   homeScale: {x: 0, y: 0, z: 0}
   homeParent: {fileID: 0}
@@ -48463,6 +48656,7 @@ GameObject:
   - component: {fileID: 1814504509}
   - component: {fileID: 1814504507}
   - component: {fileID: 1814504508}
+  - component: {fileID: 1814504510}
   m_Layer: 11
   m_Name: Cable (4)
   m_TagString: Untagged
@@ -48528,6 +48722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
   updateOnMove: 0
@@ -48648,6 +48843,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &1814504510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814504505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!43 &1823119491
 Mesh:
   m_ObjectHideFlags: 0
@@ -48968,6 +49178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeInNullSpace: 0
+  destroyedInKillTrigger: 1
   homePosition: {x: 0, y: 0, z: 0}
   homeScale: {x: 0, y: 0, z: 0}
   homeParent: {fileID: 0}
