@@ -31,8 +31,8 @@ public class Door : MonoBehaviour
     private NEW_LogicProcessor logicProcessor;
     [Header("References")]
     [SerializeField] private Animator animator;
-    [SerializeField] private Material poweredMaterial, unpoweredMaterial;
-    [SerializeField] private GameObject indicatorMesh;
+    //[SerializeField] private Material poweredMaterial, unpoweredMaterial;
+    //[SerializeField] private GameObject indicatorMesh;
     [HideInInspector] [SerializeField] private UnityEvent onPowered;
     [HideInInspector] [SerializeField] private UnityEvent onUnpowered;
 
@@ -58,14 +58,14 @@ public class Door : MonoBehaviour
                 onPowered.Invoke();
                 
                 animator.Play("Door_Open");
-                indicatorMesh.GetComponent<MeshRenderer>().material = poweredMaterial;
+                //indicatorMesh.GetComponent<MeshRenderer>().material = poweredMaterial;
             }
             else
             {
                 onUnpowered.Invoke();
                 
                 animator.Play("Door_Close");
-                indicatorMesh.GetComponent<MeshRenderer>().material = unpoweredMaterial;
+                //indicatorMesh.GetComponent<MeshRenderer>().material = unpoweredMaterial;
             }
         }
     }
