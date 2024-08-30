@@ -36,11 +36,13 @@ public class LB_Title : MonoBehaviour
         gameInstance = FindObjectOfType<GameInstance>();
         gameInstance.UI_ShowTitle();
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     private void Update()
     {
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
 
