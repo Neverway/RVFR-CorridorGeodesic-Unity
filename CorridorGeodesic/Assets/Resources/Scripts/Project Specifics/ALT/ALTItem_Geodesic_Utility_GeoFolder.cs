@@ -122,15 +122,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
         }
 
-        if (deployedRift)
-        {
-            foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
-            {
-                if (actor.dynamic)
-                    Debug.Log(GetActorRiftSpace (actor));
-            }
-        }
-
         // TODO Fix this dummy (This function is currently resetting null-space actors homeworld position which majorly breaks things)
         //CheckForActorSpaceChanges();
 
@@ -452,7 +443,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         foreach (var actor in nullSpaceObjects)
         {
-            if (actor.dynamic) continue;
+            if (!actor.crushInNullSpace) continue;
             actor.homePosition = actor.transform.position;
             actor.transform.SetParent (deployedRift.transform);
             actor.nullSpace = true;
@@ -482,6 +473,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                             Debug.Log($"{actor.gameObject.name} moved [Null] -> [A]");
                             actor.nullSpace = false;
                             actor.transform.SetParent(actor.homeParent);
+                            actor.transform.localScale = actor.homeScale;
                         }
                         else if (bSpaceObjects.Contains (actor))
                         {
@@ -502,6 +494,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                             Debug.Log($"{actor.gameObject.name} moved [Null] -> [B]");
                             actor.nullSpace = false;
                             actor.transform.SetParent(actor.homeParent);
+                            actor.transform.localScale = actor.homeScale;
                         }
                         else if (aSpaceObjects.Contains (actor))
                         {
@@ -527,7 +520,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                             Debug.Log ($"{actor.gameObject.name} moved [B] -> [Null]");
                         }
                         actor.homePosition = actor.transform.position;
-                        if (!actor.dynamic)
+                        if (actor.crushInNullSpace)
                         {
                             actor.transform.SetParent (deployedRift.transform);
                             actor.nullSpace = true;

@@ -29,6 +29,7 @@ public class CorGeo_ActorData : MonoBehaviour
     [ReadOnly] [SerializeField] public Transform homeParent;
     [ReadOnly] [SerializeField] public bool nullSpace = false;
     [ReadOnly] [SerializeField] public bool dynamic = false;
+    [ReadOnly][SerializeField] public bool crushInNullSpace = true;
     public event Action OnRiftRestore;
     
 
