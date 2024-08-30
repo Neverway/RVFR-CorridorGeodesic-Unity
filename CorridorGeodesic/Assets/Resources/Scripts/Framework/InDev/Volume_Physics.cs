@@ -37,6 +37,10 @@ public class Volume_Physics : Volume
     {
         foreach (var entity in pawnsInTrigger)
         {
+            if (entity == null)
+            {
+                continue;
+            }
             // If no team specified, push everyone
             if (owningTeam == "")
             {
@@ -76,6 +80,10 @@ public class Volume_Physics : Volume
         }
         foreach (var entity in propsInTrigger)
         {
+            if (entity == null)
+            {
+                continue;
+            }
             if (entity.GetComponent<Rigidbody>())
             {
                 entity.GetComponent<Rigidbody>().AddForce(forceDirection.transform.forward*propForceIntensity, ForceMode.Force);

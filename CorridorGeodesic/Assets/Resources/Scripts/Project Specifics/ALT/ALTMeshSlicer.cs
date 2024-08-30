@@ -56,7 +56,10 @@ public class ALTMeshSlicer : MonoBehaviour
     {
         foreach (var meshCollider in gameObject.GetComponents<MeshCollider>())
         {
-            meshCollider.convex = false;
+            if (!meshCollider.isTrigger)
+            {
+                meshCollider.convex = false;
+            }
             meshCollider.sharedMesh = meshCollider.sharedMesh;
         }
     }
@@ -103,6 +106,11 @@ public class ALTMeshSlicer : MonoBehaviour
                 foreach (Collider collider in obj.gameObject.GetComponents<Collider> ())
                 {
                     collider.isTrigger = isTrigger;
+                    MeshCollider meshColl = collider as MeshCollider;
+                    if (meshColl != null)
+                    {
+                        meshColl.convex = true;
+                    }
                 }
                 
                 ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
@@ -121,10 +129,11 @@ public class ALTMeshSlicer : MonoBehaviour
                             foreach (Collider collider in obj2.gameObject.GetComponents<Collider> ())
                             {
                                 collider.isTrigger = isTrigger;
-                            }
-                            if (obj2.gameObject.TryGetComponent<Collider> (out coll))
-                            {
-                                coll.isTrigger = isTrigger;
+                                MeshCollider meshColl = coll as MeshCollider;
+                                if (meshColl != null)
+                                {
+                                    meshColl.convex = true;
+                                }
                             }
                             obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
                             ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
@@ -159,6 +168,11 @@ public class ALTMeshSlicer : MonoBehaviour
                     foreach (Collider collider in obj.gameObject.GetComponents<Collider> ())
                     {
                         collider.isTrigger = isTrigger;
+                        MeshCollider meshColl = coll as MeshCollider;
+                        if (meshColl != null)
+                        {
+                            meshColl.convex = true;
+                        }
                     }
                     obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
                     ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
