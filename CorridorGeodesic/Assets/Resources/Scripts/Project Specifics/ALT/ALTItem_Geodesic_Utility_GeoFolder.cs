@@ -122,16 +122,16 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
         }
 
-        // TODO Fix this dummy (This function is currently resetting null-space actors homeworld position which majorly breaks things)
-        //CheckForActorSpaceChanges();
+        if (deployedRift)
+        {
+            CheckForActorSpaceChanges ();
+        }
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
             // If converging, increase the riftTimer and relocate actors and meshes
             if (secondaryHeld)
             {
-                CheckForActorSpaceChanges ();
-
                 riftTimer += Time.deltaTime;
             
                 // Calculate offset
@@ -471,6 +471,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                         if (nullSpaceObjects.Contains(actor))
                         {
                             Debug.Log($"{actor.gameObject.name} moved [Null] -> [A]");
+                            nullSpaceObjects.Remove(actor);
                             actor.nullSpace = false;
                             actor.transform.SetParent(actor.homeParent);
                             actor.transform.localScale = actor.homeScale;
