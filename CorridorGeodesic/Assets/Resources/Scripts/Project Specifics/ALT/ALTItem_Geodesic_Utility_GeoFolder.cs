@@ -60,6 +60,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //Object groups for resetting
 
     //Rift collapse lerp 
+    private Vector3 riftNormal;
     private float riftTimer = 0f;
     private float maxRiftTimer = 2f;
     public static float lerpAmount;
@@ -120,6 +121,16 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 DeployRiftAndPreview ();
             }
         }
+
+        if (deployedRift)
+        {
+            foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+            {
+                if (actor.dynamic)
+                    Debug.Log(GetActorRiftSpace (actor));
+            }
+        }
+
         // TODO Fix this dummy (This function is currently resetting null-space actors homeworld position which majorly breaks things)
         //CheckForActorSpaceChanges();
 
@@ -128,6 +139,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             // If converging, increase the riftTimer and relocate actors and meshes
             if (secondaryHeld)
             {
+                CheckForActorSpaceChanges ();
+
                 riftTimer += Time.deltaTime;
             
                 // Calculate offset
@@ -147,6 +160,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                     
                     obj.transform.position += cutPreviews[1].transform.position - previousPlanePosition;
                 }
+
+                planeB = new Plane (-riftNormal, cutPreviews[1].transform.position);
 
                 previousPlanePosition = cutPreviews[1].transform.position;
             }
@@ -185,7 +200,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                     {
                         if (deployedRift.transform.GetChild(i).GetComponents<MeshCollider>().Length > 1)
                         {
-                            print("THIS OBJECT IS HORDING MESH COLLIDERS! GET 'EM BOYS!");
                             Destroy(deployedRift.transform.GetChild(i).GetComponents<MeshCollider>()[0]);
                         }
                     }
@@ -206,7 +220,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         if (allowNoLinearSlicing) deployedRift.transform.rotation = new Quaternion (deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
         else deployedRift.transform.rotation = new Quaternion (0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
 
-        Vector3 riftNormal = deployedRift.transform.forward;
+        riftNormal = deployedRift.transform.forward;
 
         Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * .25f;
         Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * .25f;
@@ -410,7 +424,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         bSpaceObjects = new List<CorGeo_ActorData> ();
         nullSpaceObjects = new List<CorGeo_ActorData> ();
 
-        foreach (var actor in FindObjectsOfType<CorGeo_ActorData> ())
+        foreach (var actor in CorGeo_ActorDatas)
         {
             float distance1 = planeA.GetDistanceToPoint (actor.transform.position);
 
@@ -438,6 +452,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         foreach (var actor in nullSpaceObjects)
         {
+            if (actor.dynamic) continue;
             actor.homePosition = actor.transform.position;
             actor.transform.SetParent (deployedRift.transform);
             actor.nullSpace = true;
@@ -451,8 +466,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         // Check B-Space entities to see if they have exited B-Space
         // Check Null-Space entities to see if they have exited Null-Space (This one sucks!)
         if (!deployedRift) return;
-        foreach (var actor in FindObjectsOfType<CorGeo_ActorData> ())
+        foreach (var actor in CorGeo_ActorDatas)
         {
+            if (!actor.dynamic)
+            {
+                continue;
+            }
             switch (GetActorRiftSpace(actor))
             {
                 case "a-space":
@@ -464,7 +483,11 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                             actor.nullSpace = false;
                             actor.transform.SetParent(actor.homeParent);
                         }
-                        Debug.Log($"{actor.gameObject.name} moved [B] -> [A]");
+                        else if (bSpaceObjects.Contains (actor))
+                        {
+                            bSpaceObjects.Remove (actor);
+                            Debug.Log ($"{actor.gameObject.name} moved [B] -> [A]");
+                        }
                         // Assign their new space
                         aSpaceObjects.Add(actor);
                         continue;
@@ -475,11 +498,16 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                     {
                         if (nullSpaceObjects.Contains(actor))
                         {
+                            nullSpaceObjects.Remove (actor);
                             Debug.Log($"{actor.gameObject.name} moved [Null] -> [B]");
                             actor.nullSpace = false;
                             actor.transform.SetParent(actor.homeParent);
                         }
-                        Debug.Log($"{actor.gameObject.name} moved [B] -> [B]");
+                        else if (aSpaceObjects.Contains (actor))
+                        {
+                            aSpaceObjects.Remove (actor);
+                            Debug.Log($"{actor.gameObject.name} moved [A] -> [B]");
+                        }
                         // Assign their new space
                         bSpaceObjects.Add(actor);
                         continue;
@@ -491,11 +519,19 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                         if (aSpaceObjects.Contains(actor))
                         {
                             Debug.Log($"{actor.gameObject.name} moved [A] -> [Null]");
+                            aSpaceObjects.Remove (actor);
                         }
-                        Debug.Log($"{actor.gameObject.name} moved [B] -> [Null]");
+                        else if (bSpaceObjects.Contains (actor))
+                        {
+                            bSpaceObjects.Remove (actor);
+                            Debug.Log ($"{actor.gameObject.name} moved [B] -> [Null]");
+                        }
                         actor.homePosition = actor.transform.position;
-                        actor.transform.SetParent (deployedRift.transform);
-                        actor.nullSpace = true;
+                        if (!actor.dynamic)
+                        {
+                            actor.transform.SetParent (deployedRift.transform);
+                            actor.nullSpace = true;
+                        }
                         // Assign their new space
                         nullSpaceObjects.Add(actor);
                         continue;
@@ -534,16 +570,16 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     /// <returns></returns>
     private string GetActorRiftSpace(CorGeo_ActorData _actor)
     {
-        //float distance1 = planeA.GetDistanceToPoint (_actor.transform.position);
-        float distance1 = Vector3.Dot(cutPreviews[0].transform.forward, _actor.transform.position);
-        float distance2 = Vector3.Dot(-cutPreviews[1].transform.forward, _actor.transform.position);
+        float distance1 = planeA.GetDistanceToPoint (_actor.transform.position);
+        float distance2 = planeB.GetDistanceToPoint (_actor.transform.position);
+
         if (_actor.debugLogData) print($"{_actor.gameObject.name}: A{distance1} | B{distance2}");
+
         if (distance1 < 0)
         {
             return "a-space";
         }
 
-        //float distance2 = planeB.GetDistanceToPoint (_actor.transform.position);
         if (distance2 < 0)
         {
             return "b-space";

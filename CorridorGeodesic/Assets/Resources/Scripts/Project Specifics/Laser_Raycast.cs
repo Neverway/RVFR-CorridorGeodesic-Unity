@@ -66,7 +66,10 @@ public class Laser_Raycast : MonoBehaviour
     {
         foreach (var line in lineRenderers)
         {
-            line.gameObject.SetActive (false);
+            if (line != null)
+            {
+                line.gameObject.SetActive (false);
+            }
         }
     }
 
@@ -74,14 +77,9 @@ public class Laser_Raycast : MonoBehaviour
     {
         foreach (var line in lineRenderers)
         {
-            try
+            if (line != null)
             {
-                Destroy(line.gameObject);
-            }
-            catch (Exception)
-            {            
-                Debug.LogWarning("A Known bug has occured. Blame Liz.");
-                //throw;
+                Destroy (line.gameObject);
             }
         }
     }

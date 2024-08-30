@@ -28,7 +28,9 @@ public class CorGeo_ActorData : MonoBehaviour
     [ReadOnly] [SerializeField] public Vector3 homeScale;
     [ReadOnly] [SerializeField] public Transform homeParent;
     [ReadOnly] [SerializeField] public bool nullSpace = false;
+    [ReadOnly] [SerializeField] public bool dynamic = false;
     public event Action OnRiftRestore;
+    
 
     //=-----------------=
     // Private Variables
@@ -54,6 +56,11 @@ public class CorGeo_ActorData : MonoBehaviour
         {
             activeInNullSpace = true;
         }
+    }
+
+    private void OnDestroy ()
+    {
+        ALTItem_Geodesic_Utility_GeoFolder.CorGeo_ActorDatas.Remove(this);
     }
 
     //=-----------------=
