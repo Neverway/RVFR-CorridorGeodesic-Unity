@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 469870322089217709}
   - component: {fileID: 3199129831438576116}
   - component: {fileID: 7344713028513584803}
+  - component: {fileID: 507064964455043299}
   m_Layer: 11
   m_Name: Cable (1)
   m_TagString: Untagged
@@ -297,6 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 4
   updateOnMove: 0
@@ -306,6 +308,21 @@ MonoBehaviour:
   anchorPointB: {fileID: 4304438129458325559}
   waypointsRoot: {fileID: 2997718874403235071}
   waypointReference: {fileID: 1642975203467605189}
+--- !u!114 &507064964455043299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361521026063340487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &1642975203467605189
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,6 +1099,7 @@ GameObject:
   - component: {fileID: 7893785467615236619}
   - component: {fileID: 9165467429079471867}
   - component: {fileID: 7625300083077471677}
+  - component: {fileID: 6727915302893989552}
   m_Layer: 11
   m_Name: Cable (2)
   m_TagString: Untagged
@@ -1253,6 +1271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 4
   updateOnMove: 0
@@ -1262,6 +1281,21 @@ MonoBehaviour:
   anchorPointB: {fileID: 6186702143013370681}
   waypointsRoot: {fileID: 2798065415525161747}
   waypointReference: {fileID: 4504210190122678246}
+--- !u!114 &6727915302893989552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4629763538145335493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &6186702143013370681
 GameObject:
   m_ObjectHideFlags: 0
@@ -2435,12 +2469,9 @@ MonoBehaviour:
   maxAmmo: 2
   currentAmmo: 2
   allowNoLinearSlicing: 0
-  convergenceSpeed: 0.5
   viewCastMask:
     serializedVersion: 2
     m_Bits: 0
-  collapsedDistance: 0
-  collapsedDirection: {x: 0, y: 0, z: 0}
   previousPlanePosition: {x: 0, y: 0, z: 0}
   barrelTransform: {fileID: 517456106474312449}
   centerViewTransform: {fileID: 0}
