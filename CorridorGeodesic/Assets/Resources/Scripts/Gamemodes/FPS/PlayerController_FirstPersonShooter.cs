@@ -79,7 +79,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Debug Respawn
         if (Input.GetKeyDown(KeyCode.Delete))
         {
-            Destroy(_pawn.gameObject);
+            _pawn.ModifyHealth(-9999);
         }
         
         UpdateMovement(_pawn);
