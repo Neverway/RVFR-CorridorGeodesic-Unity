@@ -73,7 +73,7 @@ public class VacuumProjectile : MonoBehaviour
                 if (faceHit.collider.gameObject.TryGetComponent(out Renderer rend))
                 {
                     int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
-                    if(subMeshIndex != -1 && ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
+                    if(subMeshIndex != -1 && !ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
                     {
                         KillProjectile();
                         killScheduled = true;
