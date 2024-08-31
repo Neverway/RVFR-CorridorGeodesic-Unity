@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 8340550117841079867}
   - component: {fileID: 7739524578549366403}
   - component: {fileID: 2248411336876633828}
+  - component: {fileID: 7851563791296439930}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -598,6 +599,7 @@ MonoBehaviour:
   delayBeforeWorldChange: 0.25
   minimumRequiredLoadTime: 1
   loadingWorldID: _Travel
+  streamingWorldID: _Streaming
   isLoading: 0
 --- !u!114 &8540078363942578872
 MonoBehaviour:
@@ -865,3 +867,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7851563791296439930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a7a266a9e7a912439c1ac72be5fd921, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  conductiveMats:
+  - {fileID: 2100000, guid: 11a948daddd4e2f48aa2c67a57b71772, type: 2}
