@@ -79,7 +79,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Debug Respawn
         if (Input.GetKeyDown(KeyCode.Delete))
         {
-            Destroy(_pawn.gameObject);
+            _pawn.ModifyHealth(-9999);
         }
         
         UpdateMovement(_pawn);
@@ -198,8 +198,24 @@ public class PlayerController_FirstPersonShooter : PawnController
 
     private void UpdateRotation(Pawn _pawn)
     {
-        // Pawn looking
-        var multiplier = 0.01f;
+        // Separate multipliers for mouse and joystick
+        float mouseMultiplier = 0.01f;
+        float joystickMultiplier = 0.2f;
+    
+        // Determine the input method (mouse or joystick)
+        // ReSharper disable once ReplaceWithSingleAssignment.False
+        bool isUsingMouse = false;
+        if (fpsActions.LookAxis.IsInProgress())
+        {
+            if (fpsActions.LookAxis.activeControl.device.name == "Mouse")
+            {
+                isUsingMouse = true;
+            }
+            Debug.Log(fpsActions.LookAxis.activeControl.device.name);
+        }
+    
+        // Apply the appropriate multiplier
+        var multiplier = isUsingMouse ? mouseMultiplier : joystickMultiplier;
         var applicationSettings = FindObjectOfType<ApplicationSettings>();
         yRotation += fpsActions.LookAxis.ReadValue<Vector2>().x*(20*applicationSettings.currentSettingsData.horizontalLookSpeed)*multiplier;
         xRotation -= fpsActions.LookAxis.ReadValue<Vector2>().y*(20*applicationSettings.currentSettingsData.verticalLookSpeed)*multiplier;
