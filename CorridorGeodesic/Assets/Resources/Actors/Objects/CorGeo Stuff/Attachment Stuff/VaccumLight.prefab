@@ -683,10 +683,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 33d15ef1a4fd1446290f59e20692dbcd,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: -6049420570427321030}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 33d15ef1a4fd1446290f59e20692dbcd,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8064634614578769581}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 33d15ef1a4fd1446290f59e20692dbcd,
         type: 3}
@@ -847,33 +843,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8146827493014085320}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &-6049420570427321030
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9065237667694814105}
-  serializedVersion: 4
-  m_Mass: 5
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!114 &8064634614578769581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -886,16 +855,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e66c1cc153f787ea0c9618b60e71c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  castRadius: 0.15
-  castOffset: {x: 0, y: 0, z: 0}
+  radius: 0.5
   pinOffset: 0.5
-  pinned: 0
   spawnOnDeath: {fileID: 3487281038522578191, guid: 4ca8399e504203046be61b0ad89f0fe3,
     type: 3}
   geoFolder: {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!114 &3051496044005046430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -928,7 +892,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.25
   m_Height: 1
@@ -946,9 +910,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba9328f886ac63731bba9d85776baa2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeInNullSpace: 0
+  destroyedInKillTrigger: 1
+  debugLogData: 0
   homePosition: {x: 0, y: 0, z: 0}
   homeScale: {x: 0, y: 0, z: 0}
   homeParent: {fileID: 0}
   nullSpace: 0
-  activeInNullSpace: 0
-  diesInKillTrigger: 0
+  dynamic: 0
+  crushInNullSpace: 1

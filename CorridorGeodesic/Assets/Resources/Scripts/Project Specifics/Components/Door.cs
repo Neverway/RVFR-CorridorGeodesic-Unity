@@ -43,7 +43,7 @@ public class Door : MonoBehaviour
     private void Start()
     {
         logicProcessor = GetComponent<NEW_LogicProcessor>();
-        animator.keepAnimatorStateOnDisable = true;
+        //animator.keepAnimatorStateOnDisable = true;
     }
 
     private void Update()
@@ -56,17 +56,18 @@ public class Door : MonoBehaviour
             if (logicProcessor.isPowered)
             {
                 onPowered.Invoke();
-                
-                animator.Play("Door_Open");
+
+                //animator.Play("Door_Open");
                 //indicatorMesh.GetComponent<MeshRenderer>().material = poweredMaterial;
             }
             else
             {
                 onUnpowered.Invoke();
                 
-                animator.Play("Door_Close");
+                //animator.Play("Door_Close");
                 //indicatorMesh.GetComponent<MeshRenderer>().material = unpoweredMaterial;
             }
+            animator.SetBool("Powered", logicProcessor.isPowered);
         }
     }
 
