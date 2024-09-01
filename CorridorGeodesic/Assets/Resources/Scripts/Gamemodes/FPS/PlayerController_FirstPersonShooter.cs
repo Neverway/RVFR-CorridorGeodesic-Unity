@@ -299,7 +299,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Call the function on the georipper to remove all rifts
         // TODO this currently assumes the player is ONLY ever holding the georipper
         // An if statement should be added to check if there were any rifts or something
-        _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UseSpecial();
+        _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(true).UseSpecial();
         
         // Remove the HUD
         Destroy(GameInstance.GetWidget("WB_HUD"));
