@@ -211,7 +211,6 @@ public class PlayerController_FirstPersonShooter : PawnController
             {
                 isUsingMouse = true;
             }
-            Debug.Log(fpsActions.LookAxis.activeControl.device.name);
         }
     
         // Apply the appropriate multiplier

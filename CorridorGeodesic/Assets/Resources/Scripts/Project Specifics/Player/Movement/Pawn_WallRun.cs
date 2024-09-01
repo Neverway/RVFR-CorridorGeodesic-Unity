@@ -18,6 +18,7 @@ public class Pawn_WallRun : MonoBehaviour
     [SerializeField] private Transform orientation;
 
     [Header("Wall Running")] 
+    [SerializeField] private bool allowWallRun;
     [SerializeField] private float wallDistance = 0.6f;
     [SerializeField] private float minimumJumpHeight = 1.5f;
     [SerializeField] private float wallRunGravity = 5;
@@ -84,7 +85,6 @@ public class Pawn_WallRun : MonoBehaviour
     private void FixedUpdate()
     {
         CheckWall();
-
         if (CanWallRun())
         {
             if (wallLeft)
@@ -122,8 +122,11 @@ public class Pawn_WallRun : MonoBehaviour
 
     private void StartWallRun()
     {
-        objectRigidbody.useGravity = false;
-        objectRigidbody.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
+        if (allowWallRun)
+        {
+            objectRigidbody.useGravity = false;
+            objectRigidbody.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
+        }
         
         // Camera effects
         viewCamera.fieldOfView = Mathf.Lerp(viewCamera.fieldOfView,
@@ -141,7 +144,10 @@ public class Pawn_WallRun : MonoBehaviour
 
     private void StopWallRun()
     {
-        objectRigidbody.useGravity = enabled;
+        if (allowWallRun)
+        {
+            objectRigidbody.useGravity = enabled;
+        }
         
         // Camera effects
         viewCamera.fieldOfView = Mathf.Lerp(viewCamera.fieldOfView,
