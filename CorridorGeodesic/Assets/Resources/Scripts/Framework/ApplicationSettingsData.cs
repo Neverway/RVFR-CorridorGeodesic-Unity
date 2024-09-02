@@ -105,11 +105,11 @@ public class ApplicationSettingsData
         resolutionScale = 3;
         shadowQuality = 2;
         effectsQuality = 2;
-        textureQuality = 2;
+        textureQuality = 3;
         postprocessingQuality = 2;
 
         antialiasing = 0;
-        motionBlur = 2;
+        motionBlur = 1;
         ambientOcclusion = 2;
         bloom = 2;
 
