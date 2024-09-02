@@ -7,19 +7,17 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class VacuumProjectile : MonoBehaviour
+public class VacuumProjectile : Projectile
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [SerializeField] private float castRadius;
-    [SerializeField] private Vector3 castOffset;
+    //[SerializeField] private float castRadius;
+    //[SerializeField] private Vector3 castOffset;
     [SerializeField] private float pinOffset;
-    [HideInInspector] public bool pinned;
+    public bool pinned => disabled;
     [SerializeField] private GameObject spawnOnDeath;
 
     //=-----------------=
@@ -30,79 +28,74 @@ public class VacuumProjectile : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [HideInInspector] public GameObject geoFolder; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
-    private Rigidbody objectRigidbody;
-    private RaycastHit faceHit;
-    [SerializeField] private LayerMask layerMask;
-
+    [HideInInspector] public ALTItem_Geodesic_Utility_GeoFolder geoFolder; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
+    public override void Awake()
     {
-        objectRigidbody = GetComponent<Rigidbody>();
+        base.Awake();
 
         StartCoroutine(Lifetime());
-    }
-
-    private void Update()
-    {
-        if (pinned) return;
-        CollisionTest();
     }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void CollisionTest()
+    public override void OnCollision(RaycastHit hit)
     {
-        if (Physics.SphereCast(transform.position+castOffset, castRadius, transform.forward, out faceHit, 1f, layerMask))
+        base.OnCollision(hit);
+
+        bool killScheduled = false;
+        if (hit.collider is MeshCollider)
         {
-            bool killScheduled = false;
-            if (faceHit.collider is MeshCollider)
+            MeshCollider mCollider = (MeshCollider)hit.collider;
+
+            Mesh colMesh = mCollider.sharedMesh;
+
+            int triIndex = hit.triangleIndex;
+
+            DisplayDebugTriangle(colMesh, triIndex, hit.collider.transform);
+
+            if (hit.collider.gameObject.TryGetComponent(out Renderer rend))
             {
-                MeshCollider mCollider = (MeshCollider)faceHit.collider;
-
-                Mesh colMesh = mCollider.sharedMesh;
-
-                int triIndex = faceHit.triangleIndex;
-
-                DisplayDebugTriangle(colMesh, triIndex, faceHit.collider.transform);
-
-                if (faceHit.collider.gameObject.TryGetComponent(out Renderer rend))
+                int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
+                if (subMeshIndex != -1 && ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
                 {
+<<<<<<< HEAD
                     int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
                     if(subMeshIndex != -1 && !ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
                     {
                         KillProjectile();
                         killScheduled = true;
                     }
+=======
+                    KillProjectile();
+                    killScheduled = true;
+>>>>>>> frickdis
                 }
             }
-            if (!killScheduled && faceHit.collider.gameObject.TryGetComponent<CorGeo_AntiProjectile> (out var component))
-            {
-                KillProjectile();
-                killScheduled = true;
-            }
-            if (killScheduled)
-                return;
-
-            // Disable physics
-            objectRigidbody.isKinematic = true;
-            
-            // Set rotation to match face normal
-            transform.rotation = Quaternion.LookRotation(-faceHit.normal);
-            transform.position = faceHit.point;
-            transform.localPosition += faceHit.normal*pinOffset;
-            
-            pinned = true;
         }
+        if (!killScheduled && hit.collider.gameObject.TryGetComponent<CorGeo_AntiProjectile>(out var component))
+        {
+            KillProjectile();
+            killScheduled = true;
+        }
+        if (killScheduled)
+            return;
+
+        // Set rotation to match face normal
+        transform.rotation = Quaternion.LookRotation(-hit.normal);
+        transform.position = hit.point;
+        transform.localPosition += hit.normal * pinOffset;
+
+        disabled = true;
     }
     private IEnumerator Lifetime()
     {
         yield return new WaitForSeconds(1);
-        if (pinned) yield break; // Exit if the lamp has landed 
+        if (disabled) yield break; // Exit if the lamp has landed 
         KillProjectile ();
     }
 
@@ -114,15 +107,12 @@ public class VacuumProjectile : MonoBehaviour
         // Give the projectile back to the weapon
         if (geoFolder)
         {
-            if (geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ())
+            if (geoFolder.currentAmmo < geoFolder.maxAmmo)
             {
-                if (geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().currentAmmo < geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().maxAmmo)
-                {
-                    geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().currentAmmo++;
-                }
-
-                if (removeProjectileFromList) geoFolder.GetComponent<ALTItem_Geodesic_Utility_GeoFolder> ().deployedInfinityMarkers.Remove (gameObject);
+                geoFolder.currentAmmo++;
             }
+
+            if (removeProjectileFromList) geoFolder.deployedInfinityMarkers.Remove(gameObject);
         }
 
         //Spawn particle effect
@@ -149,6 +139,8 @@ public class VacuumProjectile : MonoBehaviour
     }
     void DisplayDebugTriangle(Mesh mesh, int triangleIndex, Transform hitTransform)
     {
+        if (!mesh.isReadable)
+            return;
         Vector3[] vertices = mesh.vertices;
         int[] triangles = mesh.triangles;
         Vector3 p0 = vertices[triangles[triangleIndex * 3 + 0]];

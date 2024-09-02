@@ -50,6 +50,8 @@ public class ALTMeshSlicer : MonoBehaviour
     {
         meshSlicer = GetComponent<IBzMeshSlicer> ();
         sliceableObject = GetComponent<BzSliceableObject> ();
+
+        sliceableObject.defaultSliceMaterial = ReferenceManager.Instance.nullSpace;
     }
     
     public void Update()

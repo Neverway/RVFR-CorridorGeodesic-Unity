@@ -23,6 +23,7 @@ public class Elevator : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
+    [SerializeField] private Transform elevatorTransform;
     private bool elevatorActivated;
     
 
@@ -39,31 +40,34 @@ public class Elevator : MonoBehaviour
     private void Start()
     {
         logicProcessor = GetComponent<NEW_LogicProcessor>();
-        animator.keepAnimatorStateOnDisable = true;
+        //animator.keepAnimatorStateOnDisable = true;
     }
 
     private void Update()
     {
-        if (doorSignal)
+        if (!elevatorActivated && doorSignal)
         {
             logicProcessor.isPowered = doorSignal.isPowered;
         
             if (doorSignal.hasPowerStateChanged)
             {
-                if (logicProcessor.isPowered)
-                {
-                    animator.Play("Elevator_Open");
-                }
-                else
-                {
-                    animator.Play("Elevator_Close");
-                }
+                //if (logicProcessor.isPowered)
+                //{
+                //    animator.Play("Elevator_Open");
+                //}
+                //else
+                //{
+                //    animator.Play("Elevator_Close");
+                //}
+                animator.SetBool("Powered", logicProcessor.isPowered);
             }
         }
 
         if (liftSignal && liftSignal.isPowered && !elevatorActivated)
         {
-            animator.Play("Elevator_Descending");
+            //animator.Play("Elevator_Descending");
+            animator.SetBool("Powered", false);
+            StartCoroutine(DescendElevator());
             elevatorActivated = true;
         }
     }
@@ -77,7 +81,16 @@ public class Elevator : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
+    IEnumerator DescendElevator()
+    {
+        float timer = 10;
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            elevatorTransform.position -= Vector3.up * Time.deltaTime * 3;
+            yield return null;
+        }
+    }
 
     //=-----------------=
     // External Functions
