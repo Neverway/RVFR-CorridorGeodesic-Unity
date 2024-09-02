@@ -45,7 +45,7 @@ public class Elevator : MonoBehaviour
 
     private void Update()
     {
-        if (doorSignal)
+        if (!elevatorActivated && doorSignal)
         {
             logicProcessor.isPowered = doorSignal.isPowered;
         
@@ -66,6 +66,7 @@ public class Elevator : MonoBehaviour
         if (liftSignal && liftSignal.isPowered && !elevatorActivated)
         {
             //animator.Play("Elevator_Descending");
+            animator.SetBool("Powered", false);
             StartCoroutine(DescendElevator());
             elevatorActivated = true;
         }
@@ -86,7 +87,7 @@ public class Elevator : MonoBehaviour
         while (timer > 0)
         {
             timer -= Time.deltaTime;
-            elevatorTransform.position -= Vector3.up * Time.deltaTime;
+            elevatorTransform.position -= Vector3.up * Time.deltaTime * 3;
             yield return null;
         }
     }
