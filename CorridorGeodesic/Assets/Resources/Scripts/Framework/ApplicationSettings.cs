@@ -154,7 +154,7 @@ public class ApplicationSettings : MonoBehaviour
         switch (currentSettingsData.resolutionScale)
         {
             case 0:
-                ScalableBufferManager.ResizeBuffers(0.15f, 0.15f);
+                ScalableBufferManager.ResizeBuffers(0.25f, 0.25f);
                 break;
             case 1:
                 ScalableBufferManager.ResizeBuffers(0.5f, 0.5f);
@@ -176,7 +176,7 @@ public class ApplicationSettings : MonoBehaviour
                 QualitySettings.shadows = ShadowQuality.Disable; // Real-time shadows (off)
                 QualitySettings.shadowResolution = ShadowResolution.Low;
                 QualitySettings.shadowCascades = 0;
-                QualitySettings.shadowDistance = 5;
+                QualitySettings.shadowDistance = 10;
                 break;
             case 1:
                 QualitySettings.shadows = ShadowQuality.HardOnly; // Real-time shadows (hard-shadows only)
@@ -208,7 +208,7 @@ public class ApplicationSettings : MonoBehaviour
         {
             case 0:
                 QualitySettings.softParticles = false;
-                QualitySettings.particleRaycastBudget = 2;
+                QualitySettings.particleRaycastBudget = 4;
                 break;
             case 1:
                 QualitySettings.softParticles = false;
@@ -231,19 +231,19 @@ public class ApplicationSettings : MonoBehaviour
         switch (currentSettingsData.textureQuality)
         {
             case 0:
-                QualitySettings.globalTextureMipmapLimit = 6;
+                QualitySettings.globalTextureMipmapLimit = 3;
                 QualitySettings.anisotropicFiltering = AnisotropicFiltering.Disable;
                 break;
             case 1:
-                QualitySettings.globalTextureMipmapLimit = 2;
+                QualitySettings.globalTextureMipmapLimit = 3;
                 QualitySettings.anisotropicFiltering = AnisotropicFiltering.Enable;
                 break;
             case 2:
-                QualitySettings.globalTextureMipmapLimit = 1;
+                QualitySettings.globalTextureMipmapLimit = 2;
                 QualitySettings.anisotropicFiltering = AnisotropicFiltering.Enable;
                 break;
             case 3:
-                QualitySettings.globalTextureMipmapLimit = 0;
+                QualitySettings.globalTextureMipmapLimit = 1;
                 QualitySettings.anisotropicFiltering = AnisotropicFiltering.Enable;
                 break;
             case 4:
