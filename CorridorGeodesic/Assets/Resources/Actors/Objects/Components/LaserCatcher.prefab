@@ -162,7 +162,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f45b127103bfe0c80895094554e20bb5, type: 2}
+  - {fileID: 2100000, guid: 8df4fc1f792d1b24786262efcf4974c4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -599,11 +599,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1779054307738304387, guid: 206248817d2cf30228e69460d6132eab,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8df4fc1f792d1b24786262efcf4974c4, type: 2}
+    - target: {fileID: -968877028931673648, guid: 206248817d2cf30228e69460d6132eab,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0043ae62b94386248a3370828892aa5a, type: 2}
     - target: {fileID: 919132149155446097, guid: 206248817d2cf30228e69460d6132eab,
         type: 3}
       propertyPath: m_Name
       value: LaserCatcher
       objectReference: {fileID: 0}
+    - target: {fileID: 1229445162600425517, guid: 206248817d2cf30228e69460d6132eab,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8df4fc1f792d1b24786262efcf4974c4, type: 2}
+    - target: {fileID: 3180559784351598424, guid: 206248817d2cf30228e69460d6132eab,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8df4fc1f792d1b24786262efcf4974c4, type: 2}
+    - target: {fileID: 5934977916243967077, guid: 206248817d2cf30228e69460d6132eab,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0043ae62b94386248a3370828892aa5a, type: 2}
+    - target: {fileID: 8808423955676554057, guid: 206248817d2cf30228e69460d6132eab,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0043ae62b94386248a3370828892aa5a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -714,6 +744,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3650626973431740112}
+    - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8891421665417045345}
   m_SourcePrefab: {fileID: 100100000, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
 --- !u!4 &220902340854671638 stripped
 Transform:
@@ -772,3 +806,18 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: -0.25}
+--- !u!114 &8891421665417045345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290464974157155360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
