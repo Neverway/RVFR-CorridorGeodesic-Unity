@@ -45,7 +45,7 @@ public class Item_Geodesic_Utility_NixieCross : Item_Geodesic_Utility
     //Statics for ALTMeshSlicer to use
     public static Plane planeA;
     public static Plane planeB;
-    public static List<GameObject> nullSlices;
+    [SerializeField] public static List<GameObject> nullSlices = new List<GameObject>();
     public static GameObject planeBMeshes;
     public static List<Mesh_Slicable> originalSliceableObjects = new List<Mesh_Slicable> ();
     public static List<GameObject> slicedMeshes = new List<GameObject> ();
@@ -335,6 +335,7 @@ public class Item_Geodesic_Utility_NixieCross : Item_Geodesic_Utility
         {
             foreach (var _gameObject in nullSlices)
             {
+                print(_gameObject.name);
                 if (_gameObject)
                 {
                     _gameObject.GetComponent<Mesh_Slicable>().GoHome ();
@@ -359,6 +360,7 @@ public class Item_Geodesic_Utility_NixieCross : Item_Geodesic_Utility
 
     private void RecallNullActor (CorGeo_ActorData _actor)
     {
+        if (!deployedRift) return;
         //Moves an actor to keep them in the same relative position to the map when the rift is recalled.
         float scaledRiftWidth = deployedRift.transform.localScale.z * riftWidth;
         float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
