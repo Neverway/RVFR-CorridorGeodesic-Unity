@@ -5,9 +5,6 @@
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,8 +28,6 @@ public class Prop_Door : MonoBehaviour
     private NEW_LogicProcessor logicProcessor;
     [Header("References")]
     [SerializeField] private Animator animator;
-    //[SerializeField] private Material poweredMaterial, unpoweredMaterial;
-    //[SerializeField] private GameObject indicatorMesh;
     [HideInInspector] [SerializeField] private UnityEvent onPowered;
     [HideInInspector] [SerializeField] private UnityEvent onUnpowered;
 
@@ -56,16 +51,10 @@ public class Prop_Door : MonoBehaviour
             if (logicProcessor.isPowered)
             {
                 onPowered.Invoke();
-
-                //animator.Play("Door_Open");
-                //indicatorMesh.GetComponent<MeshRenderer>().material = poweredMaterial;
             }
             else
             {
                 onUnpowered.Invoke();
-                
-                //animator.Play("Door_Close");
-                //indicatorMesh.GetComponent<MeshRenderer>().material = unpoweredMaterial;
             }
             animator.SetBool("Powered", logicProcessor.isPowered);
         }

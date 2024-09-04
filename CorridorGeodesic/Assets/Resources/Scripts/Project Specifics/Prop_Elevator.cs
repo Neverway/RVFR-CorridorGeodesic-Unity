@@ -5,9 +5,7 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(NEW_LogicProcessor))]
@@ -51,21 +49,12 @@ public class Prop_Elevator : MonoBehaviour
         
             if (doorSignal.hasPowerStateChanged)
             {
-                //if (logicProcessor.isPowered)
-                //{
-                //    animator.Play("Elevator_Open");
-                //}
-                //else
-                //{
-                //    animator.Play("Elevator_Close");
-                //}
                 animator.SetBool("Powered", logicProcessor.isPowered);
             }
         }
 
         if (liftSignal && liftSignal.isPowered && !elevatorActivated)
         {
-            //animator.Play("Elevator_Descending");
             animator.SetBool("Powered", false);
             StartCoroutine(DescendElevator());
             elevatorActivated = true;

@@ -1,11 +1,11 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Attached to the vacuum tube projectile, detects when the projectile
+//  has hit a valid surface, and attaches it
 // Notes:
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;

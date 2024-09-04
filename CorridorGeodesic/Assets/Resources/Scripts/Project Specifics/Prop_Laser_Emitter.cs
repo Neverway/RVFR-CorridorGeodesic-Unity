@@ -1,18 +1,16 @@
-using System;
-using System.Net.Http.Headers;
+//===================== (Neverway 2024) Written by Connorses =====================
+//
+// Purpose: Recursively bounces a raycast off reflective surfaces. Also places laser prefabs to render each line/halo effect.
+// Notes: Checks for the IsReflective component when deciding if it can bounce.
+// Source: https://stackoverflow.com/questions/51931455/unity3d-bouncing-reflecting-raycast
+//
+//=============================================================================
+
 using UnityEngine;
 
 [RequireComponent(typeof(NEW_LogicProcessor))]
 public class Prop_Laser_Emitter : MonoBehaviour
 {
-
-    //===================== (Neverway 2024) Written by Connorses =====================
-    //
-    // Purpose: Recursively bounces a raycast off reflective surfaces. Also places laser prefabs to render each line/halo effect.
-    // Notes: Checks for the IsReflective component when deciding if it can bounce.
-    // Source: https://stackoverflow.com/questions/51931455/unity3d-bouncing-reflecting-raycast
-    //
-    //=============================================================================
 
     //=-----------------=
     // Reference Variables

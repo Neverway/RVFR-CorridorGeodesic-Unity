@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Base class for utility items in CorGeo
 // Notes:
 //
 //=============================================================================

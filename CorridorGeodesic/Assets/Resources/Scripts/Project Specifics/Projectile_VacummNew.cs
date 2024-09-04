@@ -1,12 +1,12 @@
 //===================== (Neverway 2024) Written by Andre Blunt ================
 //
-// Purpose:
-// Notes:
+// Purpose: Attached to the vacuum tube projectile, detects when the projectile
+//  has hit a valid surface, and attaches it
+// Notes: This version fakes the projectile movement but prevents the "projectile"
+//  from clipping out of bounds
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile_VacummNew: MonoBehaviour

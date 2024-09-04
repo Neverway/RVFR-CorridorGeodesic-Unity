@@ -1,13 +1,12 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Flashes an image by raising it's alpha color channel gradually when an entity has been hurt
+// Purpose: Flashes an image by raising its alpha color channel gradually when
+// an entity has been hurt
 // Notes:
 //
 //=============================================================================
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 

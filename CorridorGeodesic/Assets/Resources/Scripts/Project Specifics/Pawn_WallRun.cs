@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Adds the ability for a pawn to wall-run and wall-kick
 // Notes: This is based off of the tutorial series by Plai
 // Source: https://www.youtube.com/watch?v=LqnPeqoJRFY
 //

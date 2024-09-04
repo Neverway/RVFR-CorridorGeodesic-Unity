@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Added to event trigger, gives the geogun to the player
 // Notes:
 //
 //=============================================================================
@@ -60,6 +60,6 @@ public class Func_GeoGunGiver : MonoBehaviour
     //=-----------------=
     public void GiveGeoGun()
     {
-        FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+        FindObjectOfType<Pawn_ItemInventory>().GiveGeoGun();
     }
 }

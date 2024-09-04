@@ -1,12 +1,11 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Creates one target object, if that object is destroyed, create another
 // Notes:
 //
 //=============================================================================
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Prop_Respawner : MonoBehaviour
@@ -33,11 +32,6 @@ public class Prop_Respawner : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-    
-    }
-
     private void Update()
     {
         if (spawnedObject == null && spawnWorker == null)

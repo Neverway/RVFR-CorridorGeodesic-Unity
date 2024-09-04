@@ -49,6 +49,9 @@ public class CorGeo_ActorData : MonoBehaviour
         homeScale = transform.localScale;
         homeParent = transform.parent;
         Item_Geodesic_Utility_NixieCross.CorGeo_ActorDatas.Add(this);
+        
+        // Hacky fix to make sure lights are always still visible even when in null-space
+        // (Can't we just make sure the base Light prefab has this value enabled? ~Liz)
         if (TryGetComponent<Light> (out Light light))
         {
             activeInNullSpace = true;
@@ -78,11 +81,8 @@ public class CorGeo_ActorData : MonoBehaviour
         if (Item_Geodesic_Utility_NixieCross.planeA.GetDistanceToPoint (transform.position) > 0)
         {
             if (!Item_Geodesic_Utility_NixieCross.deployedRift) return;
-            //move actor away from collapse direction scaled by the rift timer's progress
             // move actor away from collapse direction scaled by the rift timer's progress
-            transform.position += Item_Geodesic_Utility_NixieCross.deployedRift.transform.forward * 
-                                  Item_Geodesic_Utility_NixieCross.riftWidth * 
-                                  (Item_Geodesic_Utility_NixieCross.lerpAmount);
+            transform.position += Item_Geodesic_Utility_NixieCross.deployedRift.transform.forward * (Item_Geodesic_Utility_NixieCross.riftWidth * (Item_Geodesic_Utility_NixieCross.lerpAmount));
         }
     }
 

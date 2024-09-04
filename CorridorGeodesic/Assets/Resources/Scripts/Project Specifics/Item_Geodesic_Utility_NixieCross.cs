@@ -1,11 +1,10 @@
 //===================== (Neverway 2024) Written by Liz M. & Connorses =====================
 //
-// Purpose:
+// Purpose: Handles the creating, collapsing, expanding, and closing of rifts
 // Notes:
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

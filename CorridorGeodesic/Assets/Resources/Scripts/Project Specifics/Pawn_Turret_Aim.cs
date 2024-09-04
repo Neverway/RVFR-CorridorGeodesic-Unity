@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Connorses =====================
 //
-// Purpose:
+// Purpose: Points the turret at the active rendering camera (Which should be the player)
 // Notes:
 //
 //=============================================================================

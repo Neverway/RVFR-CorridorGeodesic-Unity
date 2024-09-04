@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Keeps track of what items a pawn has
 // Notes:
 //
 //=============================================================================
@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pawn_WeaponInventory : MonoBehaviour
+public class Pawn_ItemInventory : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
