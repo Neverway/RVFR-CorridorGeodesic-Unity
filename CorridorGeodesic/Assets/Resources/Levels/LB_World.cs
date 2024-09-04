@@ -37,9 +37,9 @@ public class LB_World : MonoBehaviour
         gameInstance.UI_ShowHUD();
         if (shouldHaveGeoGun)
         {
-            if (FindObjectOfType<Pawn_WeaponInventory>())
+            if (FindObjectOfType<Pawn_ItemInventory>())
             {
-                FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+                FindObjectOfType<Pawn_ItemInventory>().GiveGeoGun();
             }
         }
     }
@@ -47,9 +47,9 @@ public class LB_World : MonoBehaviour
     {
         if (shouldHaveGeoGun)
         {
-            if (FindObjectOfType<Pawn_WeaponInventory>())
+            if (FindObjectOfType<Pawn_ItemInventory>())
             {
-                FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+                FindObjectOfType<Pawn_ItemInventory>().GiveGeoGun();
             }
         }
     }
