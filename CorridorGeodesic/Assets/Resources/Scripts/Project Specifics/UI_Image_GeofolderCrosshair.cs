@@ -28,7 +28,7 @@ public class UI_Image_GeofolderCrosshair : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private ALTItem_Geodesic_Utility_GeoFolder geoFolder;
+    private Item_Geodesic_Utility_NixieCross nixieCross;
     [SerializeField] private Image sineA, markerA, sineB, markerB, badDogNoBiscuit;
     [SerializeField] private GameObject crosshair;
 
@@ -39,12 +39,12 @@ public class UI_Image_GeofolderCrosshair : MonoBehaviour
     private void Update()
     {
         // Locate the player and see if they have the geofolder
-        if (!geoFolder)
+        if (!nixieCross)
         {
             var pawn = FindPossessedPawn();
             if (pawn)
             {
-                geoFolder = pawn.GetComponentInChildren<ALTItem_Geodesic_Utility_GeoFolder>();
+                nixieCross = pawn.GetComponentInChildren<Item_Geodesic_Utility_NixieCross>();
             }
             // Hide the crosshair if the player is not holding the geofolder
             crosshair.SetActive(false);
@@ -54,7 +54,7 @@ public class UI_Image_GeofolderCrosshair : MonoBehaviour
         
         
         // Enable the marker indicators accordingly
-        switch (geoFolder.deployedInfinityMarkers.Count)
+        switch (nixieCross.deployedInfinityMarkers.Count)
         {
             case 0:
                 markerA.enabled = false;

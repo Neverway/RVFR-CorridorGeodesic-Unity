@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using UnityEngine;
 
 [RequireComponent(typeof(NEW_LogicProcessor))]
-public class Laser_Raycast : MonoBehaviour
+public class Prop_Laser_Emitter : MonoBehaviour
 {
 
     //===================== (Neverway 2024) Written by Connorses =====================
@@ -125,7 +125,7 @@ public class Laser_Raycast : MonoBehaviour
             direction = Vector3.Reflect (direction, hit.normal);
             position = hit.point;
 
-            if (hit.collider.gameObject.TryGetComponent<ALTMeshSlicer> (out var slicer))
+            if (hit.collider.gameObject.TryGetComponent<Mesh_Slicable> (out var slicer))
             {
                 if (!slicer.isReflective)
                 {
@@ -133,7 +133,7 @@ public class Laser_Raycast : MonoBehaviour
                 }
                 OnHit(hit);
             }
-            else if (hit.collider.gameObject.TryGetComponent<Laser_Detector> (out var detector))
+            else if (hit.collider.gameObject.TryGetComponent<Prop_Laser_Detector> (out var detector))
             {
                 bounce = false;
                 OnHit(hit);
@@ -163,7 +163,7 @@ public class Laser_Raycast : MonoBehaviour
 
     private void OnHit (RaycastHit hit)
     {
-        if (hit.collider.gameObject.TryGetComponent<Laser_Detector> (out var detector))
+        if (hit.collider.gameObject.TryGetComponent<Prop_Laser_Detector> (out var detector))
         {
             detector.OnHit ();
         }

@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserWall_Object : MonoBehaviour
+public class Prop_LaserBarrier_Object : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -20,7 +20,7 @@ public class LaserWall_Object : MonoBehaviour
     // Private Variables
     //=-----------------=
 
-    private LaserWallShooter[] laserWallShooters;
+    private Prop_LaserBarrier_Segment[] laserWallShooters;
 
 
     //=-----------------=
@@ -33,7 +33,7 @@ public class LaserWall_Object : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-        laserWallShooters = GetComponentsInChildren<LaserWallShooter>();
+        laserWallShooters = GetComponentsInChildren<Prop_LaserBarrier_Segment>();
     }
 
     private void Update()
@@ -52,7 +52,7 @@ public class LaserWall_Object : MonoBehaviour
 
     public void Activate ()
     {
-        foreach(LaserWallShooter wall in laserWallShooters)
+        foreach(Prop_LaserBarrier_Segment wall in laserWallShooters)
         {
             wall.SetActive (true);
         }
@@ -60,7 +60,7 @@ public class LaserWall_Object : MonoBehaviour
 
     public void Deactivate ()
     {
-        foreach (LaserWallShooter wall in laserWallShooters)
+        foreach (Prop_LaserBarrier_Segment wall in laserWallShooters)
         {
             wall.SetActive (false);
         }

@@ -9,8 +9,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
+public class Item_Geodesic_Utility_NixieCross : Item_Geodesic_Utility
 {
     //=-----------------=
     // Public Variables
@@ -33,21 +34,21 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private Transform centerViewTransform;
     [SerializeField] private GameObject debugObject;
-    [SerializeField] private VacuumProjectile vacuumProjectile;
+    [FormerlySerializedAs("vacuumProjectile")] [SerializeField] private Projectile_Vacumm projectileVacumm;
     [SerializeField] private GameObject riftObject;
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
     public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
     public static GameObject deployedRift;
-    private ALTMeshSlicer[] meshSlicers;
+    private Mesh_Slicable[] meshSlicers;
 
     //Statics for ALTMeshSlicer to use
     public static Plane planeA;
     public static Plane planeB;
     public static List<GameObject> nullSlices;
     public static GameObject planeBMeshes;
-    public static List<ALTMeshSlicer> originalSliceableObjects = new List<ALTMeshSlicer> ();
+    public static List<Mesh_Slicable> originalSliceableObjects = new List<Mesh_Slicable> ();
     public static List<GameObject> slicedMeshes = new List<GameObject> ();
     public static List<CorGeo_ActorData> CorGeo_ActorDatas = new List<CorGeo_ActorData> ();
 
@@ -84,7 +85,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     private void Start ()
     {
-        meshSlicers = FindObjectsByType<ALTMeshSlicer> (FindObjectsSortMode.None);
+        meshSlicers = FindObjectsByType<Mesh_Slicable> (FindObjectsSortMode.None);
 
         CreateCutPreviews();
     }
@@ -266,7 +267,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         if (currentAmmo >= 2) return;
         foreach (var projectile in deployedInfinityMarkers)
         {
-            projectile.GetComponent<VacuumProjectile>().KillProjectile(false);
+            projectile.GetComponent<Projectile_Vacumm>().KillProjectile(false);
         }
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;
@@ -307,7 +308,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             if (_gameObject) Destroy (_gameObject);
         }
         slicedMeshes.Clear ();
-        foreach (ALTMeshSlicer _gameObject in originalSliceableObjects)
+        foreach (Mesh_Slicable _gameObject in originalSliceableObjects)
         {
             if (_gameObject) _gameObject.GoHome ();
         }
@@ -319,7 +320,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             {
                 if (_gameObject)
                 {
-                    _gameObject.GetComponent<ALTMeshSlicer>().GoHome ();
+                    _gameObject.GetComponent<Mesh_Slicable>().GoHome ();
                 }
             }
             StartCoroutine (DestroyWorker (deployedRift));
@@ -343,9 +344,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         if (currentAmmo <= 0) return;
         currentAmmo--;
-        var projectile = Instantiate(vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
+        var projectile = Instantiate(projectileVacumm, barrelTransform.transform.position, barrelTransform.rotation, null);
         projectile.InitializeProjectile(projectileForce);
-        projectile.geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+        projectile.nixieCross = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
         deployedInfinityMarkers.Add (projectile.gameObject);
     }
 
@@ -356,7 +357,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             foreach (var marker in deployedInfinityMarkers)
             {
-                if (!marker.GetComponent<VacuumProjectile>().pinned)
+                if (!marker.GetComponent<Projectile_Vacumm>().pinned)
                 {
                     return false;
                 }
@@ -377,7 +378,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             if (deployedRift)
             {
                 Debug.Log ("CONVERGING");
-                meshSlicers = FindObjectsOfType<ALTMeshSlicer> ();
+                meshSlicers = FindObjectsOfType<Mesh_Slicable> ();
                 nullSlices = new List<GameObject> ();
                 planeBMeshes = Instantiate (new GameObject ());
                 planeBMeshes.name = "planeBMeshes";
@@ -566,8 +567,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         float distance1 = planeA.GetDistanceToPoint (_actor.transform.position);
         float distance2 = planeB.GetDistanceToPoint (_actor.transform.position);
-
-        if (_actor.debugLogData) print($"{_actor.gameObject.name}: A{distance1} | B{distance2}");
 
         if (distance1 < 0)
         {

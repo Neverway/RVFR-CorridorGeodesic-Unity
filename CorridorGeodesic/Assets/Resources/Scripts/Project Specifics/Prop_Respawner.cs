@@ -9,24 +9,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class GeoGunGiver : MonoBehaviour
+public class Prop_Respawner : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public NEW_LogicProcessor inputSignal;
 
+    [SerializeField] GameObject prefabToSpawn;
+    private GameObject spawnedObject;
 
     //=-----------------=
     // Private Variables
     //=-----------------=
+    [SerializeField] private float spawnDelay;
+    private Coroutine spawnWorker;
 
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
@@ -34,19 +35,14 @@ public class GeoGunGiver : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-        logicProcessor = GetComponent<NEW_LogicProcessor>();
+    
     }
 
     private void Update()
     {
-        if (!inputSignal) return;
-        logicProcessor.isPowered = inputSignal.isPowered;
-        if (logicProcessor.hasPowerStateChanged)
+        if (spawnedObject == null && spawnWorker == null)
         {
-            if (logicProcessor.isPowered)
-            {
-                GiveGeoGun();
-            }
+            spawnWorker = StartCoroutine(SpawnWorker());
         }
     }
 
@@ -54,12 +50,14 @@ public class GeoGunGiver : MonoBehaviour
     // Internal Functions
     //=-----------------=
 
+    private IEnumerator SpawnWorker ()
+    {
+        yield return new WaitForSeconds(spawnDelay);
+        spawnedObject = Instantiate (prefabToSpawn, transform.position, transform.rotation);
+        spawnWorker = null;
+    }
 
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void GiveGeoGun()
-    {
-        FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
-    }
 }

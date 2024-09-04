@@ -7,7 +7,7 @@
 
 using UnityEngine;
 
-public class TurretAim : MonoBehaviour
+public class Pawn_Turret_Aim : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
