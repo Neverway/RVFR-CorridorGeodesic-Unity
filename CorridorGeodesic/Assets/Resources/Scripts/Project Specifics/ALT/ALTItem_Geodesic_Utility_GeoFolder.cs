@@ -138,9 +138,13 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
                 lerpAmount = Mathf.Clamp ((riftTimer / maxRiftTimer), 0, 1);
 
+                float prevRiftWidth = deployedRift.transform.localScale.z * riftWidth;
+
                 // Squish null-space parent
                 deployedRift.transform.localScale = new Vector3 (1, 1, 1 - lerpAmount);
-            
+
+                float newRiftWidth = deployedRift.transform.localScale.z * riftWidth;
+
                 // Collapse meshes in planeB/B-Space
                 planeBMeshes.transform.position = Vector3.Lerp (planeBStartPos, planeBStartPos + targetOffset, lerpAmount);
                 
@@ -150,6 +154,18 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                     //obj.transform.position = Vector3.Lerp(obj.homePosition, obj.homePosition + targetOffset, lerpAmount);
                     
                     obj.transform.position += cutPreviews[1].transform.position - previousPlanePosition;
+                }
+
+                foreach (CorGeo_ActorData obj in nullSpaceObjects)
+                {
+                    if (obj.dynamic && !obj.crushInNullSpace)
+                    {
+                        //Get object's position relative to the rift, then move the object based on the new size of the rift.
+                        float percent = planeA.GetDistanceToPoint (obj.transform.position) / prevRiftWidth;
+                        float oldDistance = prevRiftWidth * percent;
+                        float newDistance = newRiftWidth * percent;
+                        obj.transform.position += riftNormal * (newDistance - oldDistance);
+                    }
                 }
 
                 planeB = new Plane (-riftNormal, cutPreviews[1].transform.position);
@@ -285,18 +301,20 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         isCutPreviewActive = false;
 
-        if (isCollapseStarted == false && deployedRift)
-        {
-            Destroy(deployedRift.gameObject);
-            return;
-        }
         isCollapseStarted = false;
 
         foreach (CorGeo_ActorData _actor in CorGeo_ActorDatas)
         {
             if (_actor)
             {
-                _actor.GoHome();
+                if (_actor.dynamic && !_actor.crushInNullSpace)
+                {
+                    RecallNullActor (_actor);
+                }
+                else
+                {
+                    _actor.GoHome ();
+                }
             }
         }
 
@@ -329,8 +347,24 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             actor.nullSpace = false;
         }
-        
-        StartCoroutine(WitchHunt ());
+
+        if (isCollapseStarted == false && deployedRift)
+        {
+            Destroy (deployedRift.gameObject);
+            return;
+        }
+
+        StartCoroutine (WitchHunt ());
+    }
+
+    private void RecallNullActor (CorGeo_ActorData _actor)
+    {
+        //Moves an actor to keep them in the same relative position to the map when the rift is recalled.
+        float scaledRiftWidth = deployedRift.transform.localScale.z * riftWidth;
+        float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
+        float oldDistance = scaledRiftWidth * percent;
+        float newDistance = riftWidth * percent;
+        _actor.transform.position += riftNormal * (newDistance - oldDistance);
     }
 
     private IEnumerator DestroyWorker (GameObject _gameObject)
