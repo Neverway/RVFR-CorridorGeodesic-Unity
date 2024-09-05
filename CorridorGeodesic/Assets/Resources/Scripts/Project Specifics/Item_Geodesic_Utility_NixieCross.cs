@@ -338,7 +338,7 @@ public class Item_Geodesic_Utility_NixieCross : Item_Geodesic_Utility
                 print(_gameObject.name);
                 if (_gameObject)
                 {
-                    _gameObject.GetComponent<Mesh_Slicable>().GoHome ();
+                    _gameObject.GetComponent<Mesh_Slicable>().GoHome();
                 }
             }
             StartCoroutine (DestroyWorker (deployedRift));

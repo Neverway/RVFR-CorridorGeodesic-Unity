@@ -25,6 +25,7 @@ public class UI_Image_EntityPain : MonoBehaviour
     // Private Variables
     //=-----------------=
     private bool isInPain; // Used to keep track of if we are currently fading the image in or out (Fadeout: Underground reference?)
+    private bool initialized;
 
 
     //=-----------------=
@@ -37,15 +38,17 @@ public class UI_Image_EntityPain : MonoBehaviour
     //=-----------------=
     private void Start()
     {
+        InvokeRepeating(nameof(UpdatePawnCheck), 0, 1);
     }
 
-    private void Update()
+    private void UpdatePawnCheck()
     {
-        if (findPossessedPawn)
+        if (findPossessedPawn && !targetPawn)
         {
             targetPawn = FindPossessedPawn();
+            initialized = false;
         }
-        if (targetPawn)
+        if (targetPawn && !initialized)
         {
             targetPawn.OnPawnHurt += () => { OnHurt(); };
         }

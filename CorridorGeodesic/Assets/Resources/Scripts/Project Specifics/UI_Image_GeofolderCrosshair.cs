@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,7 +34,12 @@ public class UI_Image_GeofolderCrosshair : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Update()
+    private void Start()
+    {
+        InvokeRepeating(nameof(UpdateCrosshair), 0, 1);
+    }
+
+    private void UpdateCrosshair()
     {
         // Locate the player and see if they have the geofolder
         if (!nixieCross)
