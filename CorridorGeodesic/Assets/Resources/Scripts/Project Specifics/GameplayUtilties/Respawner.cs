@@ -52,9 +52,25 @@ public class Respawner : MonoBehaviour
     // External Functions
     //=-----------------=
 
+    /// <summary>
+    /// Destroy the spawned object so that it will respawn.
+    /// </summary>
     public void DestroySpawnedObject ()
     {
-        Destroy(spawnedObject);
+        StartCoroutine (DestroyWorker ());
+    }
+
+    /// <summary>
+    /// Destroy the object after moving it to trigger OnTriggerExit for any objects it's inside of.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator DestroyWorker ()
+    {
+        //Move the spawne dobject far away, triggering OnTriggerExit for anything it may have been inside of
+        spawnedObject.transform.position = new Vector3 (0, 1000, 0);
+        //wait one frame, then destroy object
+        yield return null;
+        Destroy (spawnedObject);
     }
 
 }
