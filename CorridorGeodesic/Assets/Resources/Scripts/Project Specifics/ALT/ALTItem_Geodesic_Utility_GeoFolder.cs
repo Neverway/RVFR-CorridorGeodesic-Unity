@@ -307,7 +307,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             if (_actor)
             {
-                if (_actor.dynamic && !_actor.crushInNullSpace)
+                if (riftTimer < maxRiftTimer && _actor.dynamic && !_actor.crushInNullSpace && nullSpaceObjects.Contains(_actor))
                 {
                     RecallNullActor (_actor);
                 }
