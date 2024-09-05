@@ -309,7 +309,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             if (_actor)
             {
-                if (riftTimer < maxRiftTimer && _actor.dynamic && !_actor.crushInNullSpace && nullSpaceObjects.Contains (_actor))
+                if (riftTimer < maxRiftTimer && _actor.dynamic && nullSpaceObjects.Contains (_actor))
                 {
                     RecallNullActor (_actor);
                 }
@@ -365,12 +365,14 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
     private void RecallNullActor (CorGeo_ActorData _actor)
     {
+        _actor.transform.SetParent (_actor.homeParent, true);
         //Moves an actor to keep them in the same relative position to the map when the rift is recalled.
         float scaledRiftWidth = deployedRift.transform.localScale.z * riftWidth;
         float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
         float oldDistance = scaledRiftWidth * percent;
         float newDistance = riftWidth * percent;
         _actor.transform.position += riftNormal * (newDistance - oldDistance);
+        Debug.Log (_actor.name + _actor.transform.position);
     }
 
     private IEnumerator DestroyWorker (GameObject _gameObject)
