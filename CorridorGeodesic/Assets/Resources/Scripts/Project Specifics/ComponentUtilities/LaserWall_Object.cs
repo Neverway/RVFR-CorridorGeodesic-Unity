@@ -1,26 +1,26 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Connorses =====================
 //
-// Purpose:
+// Purpose: Manage toggling the state of all the LaserWallShooters that are part of a laser wall
 // Notes:
 //
 //=============================================================================
 
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class LaserWall_Object : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public List<Camera> cameras;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
+
+    private LaserWallShooter[] laserWallShooters;
 
 
     //=-----------------=
@@ -31,13 +31,14 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+        laserWallShooters = GetComponentsInChildren<LaserWallShooter>();
+    }
+
     private void Update()
     {
-        cameras.Clear();
-        foreach (var camera in FindObjectsOfType<Camera>())
-        {
-            cameras.Add(camera);
-        }
+    
     }
 
     //=-----------------=
@@ -48,20 +49,20 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public Camera GetActiveRenderingCamera()
+
+    public void Activate ()
     {
-        foreach (Camera cam in cameras)
+        foreach(LaserWallShooter wall in laserWallShooters)
         {
-            if (cam.IsUnityNull())
-            {
-                cameras.Remove(cam);
-                return null;
-            }
-            if (cam.isActiveAndEnabled && cam.targetTexture == null)
-            {
-                return cam;
-            }
+            wall.SetActive (true);
         }
-        return null;
+    }
+
+    public void Deactivate ()
+    {
+        foreach (LaserWallShooter wall in laserWallShooters)
+        {
+            wall.SetActive (false);
+        }
     }
 }

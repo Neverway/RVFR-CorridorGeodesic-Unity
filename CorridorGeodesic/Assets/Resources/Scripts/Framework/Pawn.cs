@@ -57,15 +57,14 @@ public class Pawn : MonoBehaviour
     {
         PassCharacterDataToCurrentState();
         currentController.PawnAwake(this);
-        gameInstance = FindObjectOfType<GameInstance>();
     }
 
     private void Update()
     {
         // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
-        if (gameInstance)
+        if (FindObjectOfType<GameInstance>())
         {
-            if (gameInstance.PlayerControllerClasses.Contains(currentController))
+            if (FindObjectOfType<GameInstance>().PlayerControllerClasses.Contains(currentController))
             {
                 isPossessed = true;
             }
@@ -74,16 +73,9 @@ public class Pawn : MonoBehaviour
                 isPossessed = false;
             }
         }
-        else
-        {
-            gameInstance = FindObjectOfType<GameInstance>(); // TODO This is a backup check in case the gameInstance is replaced or could not be found
-            return;
-        }
+        gameInstance = FindObjectOfType<GameInstance>();
         CheckCameraState();
-        if (isDead)
-        {
-            return;
-        }
+        if (isDead) return;
         currentController.PawnUpdate(this);
     }
 

@@ -14,7 +14,6 @@ public class GameObject_Billboard : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public int billboardUpdateRate = 1;
 
 
     //=-----------------=
@@ -34,10 +33,9 @@ public class GameObject_Billboard : MonoBehaviour
     private void Start()
     {
         cameraManager = FindObjectOfType<CameraManager>();
-        InvokeRepeating(nameof(UpdateBillboard), 0, billboardUpdateRate);
     }
 
-    private void UpdateBillboard()
+    private void Update()
     {
         if (!cameraManager)
         {

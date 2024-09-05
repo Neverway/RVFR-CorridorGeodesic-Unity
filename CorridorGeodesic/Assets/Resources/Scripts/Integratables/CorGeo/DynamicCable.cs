@@ -15,7 +15,6 @@ public class DynamicCable : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public int cableUpdateRate = 1;
     public NEW_LogicProcessor inputSignal;
     public bool generateWaypointsUsingLength; // Auto-generate waypoints based on the distance between the two anchors
     public float waypointsPerUnit; // How many waypoints should be created per unit of distance between the anchors
@@ -53,11 +52,9 @@ public class DynamicCable : MonoBehaviour
             GenerateWaypoints();
             //GatherWaypoints();
         }
-        
-        InvokeRepeating(nameof(UpdateCable), 0, cableUpdateRate);
     }
 
-    private void UpdateCable()
+    private void Update()
     {
         if (inputSignal)
         {

@@ -7,16 +7,14 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class ApplicationFontSetter : MonoBehaviour
+public class Item_Geodesic_Utility_GeoFolder : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public int currentFont;
-    
+
 
     //=-----------------=
     // Private Variables
@@ -26,8 +24,7 @@ public class ApplicationFontSetter : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    public TMP_FontAsset defaultFont, dyslexiaAssistFont;
-    
+
 
     //=-----------------=
     // Mono Functions
@@ -39,24 +36,7 @@ public class ApplicationFontSetter : MonoBehaviour
 
     private void Update()
     {
-        TMP_FontAsset targetFont = null;
-        switch (currentFont)
-        {
-            case 0:
-                targetFont = defaultFont;
-                break;
-            case 1:
-                targetFont = dyslexiaAssistFont;
-                break;
-            default:
-                targetFont = defaultFont;
-                break;
-        }
-
-        foreach (var textElement in FindObjectsOfType<TMP_Text>())
-        {
-            textElement.font = targetFont;
-        }
+    
     }
 
     //=-----------------=

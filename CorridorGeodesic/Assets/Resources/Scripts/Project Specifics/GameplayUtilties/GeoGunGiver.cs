@@ -7,16 +7,16 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class ApplicationFontSetter : MonoBehaviour
+[RequireComponent(typeof(NEW_LogicProcessor))]
+public class GeoGunGiver : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public int currentFont;
-    
+    public NEW_LogicProcessor inputSignal;
+
 
     //=-----------------=
     // Private Variables
@@ -26,36 +26,27 @@ public class ApplicationFontSetter : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    public TMP_FontAsset defaultFont, dyslexiaAssistFont;
-    
+    private NEW_LogicProcessor logicProcessor;
+
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
     private void Start()
     {
-    
+        logicProcessor = GetComponent<NEW_LogicProcessor>();
     }
 
     private void Update()
     {
-        TMP_FontAsset targetFont = null;
-        switch (currentFont)
+        if (!inputSignal) return;
+        logicProcessor.isPowered = inputSignal.isPowered;
+        if (logicProcessor.hasPowerStateChanged)
         {
-            case 0:
-                targetFont = defaultFont;
-                break;
-            case 1:
-                targetFont = dyslexiaAssistFont;
-                break;
-            default:
-                targetFont = defaultFont;
-                break;
-        }
-
-        foreach (var textElement in FindObjectsOfType<TMP_Text>())
-        {
-            textElement.font = targetFont;
+            if (logicProcessor.isPowered)
+            {
+                GiveGeoGun();
+            }
         }
     }
 
@@ -67,4 +58,8 @@ public class ApplicationFontSetter : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void GiveGeoGun()
+    {
+        FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+    }
 }

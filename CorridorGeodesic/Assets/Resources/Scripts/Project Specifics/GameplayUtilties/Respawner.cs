@@ -7,27 +7,28 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class ApplicationFontSetter : MonoBehaviour
+public class Respawner : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public int currentFont;
-    
+
+    [SerializeField] GameObject prefabToSpawn;
+    private GameObject spawnedObject;
 
     //=-----------------=
     // Private Variables
     //=-----------------=
+    [SerializeField] private float spawnDelay;
+    private Coroutine spawnWorker;
 
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    public TMP_FontAsset defaultFont, dyslexiaAssistFont;
-    
+
 
     //=-----------------=
     // Mono Functions
@@ -39,23 +40,9 @@ public class ApplicationFontSetter : MonoBehaviour
 
     private void Update()
     {
-        TMP_FontAsset targetFont = null;
-        switch (currentFont)
+        if (spawnedObject == null && spawnWorker == null)
         {
-            case 0:
-                targetFont = defaultFont;
-                break;
-            case 1:
-                targetFont = dyslexiaAssistFont;
-                break;
-            default:
-                targetFont = defaultFont;
-                break;
-        }
-
-        foreach (var textElement in FindObjectsOfType<TMP_Text>())
-        {
-            textElement.font = targetFont;
+            spawnWorker = StartCoroutine(SpawnWorker());
         }
     }
 
@@ -63,6 +50,12 @@ public class ApplicationFontSetter : MonoBehaviour
     // Internal Functions
     //=-----------------=
 
+    private IEnumerator SpawnWorker ()
+    {
+        yield return new WaitForSeconds(spawnDelay);
+        spawnedObject = Instantiate (prefabToSpawn, transform.position, transform.rotation);
+        spawnWorker = null;
+    }
 
     //=-----------------=
     // External Functions

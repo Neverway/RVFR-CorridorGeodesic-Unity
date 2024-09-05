@@ -42,8 +42,12 @@ public class WorldSettings : MonoBehaviour
     private void Start()
     {
         gameInstance = FindObjectOfType<GameInstance>();
-        InvokeRepeating(nameof(SpawnPlayerCharacter), 0, 1);
-        InvokeRepeating(nameof(CheckKillVolume), 0, 1);
+    }
+
+    private void Update()
+    {
+        if (gameInstance.localPlayerCharacter == null) SpawnPlayerCharacter();
+        CheckKillVolume();
     }
 
     private void OnDrawGizmos()
@@ -116,17 +120,8 @@ public class WorldSettings : MonoBehaviour
     //=-----------------=
     public void SpawnPlayerCharacter()
     {
-        if (!gameInstance)
-        {
-            gameInstance = FindObjectOfType<GameInstance>();
-            return;
-        }
-
-        if (gameInstance.localPlayerCharacter != null)
-        {
-            return;
-        }
-
+        if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+        
         // Perform a check first to see if there is already a local player character in the scene
         Debug.Log("LocalPlayerCharacter is empty in the gameInstance! Has the player spawned yet? Checking...");
         foreach (var pawn in FindObjectsOfType<Pawn>())
