@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -31,7 +32,12 @@ public class CameraManager : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Update()
+    private void Start()
+    {
+        InvokeRepeating(nameof(UpdateCameraList), 0, 1);
+    }
+
+    private void UpdateCameraList()
     {
         cameras.Clear();
         foreach (var camera in FindObjectsOfType<Camera>())
