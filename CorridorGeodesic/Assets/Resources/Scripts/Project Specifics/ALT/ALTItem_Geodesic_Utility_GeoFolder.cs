@@ -333,17 +333,20 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         Destroy (planeBMeshes);
         if (deployedRift)
         {
-            foreach (var _gameObject in nullSlices)
+            if (nullSlices != null)
             {
-                if (_gameObject)
+                foreach (var _gameObject in nullSlices)
                 {
-                    _gameObject.GetComponent<ALTMeshSlicer>().GoHome ();
+                    if (_gameObject)
+                    {
+                        _gameObject.GetComponent<ALTMeshSlicer> ().GoHome ();
+                    }
                 }
             }
             StartCoroutine (DestroyWorker (deployedRift));
         }
         // Reset the value used to track if an actor is in null space
-        foreach (var actor in FindObjectsOfType<CorGeo_ActorData> ())
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
         {
             actor.nullSpace = false;
         }
