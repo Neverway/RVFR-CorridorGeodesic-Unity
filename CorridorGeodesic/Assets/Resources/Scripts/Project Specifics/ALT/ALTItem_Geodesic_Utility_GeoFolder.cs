@@ -33,7 +33,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private Transform centerViewTransform;
     [SerializeField] private GameObject debugObject;
-    [SerializeField] private GameObject vacuumProjectile;
+    [SerializeField] private VacuumProjectile vacuumProjectile;
     [SerializeField] private GameObject riftObject;
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
@@ -260,6 +260,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         cutPreviews[0].transform.rotation = deployedRift.transform.rotation;
         cutPreviews[1].transform.rotation = deployedRift.transform.rotation;
         isCutPreviewActive = true;
+
+        lerpAmount = 0f;
     }
 
 
@@ -307,7 +309,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             if (_actor)
             {
-                if (_actor.dynamic && !_actor.crushInNullSpace)
+                if (riftTimer < maxRiftTimer && _actor.dynamic && nullSpaceObjects.Contains (_actor))
                 {
                     RecallNullActor (_actor);
                 }
@@ -333,17 +335,20 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         Destroy (planeBMeshes);
         if (deployedRift)
         {
-            foreach (var _gameObject in nullSlices)
+            if (nullSlices != null)
             {
-                if (_gameObject)
+                foreach (var _gameObject in nullSlices)
                 {
-                    _gameObject.GetComponent<ALTMeshSlicer>().GoHome ();
+                    if (_gameObject)
+                    {
+                        _gameObject.GetComponent<ALTMeshSlicer> ().GoHome ();
+                    }
                 }
             }
             StartCoroutine (DestroyWorker (deployedRift));
         }
         // Reset the value used to track if an actor is in null space
-        foreach (var actor in FindObjectsOfType<CorGeo_ActorData> ())
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
         {
             actor.nullSpace = false;
         }
@@ -355,10 +360,13 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         }
 
         StartCoroutine (WitchHunt ());
+        lerpAmount = 0f;
     }
 
     private void RecallNullActor (CorGeo_ActorData _actor)
     {
+        _actor.transform.SetParent (_actor.homeParent, true);
+        _actor.transform.localScale = _actor.homeScale;
         //Moves an actor to keep them in the same relative position to the map when the rift is recalled.
         float scaledRiftWidth = deployedRift.transform.localScale.z * riftWidth;
         float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
@@ -377,10 +385,10 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         if (currentAmmo <= 0) return;
         currentAmmo--;
-        var projectile = Instantiate (vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
-        projectile.GetComponent<Rigidbody>().AddForce (projectile.transform.forward * projectileForce, ForceMode.Impulse);
-        projectile.GetComponent<VacuumProjectile> ().geoFolder = gameObject; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
-        deployedInfinityMarkers.Add (projectile);
+        var projectile = Instantiate(vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
+        projectile.InitializeProjectile(projectileForce);
+        projectile.geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+        deployedInfinityMarkers.Add (projectile.gameObject);
     }
 
     private bool AreMarkersPinned ()
@@ -390,7 +398,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             foreach (var marker in deployedInfinityMarkers)
             {
-                if (marker.GetComponent<VacuumProjectile> ().pinned == false)
+                if (!marker.GetComponent<VacuumProjectile>().pinned)
                 {
                     return false;
                 }

@@ -20,7 +20,9 @@ public class WorldSettings : MonoBehaviour
     public GameMode gameModeOverride;
     public bool startAsSpectator;
     public bool disableWorldKillVolume;
+    public bool disableWorldKillY;
     public int worldKillVolumeDistance=32767;
+    public int worldKillYDistance = -100;
 
 
     //=-----------------=
@@ -48,18 +50,55 @@ public class WorldSettings : MonoBehaviour
         CheckKillVolume();
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        if (!disableWorldKillVolume) Gizmos.DrawCube(new Vector3(0,0,0), new Vector3(worldKillVolumeDistance*0.5f,worldKillVolumeDistance*0.5f,worldKillVolumeDistance*0.5f));
+        if (!disableWorldKillY) Gizmos.DrawCube(new Vector3(0,worldKillYDistance,0), new Vector3(1000,1,1000));
+    }
+
     //=-----------------=
     // Internal Functions
     //=-----------------=
     private void CheckKillVolume()
     {
-        if (disableWorldKillVolume) return;
+        if (disableWorldKillVolume && disableWorldKillY) return;
         foreach (var pawn in FindObjectsOfType<Pawn>())
         {
-            var distanceToEntity = Vector3.Distance(pawn.transform.position,  new Vector3(0,0,0));
-            if (distanceToEntity >= worldKillVolumeDistance || distanceToEntity <= (worldKillVolumeDistance * -1))
+            if (!disableWorldKillVolume)
             {
-                Destroy(pawn.gameObject);
+                var distanceToEntity = Vector3.Distance(pawn.transform.position,  new Vector3(0,0,0));
+                if (distanceToEntity >= worldKillVolumeDistance || distanceToEntity <= (worldKillVolumeDistance * -1))
+                {
+                    Destroy(pawn.gameObject);
+                }
+            }
+            if (!disableWorldKillY)
+            {
+                if (pawn.transform.position.y <= worldKillYDistance)
+                {
+                    Destroy(pawn.gameObject);
+                }
+            }
+        }
+        foreach (var actor in FindObjectsOfType<ActorData>())
+        {
+            if (!actor.CompareTag("PhysProp")) continue;
+            
+            if (!disableWorldKillVolume)
+            {
+                var distanceToEntity = Vector3.Distance(actor.transform.position,  new Vector3(0,0,0));
+                if (distanceToEntity >= worldKillVolumeDistance || distanceToEntity <= (worldKillVolumeDistance * -1))
+                {
+                    Destroy(actor.gameObject);
+                }
+            }
+            if (!disableWorldKillY)
+            {
+                if (actor.transform.position.y <= worldKillYDistance)
+                {
+                    Destroy(actor.gameObject);
+                }
             }
         }
     }

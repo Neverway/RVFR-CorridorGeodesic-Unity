@@ -71,22 +71,22 @@ public class CorGeo_ActorData : MonoBehaviour
     public void GoHome ()
     {
         OnRiftRestore?.Invoke();
-        gameObject.SetActive (true);
+        gameObject.SetActive (true); //todo: remember if object was active before crushing
         transform.SetParent(homeParent);
         transform.localScale = homeScale;
-        if (nullSpace)
+        if (nullSpace && !dynamic)
         {
             transform.position = homePosition;
             return;
         }
-        if (ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (transform.position) > 0)
+        if (!nullSpace && ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (transform.position) > 0)
         {
             if (!ALTItem_Geodesic_Utility_GeoFolder.deployedRift) return;
             //move actor away from collapse direction scaled by the rift timer's progress
             // move actor away from collapse direction scaled by the rift timer's progress
-            transform.position += ALTItem_Geodesic_Utility_GeoFolder.deployedRift.transform.forward * 
-                                  ALTItem_Geodesic_Utility_GeoFolder.riftWidth * 
-                                  (ALTItem_Geodesic_Utility_GeoFolder.lerpAmount);
+            transform.position += ALTItem_Geodesic_Utility_GeoFolder.deployedRift.transform.forward *
+                                    ALTItem_Geodesic_Utility_GeoFolder.riftWidth *
+                                    (ALTItem_Geodesic_Utility_GeoFolder.lerpAmount);
         }
     }
 
