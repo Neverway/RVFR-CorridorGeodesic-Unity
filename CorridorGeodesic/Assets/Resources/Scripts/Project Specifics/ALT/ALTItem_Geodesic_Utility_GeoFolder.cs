@@ -109,7 +109,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         RecallInfinityMarkers ();
     }
 
-    public void Update ()
+    public void FixedUpdate ()
     {
         AimTowardsCenterOfView ();
 
@@ -131,7 +131,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             // If converging, increase the riftTimer and relocate actors and meshes
             if (secondaryHeld)
             {
-                riftTimer += Time.deltaTime;
+                riftTimer += Time.fixedDeltaTime;
 
                 // Calculate offset
                 Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
