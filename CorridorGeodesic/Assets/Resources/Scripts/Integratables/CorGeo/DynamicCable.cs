@@ -57,7 +57,7 @@ public class DynamicCable : MonoBehaviour
         InvokeRepeating(nameof(UpdateCable), 0, cableUpdateRate);
     }
 
-    private IEnumerator UpdateCable()
+    private void UpdateCable()
     {
         if (inputSignal)
         {
@@ -78,8 +78,6 @@ public class DynamicCable : MonoBehaviour
         {
             lineRenderer.SetPosition(i, waypoints[i].transform.position);
         }
-
-        yield break;
     }
 
     //=-----------------=

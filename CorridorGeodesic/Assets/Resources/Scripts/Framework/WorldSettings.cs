@@ -56,9 +56,9 @@ public class WorldSettings : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private IEnumerator CheckKillVolume()
+    private void CheckKillVolume()
     {
-        if (disableWorldKillVolume && disableWorldKillY) yield return null;
+        if (disableWorldKillVolume && disableWorldKillY) return;
         foreach (var pawn in FindObjectsOfType<Pawn>())
         {
             if (!disableWorldKillVolume)
@@ -114,17 +114,17 @@ public class WorldSettings : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public IEnumerator SpawnPlayerCharacter()
+    public void SpawnPlayerCharacter()
     {
         if (!gameInstance)
         {
             gameInstance = FindObjectOfType<GameInstance>();
-            yield return null;
+            return;
         }
 
         if (gameInstance.localPlayerCharacter != null)
         {
-            yield return null;
+            return;
         }
 
         // Perform a check first to see if there is already a local player character in the scene
@@ -135,7 +135,7 @@ public class WorldSettings : MonoBehaviour
             {
                 gameInstance.localPlayerCharacter = pawn;
                 Debug.Log("A possessed actor was found, assigning them to be the LocalPlayerCharacter.");
-                yield return null;
+                return;
             }
         }
         Debug.Log("No possessed actors found. Checking actor controllers to see if any of them are player driven...");
@@ -145,7 +145,7 @@ public class WorldSettings : MonoBehaviour
             {
                 gameInstance.localPlayerCharacter = pawn;
                 Debug.Log("A valid controller actor was found, assigning them to be the LocalPlayerCharacter.");
-                yield return null;
+                return;
             }
         }
         Debug.Log("No player found. Let's spawn a new one!");

@@ -37,14 +37,13 @@ public class CameraManager : MonoBehaviour
         InvokeRepeating(nameof(UpdateCameraList), 0, 1);
     }
 
-    private IEnumerator UpdateCameraList()
+    private void UpdateCameraList()
     {
         cameras.Clear();
         foreach (var camera in FindObjectsOfType<Camera>())
         {
             cameras.Add(camera);
         }
-        yield break;
     }
 
     //=-----------------=
