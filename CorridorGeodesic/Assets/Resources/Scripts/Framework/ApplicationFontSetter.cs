@@ -34,10 +34,10 @@ public class ApplicationFontSetter : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-    
+        InvokeRepeating(nameof(UpdateActiveFonts), 0, 1);
     }
 
-    private void Update()
+    private IEnumerator UpdateActiveFonts()
     {
         TMP_FontAsset targetFont = null;
         switch (currentFont)
@@ -57,6 +57,8 @@ public class ApplicationFontSetter : MonoBehaviour
         {
             textElement.font = targetFont;
         }
+
+        yield break;
     }
 
     //=-----------------=

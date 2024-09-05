@@ -42,12 +42,8 @@ public class WorldSettings : MonoBehaviour
     private void Start()
     {
         gameInstance = FindObjectOfType<GameInstance>();
-    }
-
-    private void Update()
-    {
-        if (gameInstance.localPlayerCharacter == null) SpawnPlayerCharacter();
-        CheckKillVolume();
+        InvokeRepeating(nameof(SpawnPlayerCharacter), 0, 1);
+        InvokeRepeating(nameof(CheckKillVolume), 0, 1);
     }
 
     private void OnDrawGizmos()
@@ -60,9 +56,9 @@ public class WorldSettings : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void CheckKillVolume()
+    private IEnumerator CheckKillVolume()
     {
-        if (disableWorldKillVolume && disableWorldKillY) return;
+        if (disableWorldKillVolume && disableWorldKillY) yield return null;
         foreach (var pawn in FindObjectsOfType<Pawn>())
         {
             if (!disableWorldKillVolume)
@@ -118,10 +114,19 @@ public class WorldSettings : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void SpawnPlayerCharacter()
+    public IEnumerator SpawnPlayerCharacter()
     {
-        if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-        
+        if (!gameInstance)
+        {
+            gameInstance = FindObjectOfType<GameInstance>();
+            yield return null;
+        }
+
+        if (gameInstance.localPlayerCharacter != null)
+        {
+            yield return null;
+        }
+
         // Perform a check first to see if there is already a local player character in the scene
         Debug.Log("LocalPlayerCharacter is empty in the gameInstance! Has the player spawned yet? Checking...");
         foreach (var pawn in FindObjectsOfType<Pawn>())
@@ -130,7 +135,7 @@ public class WorldSettings : MonoBehaviour
             {
                 gameInstance.localPlayerCharacter = pawn;
                 Debug.Log("A possessed actor was found, assigning them to be the LocalPlayerCharacter.");
-                return;
+                yield return null;
             }
         }
         Debug.Log("No possessed actors found. Checking actor controllers to see if any of them are player driven...");
@@ -140,7 +145,7 @@ public class WorldSettings : MonoBehaviour
             {
                 gameInstance.localPlayerCharacter = pawn;
                 Debug.Log("A valid controller actor was found, assigning them to be the LocalPlayerCharacter.");
-                return;
+                yield return null;
             }
         }
         Debug.Log("No player found. Let's spawn a new one!");
