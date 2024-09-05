@@ -5,7 +5,6 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -86,7 +85,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         meshSlicers = FindObjectsByType<ALTMeshSlicer> (FindObjectsSortMode.None);
 
-        CreateCutPreviews();
+        CreateCutPreviews ();
     }
 
     public override void UsePrimary ()
@@ -133,7 +132,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             if (secondaryHeld)
             {
                 riftTimer += Time.deltaTime;
-            
+
                 // Calculate offset
                 Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
                 lerpAmount = Mathf.Clamp ((riftTimer / maxRiftTimer), 0, 1);
@@ -147,12 +146,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
                 // Collapse meshes in planeB/B-Space
                 planeBMeshes.transform.position = Vector3.Lerp (planeBStartPos, planeBStartPos + targetOffset, lerpAmount);
-                
+
                 // Collapse actors in planeB/B-Space
                 foreach (CorGeo_ActorData obj in bSpaceObjects)
                 {
                     //obj.transform.position = Vector3.Lerp(obj.homePosition, obj.homePosition + targetOffset, lerpAmount);
-                    
+
                     obj.transform.position += cutPreviews[1].transform.position - previousPlanePosition;
                 }
 
@@ -178,14 +177,14 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             {
                 for (int i = 0; i < deployedRift.transform.childCount; i++)
                 {
-                    if (deployedRift.transform.GetChild(i).TryGetComponent<CorGeo_ActorData>(out var actor))
+                    if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
                     {
                         if (actor.activeInNullSpace)
                         {
                             continue;
                         }
                     }
-                    deployedRift.transform.GetChild(i).gameObject.SetActive(false);
+                    deployedRift.transform.GetChild (i).gameObject.SetActive (false);
                 }
                 foreach (var plane in cutPreviews)
                 {
@@ -196,7 +195,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             {
                 for (int i = 0; i < deployedRift.transform.childCount; i++)
                 {
-                    if (deployedRift.transform.GetChild(i).TryGetComponent<CorGeo_ActorData>(out var actor))
+                    if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
                     {
                         if (actor.activeInNullSpace)
                         {
@@ -205,9 +204,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                     }
                     else
                     {
-                        if (deployedRift.transform.GetChild(i).GetComponents<MeshCollider>().Length > 1)
+                        if (deployedRift.transform.GetChild (i).GetComponents<MeshCollider> ().Length > 1)
                         {
-                            Destroy(deployedRift.transform.GetChild(i).GetComponents<MeshCollider>()[0]);
+                            Destroy (deployedRift.transform.GetChild (i).GetComponents<MeshCollider> ()[0]);
                         }
                     }
                 }
@@ -246,13 +245,13 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         planeA = new Plane (riftNormal, pos1);
         planeB = new Plane (-riftNormal, pos2);
 
-        
+
         // TODO make this neater tomorrow
         if (!cutPreviews[0])
         {
-            CreateCutPreviews();
+            CreateCutPreviews ();
         }
-        
+
         cutPreviews[0].SetActive (true);
         cutPreviews[1].SetActive (true);
         cutPreviews[0].transform.position = pos1;
@@ -268,23 +267,23 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void CreateCutPreviews()
+    private void CreateCutPreviews ()
     {
         cutPreviews = new GameObject[2];
         for (int i = 0; i < cutPreviews.Length; i++)
         {
             cutPreviews[i] = Instantiate (cutPreviewPrefab);
-            cutPreviews[i].GetComponent<CutPreviewTracker>().cutPreviewID = i; // Label them so we know whether they are a or b space's side preview
+            cutPreviews[i].GetComponent<CutPreviewTracker> ().cutPreviewID = i; // Label them so we know whether they are a or b space's side preview
             cutPreviews[i].SetActive (false);
         }
     }
-    
+
     private void RecallInfinityMarkers ()
     {
         if (currentAmmo >= 2) return;
         foreach (var projectile in deployedInfinityMarkers)
         {
-            projectile.GetComponent<VacuumProjectile>().KillProjectile(false);
+            projectile.GetComponent<VacuumProjectile> ().KillProjectile (false);
         }
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;
@@ -309,9 +308,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             if (_actor)
             {
-                if (riftTimer < maxRiftTimer && _actor.dynamic && nullSpaceObjects.Contains (_actor))
+                if (riftTimer < maxRiftTimer && _actor.dynamic)
                 {
-                    RecallNullActor (_actor);
+                    RecallDynamicActor (_actor);
                 }
                 else
                 {
@@ -363,16 +362,29 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         lerpAmount = 0f;
     }
 
-    private void RecallNullActor (CorGeo_ActorData _actor)
+    private void RecallDynamicActor (CorGeo_ActorData _actor)
     {
-        _actor.transform.SetParent (_actor.homeParent, true);
-        _actor.transform.localScale = _actor.homeScale;
-        //Moves an actor to keep them in the same relative position to the map when the rift is recalled.
-        float scaledRiftWidth = deployedRift.transform.localScale.z * riftWidth;
-        float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
-        float oldDistance = scaledRiftWidth * percent;
-        float newDistance = riftWidth * percent;
-        _actor.transform.position += riftNormal * (newDistance - oldDistance);
+        if (nullSpaceObjects.Contains (_actor))
+        {
+            _actor.transform.SetParent (_actor.homeParent, true);
+            _actor.transform.localScale = _actor.homeScale;
+            //Moves an actor to keep them in the same relative position to the map when the rift is recalled.
+            float scaledRiftWidth = deployedRift.transform.localScale.z * riftWidth;
+            float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
+            float oldDistance = scaledRiftWidth * percent;
+            float newDistance = riftWidth * percent;
+            _actor.transform.position += riftNormal * (newDistance - oldDistance);
+            return;
+        }
+
+        if (!_actor.nullSpace && ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (_actor.transform.position) > 0)
+        {
+            if (!ALTItem_Geodesic_Utility_GeoFolder.deployedRift) return;
+            //move actor away from collapse direction scaled by the rift timer's progress
+            _actor.transform.position += ALTItem_Geodesic_Utility_GeoFolder.deployedRift.transform.forward *
+                                    ALTItem_Geodesic_Utility_GeoFolder.riftWidth *
+                                    (ALTItem_Geodesic_Utility_GeoFolder.lerpAmount);
+        }
     }
 
     private IEnumerator DestroyWorker (GameObject _gameObject)
@@ -385,8 +397,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         if (currentAmmo <= 0) return;
         currentAmmo--;
-        var projectile = Instantiate(vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
-        projectile.InitializeProjectile(projectileForce);
+        var projectile = Instantiate (vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
+        projectile.InitializeProjectile (projectileForce);
         projectile.geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
         deployedInfinityMarkers.Add (projectile.gameObject);
     }
@@ -398,7 +410,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             foreach (var marker in deployedInfinityMarkers)
             {
-                if (!marker.GetComponent<VacuumProjectile>().pinned)
+                if (!marker.GetComponent<VacuumProjectile> ().pinned)
                 {
                     return false;
                 }
@@ -439,7 +451,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                         Destroy (meshColliders[0]);
                     }
                 }
-                AssignInitialActorRiftSpace();
+                AssignInitialActorRiftSpace ();
                 isCollapseStarted = true;
                 riftTimer = 0f;
                 maxRiftTimer = riftWidth * riftSecondsPerUnit;
@@ -477,7 +489,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
 
             //if both distances are >= 0, we are in null space.
-            
+
             // Check to make sure the object we want to add is not the player (This is because the player should not be squished in null space)
             //if (FindObjectOfType<GameInstance>().localPlayerCharacter == actor.GetComponent<Pawn>()) continue;
             nullSpaceObjects.Add (actor);
@@ -493,7 +505,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         cutPreviews[1].transform.SetParent (planeBMeshes.transform);
     }
 
-    private void CheckForActorSpaceChanges()
+    private void CheckForActorSpaceChanges ()
     {
         // Check A-Space entities to see if they have exited A-Space
         // Check B-Space entities to see if they have exited B-Space
@@ -505,17 +517,17 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             {
                 continue;
             }
-            switch (GetActorRiftSpace(actor))
+            switch (GetActorRiftSpace (actor))
             {
                 case "a-space":
-                    if (!aSpaceObjects.Contains(actor))
+                    if (!aSpaceObjects.Contains (actor))
                     {
-                        if (nullSpaceObjects.Contains(actor))
+                        if (nullSpaceObjects.Contains (actor))
                         {
-                            Debug.Log($"{actor.gameObject.name} moved [Null] -> [A]");
-                            nullSpaceObjects.Remove(actor);
+                            Debug.Log ($"{actor.gameObject.name} moved [Null] -> [A]");
+                            nullSpaceObjects.Remove (actor);
                             actor.nullSpace = false;
-                            actor.transform.SetParent(actor.homeParent);
+                            actor.transform.SetParent (actor.homeParent);
                             actor.transform.localScale = actor.homeScale;
                         }
                         else if (bSpaceObjects.Contains (actor))
@@ -524,37 +536,37 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                             Debug.Log ($"{actor.gameObject.name} moved [B] -> [A]");
                         }
                         // Assign their new space
-                        aSpaceObjects.Add(actor);
+                        aSpaceObjects.Add (actor);
                         continue;
                     }
                     continue;
                 case "b-space":
-                    if (!bSpaceObjects.Contains(actor))
+                    if (!bSpaceObjects.Contains (actor))
                     {
-                        if (nullSpaceObjects.Contains(actor))
+                        if (nullSpaceObjects.Contains (actor))
                         {
                             nullSpaceObjects.Remove (actor);
-                            Debug.Log($"{actor.gameObject.name} moved [Null] -> [B]");
+                            Debug.Log ($"{actor.gameObject.name} moved [Null] -> [B]");
                             actor.nullSpace = false;
-                            actor.transform.SetParent(actor.homeParent);
+                            actor.transform.SetParent (actor.homeParent);
                             actor.transform.localScale = actor.homeScale;
                         }
                         else if (aSpaceObjects.Contains (actor))
                         {
                             aSpaceObjects.Remove (actor);
-                            Debug.Log($"{actor.gameObject.name} moved [A] -> [B]");
+                            Debug.Log ($"{actor.gameObject.name} moved [A] -> [B]");
                         }
                         // Assign their new space
-                        bSpaceObjects.Add(actor);
+                        bSpaceObjects.Add (actor);
                         continue;
                     }
                     continue;
                 case "null-space":
-                    if (!nullSpaceObjects.Contains(actor))
+                    if (!nullSpaceObjects.Contains (actor))
                     {
-                        if (aSpaceObjects.Contains(actor))
+                        if (aSpaceObjects.Contains (actor))
                         {
-                            Debug.Log($"{actor.gameObject.name} moved [A] -> [Null]");
+                            Debug.Log ($"{actor.gameObject.name} moved [A] -> [Null]");
                             aSpaceObjects.Remove (actor);
                         }
                         else if (bSpaceObjects.Contains (actor))
@@ -569,7 +581,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                             actor.nullSpace = true;
                         }
                         // Assign their new space
-                        nullSpaceObjects.Add(actor);
+                        nullSpaceObjects.Add (actor);
                         continue;
                     }
                     continue;
@@ -581,21 +593,22 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         RaycastHit viewPoint = new RaycastHit ();
         // Perform the raycast, ignoring the trigger layer
-        if (Physics.Raycast(centerViewTransform.position, centerViewTransform.forward, out viewPoint, Mathf.Infinity, viewCastMask))
+        if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out viewPoint, Mathf.Infinity, viewCastMask))
         {
             // If the raycast hits something, aim the barrel towards the hit point
-            barrelTransform.LookAt(viewPoint.point);
+            barrelTransform.LookAt (viewPoint.point);
         }
     }
 
     private IEnumerator WitchHunt ()
     {
         var everything = FindObjectsOfType<GameObject> ();
-        foreach (GameObject obj in everything) {
+        foreach (GameObject obj in everything)
+        {
             yield return new WaitForEndOfFrame ();
             if (obj && obj.name == "New Game Object")
             {
-                    Destroy (obj);
+                Destroy (obj);
             }
         }
     }
@@ -604,12 +617,12 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     /// Returns weather an actor is in A-Space, B-Space, or Null-Space
     /// </summary>
     /// <returns></returns>
-    private string GetActorRiftSpace(CorGeo_ActorData _actor)
+    private string GetActorRiftSpace (CorGeo_ActorData _actor)
     {
         float distance1 = planeA.GetDistanceToPoint (_actor.transform.position);
         float distance2 = planeB.GetDistanceToPoint (_actor.transform.position);
 
-        if (_actor.debugLogData) print($"{_actor.gameObject.name}: A{distance1} | B{distance2}");
+        if (_actor.debugLogData) print ($"{_actor.gameObject.name}: A{distance1} | B{distance2}");
 
         if (distance1 < 0)
         {
@@ -620,7 +633,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             return "b-space";
         }
-        
+
         return "null-space";
     }
 
