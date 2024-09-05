@@ -260,6 +260,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         cutPreviews[0].transform.rotation = deployedRift.transform.rotation;
         cutPreviews[1].transform.rotation = deployedRift.transform.rotation;
         isCutPreviewActive = true;
+
+        lerpAmount = 0f;
     }
 
 
@@ -358,6 +360,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         }
 
         StartCoroutine (WitchHunt ());
+        lerpAmount = 0f;
     }
 
     private void RecallNullActor (CorGeo_ActorData _actor)
