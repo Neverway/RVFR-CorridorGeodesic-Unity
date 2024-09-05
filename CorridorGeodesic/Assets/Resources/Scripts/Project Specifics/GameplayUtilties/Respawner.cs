@@ -1,6 +1,6 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Connorses =====================
 //
-// Purpose:
+// Purpose: Spawns a prefab object on a timer, and spawns it again if it is destroyed.
 // Notes:
 //
 //=============================================================================
@@ -26,17 +26,8 @@ public class Respawner : MonoBehaviour
 
 
     //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-    
-    }
 
     private void Update()
     {
@@ -60,4 +51,10 @@ public class Respawner : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+
+    public void DestroySpawnedObject ()
+    {
+        Destroy(spawnedObject);
+    }
+
 }
