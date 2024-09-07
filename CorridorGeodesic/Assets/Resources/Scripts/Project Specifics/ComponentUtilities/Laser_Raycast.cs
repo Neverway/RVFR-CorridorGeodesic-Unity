@@ -22,7 +22,8 @@ public class Laser_Raycast : MonoBehaviour
     [SerializeField] private int maxReflectionCount = 5;
     [SerializeField] private float maxStepDistance = 200f;
     [SerializeField] private LineRenderer prefabLine;
-    public Transform laserFireTransform;
+    [SerializeField] private Transform laserFireTransform;
+    [SerializeField] private Transform laserAimTransform;
     
     //=-----------------=
     // Private Variables
@@ -98,7 +99,8 @@ public class Laser_Raycast : MonoBehaviour
         {
             return;
         }
-        DrawReflectionPattern (laserFireTransform.position + laserFireTransform.forward * 0.75f, laserFireTransform.forward, maxReflectionCount);
+        Vector3 forward = laserAimTransform.position - laserFireTransform.position;
+        DrawReflectionPattern (laserFireTransform.position, forward, maxReflectionCount);
     }
 
     private void DrawReflectionPattern (Vector3 position, Vector3 direction, int reflectionsRemaining, bool bounce = true)
