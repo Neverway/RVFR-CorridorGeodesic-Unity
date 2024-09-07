@@ -2172,6 +2172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 239011986}
   - component: {fileID: 239011985}
+  - component: {fileID: 239011987}
   m_Layer: 0
   m_Name: Cube Spawner
   m_TagString: Untagged
@@ -2209,6 +2210,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &239011987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239011984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9328f886ac63731bba9d85776baa2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeInNullSpace: 0
+  destroyedInKillTrigger: 1
+  debugLogData: 0
+  homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
+  nullSpace: 0
+  dynamic: 0
+  crushInNullSpace: 1
 --- !u!1001 &244417425
 PrefabInstance:
   m_ObjectHideFlags: 0
