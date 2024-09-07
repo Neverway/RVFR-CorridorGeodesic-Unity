@@ -45,7 +45,6 @@ public class Pawn : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private GameInstance gameInstance;
-    private Camera viewCamera;
     public Quaternion faceDirection; // Imported from old system
     public RaycastHit slopeHit;
     public Pawn_AttachmentPoint physObjectAttachmentPoint;
@@ -62,15 +61,10 @@ public class Pawn : MonoBehaviour
 
     private void Update()
     {
-        if (!gameInstance)
-        {
-            gameInstance = FindObjectOfType<GameInstance>();
-        }
-        
         // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
-        if (gameInstance)
+        if (FindObjectOfType<GameInstance>())
         {
-            if (gameInstance.PlayerControllerClasses.Contains(currentController))
+            if (FindObjectOfType<GameInstance>().PlayerControllerClasses.Contains(currentController))
             {
                 isPossessed = true;
             }
@@ -78,24 +72,18 @@ public class Pawn : MonoBehaviour
             {
                 isPossessed = false;
             }
-            CheckCameraState();
         }
-
-        if (isDead)
-        {
-            return;
-        }
+        gameInstance = FindObjectOfType<GameInstance>();
+        CheckCameraState();
+        if (isDead) return;
         currentController.PawnUpdate(this);
     }
 
     private void FixedUpdate()
     {
-        if (isDead)
-        {
-            return;
-        }
+        if (isDead) return;
         currentController.PawnFixedUpdate(this);
-        contactPoints.Clear(); // Deletes all ContactPoints collected from the last physics frame
+        contactPoints.Clear(); //Deletes all ContactPoints collected from the last physics frame
     }
     
     void OnCollisionEnter(Collision col)
@@ -114,10 +102,7 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     private void CheckCameraState()
     {
-        if (!viewCamera)
-        {
-            viewCamera = GetComponentInChildren<Camera>(true);
-        }
+        var viewCamera = GetComponentInChildren<Camera>(true);
         if (IsPlayerControlled() && viewCamera)
         {
             viewCamera.gameObject.SetActive(true);
@@ -133,11 +118,6 @@ public class Pawn : MonoBehaviour
         isInvulnerable = true;
         yield return new WaitForSeconds(currentState.invulnerabilityTime);
         isInvulnerable = false;
-    }
-
-    private bool IsPlayerControlled()
-    {
-        return gameInstance.PlayerControllerClasses.Contains(currentController);
     }
     
     // ------------------------------------------------------------------
@@ -184,6 +164,12 @@ public class Pawn : MonoBehaviour
         }
 
         return false;
+    }
+    
+    public bool IsPlayerControlled()
+    {
+        if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+        return gameInstance.PlayerControllerClasses.Contains(currentController);
     }
 
     public void Move(Vector3 _movement, string _mode)
