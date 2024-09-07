@@ -50,6 +50,8 @@ public class ApplicationSettings : MonoBehaviour
         LoadSettings();
         GetCurrentResolutionFromList();
         ApplySettings();
+        InvokeRepeating(nameof(CheckFPSCounterVisibility), 0, 1);
+        InvokeRepeating(nameof(CheckDynamicTextureFiltering), 0, 1);
     }
 
     private void Update()
@@ -77,6 +79,62 @@ public class ApplicationSettings : MonoBehaviour
         if (FindObjectOfType<WB_Settings_Gameplay>())
         {
             FindObjectOfType<WB_Settings_Gameplay>().InitButtonValues();
+        }
+    }
+
+    private void CheckFPSCounterVisibility()
+    {
+        switch (currentSettingsData.showFramecounter)
+        {
+            case true:
+                if (!GameInstance.GetWidget("WB_Framecounter"))
+                {
+                    gameInstance.UI_ShowFramecounter();
+                }
+                break;
+            case false:
+                if (GameInstance.GetWidget("WB_Framecounter"))
+                {
+                    Destroy(GameInstance.GetWidget("WB_Framecounter"));
+                }
+                break;
+        }
+    }
+
+    private void CheckDynamicTextureFiltering()
+    {
+        switch (currentSettingsData.textureQuality)
+        {
+            case 0:
+                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+                {
+                    texture.filterMode = FilterMode.Point;
+                }
+                break;
+            case 1:
+                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+                {
+                    texture.filterMode = FilterMode.Point;
+                }
+                break;
+            case 2:
+                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+                {
+                    texture.filterMode = FilterMode.Bilinear;
+                }
+                break;
+            case 3:
+                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+                {
+                    texture.filterMode = FilterMode.Bilinear;
+                }
+                break;
+            case 4:
+                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+                {
+                    texture.filterMode = FilterMode.Trilinear;
+                }
+                break;
         }
     }
 
@@ -154,7 +212,7 @@ public class ApplicationSettings : MonoBehaviour
         switch (currentSettingsData.resolutionScale)
         {
             case 0:
-                ScalableBufferManager.ResizeBuffers(0.1f, 0.1f);
+                ScalableBufferManager.ResizeBuffers(0.25f, 0.25f);
                 break;
             case 1:
                 ScalableBufferManager.ResizeBuffers(0.5f, 0.5f);
@@ -176,7 +234,7 @@ public class ApplicationSettings : MonoBehaviour
                 QualitySettings.shadows = ShadowQuality.Disable; // Real-time shadows (off)
                 QualitySettings.shadowResolution = ShadowResolution.Low;
                 QualitySettings.shadowCascades = 0;
-                QualitySettings.shadowDistance = 0;
+                QualitySettings.shadowDistance = 5;
                 break;
             case 1:
                 QualitySettings.shadows = ShadowQuality.HardOnly; // Real-time shadows (hard-shadows only)
@@ -231,7 +289,7 @@ public class ApplicationSettings : MonoBehaviour
         switch (currentSettingsData.textureQuality)
         {
             case 0:
-                QualitySettings.globalTextureMipmapLimit = 8;
+                QualitySettings.globalTextureMipmapLimit = 12;
                 QualitySettings.anisotropicFiltering = AnisotropicFiltering.Disable;
                 break;
             case 1:
