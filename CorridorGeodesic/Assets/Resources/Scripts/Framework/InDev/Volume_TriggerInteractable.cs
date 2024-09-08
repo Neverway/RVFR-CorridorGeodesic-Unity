@@ -10,7 +10,6 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
 public class Volume_TriggerInteractable : Volume
 {
     //=-----------------=
@@ -26,7 +25,6 @@ public class Volume_TriggerInteractable : Volume
     public bool requireActivatingActorInside = true;
     
     [Header("Signal Events")]
-    public NEW_LogicProcessor resetSignal;
     //[Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
     public UnityEvent onInteract;
 
@@ -34,7 +32,8 @@ public class Volume_TriggerInteractable : Volume
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private NEW_LogicProcessor logicProcessor;
+    //[SerializeField] private LogicComponent resetSignal;
+
     [Tooltip("A variable to keep track of if this volume has already been trigger")]
     [HideInInspector] public bool hasBeenTriggered;
     private bool previousIsPoweredState; // Used to check for any overrides to the initial isPowered state in the level editor
@@ -50,22 +49,9 @@ public class Volume_TriggerInteractable : Volume
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-        logicProcessor = GetComponent<NEW_LogicProcessor>();
-    }
-
-    private void Update()
-    {
-        /*foreach (var powerReceiver in onInteractTransmit)
-        {
-            powerReceiver.isPowered = logicProcessor.isPowered;
-        }*/
-    }
-
     private void OnDrawGizmos()
     {
-        if (resetSignal) Debug.DrawLine(gameObject.transform.position, resetSignal.transform.position, new Color(1,0.5f,0,1));
+        //if (resetSignal) Debug.DrawLine(transform.position, resetSignal.transform.position, new Color(1,0.5f,0,1));
     }
 
     private new void OnTriggerEnter2D(Collider2D _other)
@@ -138,8 +124,8 @@ public class Volume_TriggerInteractable : Volume
         // Dear past me, you are a fool and a coward. I fixed it. ~Future Liz M.
         
         // Flip the current activation state
-        logicProcessor.isPowered = !logicProcessor.isPowered;
-        previousIsPoweredState = logicProcessor.isPowered;
+        isPowered = !isPowered;
+        previousIsPoweredState = isPowered;
         
         // Update connected devices
         hasBeenTriggered = true;

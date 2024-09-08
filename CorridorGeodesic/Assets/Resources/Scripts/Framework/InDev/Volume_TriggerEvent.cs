@@ -10,7 +10,6 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
 public class Volume_TriggerEvent : Volume
 {
     //=-----------------=
@@ -19,7 +18,7 @@ public class Volume_TriggerEvent : Volume
     public bool resetsAutomatically = true;
     public bool checksOnlyForPlayer = true;
     [Header("Signal Events")]
-    public NEW_LogicProcessor resetSignal;
+    public LogicComponent resetSignal;
     
     //[Header("Channel Events")]
     //[Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
@@ -32,11 +31,9 @@ public class Volume_TriggerEvent : Volume
     [Tooltip("A variable to keep track of if this volume has already been trigger")]
     public bool hasBeenTriggered;
 
-
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
@@ -44,22 +41,17 @@ public class Volume_TriggerEvent : Volume
     //=-----------------=
     private void Start()
     {
-        logicProcessor = GetComponent<NEW_LogicProcessor>();
         Reset();
     }
-
-    private void Update()
+    private void OnEnable()
     {
-        if (!resetSignal) return;
-        if (resetSignal.hasPowerStateChanged)
-        {
-            if (resetSignal.isPowered) Reset();
-        }
+        if (resetSignal)
+            resetSignal.OnPowerStateChanged += SourcePowerStateChanged;
     }
 
     private void OnDrawGizmos()
     {
-        if (resetSignal) Debug.DrawLine(gameObject.transform.position, resetSignal.transform.position, new Color(1,0.5f,0,1));
+        if (resetSignal) Debug.DrawLine(transform.position, resetSignal.transform.position, new Color(1,0.5f,0,1));
     }
 
     private new void OnTriggerEnter2D(Collider2D _other)
@@ -70,13 +62,13 @@ public class Volume_TriggerEvent : Volume
         {
             if (!targetEnt.isPossessed) return; 
             onOccupied.Invoke();
-            logicProcessor.isPowered = true;
+            isPowered = true;
             hasBeenTriggered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
             onOccupied.Invoke();
-            logicProcessor.isPowered = true;
+            isPowered = true;
             hasBeenTriggered = true;
         }
         print(_other.name);
@@ -89,13 +81,13 @@ public class Volume_TriggerEvent : Volume
         {
             if (!targetEnt.isPossessed) return;
             onUnoccupied.Invoke();
-            logicProcessor.isPowered = false;
+            isPowered = false;
             if (resetsAutomatically) hasBeenTriggered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
             onUnoccupied.Invoke();
-            logicProcessor.isPowered = false;
+            isPowered = false;
             if (resetsAutomatically) hasBeenTriggered = false;
         }
     }
@@ -108,13 +100,13 @@ public class Volume_TriggerEvent : Volume
         {
             if (!targetEnt.isPossessed) return;
             onOccupied.Invoke();
-            logicProcessor.isPowered = true;
+            isPowered = true;
             hasBeenTriggered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
             onOccupied.Invoke();
-            logicProcessor.isPowered = true;
+            isPowered = true;
             hasBeenTriggered = true;
         }
     }
@@ -126,13 +118,13 @@ public class Volume_TriggerEvent : Volume
         {
             if (!targetEnt.isPossessed) return;
             onUnoccupied.Invoke();
-            logicProcessor.isPowered = false;
+            isPowered = false;
             if (resetsAutomatically) hasBeenTriggered = false;
         }
         else if (pawnsInTrigger.Count == 0 && propsInTrigger.Count == 0)
         {
             onUnoccupied.Invoke();
-            logicProcessor.isPowered = false;
+            isPowered = false;
             if (resetsAutomatically) hasBeenTriggered = false;
         }
     }
@@ -149,4 +141,10 @@ public class Volume_TriggerEvent : Volume
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void SourcePowerStateChanged(bool powered)
+    {
+        base.SourcePowerStateChanged(powered);
+        if (resetSignal && resetSignal.isPowered)
+            Reset();
+    }
 }
