@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof (BzSliceableObject))]
-public class ALTMeshSlicer : MonoBehaviour
+public class Mesh_Slicable : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -51,7 +51,10 @@ public class ALTMeshSlicer : MonoBehaviour
         meshSlicer = GetComponent<IBzMeshSlicer> ();
         sliceableObject = GetComponent<BzSliceableObject> ();
 
-        sliceableObject.defaultSliceMaterial = ReferenceManager.Instance.nullSpace;
+        if (!sliceableObject.defaultSliceMaterial)
+        {
+            sliceableObject.defaultSliceMaterial = CorGeo_ReferenceManager.Instance.nullSpace;
+        }
     }
     
     public void Update()
@@ -77,10 +80,10 @@ public class ALTMeshSlicer : MonoBehaviour
     //=-----------------=
     public void ApplyCuts()
     {
-        ALTMeshSlicer sliceThis = Instantiate (this, transform.position, transform.rotation);
+        Mesh_Slicable sliceThis = Instantiate (this, transform.position, transform.rotation);
         sliceThis.gameObject.name = $"[CUT] {name}";
         isCut = false;
-        ALTItem_Geodesic_Utility_GeoFolder.originalSliceableObjects.Add(this);
+        Alt_Item_Geodesic_Utility_GeoGun.originalSliceableObjects.Add(this);
         homePosition = transform.position;
         homeScale = transform.localScale;
         homeParent = transform.parent;
@@ -96,7 +99,7 @@ public class ALTMeshSlicer : MonoBehaviour
         bool isTrigger = coll.isTrigger;
         sliceableObject= GetComponent<BzSliceableObject> ();
         //Slice the object
-        var result = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.planeA, meshSlicer);
+        var result = await sliceableObject.SliceAsync (Alt_Item_Geodesic_Utility_GeoGun.planeA, meshSlicer);
         if (result.sliced)
         {
 
@@ -104,7 +107,7 @@ public class ALTMeshSlicer : MonoBehaviour
             sliced = true;
             foreach (var obj in result.resultObjects)
             {
-                obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
+                obj.gameObject.GetComponent<Mesh_Slicable> ().isCut = true;
                 foreach (Collider collider in obj.gameObject.GetComponents<Collider> ())
                 {
                     collider.isTrigger = isTrigger;
@@ -115,12 +118,12 @@ public class ALTMeshSlicer : MonoBehaviour
                     }
                 }
                 
-                ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
+                Alt_Item_Geodesic_Utility_GeoGun.slicedMeshes.Add (obj.gameObject);
                 if (obj.side)
                 {
                     //Slice the new object on the positive side of the cut, this time with the other plane
                     IBzMeshSlicer objSlicer = obj.gameObject.GetComponent<IBzMeshSlicer> ();
-                    var result2 = await objSlicer.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.planeB);
+                    var result2 = await objSlicer.SliceAsync (Alt_Item_Geodesic_Utility_GeoGun.planeB);
                     if (result2.sliced)
                     {
                         sliced = true;
@@ -137,22 +140,22 @@ public class ALTMeshSlicer : MonoBehaviour
                                     meshColl.convex = true;
                                 }
                             }
-                            obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
-                            ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
+                            obj.gameObject.GetComponent<Mesh_Slicable> ().isCut = true;
+                            Alt_Item_Geodesic_Utility_GeoGun.slicedMeshes.Add (obj.gameObject);
                             if (obj2.side)
                             {
-                                ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj2.gameObject);
+                                Alt_Item_Geodesic_Utility_GeoGun.nullSlices.Add (obj2.gameObject);
                             }
                             else
                             {
-                                obj2.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.planeBMeshes.transform);
+                                obj2.gameObject.transform.SetParent (Alt_Item_Geodesic_Utility_GeoGun.planeBMeshes.transform);
                             }
                         }
                     }
                     else
                     {
                         //if slice 2 failed, we still add this object
-                        ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
+                        Alt_Item_Geodesic_Utility_GeoGun.nullSlices.Add (obj.gameObject);
                     }
                 }
             }
@@ -160,7 +163,7 @@ public class ALTMeshSlicer : MonoBehaviour
 
         else //if we didn't slice, we still try slicing with plane2
         {
-            var result2 = await sliceableObject.SliceAsync (ALTItem_Geodesic_Utility_GeoFolder.planeB, meshSlicer);
+            var result2 = await sliceableObject.SliceAsync (Alt_Item_Geodesic_Utility_GeoGun.planeB, meshSlicer);
             if (result2.sliced)
             {
                 _original.SetActive (false);
@@ -176,15 +179,15 @@ public class ALTMeshSlicer : MonoBehaviour
                             meshColl.convex = true;
                         }
                     }
-                    obj.gameObject.GetComponent<ALTMeshSlicer> ().isCut = true;
-                    ALTItem_Geodesic_Utility_GeoFolder.slicedMeshes.Add (obj.gameObject);
+                    obj.gameObject.GetComponent<Mesh_Slicable> ().isCut = true;
+                    Alt_Item_Geodesic_Utility_GeoGun.slicedMeshes.Add (obj.gameObject);
                     if (obj.side)
                     {
-                        ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (obj.gameObject);
+                        Alt_Item_Geodesic_Utility_GeoGun.nullSlices.Add (obj.gameObject);
                     }
                     else
                     {
-                        obj.gameObject.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.planeBMeshes.transform);
+                        obj.gameObject.transform.SetParent (Alt_Item_Geodesic_Utility_GeoGun.planeBMeshes.transform);
                     }
                 }
             }
@@ -201,7 +204,7 @@ public class ALTMeshSlicer : MonoBehaviour
                 var vert = meshFilter.mesh.vertices[0];
                 Vector3 testPoint = new Vector3 (vert.x, vert.y, vert.z);
                 Vector3 worldPoint = transform.TransformPoint (testPoint);
-                if (ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (worldPoint) < 0)
+                if (Alt_Item_Geodesic_Utility_GeoGun.planeA.GetDistanceToPoint (worldPoint) < 0)
                 {
                     //Entire object was outside nullspace plane1
                     _original.gameObject.SetActive (true);
@@ -210,18 +213,18 @@ public class ALTMeshSlicer : MonoBehaviour
                 }
                 else
                 {
-                    if (ALTItem_Geodesic_Utility_GeoFolder.planeB.GetDistanceToPoint (worldPoint) < 0)
+                    if (Alt_Item_Geodesic_Utility_GeoGun.planeB.GetDistanceToPoint (worldPoint) < 0)
                     {
                         //entire object was outside nullspace plane2
                         _original.SetActive (true);
-                        _original.transform.SetParent (ALTItem_Geodesic_Utility_GeoFolder.planeBMeshes.transform);
+                        _original.transform.SetParent (Alt_Item_Geodesic_Utility_GeoGun.planeBMeshes.transform);
                         Destroy (gameObject);
                         return;
                     }
                     else
                     {
                         //Entire object was in the nullspace
-                        ALTItem_Geodesic_Utility_GeoFolder.nullSlices.Add (_original);
+                        Alt_Item_Geodesic_Utility_GeoGun.nullSlices.Add (_original);
                         Destroy (gameObject);
                         return;
                     }

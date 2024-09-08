@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretGun : MonoBehaviour
+public class Pawn_Turret_Gun : MonoBehaviour
 {
     //=-----------------=
     // Public Variables

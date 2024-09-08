@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Respawner : MonoBehaviour
+public class Prop_Respawner : MonoBehaviour
 {
     //=-----------------=
     // Public Variables

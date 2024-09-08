@@ -52,7 +52,7 @@ public class CorGeo_ActorData : MonoBehaviour
         homePosition = transform.position;
         homeScale = transform.localScale;
         homeParent = transform.parent;
-        ALTItem_Geodesic_Utility_GeoFolder.CorGeo_ActorDatas.Add(this);
+        Alt_Item_Geodesic_Utility_GeoGun.CorGeo_ActorDatas.Add(this);
         if (TryGetComponent<Light> (out Light light))
         {
             activeInNullSpace = true;
@@ -61,7 +61,7 @@ public class CorGeo_ActorData : MonoBehaviour
 
     private void OnDestroy ()
     {
-        ALTItem_Geodesic_Utility_GeoFolder.CorGeo_ActorDatas.Remove(this);
+        Alt_Item_Geodesic_Utility_GeoGun.CorGeo_ActorDatas.Remove(this);
     }
 
     //=-----------------=
@@ -79,13 +79,13 @@ public class CorGeo_ActorData : MonoBehaviour
             transform.position = homePosition;
             return;
         }
-        if (!nullSpace && ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (transform.position) > 0)
+        if (!nullSpace && Alt_Item_Geodesic_Utility_GeoGun.planeA.GetDistanceToPoint (transform.position) > 0)
         {
-            if (!ALTItem_Geodesic_Utility_GeoFolder.deployedRift) return;
+            if (!Alt_Item_Geodesic_Utility_GeoGun.deployedRift) return;
             //move actor away from collapse direction scaled by the rift timer's progress
-            transform.position += ALTItem_Geodesic_Utility_GeoFolder.deployedRift.transform.forward *
-                                    ALTItem_Geodesic_Utility_GeoFolder.riftWidth *
-                                    (ALTItem_Geodesic_Utility_GeoFolder.lerpAmount);
+            transform.position += Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform.forward *
+                                    Alt_Item_Geodesic_Utility_GeoGun.riftWidth *
+                                    (Alt_Item_Geodesic_Utility_GeoGun.lerpAmount);
         }
     }
 

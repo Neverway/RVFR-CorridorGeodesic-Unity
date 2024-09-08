@@ -8,8 +8,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
+public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 {
     //=-----------------=
     // Public Variables
@@ -32,21 +33,21 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private Transform centerViewTransform;
     [SerializeField] private GameObject debugObject;
-    [SerializeField] private VacuumProjectile vacuumProjectile;
+    [FormerlySerializedAs("vacuumProjectile")] [SerializeField] private Projectile_Vacumm projectileVacumm;
     [SerializeField] private GameObject riftObject;
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
     public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
     public static GameObject deployedRift;
-    private ALTMeshSlicer[] meshSlicers;
+    private Mesh_Slicable[] meshSlicers;
 
     //Statics for ALTMeshSlicer to use
     public static Plane planeA;
     public static Plane planeB;
     public static List<GameObject> nullSlices;
     public static GameObject planeBMeshes;
-    public static List<ALTMeshSlicer> originalSliceableObjects = new List<ALTMeshSlicer> ();
+    public static List<Mesh_Slicable> originalSliceableObjects = new List<Mesh_Slicable> ();
     public static List<GameObject> slicedMeshes = new List<GameObject> ();
     public static List<CorGeo_ActorData> CorGeo_ActorDatas = new List<CorGeo_ActorData> ();
 
@@ -83,7 +84,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     //=-----------------=
     private void Start ()
     {
-        meshSlicers = FindObjectsByType<ALTMeshSlicer> (FindObjectsSortMode.None);
+        meshSlicers = FindObjectsByType<Mesh_Slicable> (FindObjectsSortMode.None);
 
         CreateCutPreviews ();
     }
@@ -283,7 +284,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         if (currentAmmo >= 2) return;
         foreach (var projectile in deployedInfinityMarkers)
         {
-            projectile.GetComponent<VacuumProjectile> ().KillProjectile (false);
+            projectile.GetComponent<Projectile_Vacumm> ().KillProjectile (false);
         }
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;
@@ -326,7 +327,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             if (_gameObject) Destroy (_gameObject);
         }
         slicedMeshes.Clear ();
-        foreach (ALTMeshSlicer _gameObject in originalSliceableObjects)
+        foreach (Mesh_Slicable _gameObject in originalSliceableObjects)
         {
             if (_gameObject) _gameObject.GoHome ();
         }
@@ -340,7 +341,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 {
                     if (_gameObject)
                     {
-                        _gameObject.GetComponent<ALTMeshSlicer> ().GoHome ();
+                        _gameObject.GetComponent<Mesh_Slicable> ().GoHome ();
                     }
                 }
             }
@@ -377,13 +378,13 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             return;
         }
 
-        if (!_actor.nullSpace && ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (_actor.transform.position) > 0)
+        if (!_actor.nullSpace && Alt_Item_Geodesic_Utility_GeoGun.planeA.GetDistanceToPoint (_actor.transform.position) > 0)
         {
-            if (!ALTItem_Geodesic_Utility_GeoFolder.deployedRift) return;
+            if (!Alt_Item_Geodesic_Utility_GeoGun.deployedRift) return;
             //move actor away from collapse direction scaled by the rift timer's progress
-            _actor.transform.position += ALTItem_Geodesic_Utility_GeoFolder.deployedRift.transform.forward *
-                                    ALTItem_Geodesic_Utility_GeoFolder.riftWidth *
-                                    (ALTItem_Geodesic_Utility_GeoFolder.lerpAmount);
+            _actor.transform.position += Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform.forward *
+                                    Alt_Item_Geodesic_Utility_GeoGun.riftWidth *
+                                    (Alt_Item_Geodesic_Utility_GeoGun.lerpAmount);
         }
     }
 
@@ -397,9 +398,9 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     {
         if (currentAmmo <= 0) return;
         currentAmmo--;
-        var projectile = Instantiate (vacuumProjectile, barrelTransform.transform.position, barrelTransform.rotation, null);
+        var projectile = Instantiate (projectileVacumm, barrelTransform.transform.position, barrelTransform.rotation, null);
         projectile.InitializeProjectile (projectileForce);
-        projectile.geoFolder = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+        projectile.geoGun = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
         deployedInfinityMarkers.Add (projectile.gameObject);
     }
 
@@ -410,7 +411,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         {
             foreach (var marker in deployedInfinityMarkers)
             {
-                if (!marker.GetComponent<VacuumProjectile> ().pinned)
+                if (!marker.GetComponent<Projectile_Vacumm> ().pinned)
                 {
                     return false;
                 }
@@ -431,7 +432,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             if (deployedRift)
             {
                 Debug.Log ("CONVERGING");
-                meshSlicers = FindObjectsOfType<ALTMeshSlicer> ();
+                meshSlicers = FindObjectsOfType<Mesh_Slicable> ();
                 nullSlices = new List<GameObject> ();
                 planeBMeshes = Instantiate (new GameObject ());
                 planeBMeshes.name = "planeBMeshes";

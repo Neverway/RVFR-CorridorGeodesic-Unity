@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile: MonoBehaviour
+public class Projectile_VacummNew: MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -38,7 +38,7 @@ public class Projectile: MonoBehaviour
     //=-----------------=
     public virtual void Awake()
     {
-        ignoreMask = ReferenceManager.Instance.playerProjectileIgnoreMask;
+        ignoreMask = CorGeo_ReferenceManager.Instance.playerProjectileIgnoreMask;
         lastPosition = transform.position;
     }
     private void Update()
