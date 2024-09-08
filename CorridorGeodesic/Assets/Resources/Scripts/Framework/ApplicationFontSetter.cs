@@ -34,10 +34,10 @@ public class ApplicationFontSetter : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-    
+        InvokeRepeating(nameof(UpdateFonts), 0, 1);
     }
 
-    private void Update()
+    private void UpdateFonts()
     {
         TMP_FontAsset targetFont = null;
         switch (currentFont)
