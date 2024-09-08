@@ -27,11 +27,16 @@ public class CorGeo_ActorData : MonoBehaviour
     [ReadOnly] [SerializeField] public Vector3 homePosition;
     [ReadOnly] [SerializeField] public Vector3 homeScale;
     [ReadOnly] [SerializeField] public Transform homeParent;
-    [ReadOnly] [SerializeField] public bool nullSpace = false;
     [ReadOnly] [SerializeField] public bool dynamic = false;
     [ReadOnly][SerializeField] public bool crushInNullSpace = true;
     public event Action OnRiftRestore;
-    
+
+    public enum Space
+    {
+        None, A, B, Null
+    }
+
+    public Space space = Space.None;
 
     //=-----------------=
     // Private Variables
@@ -74,12 +79,12 @@ public class CorGeo_ActorData : MonoBehaviour
         gameObject.SetActive (true); //todo: remember if object was active before crushing
         transform.SetParent(homeParent);
         transform.localScale = homeScale;
-        if (nullSpace && !dynamic)
+        if (space == Space.Null && !dynamic)
         {
             transform.position = homePosition;
             return;
         }
-        if (!nullSpace && Alt_Item_Geodesic_Utility_GeoGun.planeA.GetDistanceToPoint (transform.position) > 0)
+        if (space != Space.Null && Alt_Item_Geodesic_Utility_GeoGun.planeA.GetDistanceToPoint (transform.position) > 0)
         {
             if (!Alt_Item_Geodesic_Utility_GeoGun.deployedRift) return;
             //move actor away from collapse direction scaled by the rift timer's progress
