@@ -271,7 +271,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
     }
 
-    private void RecallInfinityMarkers ()
+    public void RecallInfinityMarkers ()
     {
         if (currentAmmo >= 2) return;
         foreach (var projectile in deployedInfinityMarkers)

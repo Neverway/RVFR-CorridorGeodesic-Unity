@@ -9,12 +9,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pawn_WeaponInventory : MonoBehaviour
+[RequireComponent(typeof(NEW_LogicProcessor))]
+public class Func_GeoGunFizzler : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public bool hasGeoGun;
+    public NEW_LogicProcessor inputSignal;
 
 
     //=-----------------=
@@ -25,7 +26,7 @@ public class Pawn_WeaponInventory : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private GameObject geoGun;
+    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
@@ -33,12 +34,16 @@ public class Pawn_WeaponInventory : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-    
+        logicProcessor = GetComponent<NEW_LogicProcessor>();
     }
 
     private void Update()
     {
-    
+        if (!inputSignal) return;
+        if (inputSignal.isPowered)
+        {
+            ClearGeoGunRifts();
+        }
     }
 
     //=-----------------=
@@ -49,17 +54,8 @@ public class Pawn_WeaponInventory : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void GiveGeoGun()
-    {
-        geoGun.SetActive(true);
-    }
-    
-    public void TakeGeoGun()
-    {
-        geoGun.SetActive(false);
-    }
     public void ClearGeoGunRifts()
     {
-        geoGun.GetComponent<Alt_Item_Geodesic_Utility_GeoGun>().RecallInfinityMarkers();
+        FindObjectOfType<Pawn_WeaponInventory>().ClearGeoGunRifts();
     }
 }
