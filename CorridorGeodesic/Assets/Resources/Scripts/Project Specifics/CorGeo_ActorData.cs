@@ -79,8 +79,8 @@ public class CorGeo_ActorData : MonoBehaviour
         OnRiftRestore?.Invoke();
         gameObject.SetActive(true); //todo: remember if object was active before crushing
         if (isParentedIgnoreOffsets) return;
-        transform.localScale = homeScale;
         transform.SetParent(homeParent);
+        transform.localScale = homeScale;
         if (space == Space.Null && !dynamic)
         {
             transform.position = homePosition;
