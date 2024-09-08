@@ -72,6 +72,10 @@ public class AudioSource_PitchVarienceModulator : MonoBehaviour
         audioSource.clip = _audioClip;
         SetAndPlayRandomPitch(_audioClip, _isOneShot);
     }
+    public void PlaySound()
+    {
+        SetAndPlayRandomPitch(null, false);
+    }
 
     /// <summary>
     /// Sets the pitch of the audio source to a random value within the defined range and plays the audio.
