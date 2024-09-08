@@ -50,12 +50,6 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     public static List<GameObject> slicedMeshes = new List<GameObject> ();
     public static List<CorGeo_ActorData> CorGeo_ActorDatas = new List<CorGeo_ActorData> ();
 
-
-    //Object groups for moving slice
-    public List<CorGeo_ActorData> aSpaceObjects;
-    public List<CorGeo_ActorData> bSpaceObjects;
-    public List<CorGeo_ActorData> nullSpaceObjects;
-
     //Object groups for resetting
 
     //Rift collapse lerp 
@@ -148,16 +142,14 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 planeBMeshes.transform.position = Vector3.Lerp (planeBStartPos, planeBStartPos + targetOffset, lerpAmount);
 
                 // Collapse actors in planeB/B-Space
-                foreach (CorGeo_ActorData obj in bSpaceObjects)
+                foreach (CorGeo_ActorData obj in CorGeo_ActorDatas)
                 {
-                    //obj.transform.position = Vector3.Lerp(obj.homePosition, obj.homePosition + targetOffset, lerpAmount);
+                    if (obj.space == CorGeo_ActorData.Space.B)
+                    {
+                        obj.transform.position += cutPreviews[1].transform.position - previousPlanePosition;
+                    }
 
-                    obj.transform.position += cutPreviews[1].transform.position - previousPlanePosition;
-                }
-
-                foreach (CorGeo_ActorData obj in nullSpaceObjects)
-                {
-                    if (obj.dynamic && !obj.crushInNullSpace)
+                    if (obj.space == CorGeo_ActorData.Space.Null && obj.dynamic && !obj.crushInNullSpace)
                     {
                         //Get object's position relative to the rift, then move the object based on the new size of the rift.
                         float percent = planeA.GetDistanceToPoint (obj.transform.position) / prevRiftWidth;
@@ -349,7 +341,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         // Reset the value used to track if an actor is in null space
         foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
         {
-            actor.nullSpace = false;
+            actor.space = CorGeo_ActorData.Space.None;
         }
 
         if (isCollapseStarted == false && deployedRift)
@@ -364,7 +356,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
     private void RecallDynamicActor (CorGeo_ActorData _actor)
     {
-        if (nullSpaceObjects.Contains (_actor))
+        if (_actor.space == CorGeo_ActorData.Space.Null)
         {
             _actor.transform.SetParent (_actor.homeParent, true);
             _actor.transform.localScale = _actor.homeScale;
@@ -377,7 +369,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             return;
         }
 
-        if (!_actor.nullSpace && ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (_actor.transform.position) > 0)
+        if (_actor.space != CorGeo_ActorData.Space.Null && ALTItem_Geodesic_Utility_GeoFolder.planeA.GetDistanceToPoint (_actor.transform.position) > 0)
         {
             if (!ALTItem_Geodesic_Utility_GeoFolder.deployedRift) return;
             //move actor away from collapse direction scaled by the rift timer's progress
@@ -465,17 +457,13 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         if (!deployedRift) return;
         // Reposition objects in A & B space to match the change in distance between the markers
 
-        aSpaceObjects = new List<CorGeo_ActorData> ();
-        bSpaceObjects = new List<CorGeo_ActorData> ();
-        nullSpaceObjects = new List<CorGeo_ActorData> ();
-
         foreach (var actor in CorGeo_ActorDatas)
         {
             float distance1 = planeA.GetDistanceToPoint (actor.transform.position);
 
             if (distance1 < 0)
             {
-                aSpaceObjects.Add (actor);
+                actor.space = CorGeo_ActorData.Space.A;
                 continue;
             }
 
@@ -483,24 +471,23 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
             if (distance2 < 0)
             {
-                bSpaceObjects.Add (actor);
+                actor.space = CorGeo_ActorData.Space.B;
                 actor.homePosition = actor.transform.position;
                 continue;
             }
 
             //if both distances are >= 0, we are in null space.
-
-            // Check to make sure the object we want to add is not the player (This is because the player should not be squished in null space)
-            //if (FindObjectOfType<GameInstance>().localPlayerCharacter == actor.GetComponent<Pawn>()) continue;
-            nullSpaceObjects.Add (actor);
+            actor.space = CorGeo_ActorData.Space.Null;
         }
 
-        foreach (var actor in nullSpaceObjects)
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
         {
-            if (!actor.crushInNullSpace) continue;
-            actor.homePosition = actor.transform.position;
-            actor.transform.SetParent (deployedRift.transform);
-            actor.nullSpace = true;
+            if (actor.space == CorGeo_ActorData.Space.Null)
+            {
+                if (!actor.crushInNullSpace) continue;
+                actor.homePosition = actor.transform.position;
+                actor.transform.SetParent (deployedRift.transform);
+            }
         }
         cutPreviews[1].transform.SetParent (planeBMeshes.transform);
     }
@@ -519,71 +506,70 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             }
             switch (GetActorRiftSpace (actor))
             {
-                case "a-space":
-                    if (!aSpaceObjects.Contains (actor))
+                case CorGeo_ActorData.Space.A:
+                    if (actor.space == CorGeo_ActorData.Space.Null)
                     {
-                        if (nullSpaceObjects.Contains (actor))
+                        Debug.Log ($"{actor.gameObject.name} moved [Null] -> [A]");
+                        if (actor.crushInNullSpace)
                         {
-                            Debug.Log ($"{actor.gameObject.name} moved [Null] -> [A]");
-                            nullSpaceObjects.Remove (actor);
-                            actor.nullSpace = false;
                             actor.transform.SetParent (actor.homeParent);
                             actor.transform.localScale = actor.homeScale;
                         }
-                        else if (bSpaceObjects.Contains (actor))
-                        {
-                            bSpaceObjects.Remove (actor);
-                            Debug.Log ($"{actor.gameObject.name} moved [B] -> [A]");
-                        }
-                        // Assign their new space
-                        aSpaceObjects.Add (actor);
+                        actor.space = CorGeo_ActorData.Space.A;
                         continue;
                     }
-                    continue;
-                case "b-space":
-                    if (!bSpaceObjects.Contains (actor))
+                    if (actor.space == CorGeo_ActorData.Space.B)
                     {
-                        if (nullSpaceObjects.Contains (actor))
+                        Debug.Log ($"{actor.gameObject.name} moved [B] -> [A]");
+                        actor.space = CorGeo_ActorData.Space.A;
+                        continue;
+                    }
+                    actor.space = CorGeo_ActorData.Space.A;
+                    continue;
+                case CorGeo_ActorData.Space.B:
+                    if (actor.space == CorGeo_ActorData.Space.Null)
+                    {
+                        if (actor.crushInNullSpace)
                         {
-                            nullSpaceObjects.Remove (actor);
-                            Debug.Log ($"{actor.gameObject.name} moved [Null] -> [B]");
-                            actor.nullSpace = false;
                             actor.transform.SetParent (actor.homeParent);
                             actor.transform.localScale = actor.homeScale;
                         }
-                        else if (aSpaceObjects.Contains (actor))
-                        {
-                            aSpaceObjects.Remove (actor);
-                            Debug.Log ($"{actor.gameObject.name} moved [A] -> [B]");
-                        }
-                        // Assign their new space
-                        bSpaceObjects.Add (actor);
+                        actor.space = CorGeo_ActorData.Space.B;
+                        Debug.Log ($"{actor.gameObject.name} moved [Null] -> [B]");
                         continue;
                     }
-                    continue;
-                case "null-space":
-                    if (!nullSpaceObjects.Contains (actor))
+                    if (actor.space == CorGeo_ActorData.Space.A)
                     {
-                        if (aSpaceObjects.Contains (actor))
-                        {
-                            Debug.Log ($"{actor.gameObject.name} moved [A] -> [Null]");
-                            aSpaceObjects.Remove (actor);
-                        }
-                        else if (bSpaceObjects.Contains (actor))
-                        {
-                            bSpaceObjects.Remove (actor);
-                            Debug.Log ($"{actor.gameObject.name} moved [B] -> [Null]");
-                        }
+                        actor.space = CorGeo_ActorData.Space.B;
+                        Debug.Log ($"{actor.gameObject.name} moved [A] -> [B]");
+                        continue;
+                    }
+                    actor.space = CorGeo_ActorData.Space.B;
+                    continue;
+                case CorGeo_ActorData.Space.Null:
+                    if (actor.space == CorGeo_ActorData.Space.A)
+                    {
                         actor.homePosition = actor.transform.position;
                         if (actor.crushInNullSpace)
                         {
                             actor.transform.SetParent (deployedRift.transform);
-                            actor.nullSpace = true;
                         }
-                        // Assign their new space
-                        nullSpaceObjects.Add (actor);
+                        actor.space = CorGeo_ActorData.Space.Null;
+                        Debug.Log ($"{actor.gameObject.name} moved [A] -> [Null]");
                         continue;
                     }
+                    if (actor.space == CorGeo_ActorData.Space.B)
+                    {
+                        actor.homePosition = actor.transform.position;
+                        if (actor.crushInNullSpace)
+                        {
+                            actor.transform.SetParent (deployedRift.transform);
+                        }
+                        actor.space = CorGeo_ActorData.Space.Null;
+                        Debug.Log ($"{actor.gameObject.name} moved [B] -> [Null]");
+                        continue;
+                    }
+                    actor.space = CorGeo_ActorData.Space.Null;
                     continue;
             }
         }
@@ -617,7 +603,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     /// Returns weather an actor is in A-Space, B-Space, or Null-Space
     /// </summary>
     /// <returns></returns>
-    private string GetActorRiftSpace (CorGeo_ActorData _actor)
+    private CorGeo_ActorData.Space GetActorRiftSpace (CorGeo_ActorData _actor)
     {
         float distance1 = planeA.GetDistanceToPoint (_actor.transform.position);
         float distance2 = planeB.GetDistanceToPoint (_actor.transform.position);
@@ -626,15 +612,15 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         if (distance1 < 0)
         {
-            return "a-space";
+            return CorGeo_ActorData.Space.A;
         }
 
         if (distance2 < 0)
         {
-            return "b-space";
+            return CorGeo_ActorData.Space.B;
         }
 
-        return "null-space";
+        return CorGeo_ActorData.Space.Null;
     }
 
     //=-----------------=
