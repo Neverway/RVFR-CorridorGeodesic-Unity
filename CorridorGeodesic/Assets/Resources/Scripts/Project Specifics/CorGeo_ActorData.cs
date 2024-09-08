@@ -28,7 +28,8 @@ public class CorGeo_ActorData : MonoBehaviour
     [ReadOnly] [SerializeField] public Vector3 homeScale;
     [ReadOnly] [SerializeField] public Transform homeParent;
     [ReadOnly] [SerializeField] public bool dynamic = false;
-    [ReadOnly][SerializeField] public bool crushInNullSpace = true;
+    [ReadOnly] [SerializeField] public bool crushInNullSpace = true;
+    [ReadOnly] [SerializeField] public bool isParentedIgnoreOffsets = false;
     public event Action OnRiftRestore;
 
     public enum Space
@@ -76,9 +77,10 @@ public class CorGeo_ActorData : MonoBehaviour
     public void GoHome ()
     {
         OnRiftRestore?.Invoke();
-        gameObject.SetActive (true); //todo: remember if object was active before crushing
-        transform.SetParent(homeParent);
+        gameObject.SetActive(true); //todo: remember if object was active before crushing
+        if (isParentedIgnoreOffsets) return;
         transform.localScale = homeScale;
+        transform.SetParent(homeParent);
         if (space == Space.Null && !dynamic)
         {
             transform.position = homePosition;

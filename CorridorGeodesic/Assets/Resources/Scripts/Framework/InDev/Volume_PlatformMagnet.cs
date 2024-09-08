@@ -38,7 +38,15 @@ public class Volume_PlatformMagnet : Volume
             if (_other.GetComponent<Pawn>())
             {
                 _other.transform.SetParent(gameObject.transform);
+                // TODO THIS IS A CORGEO FUNC, REMOVE ME LATER!!
+                _other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = true;
             }
+        }
+        if (_other.CompareTag("PhysProp"))
+        {
+            _other.transform.SetParent(gameObject.transform);
+            // TODO THIS IS A CORGEO FUNC, REMOVE ME LATER!!
+            _other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = true;
         }
     }
 
@@ -50,7 +58,15 @@ public class Volume_PlatformMagnet : Volume
             if (_other.GetComponent<Pawn>())
             {
                 _other.transform.SetParent(null);
+                // TODO THIS IS A CORGEO FUNC, REMOVE ME LATER!!
+                _other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = false;
             }
+        }
+        if (_other.CompareTag("PhysProp"))
+        {
+            _other.transform.SetParent(null);
+            // TODO THIS IS A CORGEO FUNC, REMOVE ME LATER!!
+            _other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = false;
         }
     }
     
