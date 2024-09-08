@@ -60,25 +60,26 @@ public class AudioSource_PitchVarienceModulator : MonoBehaviour
     public IEnumerator PlaySound(float _delay)
     {
         yield return new WaitForSeconds(_delay);
-        SetAndPlayRandomPitch();
+        SetAndPlayRandomPitch(null, false);
     }
 
     /// <summary>
     /// Plays a specific audio clip with a randomized pitch within the defined range.
     /// </summary>
     /// <param name="_audioClip">The audio clip to play.</param>
-    public void PlaySound(AudioClip _audioClip)
+    public void PlaySound(AudioClip _audioClip, bool _isOneShot = true)
     {
         audioSource.clip = _audioClip;
-        SetAndPlayRandomPitch();
+        SetAndPlayRandomPitch(_audioClip, _isOneShot);
     }
 
     /// <summary>
     /// Sets the pitch of the audio source to a random value within the defined range and plays the audio.
     /// </summary>
-    private void SetAndPlayRandomPitch()
+    private void SetAndPlayRandomPitch(AudioClip _audioClip, bool _isOneShot)
     {
         audioSource.pitch = Random.Range(pitchVariance.x, pitchVariance.y);
-        audioSource.Play();
+        if (!_isOneShot) audioSource.Play();
+        if (_isOneShot) audioSource.PlayOneShot(_audioClip);
     }
 }
