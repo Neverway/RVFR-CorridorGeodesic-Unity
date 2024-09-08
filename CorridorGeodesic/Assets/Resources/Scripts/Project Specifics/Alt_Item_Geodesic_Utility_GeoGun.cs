@@ -25,11 +25,13 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     // Private Variables
     //=-----------------=
     public Vector3 previousPlanePosition;
+    private AudioSource_PitchVarienceModulator audioSource;
 
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [SerializeField] private AudioClip projectileTravel, projectileFire;
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private Transform centerViewTransform;
     [SerializeField] private GameObject debugObject;
@@ -81,6 +83,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         meshSlicers = FindObjectsByType<Mesh_Slicable> (FindObjectsSortMode.None);
 
         CreateCutPreviews ();
+        audioSource = GetComponent<AudioSource_PitchVarienceModulator>();
     }
 
     public override void UsePrimary ()
@@ -281,6 +284,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;
 
+
         if (cutPreviews[0])
         {
             cutPreviews[0].transform.SetParent (null);
@@ -390,6 +394,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     {
         if (currentAmmo <= 0) return;
         currentAmmo--;
+        audioSource.PlaySound(projectileFire);
+        audioSource.PlaySound(projectileTravel);
         var projectile = Instantiate (projectileVacumm, barrelTransform.transform.position, barrelTransform.rotation, null);
         projectile.InitializeProjectile (projectileForce);
         projectile.geoGun = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration

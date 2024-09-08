@@ -24,13 +24,15 @@ public class Projectile_Vacumm : Projectile_VacummNew
     //=-----------------=
     // Private Variables
     //=-----------------=
+    private AudioSource_PitchVarienceModulator audioSource;
 
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
     [FormerlySerializedAs("geoFolder")] [HideInInspector] public Alt_Item_Geodesic_Utility_GeoGun geoGun; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
-
+    [SerializeField] private AudioClip markerPinned;
+    
     //=-----------------=
     // Mono Functions
     //=-----------------=
@@ -39,6 +41,7 @@ public class Projectile_Vacumm : Projectile_VacummNew
         base.Awake();
 
         StartCoroutine(Lifetime());
+        audioSource = GetComponent<AudioSource_PitchVarienceModulator>();
     }
 
     //=-----------------=
@@ -81,6 +84,8 @@ public class Projectile_Vacumm : Projectile_VacummNew
         transform.rotation = Quaternion.LookRotation(-hit.normal);
         transform.position = hit.point;
         transform.localPosition += hit.normal * pinOffset;
+
+        audioSource.PlaySound(markerPinned);
 
         disabled = true;
     }
