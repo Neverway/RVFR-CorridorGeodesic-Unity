@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(NEW_LogicProcessor))]
-public class Elevator : MonoBehaviour
+public class Prop_Elevator : MonoBehaviour
 {
     //=-----------------=
     // Public Variables

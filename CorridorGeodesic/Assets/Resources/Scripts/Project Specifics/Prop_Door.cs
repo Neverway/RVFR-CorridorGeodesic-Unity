@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(NEW_LogicProcessor))]
-public class Door : MonoBehaviour
+public class Prop_Door : MonoBehaviour
 {
     //=-----------------=
     // Public Variables

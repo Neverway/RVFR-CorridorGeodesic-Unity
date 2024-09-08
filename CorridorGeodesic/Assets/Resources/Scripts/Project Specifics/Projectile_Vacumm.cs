@@ -8,8 +8,9 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class VacuumProjectile : Projectile
+public class Projectile_Vacumm : Projectile_VacummNew
 {
     //=-----------------=
     // Public Variables
@@ -28,7 +29,7 @@ public class VacuumProjectile : Projectile
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [HideInInspector] public ALTItem_Geodesic_Utility_GeoFolder geoFolder; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+    [FormerlySerializedAs("geoFolder")] [HideInInspector] public Alt_Item_Geodesic_Utility_GeoGun geoGun; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
 
     //=-----------------=
     // Mono Functions
@@ -61,7 +62,7 @@ public class VacuumProjectile : Projectile
             if (hit.collider.gameObject.TryGetComponent(out Renderer rend))
             {
                 int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
-                if (subMeshIndex != -1 && !ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
+                if (subMeshIndex != -1 && !CorGeo_ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
                 {
                     KillProjectile();
                     killScheduled = true;
@@ -96,14 +97,14 @@ public class VacuumProjectile : Projectile
         // update the list while the utility is trying to iterate through it (That's no good!) ~Liz
         
         // Give the projectile back to the weapon
-        if (geoFolder)
+        if (geoGun)
         {
-            if (geoFolder.currentAmmo < geoFolder.maxAmmo)
+            if (geoGun.currentAmmo < geoGun.maxAmmo)
             {
-                geoFolder.currentAmmo++;
+                geoGun.currentAmmo++;
             }
 
-            if (removeProjectileFromList) geoFolder.deployedInfinityMarkers.Remove(gameObject);
+            if (removeProjectileFromList) geoGun.deployedInfinityMarkers.Remove(gameObject);
         }
 
         //Spawn particle effect

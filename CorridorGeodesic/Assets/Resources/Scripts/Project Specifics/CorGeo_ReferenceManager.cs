@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReferenceManager : MonoBehaviour
+public class CorGeo_ReferenceManager : MonoBehaviour
 {
-    public static ReferenceManager Instance;
+    public static CorGeo_ReferenceManager Instance;
 
     [Header("Materials")]
     public List<Material> conductiveMats = new List<Material>();

@@ -9,11 +9,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item_Geodesic_Utility_GeoFolder : MonoBehaviour
+[RequireComponent(typeof(NEW_LogicProcessor))]
+public class Func_GeoGunGiver : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public NEW_LogicProcessor inputSignal;
 
 
     //=-----------------=
@@ -24,6 +26,7 @@ public class Item_Geodesic_Utility_GeoFolder : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
@@ -31,12 +34,20 @@ public class Item_Geodesic_Utility_GeoFolder : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-    
+        logicProcessor = GetComponent<NEW_LogicProcessor>();
     }
 
     private void Update()
     {
-    
+        if (!inputSignal) return;
+        logicProcessor.isPowered = inputSignal.isPowered;
+        if (logicProcessor.hasPowerStateChanged)
+        {
+            if (logicProcessor.isPowered)
+            {
+                GiveGeoGun();
+            }
+        }
     }
 
     //=-----------------=
@@ -47,4 +58,8 @@ public class Item_Geodesic_Utility_GeoFolder : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void GiveGeoGun()
+    {
+        FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+    }
 }

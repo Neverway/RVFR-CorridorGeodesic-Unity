@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NEW_Prop_LaserWall : LogicComponent
+public class Prop_LaserWall : LogicComponent
 {
     //=-----------------=
     // Public Variables

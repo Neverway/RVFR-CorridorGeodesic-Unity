@@ -5,8 +5,6 @@
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameObject_Billboard : MonoBehaviour
@@ -14,6 +12,7 @@ public class GameObject_Billboard : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [SerializeField] private float updateRate = 1;
 
 
     //=-----------------=
@@ -33,9 +32,10 @@ public class GameObject_Billboard : MonoBehaviour
     private void Start()
     {
         cameraManager = FindObjectOfType<CameraManager>();
+        InvokeRepeating(nameof(UpdateBillboard), 0, updateRate);
     }
 
-    private void Update()
+    private void UpdateBillboard()
     {
         if (!cameraManager)
         {

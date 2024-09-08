@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(NEW_LogicProcessor))]
-public class Laser_Detector : MonoBehaviour
+public class Prop_Laser_Detector : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
