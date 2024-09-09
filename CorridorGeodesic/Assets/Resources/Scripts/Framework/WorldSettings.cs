@@ -75,14 +75,14 @@ public class WorldSettings : MonoBehaviour
                 var distanceToEntity = Vector3.Distance(pawn.transform.position,  new Vector3(0,0,0));
                 if (distanceToEntity >= worldKillVolumeDistance || distanceToEntity <= (worldKillVolumeDistance * -1))
                 {
-                    Destroy(pawn.gameObject);
+                    pawn.ModifyHealth(-99999);
                 }
             }
             if (!disableWorldKillY)
             {
                 if (pawn.transform.position.y <= worldKillYDistance)
                 {
-                    Destroy(pawn.gameObject);
+                    pawn.ModifyHealth(-99999);
                 }
             }
         }
