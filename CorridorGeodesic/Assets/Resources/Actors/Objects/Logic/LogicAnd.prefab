@@ -71,16 +71,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4574540679803921474, guid: eb80098e820b8caaea7a7935cfd7ce86,
         type: 3}
-      propertyPath: scriptDataList.Array.data[0].targetScript
-      value: 
-      objectReference: {fileID: 8344177815406209132}
-    - target: {fileID: 4574540679803921474, guid: eb80098e820b8caaea7a7935cfd7ce86,
-        type: 3}
-      propertyPath: scriptDataList.Array.data[1].targetScript
-      value: 
-      objectReference: {fileID: 8344177815406209132}
-    - target: {fileID: 4574540679803921474, guid: eb80098e820b8caaea7a7935cfd7ce86,
-        type: 3}
       propertyPath: scriptDataList.Array.data[0].exposedVariables.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -109,14 +99,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LogicAnd
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8418873826368600983, guid: eb80098e820b8caaea7a7935cfd7ce86, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5070548219321812015, guid: eb80098e820b8caaea7a7935cfd7ce86,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8344177815406209132}
     - targetCorrespondingSourceObject: {fileID: 5070548219321812015, guid: eb80098e820b8caaea7a7935cfd7ce86,
         type: 3}
       insertIndex: -1
@@ -128,20 +115,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8023107962574464240}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8344177815406209132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2957170137782903007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7026907fb1fed7b83af97565e8aef085, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputA: {fileID: 0}
-  inputB: {fileID: 0}
 --- !u!114 &3265414697423606441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,4 +128,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 0
-  inputs: []
+  inputSignals: []

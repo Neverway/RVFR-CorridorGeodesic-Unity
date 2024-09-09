@@ -20,7 +20,7 @@ public class LogicOr : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private List<LogicComponent> inputs = new List<LogicComponent>();
+    [SerializeField] private List<LogicComponent> inputSignals = new List<LogicComponent>();
 
     //=-----------------=
     // Reference Variables
@@ -30,28 +30,28 @@ public class LogicOr : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void OnEnable()
-    {
-        if (inputs.Count == 0)
-            return;
+    //private void OnEnable()
+    //{
+    //    if (inputs.Count == 0)
+    //        return;
 
-        inputs.ForEach(i =>
-        {
-            if (i)
-                i.OnPowerStateChanged += SourcePowerStateChanged;
-        });
-    }
-    private void OnDestroy()
-    {
-        if (inputs.Count == 0)
-            return;
+    //    inputs.ForEach(i =>
+    //    {
+    //        if (i)
+    //            i.OnPowerStateChanged += SourcePowerStateChanged;
+    //    });
+    //}
+    //private void OnDestroy()
+    //{
+    //    if (inputs.Count == 0)
+    //        return;
 
-        inputs.ForEach(i => 
-        {
-            if (i)
-                i.OnPowerStateChanged -= SourcePowerStateChanged;
-        });
-    }
+    //    inputs.ForEach(i => 
+    //    {
+    //        if (i)
+    //            i.OnPowerStateChanged -= SourcePowerStateChanged;
+    //    });
+    //}
 
     //=-----------------=
     // Internal Functions
@@ -61,8 +61,13 @@ public class LogicOr : LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.AddRange(inputSignals);
+        base.AutoSubscribe();
+    }
     public override void SourcePowerStateChanged(bool powered)
     {
-        isPowered = inputs.Any(i => i && i.isPowered);
+        isPowered = inputSignals.Any(i => i && i.isPowered);
     }
 }

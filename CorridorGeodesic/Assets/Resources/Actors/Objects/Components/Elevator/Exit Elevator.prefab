@@ -178,6 +178,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ebb660f2fe76334a8d657592c1d816e, type: 3}
+--- !u!114 &4192021995242413268 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4212473808872839874, guid: 0ebb660f2fe76334a8d657592c1d816e,
+    type: 3}
+  m_PrefabInstance: {fileID: 24975780665411094}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf978b39f9a2b6508a1bb2cebc9cd4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &5152998398235331748 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5177903629548751538, guid: 0ebb660f2fe76334a8d657592c1d816e,
@@ -190,18 +202,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 24975780665411094}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8172761126207813070 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8157076270538044376, guid: 0ebb660f2fe76334a8d657592c1d816e,
-    type: 3}
-  m_PrefabInstance: {fileID: 24975780665411094}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3595728269706188201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -520,8 +520,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9122264b5582dfd0eb0be0104ece533e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorSignal: {fileID: 0}
-  liftSignal: {fileID: 8172761126207813070}
+  _isPowered: 0
+  activateSignal: {fileID: 0}
+  liftSignal: {fileID: 4192021995242413268}
+  descendSpeed: 3
   elevatorTransform: {fileID: 5248688764080458505}
   animator: {fileID: 5152998398235331748}
 --- !u!114 &7587946132603461075

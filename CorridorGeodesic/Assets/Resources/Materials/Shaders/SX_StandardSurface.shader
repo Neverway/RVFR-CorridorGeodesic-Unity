@@ -12,9 +12,10 @@ Shader "Soulex/SX_Standard Surface"
         _Roughness ("Roughness Power", Range(0.0, 1.0)) = 0.5
         [NoScaleOffset] _RoughnessMap ("Roughness Map", 2D) = "white" {}
 
-        [Gamma] _Metallic ("Metallic Power", Range(0.0, 1.0)) = 0.0
+        _Metallic ("Metallic Power", Range(0.0, 1.0)) = 0.0
         [NoScaleOffset] _MetallicMap ("Metallic Map", 2D) = "white" {}
 
+        _NormalPower ("Normal Power", Range(0.0, 1.0)) = 1.0
         [NoScaleOffset][Normal] _Normal ("Normal Map", 2D) = "bump" {}
 
         _HeightScale ("Height Scale", Range(0, 0.08)) = 0
@@ -35,6 +36,7 @@ Shader "Soulex/SX_Standard Surface"
         CGPROGRAM
 
         #pragma surface surf Standard fullforwardshadows
+        #include "UnityStandardUtils.cginc"
 
         #pragma target 3.0
 
@@ -45,6 +47,7 @@ Shader "Soulex/SX_Standard Surface"
         };
 
         float _AlphaClip;
+        half _NormalPower;
 
         sampler2D _MainTex;
 
@@ -66,13 +69,6 @@ Shader "Soulex/SX_Standard Surface"
 
         fixed4 _Color;
 
-        // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
-        // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
-        // #pragma instancing_options assumeuniformscaling
-        UNITY_INSTANCING_BUFFER_START(Props)
-            // put more per-instance properties here
-        UNITY_INSTANCING_BUFFER_END(Props)
-
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             float2 uv = IN.uv_MainTex * _Tiling + _Offset;
@@ -84,7 +80,7 @@ Shader "Soulex/SX_Standard Surface"
 
             o.Albedo = col.rgb;
 
-            o.Normal = UnpackNormal(tex2D(_Normal, uv));
+            o.Normal = UnpackScaleNormal(tex2D(_Normal, uv), _NormalPower);
 
             o.Metallic = tex2D(_MetallicMap, uv).r * _Metallic;
 

@@ -19,7 +19,7 @@ public class Logic_Toggle : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent input;
+    [SerializeField] private LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
@@ -29,16 +29,16 @@ public class Logic_Toggle : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void OnEnable()
-    {
-        if (input)
-            input.OnPowerStateChanged += SourcePowerStateChanged;
-    }
-    private void OnDestroy()
-    {
-        if (input)
-            input.OnPowerStateChanged -= SourcePowerStateChanged;
-    }
+    //private void OnEnable()
+    //{
+    //    if (input)
+    //        input.OnPowerStateChanged += SourcePowerStateChanged;
+    //}
+    //private void OnDestroy()
+    //{
+    //    if (input)
+    //        input.OnPowerStateChanged -= SourcePowerStateChanged;
+    //}
 
     //=-----------------=
     // Internal Functions
@@ -48,6 +48,11 @@ public class Logic_Toggle : LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.Add(inputSignal);
+        base.AutoSubscribe();
+    }
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);

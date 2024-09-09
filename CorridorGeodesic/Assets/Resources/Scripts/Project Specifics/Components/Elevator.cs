@@ -20,7 +20,7 @@ public class Elevator : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent elevatorSignal, liftSignal;
+    [SerializeField] private LogicComponent activateSignal, liftSignal;
     [SerializeField] private float descendSpeed = 3;
     private bool elevatorActivated;
 
@@ -34,11 +34,10 @@ public class Elevator : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void OnDrawGizmos()
-    {
-        if (elevatorSignal) Debug.DrawLine(transform.position, elevatorSignal.transform.position, Color.blue);
-    }
-
+    //private void OnDrawGizmos()
+    //{
+    //    if (activateSignal) Debug.DrawLine(transform.position, activateSignal.transform.position, Color.blue);
+    //}
 
     //=-----------------=
     // Internal Functions
@@ -57,15 +56,21 @@ public class Elevator : LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.Add(activateSignal);
+        subscribeLogicComponents.Add(liftSignal);
+        base.AutoSubscribe();
+    }
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);
 
         if (!elevatorActivated)
         {
-            if (elevatorSignal)
+            if (activateSignal)
             {
-                isPowered = elevatorSignal.isPowered;
+                isPowered = activateSignal.isPowered;
                 animator.SetBool("Powered", isPowered);
             }
 

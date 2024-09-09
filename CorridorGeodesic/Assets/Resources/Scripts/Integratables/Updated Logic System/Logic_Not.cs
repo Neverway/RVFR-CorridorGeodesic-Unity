@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Logic_Not: LogicComponent
+public class Logic_Not : LogicComponent
 {
     //=-----------------=
     // Public Variables
@@ -19,7 +19,7 @@ public class Logic_Not: LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent input;
+    [SerializeField] private LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
@@ -29,16 +29,16 @@ public class Logic_Not: LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void OnEnable()
-    {
-        if (input)
-            input.OnPowerStateChanged += SourcePowerStateChanged;
-    }
-    private void OnDestroy()
-    {
-        if (input)
-            input.OnPowerStateChanged -= SourcePowerStateChanged;
-    }
+    //private void OnEnable()
+    //{
+    //    if (input)
+    //        input.OnPowerStateChanged += SourcePowerStateChanged;
+    //}
+    //private void OnDestroy()
+    //{
+    //    if (input)
+    //        input.OnPowerStateChanged -= SourcePowerStateChanged;
+    //}
 
     //=-----------------=
     // Internal Functions
@@ -48,6 +48,11 @@ public class Logic_Not: LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.Add(inputSignal);
+        base.AutoSubscribe();
+    }
     public override void SourcePowerStateChanged(bool powered)
     {
         isPowered = !powered;

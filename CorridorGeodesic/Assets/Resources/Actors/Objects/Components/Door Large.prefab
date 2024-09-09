@@ -20,11 +20,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5051199325652713641, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
-      propertyPath: onOccupiedTransmit.Array.data[0]
-      value: 
-      objectReference: {fileID: 7527268568049605683}
-    - target: {fileID: 5051199325652713641, guid: 25ecce1d4d40796fc80bc4111abf4700,
-        type: 3}
       propertyPath: onOccupied.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -180,16 +175,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 25ecce1d4d40796fc80bc4111abf4700, type: 3}
---- !u!114 &5982742053907348327 stripped
+--- !u!114 &5057422706704780782 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5994322015025837600, guid: 25ecce1d4d40796fc80bc4111abf4700,
+  m_CorrespondingSourceObject: {fileID: 5051199325652713641, guid: 25ecce1d4d40796fc80bc4111abf4700,
     type: 3}
   m_PrefabInstance: {fileID: 15450536020741447}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Script: {fileID: 11500000, guid: 66a2b6dd573eced7f98260ed9f7d8d60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &8331354840227406419 stripped
@@ -307,10 +302,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 369627841793239761}
-    - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7527268568049605683}
   m_SourcePrefab: {fileID: 100100000, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
 --- !u!4 &4699421934600881159 stripped
 Transform:
@@ -336,7 +327,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d865b08fdbf89316da3d0a7404953ce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSignal: {fileID: 5982742053907348327}
+  _isPowered: 0
+  inputSignal: {fileID: 5057422706704780782}
   animator: {fileID: 818395751258156438}
   onPowered:
     m_PersistentCalls:
@@ -344,21 +336,6 @@ MonoBehaviour:
   onUnpowered:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7527268568049605683
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5053195466703233329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPowered: 0
-  hasPowerStateChanged: 0
-  incomingPowerSignals: []
 --- !u!1001 &8891737757010969508
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -20,6 +20,7 @@ Shader "Soulex/SX_Standard Toon"
         _Metallic ("Metallic Power", Range(0.0, 1.0)) = 0.0
         [NoScaleOffset] _MetallicMap ("Metallic Map", 2D) = "white" {}
 
+        _NormalPower ("Normal Power", Range(0.0, 1.0)) = 1.0
         [NoScaleOffset][Normal] _Normal ("Normal Map", 2D) = "bump" {}
 
         _HeightScale ("Height Scale", Range(0, 0.08)) = 0
@@ -60,8 +61,7 @@ Shader "Soulex/SX_Standard Toon"
         };
 
         half _RampSmoothness;
-        half _SpecularSmoothness;
-        half _SpecularCutoff;
+        half _NormalPower;
 
         float _AlphaClip;
 
@@ -191,7 +191,7 @@ Shader "Soulex/SX_Standard Toon"
 
             o.Albedo = col.rgb;
 
-            o.Normal = UnpackNormal(tex2D(_Normal, uv));
+            o.Normal = UnpackScaleNormal(tex2D(_Normal, uv), _NormalPower);
 
             o.Metallic = tex2D(_MetallicMap, uv).r * _Metallic;
 

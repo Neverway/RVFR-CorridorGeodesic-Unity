@@ -6,6 +6,7 @@
 //=============================================================================
 
 using System;
+using System.Collections;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -119,16 +120,22 @@ public class Volume_TriggerInteractable : Volume
         {
             return;
         }
-        onInteract.Invoke(); 
+        onInteract.Invoke();
         // Dear future me, please keep in mind that this will not be called unless the onInteractSignal is set. I don't know if I intended for it to work that way. (P.S. I am using "-" for empty activations) ~Past Liz M.
         // Dear past me, you are a fool and a coward. I fixed it. ~Future Liz M.
-        
+
         // Flip the current activation state
-        isPowered = !isPowered;
-        previousIsPoweredState = isPowered;
+        StartCoroutine(WaitUnpower());
+        //previousIsPoweredState = isPowered;
         
         // Update connected devices
         hasBeenTriggered = true;
+    }
+    IEnumerator WaitUnpower()
+    {
+        isPowered = true;
+        yield return new WaitForSeconds(0.1f);
+        isPowered = false;
     }
 
 

@@ -31,16 +31,16 @@ public class Logic_Comparator: LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void OnEnable()
-    {
-        if (counter)
-            counter.OnPowerStateChanged += SourcePowerStateChanged;
-    }
-    private void OnDestroy()
-    {
-        if (counter)
-            counter.OnPowerStateChanged -= SourcePowerStateChanged;
-    }
+    //private void OnEnable()
+    //{
+    //    if (counter)
+    //        counter.OnPowerStateChanged += SourcePowerStateChanged;
+    //}
+    //private void OnDestroy()
+    //{
+    //    if (counter)
+    //        counter.OnPowerStateChanged -= SourcePowerStateChanged;
+    //}
 
     //=-----------------=
     // Internal Functions
@@ -50,6 +50,11 @@ public class Logic_Comparator: LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.Add(counter);
+        base.AutoSubscribe();
+    }
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);
