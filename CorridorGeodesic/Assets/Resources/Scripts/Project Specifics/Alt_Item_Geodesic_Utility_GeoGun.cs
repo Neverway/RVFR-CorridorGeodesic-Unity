@@ -124,16 +124,40 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             CheckForActorSpaceChanges ();
         }
 
+        bool moveRiftBackwards = false;
+        bool moveRift = false;
+        if (secondaryHeld)
+        {
+            moveRiftBackwards = false;
+            moveRift = true;
+        }
+
+        //todo: finish coding the un-squish mechanic.
+        /*else if (Input.GetKey(KeyCode.LeftAlt))
+        {
+            moveRiftBackwards = true;
+            moveRift = true;
+        }*/
+
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
             // If converging, increase the riftTimer and relocate actors and meshes
-            if (secondaryHeld)
+            if (moveRift)
             {
-                riftTimer += Time.fixedDeltaTime;
+                if (moveRiftBackwards)
+                {
+                    riftTimer -= Time.fixedDeltaTime;
+                }
+                else
+                {
+                    riftTimer += Time.fixedDeltaTime;
+                }
+
+                riftTimer = Mathf.Clamp (riftTimer, -maxRiftTimer, maxRiftTimer);
 
                 // Calculate offset
                 Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
-                lerpAmount = Mathf.Clamp ((riftTimer / maxRiftTimer), 0, 1);
+                lerpAmount = riftTimer / maxRiftTimer;
 
                 float prevRiftWidth = deployedRift.transform.localScale.z * riftWidth;
 
@@ -143,14 +167,25 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 float newRiftWidth = deployedRift.transform.localScale.z * riftWidth;
 
                 // Collapse meshes in planeB/B-Space
-                planeBMeshes.transform.position = Vector3.Lerp (planeBStartPos, planeBStartPos + targetOffset, lerpAmount);
+                //planeBMeshes.transform.position = Vector3.Lerp (planeBStartPos, planeBStartPos + targetOffset, lerpAmount);
+
+                planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
 
                 // Collapse actors in planeB/B-Space
                 foreach (CorGeo_ActorData obj in CorGeo_ActorDatas)
                 {
                     if (obj.space == CorGeo_ActorData.Space.B)
                     {
-                        obj.transform.position += cutPreviews[1].transform.position - previousPlanePosition;
+                        Vector3 move = cutPreviews[1].transform.position - previousPlanePosition;
+
+                        if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
+                        {
+                            objRigidBody.MovePosition (obj.transform.position + move);
+                        }
+                        else
+                        {
+                            obj.transform.position += move;
+                        }
                     }
 
                     if (obj.space == CorGeo_ActorData.Space.Null && obj.dynamic && !obj.crushInNullSpace)
@@ -159,7 +194,17 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                         float percent = planeA.GetDistanceToPoint (obj.transform.position) / prevRiftWidth;
                         float oldDistance = prevRiftWidth * percent;
                         float newDistance = newRiftWidth * percent;
-                        obj.transform.position += riftNormal * (newDistance - oldDistance);
+
+                        Vector3 move = riftNormal * (newDistance - oldDistance);
+
+                        if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
+                        {
+                            objRigidBody.MovePosition (obj.transform.position + move);
+                        }
+                        else
+                        {
+                            obj.transform.position += move;
+                        }
                     }
                 }
 
@@ -169,7 +214,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
 
             // If we've converged the rift all the way, deactivate null-space actors and meshes
-            if (riftTimer > maxRiftTimer)
+            if (riftTimer >= maxRiftTimer)
             {
                 for (int i = 0; i < deployedRift.transform.childCount; i++)
                 {
