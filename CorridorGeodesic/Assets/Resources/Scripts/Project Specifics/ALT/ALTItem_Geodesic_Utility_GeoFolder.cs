@@ -172,7 +172,16 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                 {
                     if (obj.space == CorGeo_ActorData.Space.B)
                     {
-                        obj.transform.position += cutPreviews[1].transform.position - previousPlanePosition;
+                        Vector3 move = cutPreviews[1].transform.position - previousPlanePosition;
+
+                        if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
+                        {
+                            objRigidBody.MovePosition (obj.transform.position + move);
+                        }
+                        else
+                        {
+                            obj.transform.position += move;
+                        }
                     }
 
                     if (obj.space == CorGeo_ActorData.Space.Null && obj.dynamic && !obj.crushInNullSpace)
@@ -181,7 +190,17 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
                         float percent = planeA.GetDistanceToPoint (obj.transform.position) / prevRiftWidth;
                         float oldDistance = prevRiftWidth * percent;
                         float newDistance = newRiftWidth * percent;
-                        obj.transform.position += riftNormal * (newDistance - oldDistance);
+
+                        Vector3 move = riftNormal * (newDistance - oldDistance);
+
+                        if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
+                        {
+                            objRigidBody.MovePosition (obj.transform.position + move);
+                        }
+                        else
+                        {
+                            obj.transform.position += move;
+                        }
                     }
                 }
 
