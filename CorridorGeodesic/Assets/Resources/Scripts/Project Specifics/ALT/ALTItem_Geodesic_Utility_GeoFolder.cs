@@ -37,6 +37,8 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
+    [SerializeField] private bool allowExpandingRift = false;
+
     public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
     public static GameObject deployedRift;
     private ALTMeshSlicer[] meshSlicers;
@@ -127,13 +129,11 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
             moveRiftBackwards = false;
             moveRift = true;
         }
-
-        //todo: finish coding the un-squish mechanic.
-        /*else if (Input.GetKey(KeyCode.LeftAlt))
+        else if (Input.GetKey(KeyCode.LeftAlt) && allowExpandingRift)
         {
             moveRiftBackwards = true;
             moveRift = true;
-        }*/
+        }
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
@@ -144,7 +144,7 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
         }
     }
 
-    private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work just yet
+    private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work, we need to re-activate things that were trapped inside of it.
     {
         // If converging, increase the riftTimer and relocate actors and meshes
 
