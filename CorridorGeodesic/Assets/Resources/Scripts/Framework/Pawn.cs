@@ -27,27 +27,19 @@ public class Pawn : MonoBehaviour
     public bool isNearInteractable; // Imported from old system
     public bool destroyOnDeath; // Should this object be deleted once it dies
     public float destroyOnDeathDelay; // How long, in seconds, should we wait before deleting the pawn after death
-
-    private List<ContactPoint> contactPoints = new List<ContactPoint> (); // Used to perform advanced collision checks (like step-up checks)
+    
+    private List<ContactPoint> contactPoints = new List<ContactPoint>(); // Used to perform advanced collision checks (like step-up checks)
 
     public event Action OnPawnHurt;
     public event Action OnPawnHeal;
     public event Action OnPawnDeath;
-
+    
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
 
-    private int crushCalculationFrames = 3;
-    private int crushFrameCount = 0;
-    private float crushThreshold = 0.1f;
-    private float crushMeter = 0;
-    private float crushDamageThreshold = 3f;
-    private float crushDamageAmount = 101;
-    private Vector3 contactAverage = Vector3.zero;
-    private int contactAverageCount = 0;
 
     //=-----------------=
     // Reference Variables
@@ -61,18 +53,18 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Awake ()
+    private void Awake()
     {
-        PassCharacterDataToCurrentState ();
-        currentController.PawnAwake (this);
+        PassCharacterDataToCurrentState();
+        currentController.PawnAwake(this);
     }
 
-    private void Update ()
+    private void Update()
     {
         // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
-        if (FindObjectOfType<GameInstance> ())
+        if (FindObjectOfType<GameInstance>())
         {
-            if (FindObjectOfType<GameInstance> ().PlayerControllerClasses.Contains (currentController))
+            if (FindObjectOfType<GameInstance>().PlayerControllerClasses.Contains(currentController))
             {
                 isPossessed = true;
             }
@@ -81,60 +73,57 @@ public class Pawn : MonoBehaviour
                 isPossessed = false;
             }
         }
-        gameInstance = FindObjectOfType<GameInstance> ();
-        CheckCameraState ();
+        gameInstance = FindObjectOfType<GameInstance>();
+        CheckCameraState();
         if (isDead) return;
-        currentController.PawnUpdate (this);
+        currentController.PawnUpdate(this);
     }
 
-    private void FixedUpdate ()
+    private void FixedUpdate()
     {
         if (isDead) return;
-
-        TestCrush ();
-
-        currentController.PawnFixedUpdate (this);
-        contactPoints.Clear (); //Deletes all ContactPoints collected from the last physics frame
+        currentController.PawnFixedUpdate(this);
+        contactPoints.Clear(); //Deletes all ContactPoints collected from the last physics frame
     }
-
-    void OnCollisionEnter (Collision col)
+    
+    void OnCollisionEnter(Collision col)
     {
-        contactPoints.AddRange (col.contacts);
+        contactPoints.AddRange(col.contacts);
     }
-
-    void OnCollisionStay (Collision col)
+    
+    void OnCollisionStay(Collision col)
     {
-        contactPoints.AddRange (col.contacts);
+        contactPoints.AddRange(col.contacts);
     }
-
+    
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void CheckCameraState ()
+    private void CheckCameraState()
     {
-        var viewCamera = GetComponentInChildren<Camera> (true);
-        if (IsPlayerControlled () && viewCamera)
+        var viewCamera = GetComponentInChildren<Camera>(true);
+        if (IsPlayerControlled() && viewCamera)
         {
-            viewCamera.gameObject.SetActive (true);
+            viewCamera.gameObject.SetActive(true);
         }
         else if (viewCamera)
         {
-            viewCamera.gameObject.SetActive (false);
+            viewCamera.gameObject.SetActive(false);
         }
     }
 
-    private IEnumerator InvulnerabilityCooldown ()
+    private IEnumerator InvulnerabilityCooldown()
     {
         isInvulnerable = true;
-        yield return new WaitForSeconds (currentState.invulnerabilityTime);
+        yield return new WaitForSeconds(currentState.invulnerabilityTime);
         isInvulnerable = false;
     }
-
+    
     // ------------------------------------------------------------------
     // MODIFY ME TO MATCH YOUR CharacterState & CharacterData CLASSES!!!
     // ------------------------------------------------------------------
-    private void PassCharacterDataToCurrentState ()
+    private void PassCharacterDataToCurrentState()
     {
         currentState.characterName = defaultState.actorName;
         currentState.health = defaultState.health;
@@ -156,152 +145,78 @@ public class Pawn : MonoBehaviour
         currentState.sprintSpeedMultiplier = defaultState.sprintSpeedMultiplier;
         currentState.sprintAcceleration = defaultState.sprintAcceleration;
     }
-
-    private void TestCrush ()
-    {
-        crushFrameCount++;
-
-        /*if (contactPoints.Count < 2)
-        {
-            crushMeter -= 0.5f;
-            Debug.Log (crushMeter);
-            return;
-        }*/
-
-        foreach (var point in contactPoints)
-        {
-            if (point.otherCollider!=null && point.otherCollider.attachedRigidbody != null && !point.otherCollider.attachedRigidbody.isKinematic)
-            {
-                continue;
-            }
-            contactAverage += point.normal;
-        }
-
-        contactAverageCount += contactPoints.Count;
-
-        if (crushFrameCount == 4)
-        {
-            crushFrameCount = 0;
-
-            contactAverage = contactAverage / contactAverageCount;
-            contactAverageCount = 0;
-
-            float mag = contactAverage.magnitude;
-
-            if (mag == float.NaN)
-            {
-                if (crushMeter > 0)
-                {
-                    crushMeter -= .5f;
-                    Debug.Log (crushMeter);
-                }
-                if (crushMeter > crushDamageThreshold)
-                {
-                    ModifyHealth (-crushDamageAmount, false);
-                }
-                contactAverage = new Vector3 (0, 0, 0);
-                return;
-            }
-            Debug.Log ("AVG = " + mag);
-
-            if (mag < crushThreshold)
-            {
-                if (crushMeter < crushDamageThreshold + 3)
-                {
-                    crushMeter++;
-                    Debug.Log (crushMeter);
-                }
-            }
-            else
-            {
-                if (crushMeter > 0)
-                {
-                    crushMeter -= 0.5f;
-                    Debug.Log (crushMeter);
-                }
-            }
-
-            contactAverage = new Vector3 (0, 0, 0);
-        }
-
-        if (crushMeter > crushDamageThreshold)
-        {
-            ModifyHealth (-crushDamageAmount, false);
-        }
-    }
-
     // ------------------------------------------------------------------
 
 
     //=-----------------=
     // External Functions
     //=-----------------=
-    public bool IsGrounded3D ()
+    public bool IsGrounded3D()
     {
-        return Physics.CheckSphere (transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, currentState.groundMask);
+        return Physics.CheckSphere(transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, currentState.groundMask);
     }
-
-    public bool IsGroundSloped3D ()
+    
+    public bool IsGroundSloped3D()
     {
-        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
         {
             return slopeHit.normal != Vector3.up;
         }
 
         return false;
     }
-
-    public bool IsPlayerControlled ()
+    
+    public bool IsPlayerControlled()
     {
-        if (!gameInstance) gameInstance = FindObjectOfType<GameInstance> ();
-        return gameInstance.PlayerControllerClasses.Contains (currentController);
+        if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+        return gameInstance.PlayerControllerClasses.Contains(currentController);
     }
 
-    public void Move (Vector3 _movement, string _mode)
+    public void Move(Vector3 _movement, string _mode)
     {
-        if (_mode == "translate") transform.Translate (_movement * (
+        if (_mode == "translate") transform.Translate(_movement * (
             currentState.movementSpeed * Time.deltaTime));
     }
-
-    public void Move (Vector3 _movement, string _mode, float _movementSpeed)
+    
+    public void Move(Vector3 _movement, string _mode, float _movementSpeed)
     {
-        if (_mode == "translate") transform.Translate (_movement * (_movementSpeed * Time.deltaTime));
+        if (_mode == "translate") transform.Translate(_movement * (_movementSpeed * Time.deltaTime));
     }
-
-    public void ModifyHealth (float _value, bool ignoreInvuln = true)
+    
+    public void ModifyHealth(float _value)
     {
-        if (isInvulnerable && !ignoreInvuln) return;
-        StartCoroutine (InvulnerabilityCooldown ());
+        if (isInvulnerable) return;
+        StartCoroutine(InvulnerabilityCooldown());
         switch (_value)
         {
             case > 0:
-                OnPawnHeal?.Invoke ();
+                OnPawnHeal?.Invoke();
                 isDead = false;
-                if (currentState.characterSounds.heal) GetComponent<AudioSource_PitchVarienceModulator> ().PlaySound (currentState.characterSounds.heal);
+                if (currentState.characterSounds.heal) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.heal);
                 break;
             case < 0:
                 if (isDead) return;
-                try
+                try 
                 {
-                    OnPawnHurt?.Invoke ();
+                    OnPawnHurt?.Invoke();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine (e);
+                    Console.WriteLine(e);
                 }
-                if (currentState.characterSounds.hurt) GetComponent<AudioSource_PitchVarienceModulator> ().PlaySound (currentState.characterSounds.hurt);
+                if (currentState.characterSounds.hurt) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.hurt);
                 break;
         }
 
         if (currentState.health + _value <= 0)
         {
             if (isDead) return;
-            GetComponent<AudioSource_PitchVarienceModulator> ().PlaySound (currentState.characterSounds.death);
-            OnPawnDeath?.Invoke ();
+            GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.death);
+            OnPawnDeath?.Invoke();
             isDead = true;
             if (destroyOnDeath)
             {
-                Destroy (gameObject, destroyOnDeathDelay);
+                Destroy(gameObject, destroyOnDeathDelay);
             }
         }
 
@@ -310,27 +225,27 @@ public class Pawn : MonoBehaviour
         else currentState.health += _value;
     }
 
-    public void Kill ()
+    public void Kill()
     {
         // Instantly sets the pawns health to zero, firing its onDeath event
-        ModifyHealth (-999999);
+        ModifyHealth(-999999);
     }
-
-    public void GetPawnController ()
+    
+    public void GetPawnController()
     {
         // Returns the type of controller that is possessing this pawn
         // This can be used to do things like checking if a pawn is possessed by a player
     }
 
-    public void SetPawnController ()
+    public void SetPawnController()
     {
         // Sets the type of controller that is possessing this pawn
     }
 
-    public void SetPawnDefaultState (CharacterData _playerState)
+    public void SetPawnDefaultState(CharacterData _playerState)
     {
         // Sets the type of character
         defaultState = _playerState;
-        PassCharacterDataToCurrentState ();
+        PassCharacterDataToCurrentState();
     }
 }
