@@ -18,6 +18,7 @@ public class WorldSettings : MonoBehaviour
     // Public Variables
     //=-----------------=
     public GameMode gameModeOverride;
+    public bool debugShowKillZones;
     public bool startAsSpectator;
     public bool disableWorldKillVolume;
     public bool disableWorldKillY;
@@ -55,6 +56,7 @@ public class WorldSettings : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (!debugShowKillZones) return;
         Gizmos.color = Color.red;
         if (!disableWorldKillVolume) Gizmos.DrawCube(new Vector3(0,0,0), new Vector3(worldKillVolumeDistance*0.5f,worldKillVolumeDistance*0.5f,worldKillVolumeDistance*0.5f));
         if (!disableWorldKillY) Gizmos.DrawCube(new Vector3(0,worldKillYDistance,0), new Vector3(1000,1,1000));
