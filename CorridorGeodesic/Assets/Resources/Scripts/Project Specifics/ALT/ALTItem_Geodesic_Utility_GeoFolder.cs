@@ -137,114 +137,131 @@ public class ALTItem_Geodesic_Utility_GeoFolder : Item_Geodesic_Utility
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
-            // If converging, increase the riftTimer and relocate actors and meshes
             if (moveRift)
             {
-                if (moveRiftBackwards)
+                MoveRift ();
+            }
+        }
+    }
+
+    private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work just yet
+    {
+        // If converging, increase the riftTimer and relocate actors and meshes
+
+        if (moveRiftBackwards)
+        {
+            if (riftTimer <= -maxRiftTimer)
+            {
+                return;
+            }
+            riftTimer -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            if (riftTimer >= maxRiftTimer)
+            {
+                return;
+            }
+            riftTimer += Time.fixedDeltaTime;
+        }
+
+        riftTimer = Mathf.Clamp (riftTimer, -maxRiftTimer, maxRiftTimer);
+
+        // Calculate offset
+        Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
+        lerpAmount = riftTimer / maxRiftTimer;
+
+        float prevRiftWidth = deployedRift.transform.localScale.z * riftWidth;
+
+        // Squish null-space parent
+        deployedRift.transform.localScale = new Vector3 (1, 1, 1 - lerpAmount);
+
+        float newRiftWidth = deployedRift.transform.localScale.z * riftWidth;
+
+        // Collapse meshes in planeB/B-Space
+        //planeBMeshes.transform.position = Vector3.Lerp (planeBStartPos, planeBStartPos + targetOffset, lerpAmount);
+
+        planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
+
+        // Collapse actors in planeB/B-Space
+        foreach (CorGeo_ActorData obj in CorGeo_ActorDatas)
+        {
+            if (obj.space == CorGeo_ActorData.Space.B)
+            {
+                Vector3 move = cutPreviews[1].transform.position - previousPlanePosition;
+
+                if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
                 {
-                    riftTimer -= Time.fixedDeltaTime;
+                    objRigidBody.MovePosition (obj.transform.position + move);
                 }
                 else
                 {
-                    riftTimer += Time.fixedDeltaTime;
-                }
-
-                riftTimer = Mathf.Clamp (riftTimer, -maxRiftTimer, maxRiftTimer);
-
-                // Calculate offset
-                Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
-                lerpAmount = riftTimer / maxRiftTimer;
-
-                float prevRiftWidth = deployedRift.transform.localScale.z * riftWidth;
-
-                // Squish null-space parent
-                deployedRift.transform.localScale = new Vector3 (1, 1, 1 - lerpAmount);
-
-                float newRiftWidth = deployedRift.transform.localScale.z * riftWidth;
-
-                // Collapse meshes in planeB/B-Space
-                //planeBMeshes.transform.position = Vector3.Lerp (planeBStartPos, planeBStartPos + targetOffset, lerpAmount);
-
-                planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
-
-                // Collapse actors in planeB/B-Space
-                foreach (CorGeo_ActorData obj in CorGeo_ActorDatas)
-                {
-                    if (obj.space == CorGeo_ActorData.Space.B)
-                    {
-                        Vector3 move = cutPreviews[1].transform.position - previousPlanePosition;
-
-                        if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
-                        {
-                            objRigidBody.MovePosition (obj.transform.position + move);
-                        }
-                        else
-                        {
-                            obj.transform.position += move;
-                        }
-                    }
-
-                    if (obj.space == CorGeo_ActorData.Space.Null && obj.dynamic && !obj.crushInNullSpace)
-                    {
-                        //Get object's position relative to the rift, then move the object based on the new size of the rift.
-                        float percent = planeA.GetDistanceToPoint (obj.transform.position) / prevRiftWidth;
-                        float oldDistance = prevRiftWidth * percent;
-                        float newDistance = newRiftWidth * percent;
-
-                        Vector3 move = riftNormal * (newDistance - oldDistance);
-
-                        if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
-                        {
-                            objRigidBody.MovePosition (obj.transform.position + move);
-                        }
-                        else
-                        {
-                            obj.transform.position += move;
-                        }
-                    }
-                }
-
-                planeB = new Plane (-riftNormal, cutPreviews[1].transform.position);
-
-                previousPlanePosition = cutPreviews[1].transform.position;
-            }
-
-            // If we've converged the rift all the way, deactivate null-space actors and meshes
-            if (riftTimer >= maxRiftTimer)
-            {
-                for (int i = 0; i < deployedRift.transform.childCount; i++)
-                {
-                    if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
-                    {
-                        if (actor.activeInNullSpace)
-                        {
-                            continue;
-                        }
-                    }
-                    deployedRift.transform.GetChild (i).gameObject.SetActive (false);
-                }
-                foreach (var plane in cutPreviews)
-                {
-                    plane.SetActive (false);
+                    obj.transform.position += move;
                 }
             }
-            else
+
+            if (obj.space == CorGeo_ActorData.Space.Null && obj.dynamic && !obj.crushInNullSpace)
             {
-                for (int i = 0; i < deployedRift.transform.childCount; i++)
+                //Get object's position relative to the rift, then move the object based on the new size of the rift.
+                float percent = planeA.GetDistanceToPoint (obj.transform.position) / prevRiftWidth;
+                float oldDistance = prevRiftWidth * percent;
+                float newDistance = newRiftWidth * percent;
+
+                Vector3 move = riftNormal * (newDistance - oldDistance);
+                if (move.x != float.NaN)
                 {
-                    if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
+                    if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
                     {
-                        if (actor.activeInNullSpace)
-                        {
-                            continue;
-                        }
+                        objRigidBody.MovePosition (obj.transform.position + move);
                     }
                     else
                     {
-                        if (deployedRift.transform.GetChild (i).GetComponents<MeshCollider> ().Length > 1)
-                        {
-                            Destroy (deployedRift.transform.GetChild (i).GetComponents<MeshCollider> ()[0]);
-                        }
+                        obj.transform.position += move;
+                    }
+                }
+            }
+        }
+
+        planeB = new Plane (-riftNormal, cutPreviews[1].transform.position);
+
+        previousPlanePosition = cutPreviews[1].transform.position;
+
+
+        // If we've converged the rift all the way, deactivate null-space actors and meshes
+        if (riftTimer >= maxRiftTimer)
+        {
+            for (int i = 0; i < deployedRift.transform.childCount; i++)
+            {
+                if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
+                {
+                    if (actor.activeInNullSpace)
+                    {
+                        continue;
+                    }
+                }
+                deployedRift.transform.GetChild (i).gameObject.SetActive (false);
+            }
+            foreach (var plane in cutPreviews)
+            {
+                plane.SetActive (false);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < deployedRift.transform.childCount; i++)
+            {
+                if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
+                {
+                    if (actor.activeInNullSpace)
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (deployedRift.transform.GetChild (i).GetComponents<MeshCollider> ().Length > 1)
+                    {
+                        Destroy (deployedRift.transform.GetChild (i).GetComponents<MeshCollider> ()[0]);
                     }
                 }
             }
