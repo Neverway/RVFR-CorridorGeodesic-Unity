@@ -1,4 +1,4 @@
-//===================== (Neverway 2024) Written by _____ =====================
+//===================== (Neverway 2024) Written by Andre Blunt =====================
 //
 // Purpose:
 // Notes:
@@ -26,8 +26,8 @@ public class Graphics_ChangeMaterialProperty: MonoBehaviour
 
     private Material instanceMat;
 
-    private Color prevColor;
-    private float prevFloat;
+    private Color originalColor;
+    private float originalFloat;
 
     //=-----------------=
     // Reference Variables
@@ -55,11 +55,30 @@ public class Graphics_ChangeMaterialProperty: MonoBehaviour
         materials[materialIndex] = instanceMat;
 
         meshRenderer.sharedMaterials = materials.ToArray();
+
+        switch (propertyType)
+        {
+            case PropertyType.Color:
+                originalColor = instanceMat.GetColor(propertyName);
+                break;
+            case PropertyType.Float:
+                originalFloat = instanceMat.GetFloat(propertyName);
+                break;
+            default:
+                break;
+        }
     }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    public void ChangePropertyToggle(bool state)
+    {
+        if (state)
+            SetProperty();
+        else
+            ResetMaterial();
+    }
     public void ChangeProperty(float duration)
     {
         StopAllCoroutines();
@@ -68,33 +87,35 @@ public class Graphics_ChangeMaterialProperty: MonoBehaviour
     }
     IEnumerator WaitChangeProperty(float duration)
     {
-        switch (propertyType)
-        {
-            case PropertyType.Color:
-                prevColor = instanceMat.GetColor(propertyName);
-                instanceMat.SetColor(propertyName, changeToColor);
-                print($"changed? {instanceMat} {changeToColor}");
-                break;
-            case PropertyType.Float:
-                prevFloat = instanceMat.GetFloat(propertyName);
-                instanceMat.SetFloat(propertyName, changeToFloat);
-                break;
-            default:
-                yield break;
-        }
+        SetProperty();
+
         yield return new WaitForSeconds(duration);
 
         ResetMaterial();
+    }
+    void SetProperty()
+    {
+        switch (propertyType)
+        {
+            case PropertyType.Color:
+                instanceMat.SetColor(propertyName, changeToColor);
+                break;
+            case PropertyType.Float:
+                instanceMat.SetFloat(propertyName, changeToFloat);
+                break;
+            default:
+                break;
+        }
     }
     void ResetMaterial()
     {
         switch (propertyType)
         {
             case PropertyType.Color:
-                instanceMat.SetColor(propertyName, prevColor);
+                instanceMat.SetColor(propertyName, originalColor);
                 break;
             case PropertyType.Float:
-                instanceMat.SetFloat(propertyName, prevFloat);
+                instanceMat.SetFloat(propertyName, originalFloat);
                 break;
             default:
                 break;

@@ -641,10 +641,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1648508231715910304}
-    - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8891421665417045345}
   m_SourcePrefab: {fileID: 100100000, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
 --- !u!4 &220902340854671638 stripped
 Transform:
@@ -693,6 +689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a4367a8604169d4e8307aa6355db903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPowered: 0
   inputSignal: {fileID: 0}
   halo: {fileID: 0}
   maxReflectionCount: 5
@@ -700,18 +697,3 @@ MonoBehaviour:
   prefabLine: {fileID: 1875282707177570320, guid: a446d575cd64c82449b8eded92bf056a,
     type: 3}
   laserFireTransform: {fileID: 6698333222549412351}
---- !u!114 &8891421665417045345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 290464974157155360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPowered: 0
-  hasPowerStateChanged: 0
-  incomingPowerSignals: []

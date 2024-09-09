@@ -12,12 +12,11 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SignalReceiver : MonoBehaviour
+public class SignalEventPlayer : LogicComponent
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [ReadOnly(true)] public bool isPowered;
     public UnityEvent onPoweredEvent, onUnpoweredEvent;
     public event Action OnPowered, OnUnpowered;
 
@@ -25,8 +24,7 @@ public class SignalReceiver : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private bool previousIsPoweredState; // this is used to check to see if the powered state has changed
-
+    [SerializeField] private LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
@@ -36,23 +34,6 @@ public class SignalReceiver : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Update()
-    {
-        if (isPowered != previousIsPoweredState)
-        {
-            if (isPowered)
-            {
-                onPoweredEvent?.Invoke();
-                OnPowered?.Invoke();
-            }
-            else
-            {
-                onUnpoweredEvent?.Invoke();
-                OnUnpowered?.Invoke();
-            }
-        }
-        previousIsPoweredState = isPowered;
-    }
 
 
     //=-----------------=
@@ -63,6 +44,28 @@ public class SignalReceiver : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.Add(inputSignal);
+        base.AutoSubscribe();
+    }
+    public override void SourcePowerStateChanged(bool powered)
+    {
+        base.SourcePowerStateChanged(powered);
+
+        isPowered = powered;
+
+        if (isPowered)
+        {
+            onPoweredEvent?.Invoke();
+            OnPowered?.Invoke();
+        }
+        else
+        {
+            onUnpoweredEvent?.Invoke();
+            OnUnpowered?.Invoke();
+        }
+    }
     public void SetIsPowered(bool _isPowered)
     {
         isPowered = _isPowered;

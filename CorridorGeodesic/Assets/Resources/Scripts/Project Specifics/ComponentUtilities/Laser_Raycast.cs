@@ -2,8 +2,7 @@ using System;
 using System.Net.Http.Headers;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class Laser_Raycast : MonoBehaviour
+public class Laser_Raycast : LogicComponent
 {
 
     //===================== (Neverway 2024) Written by Connorses =====================
@@ -17,7 +16,7 @@ public class Laser_Raycast : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    public NEW_LogicProcessor inputSignal;
+    [SerializeField] private LogicComponent inputSignal;
     [SerializeField] private Transform halo;
     [SerializeField] private int maxReflectionCount = 5;
     [SerializeField] private float maxStepDistance = 200f;
@@ -27,12 +26,10 @@ public class Laser_Raycast : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private NEW_LogicProcessor logicProcessor;
     private LineRenderer[] lineRenderers;
 
     private void Start ()
     {
-        logicProcessor = GetComponent<NEW_LogicProcessor>();
         lineRenderers = new LineRenderer[maxReflectionCount];
         for (int i = 0; i < maxReflectionCount; i++)
         {
@@ -47,14 +44,7 @@ public class Laser_Raycast : MonoBehaviour
 
     private void Update ()
     {
-        if (inputSignal == null)
-        {
-            ShootLaser ();
-            return;
-        }
-
-        if (inputSignal.hasPowerStateChanged) logicProcessor.isPowered = inputSignal.isPowered;
-        ShootLaser ();
+        ShootLaser();
     }
 
     private void OnDrawGizmos()
@@ -94,7 +84,7 @@ public class Laser_Raycast : MonoBehaviour
         {
             l.gameObject.SetActive (false);
         }
-        if (inputSignal != null && !logicProcessor.isPowered)
+        if (inputSignal != null && !isPowered)
         {
             return;
         }
@@ -168,5 +158,15 @@ public class Laser_Raycast : MonoBehaviour
             detector.OnHit ();
         }
     }
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.Add(inputSignal);
+        base.AutoSubscribe();
+    }
+    public override void SourcePowerStateChanged(bool powered)
+    {
+        base.SourcePowerStateChanged(powered);
 
+        isPowered = powered;
+    }
 }

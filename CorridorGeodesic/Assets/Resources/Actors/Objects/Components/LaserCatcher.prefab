@@ -744,10 +744,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3650626973431740112}
-    - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8891421665417045345}
   m_SourcePrefab: {fileID: 100100000, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
 --- !u!4 &220902340854671638 stripped
 Transform:
@@ -773,6 +769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfb3f28467d9817448bbc57dcf7874e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPowered: 0
   offMaterial: {fileID: 2100000, guid: 291de02b41e16cac0aa88ad232b18407, type: 2}
   onMaterial: {fileID: 2100000, guid: 83e70c8276382c146bbf5a7db4d932d1, type: 2}
   laserLight: {fileID: 6919020028671226849}
@@ -806,18 +803,3 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: -0.25}
---- !u!114 &8891421665417045345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 290464974157155360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPowered: 0
-  hasPowerStateChanged: 0
-  incomingPowerSignals: []
