@@ -5,8 +5,10 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Logic_Not : LogicComponent
@@ -39,6 +41,13 @@ public class Logic_Not : LogicComponent
     //    if (input)
     //        input.OnPowerStateChanged -= SourcePowerStateChanged;
     //}
+    private void Start()
+    {
+        if (!inputSignal)
+        {
+            isPowered = true;
+        }
+    }
 
     //=-----------------=
     // Internal Functions

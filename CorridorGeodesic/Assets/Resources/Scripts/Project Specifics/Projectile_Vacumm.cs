@@ -53,9 +53,10 @@ public class Projectile_Vacumm : Projectile_VacummNew
         base.OnCollision(hit);
 
         bool killScheduled = false;
-        if (hit.collider is MeshCollider)
+        hit.collider.gameObject.TryGetComponent<Mesh_Slicable>(out var _out);
+        if (_out)
         {
-            
+            if (hit.collider is not MeshCollider) return;
             MeshCollider mCollider = (MeshCollider)hit.collider;
 
             Mesh colMesh = mCollider.sharedMesh;

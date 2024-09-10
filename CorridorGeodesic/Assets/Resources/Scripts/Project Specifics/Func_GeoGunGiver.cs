@@ -9,13 +9,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class Func_GeoGunGiver : MonoBehaviour
+public class Func_GeoGunGiver : LogicComponent
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public NEW_LogicProcessor inputSignal;
+    [SerializeField] private LogicComponent inputSignal;
+
 
 
     //=-----------------=
@@ -26,27 +26,25 @@ public class Func_GeoGunGiver : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
+    public override void AutoSubscribe()
     {
-        logicProcessor = GetComponent<NEW_LogicProcessor>();
+        subscribeLogicComponents.Add(inputSignal);
+        base.AutoSubscribe();
     }
-
-    private void Update()
+    public override void SourcePowerStateChanged(bool powered)
     {
-        if (!inputSignal) return;
-        logicProcessor.isPowered = inputSignal.isPowered;
-        if (logicProcessor.hasPowerStateChanged)
+        base.SourcePowerStateChanged(powered);
+
+        isPowered = powered;
+
+        if (isPowered)
         {
-            if (logicProcessor.isPowered)
-            {
-                GiveGeoGun();
-            }
+            GiveGeoGun();
         }
     }
 
