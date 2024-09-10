@@ -23,6 +23,7 @@ public class Respawner : MonoBehaviour
     //=-----------------=
     [SerializeField] private float spawnDelay;
     private Coroutine spawnWorker;
+    [SerializeField] private bool waitForRespawn = false;
 
 
     //=-----------------=
@@ -31,9 +32,12 @@ public class Respawner : MonoBehaviour
 
     private void Update()
     {
-        if (spawnedObject == null && spawnWorker == null)
+        if (waitForRespawn == false)
         {
-            spawnWorker = StartCoroutine(SpawnWorker());
+            if (spawnedObject == null && spawnWorker == null)
+            {
+                spawnWorker = StartCoroutine (SpawnWorker ());
+            }
         }
     }
 
@@ -66,6 +70,12 @@ public class Respawner : MonoBehaviour
     /// <returns></returns>
     private IEnumerator DestroyWorker ()
     {
+        waitForRespawn = false;
+        if (spawnedObject == null)
+        {
+            yield break;
+        }
+
         //Move the spawne dobject far away, triggering OnTriggerExit for anything it may have been inside of
         spawnedObject.transform.position = new Vector3 (0, 1000, 0);
         //wait one frame, then destroy object
