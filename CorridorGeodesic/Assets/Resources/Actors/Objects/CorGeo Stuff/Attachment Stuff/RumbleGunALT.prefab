@@ -298,6 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateRate: 1
   inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 4
@@ -1271,6 +1272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateRate: 1
   inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 4
@@ -2473,15 +2475,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   previousPlanePosition: {x: 0, y: 0, z: 0}
+  projectileTravel: {fileID: 0}
+  projectileFire: {fileID: 0}
   barrelTransform: {fileID: 517456106474312449}
   centerViewTransform: {fileID: 0}
   debugObject: {fileID: 0}
-  vacuumProjectile: {fileID: 9065237667694814105, guid: ed82fd31b6042c558abf0fb0727b922f,
+  projectileVacumm: {fileID: 8064634614578769581, guid: ed82fd31b6042c558abf0fb0727b922f,
     type: 3}
   riftObject: {fileID: 345048906418830031, guid: b362eb1456df216f0a3b8bb391d0a92c,
     type: 3}
   cutPreviewPrefab: {fileID: 2325414591476811082, guid: 077c8ba8d12051f4aa063cdafdcf5a3d,
     type: 3}
+  cutPreviews: []
   projectileForce: 225
+  allowExpandingRift: 0
   deployedInfinityMarkers: []
   riftSecondsPerUnit: 0.2

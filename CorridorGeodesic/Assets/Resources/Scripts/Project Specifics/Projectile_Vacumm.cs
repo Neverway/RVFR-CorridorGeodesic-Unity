@@ -55,6 +55,7 @@ public class Projectile_Vacumm : Projectile_VacummNew
         bool killScheduled = false;
         if (hit.collider is MeshCollider)
         {
+            
             MeshCollider mCollider = (MeshCollider)hit.collider;
 
             Mesh colMesh = mCollider.sharedMesh;
@@ -72,23 +73,23 @@ public class Projectile_Vacumm : Projectile_VacummNew
                     killScheduled = true;
                 }
             }
+            if (killScheduled)
+                return;
+
+            // Set rotation to match face normal
+            transform.rotation = Quaternion.LookRotation(-hit.normal);
+            transform.position = hit.point;
+            transform.localPosition += hit.normal * pinOffset;
+
+            audioSource.PlaySound(markerPinned);
+
+            disabled = true;
         }
-        if (!killScheduled && hit.collider.gameObject.TryGetComponent<CorGeo_AntiProjectile>(out var component))
+        else
         {
             KillProjectile();
             killScheduled = true;
         }
-        if (killScheduled)
-            return;
-
-        // Set rotation to match face normal
-        transform.rotation = Quaternion.LookRotation(-hit.normal);
-        transform.position = hit.point;
-        transform.localPosition += hit.normal * pinOffset;
-
-        audioSource.PlaySound(markerPinned);
-
-        disabled = true;
     }
     private IEnumerator Lifetime()
     {

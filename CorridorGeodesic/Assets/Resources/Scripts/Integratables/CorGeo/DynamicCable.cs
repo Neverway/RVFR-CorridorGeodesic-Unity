@@ -60,10 +60,10 @@ public class DynamicCable : MonoBehaviour
     {
         if (inputSignal)
         {
+            SetCablePowered(inputSignal.isPowered);
             logicProcessor.isPowered = inputSignal.isPowered;
             if (logicProcessor.hasPowerStateChanged)
             {
-                SetCablePowered(logicProcessor.isPowered);
             }
         }
         

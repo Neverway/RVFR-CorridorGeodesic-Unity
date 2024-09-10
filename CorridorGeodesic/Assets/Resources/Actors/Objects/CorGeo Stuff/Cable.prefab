@@ -448,6 +448,7 @@ GameObject:
   - component: {fileID: 1795026404547594194}
   - component: {fileID: 526291522045680119}
   - component: {fileID: 168161177397085500}
+  - component: {fileID: 5216550776138309577}
   m_Layer: 11
   m_Name: Cable
   m_TagString: Untagged
@@ -617,14 +618,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255490cd2f1a776068fd0c6b10f9979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateRate: 0.2
+  inputSignal: {fileID: 0}
   generateWaypointsUsingLength: 1
   waypointsPerUnit: 1
+  updateOnMove: 0
   cableUnpowered: {fileID: 2100000, guid: 3ff4228ecc12164cbbc147b4e74d1e2b, type: 2}
   cablePowered: {fileID: 2100000, guid: ce283e9d00e4be12b820f40fb6576eb0, type: 2}
   anchorPointA: {fileID: 7697580492710995193}
   anchorPointB: {fileID: 1271611192577058156}
   waypointsRoot: {fileID: 5380022056419348565}
   waypointReference: {fileID: 4791157200000925455}
+--- !u!114 &5216550776138309577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5543193317768764687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPowered: 0
+  hasPowerStateChanged: 0
+  incomingPowerSignals: []
 --- !u!1 &7697580492710995193
 GameObject:
   m_ObjectHideFlags: 0
