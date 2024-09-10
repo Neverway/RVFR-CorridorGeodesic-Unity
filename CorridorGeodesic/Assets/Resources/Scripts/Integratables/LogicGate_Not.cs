@@ -43,7 +43,7 @@ public class LogicGate_Not : MonoBehaviour
     {
         if (!inputSignal)
         {
-            logicProcessor.isPowered = false;
+            logicProcessor.isPowered = true;
             return;
         }
         logicProcessor.isPowered = !inputSignal.isPowered;
