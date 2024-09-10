@@ -48,6 +48,7 @@ MonoBehaviour:
   prefabToSpawn: {fileID: 6153716924502838921, guid: f4ae20d884a5de22789265f6a01b72a1,
     type: 3}
   spawnDelay: 1.25
+  waitForRespawn: 0
 --- !u!1 &7846932003829994977
 GameObject:
   m_ObjectHideFlags: 0
@@ -730,6 +731,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8388844613433705366, guid: 4dbe5c423603d1e4499db92c341d52a8,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 379f2a7752c36da46b3194519234a0ac, type: 2}
     - target: {fileID: -3536752314837573512, guid: 4dbe5c423603d1e4499db92c341d52a8,
         type: 3}
       propertyPath: m_IsActive
