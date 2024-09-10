@@ -20,7 +20,6 @@ public class Projectile_Vacumm : Projectile_VacummNew
     [SerializeField] private float pinOffset;
     public bool pinned => disabled;
     [SerializeField] private GameObject spawnOnDeath;
-    [SerializeField] private float lifetimeSeconds = 1.5f;
 
     //=-----------------=
     // Private Variables
@@ -92,7 +91,7 @@ public class Projectile_Vacumm : Projectile_VacummNew
     }
     private IEnumerator Lifetime()
     {
-        yield return new WaitForSeconds(lifetimeSeconds);
+        yield return new WaitForSeconds(1);
         if (disabled) yield break; // Exit if the lamp has landed 
         KillProjectile ();
     }

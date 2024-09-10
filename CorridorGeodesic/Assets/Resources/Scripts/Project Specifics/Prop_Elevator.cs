@@ -1,4 +1,4 @@
-﻿//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Liz M. =====================
 //
 // Purpose:
 // Notes:
@@ -25,7 +25,6 @@ public class Prop_Elevator : MonoBehaviour
     //=-----------------=
     [SerializeField] private Transform elevatorTransform;
     private bool elevatorActivated;
-    private bool enableCheck = false;
     
 
     //=-----------------=
@@ -44,20 +43,14 @@ public class Prop_Elevator : MonoBehaviour
         //animator.keepAnimatorStateOnDisable = true;
     }
 
-    private void OnEnable ()
-    {
-        enableCheck = true;
-    }
-
     private void Update()
     {
         if (!elevatorActivated && doorSignal)
         {
             logicProcessor.isPowered = doorSignal.isPowered;
         
-            if (doorSignal.hasPowerStateChanged || enableCheck)
+            if (doorSignal.hasPowerStateChanged)
             {
-                enableCheck = false;
                 //if (logicProcessor.isPowered)
                 //{
                 //    animator.Play("Elevator_Open");
