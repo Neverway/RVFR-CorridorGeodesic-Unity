@@ -37,7 +37,7 @@ public abstract class LogicComponent: MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-
+    protected List<LogicComponent> subscribeLogicComponents = new List<LogicComponent>();
 
     //=-----------------=
     // Reference Variables
@@ -47,14 +47,49 @@ public abstract class LogicComponent: MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Awake()
+    {
+        AutoSubscribe();
+    }
     private void OnDestroy()
     {
+        if (subscribeLogicComponents.Count <= 0)
+            return;
+        subscribeLogicComponents.ForEach(component =>
+        {
+            if (component)
+                component.OnPowerStateChanged -= SourcePowerStateChanged;
+        });
+
         isPowered = false;
+    }
+    void OnDrawGizmos()
+    {
+        if(subscribeLogicComponents.Count > 0)
+        {
+            subscribeLogicComponents.ForEach(c =>
+            {
+                if (!c)
+                    return;
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(transform.position, 0.2f);
+
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(c.transform.position, 0.2f);
+
+                Gizmos.color = Color.blue;
+                Gizmos.DrawLine(transform.position, c.transform.position);
+            });
+        }
     }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    public virtual void AutoSubscribe()
+    {
+        Subscribe();
+    }
     public virtual void SourcePowerStateChanged(bool powered)
     {
 
@@ -62,6 +97,16 @@ public abstract class LogicComponent: MonoBehaviour
     public virtual void LocalPowerStateChanged(bool powered)
     {
 
+    }
+    void Subscribe()
+    {
+        if (subscribeLogicComponents.Count <= 0)
+            return;
+        subscribeLogicComponents.ForEach(component =>
+        {
+            if (component)
+                component.OnPowerStateChanged += SourcePowerStateChanged;
+        });
     }
 
     //=-----------------=

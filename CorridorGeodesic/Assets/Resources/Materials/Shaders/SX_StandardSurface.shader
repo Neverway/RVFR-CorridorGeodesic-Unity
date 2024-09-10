@@ -1,53 +1,95 @@
-Shader "Soulex/SX_StandardSurface"
+Shader "Soulex/SX_Standard Surface"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
-        _MainTex ("Albedo (RGB)", 2D) = "white" {}
-        _Roughness ("Roughness", 2D) = "white" {}
-        _Metallic ("Metallic", 2D) = "black" {}
-        [Normal] _Normal ("Normal Map", 2D) = "white" {}
-        _HeightMap ("Height Map", 2D) = "white" {}
+        [Enum(UnityEngine.Rendering.CullMode)] _CullMode ("Cull Mode", Float) = 2
+        _AlphaClip ("Alpha Clip", Range(0, 1)) = 0.5
 
+        _Color ("Color", Color) = (1,1,1,1)
+
+        [NoScaleOffset] _MainTex ("Albedo", 2D) = "white" {}
+
+        _Roughness ("Roughness Power", Range(0.0, 1.0)) = 0.5
+        [NoScaleOffset] _RoughnessMap ("Roughness Map", 2D) = "white" {}
+
+        _Metallic ("Metallic Power", Range(0.0, 1.0)) = 0.0
+        [NoScaleOffset] _MetallicMap ("Metallic Map", 2D) = "white" {}
+
+        _NormalPower ("Normal Power", Range(0.0, 1.0)) = 1.0
+        [NoScaleOffset][Normal] _Normal ("Normal Map", 2D) = "bump" {}
+
+        _HeightScale ("Height Scale", Range(0, 0.08)) = 0
+        [NoScaleOffset] _HeightMap ("Height Map", 2D) = "black" {}
+
+        [NoScaleOffset] _Occlusion ("Occlusion", 2D) = "white" {}
+
+        _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
+        _Offset ("Offset", Vector) = (0, 0, 0, 0)
     }
     SubShader
     {
         Tags { "RenderType"="Opaque" }
         LOD 200
 
+        Cull [_CullMode]
+
         CGPROGRAM
-        // Physically based Standard lighting model, and enable shadows on all light types
+
         #pragma surface surf Standard fullforwardshadows
+        #include "UnityStandardUtils.cginc"
 
-        // Use shader model 3.0 target, to get nicer looking lighting
         #pragma target 3.0
-
-        sampler2D _MainTex;
 
         struct Input
         {
             float2 uv_MainTex;
+            float3 viewDir;
         };
 
-        half _Glossiness;
-        half _Metallic;
-        fixed4 _Color;
+        float _AlphaClip;
+        half _NormalPower;
 
-        // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
-        // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
-        // #pragma instancing_options assumeuniformscaling
-        UNITY_INSTANCING_BUFFER_START(Props)
-            // put more per-instance properties here
-        UNITY_INSTANCING_BUFFER_END(Props)
+        sampler2D _MainTex;
+
+        float _Roughness;
+        sampler2D _RoughnessMap;
+
+        float _Metallic;
+        sampler2D _MetallicMap;
+
+        sampler2D _Normal;
+
+        float _HeightScale;
+        sampler2D _HeightMap;
+
+        sampler2D _Occlusion;
+        
+        float2 _Tiling;
+        float2 _Offset;
+
+        fixed4 _Color;
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-            o.Albedo = c.rgb;
+            float2 uv = IN.uv_MainTex * _Tiling + _Offset;
+            float2 parallaxOffset = ParallaxOffset (tex2D(_HeightMap, uv).r, _HeightScale, IN.viewDir);
 
-            o.Metallic = _Metallic;
-            //o.Smoothness = 1 - _Roughness;
-            o.Alpha = c.a;
+            uv += parallaxOffset;
+
+            fixed4 col = tex2D(_MainTex, uv) * _Color;
+
+            o.Albedo = col.rgb;
+
+            o.Normal = UnpackScaleNormal(tex2D(_Normal, uv), _NormalPower);
+
+            o.Metallic = tex2D(_MetallicMap, uv).r * _Metallic;
+
+            o.Smoothness = 1 - tex2D(_RoughnessMap, uv).r * _Roughness;
+
+            o.Occlusion = tex2D(_Occlusion, uv).r;
+
+            o.Alpha = col.a;
+            clip(col.a -_AlphaClip);
         }
         ENDCG
     }

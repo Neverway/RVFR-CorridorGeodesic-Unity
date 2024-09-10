@@ -1,4 +1,4 @@
-//===================== (Neverway 2024) Written by _____ =====================
+//===================== (Neverway 2024) Written by Andre Blunt =====================
 //
 // Purpose:
 // Notes:
@@ -29,13 +29,13 @@ public class Logic_Counter: LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void OnEnable()
-    {
-        if (addSignal)
-            addSignal.OnPowerStateChanged += SourcePowerStateChanged;
-        if(subtractSignal)
-            subtractSignal.OnPowerStateChanged += SourcePowerStateChanged;
-    }
+    //private void OnEnable()
+    //{
+    //    if (addSignal)
+    //        addSignal.OnPowerStateChanged += SourcePowerStateChanged;
+    //    if(subtractSignal)
+    //        subtractSignal.OnPowerStateChanged += SourcePowerStateChanged;
+    //}
 
     //=-----------------=
     // Internal Functions
@@ -45,6 +45,12 @@ public class Logic_Counter: LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.Add(addSignal);
+        subscribeLogicComponents.Add(subtractSignal);
+        base.AutoSubscribe();
+    }
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);

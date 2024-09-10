@@ -1,4 +1,4 @@
-//===================== (Neverway 2024) Written by _____ =====================
+//===================== (Neverway 2024) Written by Andre Blunt =====================
 //
 // Purpose:
 // Notes:
@@ -19,7 +19,7 @@ public class Logic_And: LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private List<LogicComponent> inputs = new List<LogicComponent>();
+    [SerializeField] private List<LogicComponent> inputSignals = new List<LogicComponent>();
 
     //=-----------------=
     // Reference Variables
@@ -29,28 +29,28 @@ public class Logic_And: LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void OnEnable()
-    {
-        if (inputs.Count == 0)
-            return;
+    //private void OnEnable()
+    //{
+    //    if (inputs.Count == 0)
+    //        return;
 
-        inputs.ForEach(i =>
-        {
-            if (i)
-                i.OnPowerStateChanged += SourcePowerStateChanged;
-        });
-    }
-    private void OnDestroy()
-    {
-        if (inputs.Count == 0)
-            return;
+    //    inputs.ForEach(i =>
+    //    {
+    //        if (i)
+    //            i.OnPowerStateChanged += SourcePowerStateChanged;
+    //    });
+    //}
+    //private void OnDestroy()
+    //{
+    //    if (inputs.Count == 0)
+    //        return;
 
-        inputs.ForEach(i => 
-        {
-            if (i)
-                i.OnPowerStateChanged -= SourcePowerStateChanged;
-        });
-    }
+    //    inputs.ForEach(i => 
+    //    {
+    //        if (i)
+    //            i.OnPowerStateChanged -= SourcePowerStateChanged;
+    //    });
+    //}
 
     //=-----------------=
     // Internal Functions
@@ -60,8 +60,13 @@ public class Logic_And: LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.AddRange(inputSignals);
+        base.AutoSubscribe();
+    }
     public override void SourcePowerStateChanged(bool powered)
     {
-        isPowered = inputs.TrueForAll(i => i && i.isPowered);
+        isPowered = inputSignals.TrueForAll(i => i && i.isPowered);
     }
 }

@@ -9,14 +9,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class DynamicCable : MonoBehaviour
+public class DynamicCable : LogicComponent
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [SerializeField] private float updateRate = 1;
-    public NEW_LogicProcessor inputSignal;
+    public LogicComponent inputSignal;
     public bool generateWaypointsUsingLength; // Auto-generate waypoints based on the distance between the two anchors
     public float waypointsPerUnit; // How many waypoints should be created per unit of distance between the anchors
     public bool updateOnMove;
@@ -32,7 +30,6 @@ public class DynamicCable : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private NEW_LogicProcessor logicProcessor;
     [SerializeField] private Material cableUnpowered, cablePowered;
     [SerializeField] private GameObject anchorPointA, anchorPointB;
     [SerializeField] private GameObject waypointsRoot;
@@ -45,7 +42,6 @@ public class DynamicCable : MonoBehaviour
     //=-----------------=
     private void Start()
     {
-        logicProcessor = GetComponent<NEW_LogicProcessor>();
         lineRenderer = GetComponent<LineRenderer>();
         //if (!generateWaypointsUsingLength) GatherWaypoints();
         if (generateWaypointsUsingLength)
@@ -53,20 +49,10 @@ public class DynamicCable : MonoBehaviour
             GenerateWaypoints();
             //GatherWaypoints();
         }
-        InvokeRepeating(nameof(UpdateCable), 0, updateRate);
     }
 
-    private void UpdateCable()
+    private void Update()
     {
-        if (inputSignal)
-        {
-            SetCablePowered(inputSignal.isPowered);
-            logicProcessor.isPowered = inputSignal.isPowered;
-            if (logicProcessor.hasPowerStateChanged)
-            {
-            }
-        }
-        
         if (AnchorPointsMoved() && generateWaypointsUsingLength && updateOnMove)
         {
             GenerateWaypoints();
@@ -156,6 +142,19 @@ public class DynamicCable : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.Add(inputSignal);
+        base.AutoSubscribe();
+    }
+    public override void SourcePowerStateChanged(bool powered)
+    {
+        base.SourcePowerStateChanged(powered);
+
+        isPowered = powered;
+
+        SetCablePowered(isPowered);
+    }
     public void SetCablePowered(bool _isPowered)
     {
         if (_isPowered)

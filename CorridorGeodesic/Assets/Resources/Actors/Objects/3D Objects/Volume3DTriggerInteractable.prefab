@@ -198,10 +198,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6276463742160257089, guid: c14d3f99c71d2f5c5920d5892075b3f3,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1385392342974309333}
-    - targetCorrespondingSourceObject: {fileID: 6276463742160257089, guid: c14d3f99c71d2f5c5920d5892075b3f3,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6376975871621139151}
   m_SourcePrefab: {fileID: 100100000, guid: c14d3f99c71d2f5c5920d5892075b3f3, type: 3}
 --- !u!4 &8767485977656216626 stripped
@@ -216,21 +212,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2999706689375791429}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1385392342974309333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9132002430392707332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPowered: 0
-  hasPowerStateChanged: 0
-  incomingPowerSignals: []
 --- !u!114 &6376975871621139151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf978b39f9a2b6508a1bb2cebc9cd4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPowered: 0
   owningTeam: 
   affectsOwnTeam: 0
   ignoreHeldObjects: 1
