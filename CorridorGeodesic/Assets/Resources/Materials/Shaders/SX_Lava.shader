@@ -126,7 +126,7 @@ Shader "Unlit/SX_Lava"
 
                 float4 output = lerp(_ColdColor, _HotColor, col * _Offset) * _StrengthUnder;
 
-                half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos))); 
+                half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos)));
                 half4 edgeLine = 1 - saturate(_Edge* (depth - i.scrPos.w));
 
                 //half4 fog = (depth - i.scrPos.w);

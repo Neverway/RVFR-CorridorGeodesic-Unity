@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Logic_Toggle : LogicComponent
+public class Opt_Lifetime: MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -19,7 +19,8 @@ public class Logic_Toggle : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent inputSignal;
+    [SerializeField] private DisableType disableType;
+    [SerializeField] private float lifeTime = 1;
 
     //=-----------------=
     // Reference Variables
@@ -29,34 +30,32 @@ public class Logic_Toggle : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    //private void OnEnable()
-    //{
-    //    if (input)
-    //        input.OnPowerStateChanged += SourcePowerStateChanged;
-    //}
-    //private void OnDestroy()
-    //{
-    //    if (input)
-    //        input.OnPowerStateChanged -= SourcePowerStateChanged;
-    //}
+    private void OnEnable()
+    {
+        StartCoroutine(WaitLifetime());
+    }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    IEnumerator WaitLifetime()
+    {
+        yield return new WaitForSeconds(lifeTime);
 
+        switch (disableType)
+        {
+            case DisableType.Destroy:
+                Destroy(gameObject);
+                break;
+            case DisableType.Disable:
+                gameObject.SetActive(false);
+                break;
+            default:
+                break;
+        }
+    }
 
     //=-----------------=
     // External Functions
     //=-----------------=
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.Add(inputSignal);
-        base.AutoSubscribe();
-    }
-    public override void SourcePowerStateChanged(bool powered)
-    {
-        base.SourcePowerStateChanged(powered);
-
-        isPowered = powered ? !isPowered : isPowered;
-    }
 }

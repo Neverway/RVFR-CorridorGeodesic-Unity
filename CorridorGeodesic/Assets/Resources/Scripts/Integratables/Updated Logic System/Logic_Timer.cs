@@ -1,4 +1,4 @@
-//===================== (Neverway 2024) Written by _____ =====================
+//===================== (Neverway 2024) Written by Andre Blunt =====================
 //
 // Purpose:
 // Notes:
