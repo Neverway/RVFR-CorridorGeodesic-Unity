@@ -10,7 +10,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Projectile_Vacumm : Projectile_VacummNew
+public class Projectile_Vacumm : Projectile
 {
     //=-----------------=
     // Public Variables
@@ -20,7 +20,6 @@ public class Projectile_Vacumm : Projectile_VacummNew
     [SerializeField] private float pinOffset;
     public bool pinned => disabled;
     [SerializeField] private GameObject spawnOnDeath;
-    [SerializeField] private float lifetimeSeconds = 1.5f;
 
     //=-----------------=
     // Private Variables
@@ -41,8 +40,15 @@ public class Projectile_Vacumm : Projectile_VacummNew
     {
         base.Awake();
 
-        StartCoroutine(Lifetime());
         audioSource = GetComponent<AudioSource_PitchVarienceModulator>();
+    }
+    private void OnDestroy()
+    {
+        ProjectileDeath();
+    }
+    private void OnDisable()
+    {
+        //ProjectileDeath();
     }
 
     //=-----------------=
@@ -70,7 +76,7 @@ public class Projectile_Vacumm : Projectile_VacummNew
                 int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
                 if (subMeshIndex != -1 && !CorGeo_ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
                 {
-                    KillProjectile();
+                    Destroy(gameObject);
                     killScheduled = true;
                 }
             }
@@ -88,18 +94,11 @@ public class Projectile_Vacumm : Projectile_VacummNew
         }
         else
         {
-            KillProjectile();
-            killScheduled = true;
+            Destroy(gameObject);
         }
     }
-    private IEnumerator Lifetime()
-    {
-        yield return new WaitForSeconds(lifetimeSeconds);
-        if (disabled) yield break; // Exit if the lamp has landed 
-        KillProjectile ();
-    }
 
-    public void KillProjectile (bool removeProjectileFromList = true)
+    public void ProjectileDeath (bool removeProjectileFromList = true)
     {
         // Note: I added removeProjectileFromList because otherwise, calling this function from the geoFolder, will
         // update the list while the utility is trying to iterate through it (That's no good!) ~Liz
@@ -120,9 +119,6 @@ public class Projectile_Vacumm : Projectile_VacummNew
         {
             Instantiate (spawnOnDeath, transform.position, Quaternion.identity);
         }
-        
-        // Erase the projectile
-        Destroy (gameObject);
     }
     int GetSubMeshIndex(Mesh mesh, int triIndex)
     {
