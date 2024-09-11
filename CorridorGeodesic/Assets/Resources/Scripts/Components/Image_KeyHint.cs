@@ -53,6 +53,7 @@ public class Image_KeyHint : MonoBehaviour
     //=-----------------=
     private void UpdateKeyHint()
     {
+        applicationKeybinds = FindObjectOfType<ApplicationKeybinds>();
         var action = applicationKeybinds.inputActionAsset.FindActionMap(targetActionMap).FindAction(targetAction);
         // If action is null it's probably because the target action is a composite, so we'll need to parse the direction we want
         if (action == null)
@@ -108,15 +109,13 @@ public class Image_KeyHint : MonoBehaviour
             string[] splitBinding = binding.path.Split("/");
             var bindingKey = splitBinding[1];
 
-            if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 0)
-            {
-                hintImage.sprite = applicationKeybinds.GetKeybindImage(applicationKeybinds.currentDeviceID, bindingKey);
-            }
-            else if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1)
+            print(controlScheme);
+            print(applicationKeybinds.currentDeviceID);
+            if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1 || controlScheme == "Keyboard&Mouse" && targetInputDevice == 0 && applicationKeybinds.currentDeviceID == 1 )
             {
                 hintImage.sprite = applicationKeybinds.GetKeybindImage(1, bindingKey);
             }
-            else if (controlScheme == "Gamepad" && targetInputDevice == 2)
+            else if (controlScheme == "Gamepad" && targetInputDevice == 2 || controlScheme == "Gamepad" && targetInputDevice == 0 && applicationKeybinds.currentDeviceID == 2 )
             {
                 hintImage.sprite = applicationKeybinds.GetKeybindImage(2, bindingKey);
             }
