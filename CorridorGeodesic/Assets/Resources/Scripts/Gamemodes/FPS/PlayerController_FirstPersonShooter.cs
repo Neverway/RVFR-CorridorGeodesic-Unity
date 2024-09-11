@@ -152,7 +152,7 @@ public class PlayerController_FirstPersonShooter : PawnController
                 _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).ReleaseSecondary();
             }
         }
-        if (fpsActions.Action.WasPressedThisFrame())
+        if (fpsActions.ClearRift.WasPressedThisFrame())
         {
             if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
             {
@@ -268,7 +268,7 @@ public class PlayerController_FirstPersonShooter : PawnController
 
     private void ControlSprinting(Pawn _pawn)
     {
-        if (fpsActions.Action.IsPressed() && _pawn.IsGrounded3D())
+        if (fpsActions.ClearRift.IsPressed() && _pawn.IsGrounded3D())
         {
             _pawn.currentState.movementSpeed = Mathf.Lerp(_pawn.currentState.movementSpeed,
                 _pawn.defaultState.movementSpeed * _pawn.currentState.sprintSpeedMultiplier,

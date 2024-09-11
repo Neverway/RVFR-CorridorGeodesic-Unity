@@ -8,6 +8,7 @@
 //=============================================================================
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -116,19 +117,39 @@ public class ApplicationKeybinds : MonoBehaviour
         return _image;
     }
 
+    private bool isOperationCompleted; // Class-level field for tracking operation completion.
+
+    private IEnumerator RebindTimeout(float _timeLimit)
+    {
+
+        yield return new WaitForSeconds(_timeLimit);
+        if (rebindOperation == null || isOperationCompleted) yield break; // If already completed or canceled, exit coroutine.
+
+        // Timeout occurred
+        if (!isOperationCompleted)
+        {
+            Debug.LogWarning("Rebind operation timed out.");
+            Destroy(GameInstance.GetWidget("WB_Settings_Controls_Rebinding"));
+            rebindOperation?.Cancel();
+            rebindOperation?.Dispose();
+            rebindOperation = null;
+        }
+    }
+
     public void SetBinding(string _actionMap, string _action, bool _isComposite)
     {
         Debug.Log($"[{this.name}] Executing function 'SetBinding(actionMap={_actionMap}, action={_action}, isComposite={_isComposite})'");
-        // Code courtesy of VoidSay
-        // Source: https://forum.unity.com/threads/changing-inputactions-bindings-at-runtime.842188/
-        // must dispose of collection or else you will have a memory leak and error with crash!
+
         rebindOperation?.Cancel();
+        isOperationCompleted = false; // Reset completion status.
 
         void CleanUp()
         {
             rebindOperation?.Dispose();
             rebindOperation = null;
         }
+
+        StartCoroutine(RebindTimeout(2f)); // Start timeout check for 5 seconds.
 
         if (!_isComposite)
         {
@@ -142,6 +163,8 @@ public class ApplicationKeybinds : MonoBehaviour
             })
             .OnComplete(something =>
             {
+                isOperationCompleted = true; // Set flag to true if operation completed successfully
+                StopAllCoroutines();
                 Destroy(GameInstance.GetWidget("WB_Settings_Controls_Rebinding"));
                 // Save
                 string device = string.Empty;
@@ -167,6 +190,8 @@ public class ApplicationKeybinds : MonoBehaviour
             })
             .OnComplete(something =>
             {
+                isOperationCompleted = true; // Set flag to true if operation completed successfully
+                StopAllCoroutines();
                 Destroy(GameInstance.GetWidget("WB_Settings_Controls_Rebinding"));
                 // Save
                 string device = string.Empty;
@@ -178,6 +203,9 @@ public class ApplicationKeybinds : MonoBehaviour
             });
         }
     }
+
+
+
 }
 
 [Serializable]
