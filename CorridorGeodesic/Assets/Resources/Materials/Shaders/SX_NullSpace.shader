@@ -27,6 +27,7 @@ Shader "Soulex/SX_NullSpace"
             #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
+            #include "SX_Helpers.cginc"
 
             struct appdata
             {
@@ -71,28 +72,55 @@ Shader "Soulex/SX_NullSpace"
             }
             fixed4 frag (v2f i) : SV_Target
             {
-                float3 weights = abs(i.normal);
-                weights /= (weights.x + weights.y + weights.z);
+                //float3 weights = abs(i.normal);
+                //weights /= (weights.x + weights.y + weights.z);
 
                 float2 timeUV = float2(1, 1) * _Time.x;
                 float2 screenUV = (i.screenPos / i.screenPos.w);
                 screenUV.y *= (_ScreenParams.y/_ScreenParams.x);
 
-                float2 uv_front = TRANSFORM_TEX(i.worldPos.xy, _MainTex) * 0.1 + timeUV;
-                float2 uv_side = TRANSFORM_TEX(i.worldPos.zy, _MainTex) * 0.1 + timeUV;
-                float2 uv_top = TRANSFORM_TEX(i.worldPos.xz, _MainTex) * 0.1 + timeUV;
+                UVMod triplanarMod;
+                triplanarMod.uvScale = 0.1;
+                triplanarMod.uvOffset = timeUV;
 
-                float3 distort_front = tex2D(_DistortTex, uv_front * 0.25).rgb * _DistortIntensity;
-                float3 distort_side = tex2D(_DistortTex, uv_side * 0.25).rgb * _DistortIntensity;
-                float3 distort_top = tex2D(_DistortTex, uv_top * 0.25).rgb * _DistortIntensity;
+                TriplanarUV UVs = GetTriplanarUVs(i.worldPos, i.normal, 1, triplanarMod, _MainTex, _MainTex_ST);
 
-                float3 distort = distort_front * weights.z + distort_side * weights.x + distort_top * weights.y;
+                //float2 uv_front = TRANSFORM_TEX(i.worldPos.xy, _MainTex) * 0.1 + timeUV;
+                //float2 uv_side = TRANSFORM_TEX(i.worldPos.zy, _MainTex) * 0.1 + timeUV;
+                //float2 uv_top = TRANSFORM_TEX(i.worldPos.xz, _MainTex) * 0.1 + timeUV;
 
-                float4 col_front = tex2D(_MainTex, uv_front + distort.rg);
-                float4 col_side = tex2D(_MainTex, uv_side + distort.bg);
-                float4 col_top = tex2D(_MainTex, uv_top + distort.rb);
+                //float3 distort_front = tex2D(_DistortTex, uv_front * 0.25).rgb * _DistortIntensity;
+                //float3 distort_side = tex2D(_DistortTex, uv_side * 0.25).rgb * _DistortIntensity;
+                //float3 distort_top = tex2D(_DistortTex, uv_top * 0.25).rgb * _DistortIntensity;
 
-                float4 col = (col_front * weights.z + col_side * weights.x + col_top * weights.y) * _Color * 0.5;
+                //float3 distort = distort_front * weights.z + distort_side * weights.x + distort_top * weights.y;
+
+                UVMod distortMod;
+                distortMod.uvScale = 0.25;
+                distortMod.uvOffset = 0;
+
+                float3 distort = GetTriplanarTexture(_DistortTex, UVs, distortMod, distortMod, distortMod).rgb;
+
+                UVMod colTop;
+                UVMod colSide;
+                UVMod colBottom;
+
+                colTop.uvScale = 1;
+                colTop.uvOffset = distort.rg;
+
+                colSide.uvScale = 1;
+                colSide.uvOffset = distort.bg;
+
+                colBottom.uvScale = 1;
+                colBottom.uvOffset = distort.rb;
+
+                float4 col = GetTriplanarTexture(_MainTex, UVs, colTop, colSide, colBottom) * _Color * 0.5;
+
+                //float4 col_front = tex2D(_MainTex, uv_front + distort.rg);
+                //float4 col_side = tex2D(_MainTex, uv_side + distort.bg);
+                //float4 col_top = tex2D(_MainTex, uv_top + distort.rb);
+
+                //float4 col = (col_front * weights.z + col_side * weights.x + col_top * weights.y) * _Color * 0.5;
 
                 float3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos);
 

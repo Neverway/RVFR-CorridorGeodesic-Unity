@@ -9,42 +9,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class Func_GeoGunFizzler : MonoBehaviour
+public class Func_GeoGunFizzler : LogicComponent
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public NEW_LogicProcessor inputSignal;
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-
+    [SerializeField] private LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private NEW_LogicProcessor logicProcessor;
 
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-        logicProcessor = GetComponent<NEW_LogicProcessor>();
-    }
 
-    private void Update()
-    {
-        if (!inputSignal) return;
-        if (inputSignal.isPowered)
-        {
-            ClearGeoGunRifts();
-        }
-    }
 
     //=-----------------=
     // Internal Functions
@@ -57,5 +42,19 @@ public class Func_GeoGunFizzler : MonoBehaviour
     public void ClearGeoGunRifts()
     {
         FindObjectOfType<Pawn_WeaponInventory>().ClearGeoGunRifts();
+    }
+    public override void AutoSubscribe()
+    {
+        subscribeLogicComponents.Add(inputSignal);
+        base.AutoSubscribe();
+    }
+    public override void SourcePowerStateChanged(bool powered)
+    {
+        base.SourcePowerStateChanged(powered);
+
+        isPowered = powered;
+
+        if (isPowered)
+            ClearGeoGunRifts();
     }
 }
