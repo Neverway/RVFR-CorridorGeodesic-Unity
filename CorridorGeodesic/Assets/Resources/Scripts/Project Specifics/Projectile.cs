@@ -32,6 +32,8 @@ public class Projectile : MonoBehaviour
 
     private LayerMask ignoreMask;
 
+    private Vector3 moveVector; //used in update loop collision & move
+
     //=-----------------=
     // Reference Variables
     //=-----------------=
@@ -50,8 +52,9 @@ public class Projectile : MonoBehaviour
         if (disabled)
             return;
 
-        MoveLogic ();
-        CollisionLogic ();
+        moveVector = transform.forward * moveSpeed * Time.deltaTime;
+        if (!CollisionLogic ())
+            MoveLogic ();
     }
 
     //=-----------------=
@@ -59,15 +62,16 @@ public class Projectile : MonoBehaviour
     //=-----------------=
     public virtual void MoveLogic ()
     {
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        transform.position += moveVector;
     }
-    public virtual void CollisionLogic ()
+    public virtual bool CollisionLogic ()
     {
-        if (Physics.Raycast (lastPosition, transform.forward, out RaycastHit hit, Vector3.Distance (lastPosition, transform.position) + radius, ignoreMask))
+        if (Physics.Raycast (transform.position, transform.forward * moveSpeed * Time.deltaTime, out RaycastHit hit, moveVector.magnitude + radius + 1f, ignoreMask))
         {
             OnCollision (hit);
+            return true;
         }
-        lastPosition = transform.position;
+        return false;
     }
     public virtual void OnCollision (RaycastHit hit)
     {

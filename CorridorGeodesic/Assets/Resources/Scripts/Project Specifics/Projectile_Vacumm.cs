@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using DG.Tweening;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -78,7 +79,7 @@ public class Projectile_Vacumm : Projectile
                 return;
 
             // Set rotation to match face normal
-            transform.rotation = Quaternion.LookRotation(-hit.normal);
+            transform.DORotateQuaternion(Quaternion.LookRotation(-hit.normal),0.08f);
             transform.position = hit.point;
             transform.localPosition += hit.normal * pinOffset;
 
