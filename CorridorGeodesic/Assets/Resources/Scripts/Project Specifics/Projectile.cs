@@ -109,9 +109,9 @@ public class Projectile : MonoBehaviour
         {
             return;
         }
-        float time = (distance * moveSpeed) - 0.2f;
+        float time = (distance * moveSpeed) - 0.1f;
         if (time < 0) time = 0;
         projectileGraphics.position = graphicsPosition;
-        projectileGraphics.DOLocalMove (Vector3.zero, distance * moveSpeed);
+        projectileGraphics.DOLocalMove (Vector3.zero, time);
     }
 }
