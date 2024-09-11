@@ -16,13 +16,16 @@ public class Actor_StepUp : MonoBehaviour
     // Public Variables
     //=-----------------=
     [Tooltip("The maximum a player can set upwards in units when they hit a wall that's potentially a step")]
-    public float maxStepHeight = 0.4f;
+    public float maxStepHeight = 0.9f;
 
     [Tooltip(
         "How much to overshoot into the direction a potential step in units when testing. High values prevent player from walking up tiny steps but may cause problems.")]
-    public float stepSearchOvershoot = 0.01f;
+    public float stepSearchOvershoot = 0.005f;
 
     public float additionalStepUpOffset=1;
+    public float stephieghtvar1 = 0.00001f;
+    public float steptestvar = 0.00000001f;
+    public float anglecheck = 0.0001f;
 
 
     
@@ -66,7 +69,7 @@ public class Actor_StepUp : MonoBehaviour
 
         foreach (var contact in contactPoints)
         {
-            Debug.DrawRay(contact.point, -contact.normal, Color.cyan);
+            Debug.DrawRay(contact.point, contact.normal, Color.cyan, 1);
         }
         
         contactPoints.Clear();
@@ -97,7 +100,7 @@ public class Actor_StepUp : MonoBehaviour
         foreach(ContactPoint cp in contactPoints)
         {   
             //Pointing with some up direction
-            if(cp.normal.y > 0.0001f && (found == false || cp.normal.y > groundCP.normal.y))
+            if(cp.normal.y >= anglecheck && (found == false || cp.normal.y > groundCP.normal.y))
             {
                 groundCP = cp;
                 found = true;
@@ -147,7 +150,7 @@ public class Actor_StepUp : MonoBehaviour
         //print("ResolveStepUp 0");
         
         //( 1 ) Check if the contact point normal matches that of a step (y close to 0)
-        if(Mathf.Abs(stepTestCP.normal.y) >= 0.00001f)
+        if(Mathf.Abs(stepTestCP.normal.y) >= steptestvar)
         {
             //print("Contact point was not flat enough");
             return false;
@@ -155,7 +158,7 @@ public class Actor_StepUp : MonoBehaviour
         //print("Found a contact point that could be a step");
         
         //( 2 ) Make sure the contact point is low enough to be a step
-        if( !(stepTestCP.point.y - groundCP.point.y < maxStepHeight) )
+        if (stepTestCP.point.y - groundCP.point.y > maxStepHeight)
         {
             //print("Step distance was too high to step up");
             return false;
@@ -164,7 +167,7 @@ public class Actor_StepUp : MonoBehaviour
         //( 3 ) Check to see if there's actually a place to step in front of us
         //Fires one Raycast
         RaycastHit hitInfo;
-        float stepHeight = groundCP.point.y + maxStepHeight + 0.0001f;
+        float stepHeight = groundCP.point.y + maxStepHeight + stephieghtvar1;
         Vector3 stepTestInvDir = new Vector3(-stepTestCP.normal.x, 0, -stepTestCP.normal.z).normalized;
         Vector3 origin = new Vector3(stepTestCP.point.x, stepHeight, stepTestCP.point.z) + (stepTestInvDir * stepSearchOvershoot);
         Vector3 direction = Vector3.down;
@@ -177,10 +180,15 @@ public class Actor_StepUp : MonoBehaviour
         Debug.Log("Max Step Height: " + maxStepHeight);*/
 
         Ray ray = new Ray(origin, direction);
+        
+        Debug.Log($"Step Test Contact Point Y Diff: {stepTestCP.point.y - groundCP.point.y}");
+        Debug.Log($"Ground CP Normal Y: {groundCP.normal.y}, StepTest Normal Y: {stepTestCP.normal.y}");
+
         if (!stepCol) return false;
         if (!stepCol.Raycast(ray, out hitInfo, maxStepHeight))
         {
-            //Debug.Log("Raycast Failed - Ray did not hit any collider");
+            Debug.Log($"Raycast Origin: {origin}, Hit: {hitInfo.point}");
+            Debug.Log("Raycast Failed - Ray did not hit any collider");
             return false;
         }
         else
