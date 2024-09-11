@@ -181,14 +181,10 @@ public class Actor_StepUp : MonoBehaviour
 
         Ray ray = new Ray(origin, direction);
         
-        Debug.Log($"Step Test Contact Point Y Diff: {stepTestCP.point.y - groundCP.point.y}");
-        Debug.Log($"Ground CP Normal Y: {groundCP.normal.y}, StepTest Normal Y: {stepTestCP.normal.y}");
 
         if (!stepCol) return false;
         if (!stepCol.Raycast(ray, out hitInfo, maxStepHeight))
         {
-            Debug.Log($"Raycast Origin: {origin}, Hit: {hitInfo.point}");
-            Debug.Log("Raycast Failed - Ray did not hit any collider");
             return false;
         }
         else
