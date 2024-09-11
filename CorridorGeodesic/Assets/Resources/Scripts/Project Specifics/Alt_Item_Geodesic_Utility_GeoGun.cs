@@ -69,6 +69,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     private bool isCutPreviewActive = false;
     private bool isCollapseStarted = false;
+    private bool delayRiftCollapse = false;
 
     enum SliceSpace
     {
@@ -100,6 +101,24 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             SetupForConvergingMarkers ();
         }
         secondaryHeld = true;
+    }
+
+    /// <summary>
+    /// Pause actors to avoid them being bumped by innaccurate collision meshes
+    /// </summary>
+    private IEnumerator FreezeActors ()
+    {
+        delayRiftCollapse = true;
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+             actor.Freeze ();
+        }
+        yield return null;
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+            actor.UnFreeze ();
+        }
+        delayRiftCollapse = false;
     }
 
     public override void ReleaseSecondary ()
@@ -144,7 +163,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
-            if (moveRift)
+            if (moveRift && !delayRiftCollapse)
             {
                 MoveRift ();
             }
@@ -481,16 +500,14 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
         return false;
     }
-
-    /// <summary>
-    ///  if not started already.
-    /// </summary>
+    
     private void SetupForConvergingMarkers ()
     {
         if (AreMarkersPinned ())
         {
             if (deployedRift)
             {
+                StartCoroutine (FreezeActors ());
                 Debug.Log ("CONVERGING");
                 meshSlicers = FindObjectsOfType<Mesh_Slicable> ();
                 nullSlices = new List<GameObject> ();

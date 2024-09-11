@@ -43,11 +43,13 @@ public class CorGeo_ActorData : MonoBehaviour
     // Private Variables
     //=-----------------=
 
+    private Vector3 prevVelocity;
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
 
+    new private Rigidbody rigidbody;
 
     //=-----------------=
     // Mono Functions
@@ -55,6 +57,7 @@ public class CorGeo_ActorData : MonoBehaviour
 
     private void Start ()
     {
+        rigidbody= GetComponent<Rigidbody>();
         homePosition = transform.position;
         homeScale = transform.localScale;
         homeParent = transform.parent;
@@ -94,6 +97,22 @@ public class CorGeo_ActorData : MonoBehaviour
                                     Alt_Item_Geodesic_Utility_GeoGun.riftWidth *
                                     (Alt_Item_Geodesic_Utility_GeoGun.lerpAmount);
         }
+    }
+
+    public void Freeze ()
+    {
+        if (rigidbody == null) return;
+
+          prevVelocity = rigidbody.velocity;
+        rigidbody.isKinematic = true;
+    }
+
+    public void UnFreeze ()
+    {
+        if (rigidbody == null) return;
+
+        rigidbody.isKinematic = false;
+        rigidbody.velocity = prevVelocity;
     }
 
 
