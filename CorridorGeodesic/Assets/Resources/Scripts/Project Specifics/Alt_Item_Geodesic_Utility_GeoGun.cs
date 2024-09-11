@@ -95,7 +95,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     public override void UseSecondary ()
     {
-        ConvergeInfinityMarkers ();
+        if (!isCollapseStarted)
+        {
+            SetupForConvergingMarkers ();
+        }
         secondaryHeld = true;
     }
 
@@ -171,8 +174,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         riftTimer = Mathf.Clamp (riftTimer, -maxRiftTimer, maxRiftTimer);
 
-        // Calculate offset
-        Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
         lerpAmount = riftTimer / maxRiftTimer;
 
         float prevRiftWidth = deployedRift.transform.localScale.z * riftWidth;
@@ -188,19 +189,19 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
 
         // Collapse actors in planeB/B-Space
+        Vector3 moveInB = cutPreviews[1].transform.position - previousPlanePosition;
         foreach (CorGeo_ActorData obj in CorGeo_ActorDatas)
         {
             if (obj.space == CorGeo_ActorData.Space.B)
             {
-                Vector3 move = cutPreviews[1].transform.position - previousPlanePosition;
 
                 if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
                 {
-                    objRigidBody.MovePosition (obj.transform.position + move);
+                    objRigidBody.MovePosition (obj.transform.position + moveInB);
                 }
                 else
                 {
-                    obj.transform.position += move;
+                    obj.transform.position += moveInB;
                 }
             }
 
@@ -481,12 +482,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         return false;
     }
 
-    private void ConvergeInfinityMarkers ()
+    /// <summary>
+    ///  if not started already.
+    /// </summary>
+    private void SetupForConvergingMarkers ()
     {
-        if (isCollapseStarted)
-        {
-            return;
-        }
         if (AreMarkersPinned ())
         {
             if (deployedRift)
