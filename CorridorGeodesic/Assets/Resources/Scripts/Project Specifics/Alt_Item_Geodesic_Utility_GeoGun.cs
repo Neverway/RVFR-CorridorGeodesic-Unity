@@ -341,7 +341,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         if (currentAmmo >= 2) return;
         foreach (var projectile in deployedInfinityMarkers)
         {
-            projectile.GetComponent<Projectile_Vacumm> ().KillProjectile (false);
+            projectile.GetComponent<Projectile_Vacumm> ().ProjectileDeath (false);
         }
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;

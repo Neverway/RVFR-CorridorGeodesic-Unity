@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile_VacummNew: MonoBehaviour
+public class Projectile: MonoBehaviour
 {
     //=-----------------=
     // Public Variables
