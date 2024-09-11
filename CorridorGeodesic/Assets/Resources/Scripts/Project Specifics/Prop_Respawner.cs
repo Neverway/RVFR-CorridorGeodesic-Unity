@@ -36,7 +36,7 @@ public class Prop_Respawner : MonoBehaviour
         {
             if (spawnedObject == null && spawnWorker == null)
             {
-                spawnWorker = StartCoroutine (SpawnWorker ());
+                spawnWorker = StartCoroutine(SpawnWorker());
             }
         }
     }
@@ -45,10 +45,10 @@ public class Prop_Respawner : MonoBehaviour
     // Internal Functions
     //=-----------------=
 
-    private IEnumerator SpawnWorker ()
+    private IEnumerator SpawnWorker()
     {
         yield return new WaitForSeconds(spawnDelay);
-        spawnedObject = Instantiate (prefabToSpawn, transform.position, transform.rotation);
+        spawnedObject = Instantiate(prefabToSpawn, transform.position, transform.rotation);
         spawnWorker = null;
     }
 
@@ -59,16 +59,16 @@ public class Prop_Respawner : MonoBehaviour
     /// <summary>
     /// Destroy the spawned object so that it will respawn.
     /// </summary>
-    public void DestroySpawnedObject ()
+    public void DestroySpawnedObject()
     {
-        StartCoroutine (DestroyWorker ());
+        StartCoroutine(DestroyWorker());
     }
 
     /// <summary>
     /// Destroy the object after moving it to trigger OnTriggerExit for any objects it's inside of.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator DestroyWorker ()
+    private IEnumerator DestroyWorker()
     {
         waitForRespawn = false;
         if (spawnedObject == null)
@@ -77,10 +77,10 @@ public class Prop_Respawner : MonoBehaviour
         }
 
         //Move the spawne dobject far away, triggering OnTriggerExit for anything it may have been inside of
-        spawnedObject.transform.position = new Vector3 (0, 1000, 0);
+        spawnedObject.transform.position = new Vector3(0, 1000, 0);
         //wait one frame, then destroy object
         yield return null;
-        Destroy (spawnedObject);
+        Destroy(spawnedObject);
     }
 
 }
