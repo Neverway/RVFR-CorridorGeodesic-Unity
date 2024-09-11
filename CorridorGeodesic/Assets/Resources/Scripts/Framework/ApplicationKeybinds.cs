@@ -26,6 +26,7 @@ public class ApplicationKeybinds : MonoBehaviour
     // Private Variables
     //=-----------------=
     private InputActionRebindingExtensions.RebindingOperation rebindOperation;
+    public int currentDeviceID = 1;
 
 
     //=-----------------=
@@ -36,6 +37,10 @@ public class ApplicationKeybinds : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Update()
+    {
+        GetCurrentInputDevice();
+    }
 
 
     //=-----------------=
@@ -47,12 +52,37 @@ public class ApplicationKeybinds : MonoBehaviour
     // External Functions
     //=-----------------=
     [Tooltip("1-Keyboard, 2-Controller")]
-    public int GetCurrentInputDevice()
+    public void GetCurrentInputDevice()
     {        
-        // Check for controller input
-        string[] joystickNames = Input.GetJoystickNames();
-        if (joystickNames.Length > 0) return 2;
-        return 1;
+        var lastDevice = InputSystem.devices;
+    
+        // Check the last active device
+        if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+        {
+            currentDeviceID = 1; // Keyboard
+            return;
+        }
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            currentDeviceID = 1;  // Mouse (treated the same as Keyboard)
+            return;
+        }
+        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
+        {
+            currentDeviceID = 2;  // Gamepad
+            return;
+        }
+        if (InputSystem.devices.Count > 0)
+        {
+            foreach (var device in InputSystem.devices)
+            {
+                if (device is TrackedDevice)
+                {
+                    currentDeviceID = 3; // Motion Controller / VR Controller
+                    return;
+                }
+            }
+        }
     }
     
     public Sprite GetKeybindImage(int _deviceID, string _keybindID)

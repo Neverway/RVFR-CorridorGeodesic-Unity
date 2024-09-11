@@ -9,6 +9,7 @@ using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Image))]
 public class Image_KeyHint : MonoBehaviour
@@ -109,7 +110,7 @@ public class Image_KeyHint : MonoBehaviour
 
             if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 0)
             {
-                hintImage.sprite = applicationKeybinds.GetKeybindImage(applicationKeybinds.GetCurrentInputDevice(), bindingKey);
+                hintImage.sprite = applicationKeybinds.GetKeybindImage(applicationKeybinds.currentDeviceID, bindingKey);
             }
             else if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1)
             {
@@ -127,4 +128,5 @@ public class Image_KeyHint : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+
 }
