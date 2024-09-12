@@ -109,8 +109,8 @@ public class Image_KeyHint : MonoBehaviour
             string[] splitBinding = binding.path.Split("/");
             var bindingKey = splitBinding[1];
 
-            print(controlScheme);
-            print(applicationKeybinds.currentDeviceID);
+            //print(controlScheme);
+            //print(applicationKeybinds.currentDeviceID);
             if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1 || controlScheme == "Keyboard&Mouse" && targetInputDevice == 0 && applicationKeybinds.currentDeviceID == 1 )
             {
                 hintImage.sprite = applicationKeybinds.GetKeybindImage(1, bindingKey);
