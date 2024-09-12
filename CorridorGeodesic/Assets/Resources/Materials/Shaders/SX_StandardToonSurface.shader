@@ -30,6 +30,13 @@ Shader "Soulex/SX_Standard Toon"
 
         _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
+
+        [Toggle] _UseSlice ("Use Slice", Float) = 0
+        [HideInInspector] _SliceCenterOne ("Slice Center One", Vector) = (0, 0, 0, 0)
+        [HideInInspector] _SliceCenterTwo ("Slice Center Two", Vector) = (0, 0, 0, 0)
+
+        [HideInInspector] _SliceNormalOne ("Slice Normal One", Vector) = (0, 0, 0, 0)
+        [HideInInspector] _SliceNormalTwo ("Slice Normal Two", Vector) = (0, 0, 0, 0)
     }
     SubShader
     {
@@ -40,7 +47,7 @@ Shader "Soulex/SX_Standard Toon"
 
         CGPROGRAM
 
-        #pragma surface surf Ramp fullforwardshadows
+        #pragma surface surf Ramp addshadow
         #pragma multi_compile _SPECULARMODE_TRUEPBR _SPECULARMODE_STYLIZEDPBR
 
         #pragma target 3.0
@@ -84,6 +91,14 @@ Shader "Soulex/SX_Standard Toon"
         float2 _Offset;
 
         fixed4 _Color;
+
+        float _UseSlice;
+
+        float3 _SliceCenterOne;
+        float3 _SliceCenterTwo;
+
+        float3 _SliceNormalOne;
+        float3 _SliceNormalTwo;
 
         struct SurfaceOutputToon
         {
@@ -200,7 +215,17 @@ Shader "Soulex/SX_Standard Toon"
             o.Occlusion = tex2D(_Occlusion, uv).r;
 
             o.Alpha = col.a;
+
+            float sliceA = dot(_SliceNormalOne, IN.worldPos - _SliceCenterOne);
+            float sliceB = dot(_SliceNormalTwo, IN.worldPos - _SliceCenterTwo);
+
             clip(col.a - _AlphaClip);
+
+            if(_UseSlice == 1)
+            {
+                clip(sliceA);
+                clip(sliceB);
+            }
         }
         ENDCG
     }
