@@ -19,6 +19,7 @@ public class Projectile_Vacumm : Projectile
     //[SerializeField] private float castRadius;
     //[SerializeField] private Vector3 castOffset;
     [SerializeField] private float pinOffset;
+    [SerializeField] private float gridSize = 1;
     public bool pinned => disabled;
     [SerializeField] private GameObject spawnOnDeath;
     [SerializeField] private float lifetimeSeconds = 1.5f;
@@ -80,11 +81,31 @@ public class Projectile_Vacumm : Projectile
 
             // Set rotation to match face normal
             transform.DORotateQuaternion(Quaternion.LookRotation(-hit.normal),0.08f);
-            transform.position = hit.point;
+            
+            // Snap to a grid along the face
+            // Get the hit position and normal
+            Vector3 hitPosition = hit.point + hit.normal * pinOffset;
+            // Figure out the relative Vector3.direction from the hit.point
+            Vector3 relativeRight, relativeUp;
+            if (Mathf.Abs(hit.normal.y) > 0.99f) // Nearly vertical surface (e.g., floor or ceiling)
+            {
+                relativeRight = Vector3.right; // Use world X axis for snapping
+                relativeUp = Vector3.forward;  // Use world Z axis for snapping
+            }
+            else
+            {
+                // Calculate relative axes based on the hit normal
+                relativeRight = Vector3.Cross(hit.normal, Vector3.up);
+                relativeUp = Vector3.Cross(hit.normal, relativeRight);
+            }
+            // Project the hit position onto these axes and snap along them
+            hitPosition += relativeRight * (Mathf.Round(Vector3.Dot(hitPosition, relativeRight) / gridSize) * gridSize - Vector3.Dot(hitPosition, relativeRight));
+            hitPosition += relativeUp * (Mathf.Round(Vector3.Dot(hitPosition, relativeUp) / gridSize) * gridSize - Vector3.Dot(hitPosition, relativeUp));
+            // Update the marker's position to the snapped position
+            transform.position = hitPosition;
             transform.localPosition += hit.normal * pinOffset;
 
             audioSource.PlaySound(markerPinned);
-
             disabled = true;
         }
         else
