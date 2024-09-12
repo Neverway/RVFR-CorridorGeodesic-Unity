@@ -26,6 +26,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //=-----------------=
     public Vector3 previousPlanePosition;
     private AudioSource_PitchVarienceModulator audioSource;
+    private RaycastHit viewPoint; //For aiming projectiles
 
 
     //=-----------------=
@@ -478,8 +479,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         currentAmmo--;
         audioSource.PlaySound(projectileFire);
         audioSource.PlaySound(projectileTravel);
-        var projectile = Instantiate (projectileVacumm, barrelTransform.transform.position, barrelTransform.rotation, null);
-        projectile.InitializeProjectile (projectileForce);
+        var projectile = Instantiate (projectileVacumm, centerViewTransform.transform.position, centerViewTransform.rotation, null);
+        projectile.InitializeProjectile (projectileForce, barrelTransform.position, viewPoint.distance);
         projectile.geoGun = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
         deployedInfinityMarkers.Add (projectile.gameObject);
     }
@@ -663,7 +664,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     private void AimTowardsCenterOfView ()
     {
-        RaycastHit viewPoint = new RaycastHit ();
+        viewPoint = new RaycastHit ();
         // Perform the raycast, ignoring the trigger layer
         if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out viewPoint, Mathf.Infinity, viewCastMask))
         {
