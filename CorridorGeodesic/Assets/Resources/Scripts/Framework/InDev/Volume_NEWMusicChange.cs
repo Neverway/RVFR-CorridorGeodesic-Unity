@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using FMODUnity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,20 +20,21 @@ public class Volume_NEWMusicChange : Volume
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private Audio_MusicSetting musicSetting;
+    [SerializeField] private EventReference musicEvent;
 
     [SerializeField] private bool resetAutomatically = false;
     [SerializeField] private bool pawnActivates=true;
     [Tooltip("Requires that pawnActivates is set to true")]
     [SerializeField] private bool onlyPlayerControllerPawns=true;
     [SerializeField] private bool physPropActivates;
+    [SerializeField] private MusicPlayType musicPlayType;
 
     private bool activated = false;
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private Audio_MusicManager musicManager => Audio_MusicManager.Instance;
+    private Audio_FMODMusicManager musicManager => Audio_FMODMusicManager.Instance;
 
     //=-----------------=
     // Mono Functions
@@ -93,7 +95,21 @@ public class Volume_NEWMusicChange : Volume
 
         if (!musicManager)
             return;
-        musicManager.SwitchMusic(musicSetting);
+
+        switch (musicPlayType)
+        {
+            case MusicPlayType.Play:
+                musicManager.SwitchMusic(musicEvent);
+                break;
+            case MusicPlayType.StopAllowFadeOut:
+                musicManager.StopMusic(true);
+                break;
+            case MusicPlayType.StopImmediate:
+                musicManager.StopMusic();
+                break;
+            default:
+                break;
+        } 
     }
 
     //=-----------------=
