@@ -55,6 +55,17 @@ public class Projectile_Vacumm : Projectile
         base.OnCollision(hit);
 
         bool killScheduled = false;
+
+        //If we hit an Outlet, then snap to it's attachpoint.
+        if (hit.collider.gameObject.TryGetComponent<BulbOutlet> (out var outlet))
+        {
+            transform.position = outlet.attachPoint.position;
+            transform.DORotateQuaternion (Quaternion.LookRotation (outlet.attachPoint.forward), 0.08f);
+            audioSource.PlaySound (markerPinned);
+            disabled = true;
+            return;
+        }
+
         hit.collider.gameObject.TryGetComponent<Mesh_Slicable>(out var _out);
         if (_out)
         {
@@ -134,7 +145,7 @@ public class Projectile_Vacumm : Projectile
                 geoGun.currentAmmo++;
             }
 
-            if (removeProjectileFromList) geoGun.deployedInfinityMarkers.Remove(gameObject);
+            if (removeProjectileFromList) geoGun.deployedInfinityMarkers.Remove(this);
         }
 
         //Spawn particle effect
