@@ -26,6 +26,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //=-----------------=
     public Vector3 previousPlanePosition;
     private AudioSource_PitchVarienceModulator audioSource;
+    private RaycastHit viewPoint; //For aiming projectiles
 
 
     //=-----------------=
@@ -59,16 +60,20 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     //Rift collapse lerp 
     private Vector3 riftNormal;
+    private Vector3 planeBStartPos;
     private float riftTimer = 0f;
-    private float maxRiftTimer = 2f;
+    private float maxRiftTimer;
     public static float lerpAmount;
     [SerializeField] private float riftSecondsPerUnit = 1f;
     public static float riftWidth;
-    private Vector3 planeBStartPos;
+    private float minRiftTimer;
+    private float maxRiftWidth = 50f;
+
     private bool secondaryHeld = false;
 
     private bool isCutPreviewActive = false;
     private bool isCollapseStarted = false;
+    private bool delayRiftCollapse = false;
 
     enum SliceSpace
     {
@@ -95,8 +100,29 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     public override void UseSecondary ()
     {
-        ConvergeInfinityMarkers ();
+        if (!isCollapseStarted)
+        {
+            SetupForConvergingMarkers ();
+        }
         secondaryHeld = true;
+    }
+
+    /// <summary>
+    /// Pause actors to avoid them being bumped by innaccurate collision meshes
+    /// </summary>
+    private IEnumerator FreezeActors ()
+    {
+        delayRiftCollapse = true;
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+             actor.Freeze ();
+        }
+        yield return null;
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+            actor.UnFreeze ();
+        }
+        delayRiftCollapse = false;
     }
 
     public override void ReleaseSecondary ()
@@ -135,15 +161,19 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
         else if (Input.GetKey(KeyCode.LeftAlt) && allowExpandingRift)
         {
+            if (!isCollapseStarted)
+            {
+                SetupForConvergingMarkers ();
+            }
             moveRiftBackwards = true;
             moveRift = true;
         }
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
-            if (moveRift)
+            if (moveRift && !delayRiftCollapse)
             {
-                MoveRift ();
+                MoveRift (moveRiftBackwards);
             }
         }
     }
@@ -154,11 +184,33 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         if (moveRiftBackwards)
         {
-            if (riftTimer <= -maxRiftTimer)
+            if (riftTimer >= maxRiftTimer)
+            {
+                for (int i = 0; i < deployedRift.transform.childCount; i++)
+                {
+                    if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
+                    {
+                        if (actor.activeInNullSpace)
+                        {
+                            continue;
+                        }
+                    }
+                    deployedRift.transform.GetChild (i).gameObject.SetActive (true);
+                }
+                foreach (var plane in cutPreviews)
+                {
+                    plane.SetActive (true);
+                }
+            }
+
+            if (riftTimer <= minRiftTimer)
             {
                 return;
             }
+
+
             riftTimer -= Time.fixedDeltaTime;
+            Debug.Log (riftTimer);
         }
         else
         {
@@ -167,12 +219,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 return;
             }
             riftTimer += Time.fixedDeltaTime;
+            Debug.Log (riftTimer);
         }
 
-        riftTimer = Mathf.Clamp (riftTimer, -maxRiftTimer, maxRiftTimer);
+        riftTimer = Mathf.Clamp (riftTimer, minRiftTimer, maxRiftTimer);
 
-        // Calculate offset
-        Vector3 targetOffset = -(deployedRift.transform.forward * riftWidth);
         lerpAmount = riftTimer / maxRiftTimer;
 
         float prevRiftWidth = deployedRift.transform.localScale.z * riftWidth;
@@ -183,24 +234,22 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         float newRiftWidth = deployedRift.transform.localScale.z * riftWidth;
 
         // Collapse meshes in planeB/B-Space
-        //planeBMeshes.transform.position = Vector3.Lerp (planeBStartPos, planeBStartPos + targetOffset, lerpAmount);
-
         planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
 
         // Collapse actors in planeB/B-Space
+        Vector3 moveInB = cutPreviews[1].transform.position - previousPlanePosition;
         foreach (CorGeo_ActorData obj in CorGeo_ActorDatas)
         {
             if (obj.space == CorGeo_ActorData.Space.B)
             {
-                Vector3 move = cutPreviews[1].transform.position - previousPlanePosition;
 
                 if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
                 {
-                    objRigidBody.MovePosition (obj.transform.position + move);
+                    objRigidBody.MovePosition (obj.transform.position + moveInB);
                 }
                 else
                 {
-                    obj.transform.position += move;
+                    obj.transform.position += moveInB;
                 }
             }
 
@@ -458,8 +507,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         currentAmmo--;
         audioSource.PlaySound(projectileFire);
         audioSource.PlaySound(projectileTravel);
-        var projectile = Instantiate (projectileVacumm, barrelTransform.transform.position, barrelTransform.rotation, null);
-        projectile.InitializeProjectile (projectileForce);
+        var projectile = Instantiate (projectileVacumm, centerViewTransform.transform.position, centerViewTransform.rotation, null);
+        projectile.InitializeProjectile (projectileForce, barrelTransform.position, viewPoint.distance);
         projectile.geoGun = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
         deployedInfinityMarkers.Add (projectile.gameObject);
     }
@@ -480,17 +529,14 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
         return false;
     }
-
-    private void ConvergeInfinityMarkers ()
+    
+    private void SetupForConvergingMarkers ()
     {
-        if (isCollapseStarted)
-        {
-            return;
-        }
         if (AreMarkersPinned ())
         {
             if (deployedRift)
             {
+                StartCoroutine (FreezeActors ());
                 Debug.Log ("CONVERGING");
                 meshSlicers = FindObjectsOfType<Mesh_Slicable> ();
                 nullSlices = new List<GameObject> ();
@@ -516,6 +562,14 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 isCollapseStarted = true;
                 riftTimer = 0f;
                 maxRiftTimer = riftWidth * riftSecondsPerUnit;
+                if (riftWidth > maxRiftWidth)
+                {
+                    minRiftTimer = 0;
+                }
+                else
+                {
+                    minRiftTimer = -(maxRiftTimer * ((maxRiftWidth - riftWidth) / riftWidth));
+                }
                 previousPlanePosition = cutPreviews[1].transform.position;
             }
         }
@@ -646,7 +700,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     private void AimTowardsCenterOfView ()
     {
-        RaycastHit viewPoint = new RaycastHit ();
+        viewPoint = new RaycastHit ();
         // Perform the raycast, ignoring the trigger layer
         if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out viewPoint, Mathf.Infinity, viewCastMask))
         {
