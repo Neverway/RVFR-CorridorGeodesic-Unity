@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -43,7 +44,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [SerializeField] private float projectileForce;
     [SerializeField] private bool allowExpandingRift = false;
 
-    public List<GameObject> deployedInfinityMarkers = new List<GameObject> ();
+    public List<Projectile_Vacumm> deployedInfinityMarkers = new List<Projectile_Vacumm> ();
     public static GameObject deployedRift;
     private Mesh_Slicable[] meshSlicers;
 
@@ -324,6 +325,21 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private void DeployRiftAndPreview ()
     {
 
+        Vector3 markerPos1 = deployedInfinityMarkers[0].transform.position;
+        Vector3 markerPos2 = deployedInfinityMarkers[1].transform.position;
+        float markerDistance = Vector3.Distance (markerPos1, markerPos2);
+
+        if (Mathf.Approximately(markerDistance,0f))
+        {
+            deployedInfinityMarkers[1].KillProjectile (true);
+            return;
+        }
+
+        if (markerDistance < .51f)
+        {
+            return;
+        }
+
         //riftNormal should point from marker 0 to marker 1
 
         deployedRift = Instantiate (new GameObject ());
@@ -335,8 +351,15 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         riftNormal = deployedRift.transform.forward;
 
-        Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * .25f;
-        Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * .25f;
+        float planeOffset = .25f;
+
+        if (markerDistance < planeOffset*2)
+        {
+            planeOffset = markerDistance / 2;
+        }
+
+        Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * planeOffset;
+        Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * planeOffset;
 
         if (allowNoLinearSlicing)
         {
@@ -510,7 +533,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         var projectile = Instantiate (projectileVacumm, centerViewTransform.transform.position, centerViewTransform.rotation, null);
         projectile.InitializeProjectile (projectileForce, barrelTransform.position, viewPoint.distance);
         projectile.geoGun = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
-        deployedInfinityMarkers.Add (projectile.gameObject);
+        deployedInfinityMarkers.Add (projectile);
     }
 
     private bool AreMarkersPinned ()
