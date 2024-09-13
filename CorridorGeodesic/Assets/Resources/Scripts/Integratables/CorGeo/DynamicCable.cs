@@ -19,17 +19,21 @@ public class DynamicCable : LogicComponent
     public float waypointsPerUnit; // How many waypoints should be created per unit of distance between the anchors
     public int extraWaypoints; //How many extra waypoints to be added after waypointsPerUnity calculation (Increases slack in cable)
     public bool updateOnMove;
-
+    public float springinessZeroRift = 10000f; //The springiness of the SpringJoints when rift is not active (this value is interpolated to)
+    public float springinessFullRift = 100000f; //The springiness of the SpringJoints when rift is fully closed or stretched open (this value is interpolated to)
 
     //=-----------------=
     // Private Variables
     //=-----------------=
     private List<GameObject> waypoints = new List<GameObject>();
+    private List<SpringJoint> waypointSpringJoints = new List<SpringJoint>();
     private Vector3 lastAnchorAPosition, lastAnchorBPosition;
-
     //Errynei added to fix Cables
     private Rigidbody anchorPointARigidBody, anchorPointBRigidBody;
     private float lastCableDistance;
+    private float onRiftClosedTimer;
+    private float ActualLerpAmount =>
+        (Alt_Item_Geodesic_Utility_GeoGun.deployedRift ? Alt_Item_Geodesic_Utility_GeoGun.lerpAmount : 0f);
 
     //=-----------------=
     // Reference Variables
@@ -60,16 +64,35 @@ public class DynamicCable : LogicComponent
 
     private void Update()
     {
-
+        
         if (AnchorPointsMoved() && generateWaypointsUsingLength && updateOnMove)
         {
             GenerateWaypoints();
             //GatherWaypoints();
         }
+
+        bool changeMeshCollider = onRiftClosedTimer > 0f;
+        if (ActualLerpAmount != 0f)
+            onRiftClosedTimer = 0.1f;
+        else
+            onRiftClosedTimer -= Time.deltaTime;
+
         
         for (int i = 0; i < waypoints.Count; i++)
         {
             lineRenderer.SetPosition(i, waypoints[i].transform.position);
+
+            //if (changeMeshCollider)
+            //{
+            //    Collider collider = waypoints[i].GetComponent<Collider>();
+            //    if (collider != null)
+            //        collider.enabled = !(onRiftClosedTimer > 0f);
+            //}
+        }
+
+        foreach (SpringJoint spring in waypointSpringJoints)
+        {
+            //spring.spring = Mathf.Lerp(springinessZeroRift, springinessFullRift, ActualLerpAmount);
         }
     }
     private void LateUpdate()
@@ -97,6 +120,7 @@ public class DynamicCable : LogicComponent
             Destroy(child.gameObject);
         }
         waypoints.Clear();
+        waypointSpringJoints.Clear();
 
         // Get the distance between the two anchors
         var distance = Vector3.Distance(anchorPointA.transform.position, anchorPointB.transform.position);
@@ -125,16 +149,20 @@ public class DynamicCable : LogicComponent
             var newWaypoint = Instantiate(waypointReference, waypointPosition, Quaternion.identity, waypointsRoot.transform);
             newWaypoint.SetActive(true);
             //newWaypoint.GetComponent<ConfigurableJoint>().connectedBody = waypoints[waypoints.Count - 1].GetComponent<Rigidbody>();
-            newWaypoint.GetComponent<SpringJoint>().connectedBody = waypoints[waypoints.Count - 1].GetComponent<Rigidbody>();
-            newWaypoint.GetComponent<SpringJoint>().maxDistance = (distance / ((waypointCount - extraWaypoints) * 3f));
+            SpringJoint newWaypointSpring = newWaypoint.GetComponent<SpringJoint>();
+            newWaypointSpring.connectedBody = waypoints[waypoints.Count - 1].GetComponent<Rigidbody>();
+            newWaypointSpring.maxDistance = (distance / ((waypointCount - extraWaypoints) * 3f));
             waypoints.Add(newWaypoint);
+            waypointSpringJoints.Add(newWaypointSpring);
         }
 
         if (anchorPointB)
         {
-            anchorPointB.GetComponent<SpringJoint>().connectedBody = waypoints[waypoints.Count - 1].GetComponent<Rigidbody>();
-            anchorPointB.GetComponent<SpringJoint>().maxDistance = (distance / ((waypointCount - extraWaypoints) * 3f));
+            SpringJoint anchorPointBSpringJoint = anchorPointB.GetComponent<SpringJoint>();
+            anchorPointBSpringJoint.connectedBody = waypoints[waypoints.Count - 1].GetComponent<Rigidbody>();
+            anchorPointBSpringJoint.maxDistance = (distance / ((waypointCount - extraWaypoints) * 3f));
             waypoints.Add(anchorPointB);
+            waypointSpringJoints.Add(anchorPointBSpringJoint);
         }
 
         lineRenderer.positionCount = waypoints.Count;
