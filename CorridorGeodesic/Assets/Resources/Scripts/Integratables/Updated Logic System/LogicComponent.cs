@@ -51,6 +51,12 @@ public abstract class LogicComponent: MonoBehaviour
     {
         AutoSubscribe();
     }
+    private void OnEnable()
+    {
+        //Fixes Animators to update its power state when re-enabled
+        SourcePowerStateChanged(isPowered);
+    }
+
     private void OnDestroy()
     {
         if (subscribeLogicComponents.Count <= 0)
