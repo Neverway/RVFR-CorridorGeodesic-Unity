@@ -35,7 +35,7 @@ Shader "Soulex/SX_Standard Surface"
 
         CGPROGRAM
 
-        #pragma surface surf Standard fullforwardshadows
+        #pragma surface surf Standard addshadows
         #include "UnityStandardUtils.cginc"
 
         #pragma target 3.0
