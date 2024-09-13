@@ -215,7 +215,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
             foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
             {
-                if (!actor.gameObject.activeSelf && actor.space == CorGeo_ActorData.Space.Null)
+                if (actor.space == CorGeo_ActorData.Space.Null)
                 {
                     actor.gameObject.SetActive (true);
                 }
@@ -262,15 +262,15 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         float prevRiftWidth = deployedRift.transform.localScale.z * riftWidth;
 
-        // Squish null-space parent
+        // Squish null-space parent by scaling it
         deployedRift.transform.localScale = new Vector3 (1, 1, 1 - lerpAmount);
 
         float newRiftWidth = deployedRift.transform.localScale.z * riftWidth;
 
-        // Collapse meshes in planeB/B-Space
+        // Move meshes relative to planeB/B-Space
         planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
 
-        // Collapse actors in planeB/B-Space
+        // Move actors relative to planeB/B-Space
         Vector3 moveInB = cutPreviews[1].transform.position - previousPlanePosition;
         foreach (CorGeo_ActorData obj in CorGeo_ActorDatas)
         {
@@ -692,6 +692,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         if (!deployedRift) return;
         foreach (var actor in CorGeo_ActorDatas)
         {
+            if (!actor.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
             if (!actor.dynamic)
             {
                 continue;
