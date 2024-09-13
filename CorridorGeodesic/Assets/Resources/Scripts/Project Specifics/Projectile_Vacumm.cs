@@ -55,7 +55,7 @@ public class Projectile_Vacumm : Projectile
         {
             transform.position = outlet.attachPoint.position;
             transform.DORotateQuaternion (Quaternion.LookRotation (outlet.attachPoint.forward), 0.08f);
-            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin);
+            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin, transform.position);
             disabled = true;
             return;
         }
@@ -110,7 +110,7 @@ public class Projectile_Vacumm : Projectile
             transform.position = hitPosition;
             transform.localPosition += hit.normal * pinOffset;
 
-            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin);
+            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin, transform.position);
             disabled = true;
         }
         else
