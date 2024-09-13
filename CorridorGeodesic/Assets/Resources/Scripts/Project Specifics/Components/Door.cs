@@ -42,6 +42,11 @@ public class Door : LogicComponent
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private void OnEnable()
+    {
+        //Added by Errynei to fix door opening when door is inactive
+        SourcePowerStateChanged(isPowered);
+    }
 
 
     //=-----------------=
