@@ -75,6 +75,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private bool isCutPreviewActive = false;
     private bool isCollapseStarted = false;
     private bool delayRiftCollapse = false;
+    private bool forceTweenRift = false;
 
     enum SliceSpace
     {
@@ -133,7 +134,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     public override void UseSpecial ()
     {
-        RecallInfinityMarkers ();
+        StartRecallInfinityMarkers ();
     }
 
     public void FixedUpdate ()
@@ -170,6 +171,16 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             moveRift = true;
         }
 
+        if (forceTweenRift && riftTimer < 0)
+        {
+            MoveRift (false);
+            return;
+        }
+        if (forceTweenRift && riftTimer > 0)
+        {
+            MoveRift (true);
+        }
+
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
         {
             if (moveRift && !delayRiftCollapse)
@@ -182,25 +193,31 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work, we need to re-activate things that were trapped inside of it.
     {
         // If converging, increase the riftTimer and relocate actors and meshes
+        float speedMod = 1f;
+        if (forceTweenRift)
+        {
+            speedMod = 4f;
+        }
 
         if (moveRiftBackwards)
         {
             if (riftTimer >= maxRiftTimer)
             {
+                //Un-collapse things in the rift.
                 for (int i = 0; i < deployedRift.transform.childCount; i++)
                 {
-                    if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
-                    {
-                        if (actor.activeInNullSpace)
-                        {
-                            continue;
-                        }
-                    }
                     deployedRift.transform.GetChild (i).gameObject.SetActive (true);
                 }
                 foreach (var plane in cutPreviews)
                 {
                     plane.SetActive (true);
+                }
+            }
+            foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+            {
+                if (actor.space == CorGeo_ActorData.Space.Null)
+                {
+                    actor.gameObject.SetActive (true);
                 }
             }
 
@@ -210,16 +227,32 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
 
 
-            riftTimer -= Time.fixedDeltaTime;
+            riftTimer -= Time.fixedDeltaTime * speedMod;
+            if ( forceTweenRift && riftTimer < 0)
+            {
+                riftTimer = 0;
+            }
             Debug.Log (riftTimer);
         }
         else
         {
+            //Move rift forwards
             if (riftTimer >= maxRiftTimer)
             {
                 return;
             }
-            riftTimer += Time.fixedDeltaTime;
+            riftTimer += Time.fixedDeltaTime * speedMod;
+            if (forceTweenRift && riftTimer > 0)
+            {
+                riftTimer = 0;
+            }
+
+            //If rift is smaller than 0.4f then close it completely.
+            if (Vector3.Distance (cutPreviews[0].transform.position, cutPreviews[1].transform.position) < 0.4f)
+            {
+                riftTimer = maxRiftTimer;
+            }
+
             Debug.Log (riftTimer);
         }
 
@@ -229,15 +262,15 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         float prevRiftWidth = deployedRift.transform.localScale.z * riftWidth;
 
-        // Squish null-space parent
+        // Squish null-space parent by scaling it
         deployedRift.transform.localScale = new Vector3 (1, 1, 1 - lerpAmount);
 
         float newRiftWidth = deployedRift.transform.localScale.z * riftWidth;
 
-        // Collapse meshes in planeB/B-Space
+        // Move meshes relative to planeB/B-Space
         planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
 
-        // Collapse actors in planeB/B-Space
+        // Move actors relative to planeB/B-Space
         Vector3 moveInB = cutPreviews[1].transform.position - previousPlanePosition;
         foreach (CorGeo_ActorData obj in CorGeo_ActorDatas)
         {
@@ -408,9 +441,22 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
     }
 
-    public void RecallInfinityMarkers ()
+    public void StartRecallInfinityMarkers ()
     {
-        if (currentAmmo >= 2) return;
+        StartCoroutine (RecallInfinityMarkers ());
+    }
+
+    private IEnumerator RecallInfinityMarkers ()
+    {
+        if (currentAmmo >= 2) yield break;
+
+        while (riftTimer != 0)
+        {
+            forceTweenRift = true;
+            yield return null;
+        }
+        forceTweenRift = false;
+
         foreach (var projectile in deployedInfinityMarkers)
         {
             projectile.GetComponent<Projectile_Vacumm> ().KillProjectile(false);
@@ -486,7 +532,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         if (isCollapseStarted == false && deployedRift)
         {
             Destroy (deployedRift.gameObject);
-            return;
+            yield break;
         }
 
         StartCoroutine (WitchHunt ());
@@ -646,6 +692,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         if (!deployedRift) return;
         foreach (var actor in CorGeo_ActorDatas)
         {
+            if (!actor.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
             if (!actor.dynamic)
             {
                 continue;
