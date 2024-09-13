@@ -17,6 +17,7 @@ public class DynamicCable : LogicComponent
     public LogicComponent inputSignal;
     public bool generateWaypointsUsingLength; // Auto-generate waypoints based on the distance between the two anchors
     public float waypointsPerUnit; // How many waypoints should be created per unit of distance between the anchors
+    public int extraWaypoints; //How many extra waypoints to be added after waypointsPerUnity calculation (Increases slack in cable)
     public bool updateOnMove;
 
 
@@ -26,6 +27,9 @@ public class DynamicCable : LogicComponent
     private List<GameObject> waypoints = new List<GameObject>();
     private Vector3 lastAnchorAPosition, lastAnchorBPosition;
 
+    //Errynei added to fix Cables
+    private Rigidbody anchorPointARigidBody, anchorPointBRigidBody;
+    private float lastCableDistance;
 
     //=-----------------=
     // Reference Variables
@@ -49,10 +53,14 @@ public class DynamicCable : LogicComponent
             GenerateWaypoints();
             //GatherWaypoints();
         }
+
+        anchorPointARigidBody = anchorPointA.GetComponent<Rigidbody>();
+        anchorPointBRigidBody = anchorPointB.GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
+
         if (AnchorPointsMoved() && generateWaypointsUsingLength && updateOnMove)
         {
             GenerateWaypoints();
@@ -64,6 +72,11 @@ public class DynamicCable : LogicComponent
             lineRenderer.SetPosition(i, waypoints[i].transform.position);
         }
     }
+    private void LateUpdate()
+    {
+        anchorPointARigidBody.isKinematic = true;
+        anchorPointBRigidBody.isKinematic = true;
+    }
 
     //=-----------------=
     // Internal Functions
@@ -73,10 +86,15 @@ public class DynamicCable : LogicComponent
     /// </summary>
     private void GenerateWaypoints()
     {
+        Vector3[] oldWaypointPositions = new Vector3[waypointsRoot.transform.childCount];
+        
+
         // Destroy all the existing waypoints
         for (int i = 0; i < waypointsRoot.transform.childCount; i++)
         {
-            Destroy(waypointsRoot.transform.GetChild(i).gameObject);
+            Transform child = waypointsRoot.transform.GetChild(i);
+            oldWaypointPositions[i] = child.position;
+            Destroy(child.gameObject);
         }
         waypoints.Clear();
 
@@ -84,8 +102,8 @@ public class DynamicCable : LogicComponent
         var distance = Vector3.Distance(anchorPointA.transform.position, anchorPointB.transform.position);
 
         // Calculate the total number of waypoints
-        int waypointCount = Mathf.RoundToInt(distance * waypointsPerUnit);
-    
+        int waypointCount = GetWaypointCount(distance);
+
         // Calculate the increment for each waypoint
         Vector3 direction = (anchorPointB.transform.position - anchorPointA.transform.position).normalized;
         float step = distance / (waypointCount + 1); // Adding 1 to waypointCount to avoid placing a waypoint at anchorB's position
@@ -96,16 +114,26 @@ public class DynamicCable : LogicComponent
         for (int i = 1; i <= waypointCount; i++)
         {
             Vector3 waypointPosition = anchorPointA.transform.position + direction * (step * i);
+            //lineRenderer.get
+            if (i < oldWaypointPositions.Length)
+            {
+                waypointPosition = oldWaypointPositions[i];
+            }
+            else if (oldWaypointPositions.Length > 0)
+                waypointPosition = oldWaypointPositions[oldWaypointPositions.Length - 1];
+
             var newWaypoint = Instantiate(waypointReference, waypointPosition, Quaternion.identity, waypointsRoot.transform);
             newWaypoint.SetActive(true);
-            newWaypoint.GetComponent<ConfigurableJoint>().connectedBody = waypoints[waypoints.Count - 1].GetComponent<Rigidbody>();
+            //newWaypoint.GetComponent<ConfigurableJoint>().connectedBody = waypoints[waypoints.Count - 1].GetComponent<Rigidbody>();
             newWaypoint.GetComponent<SpringJoint>().connectedBody = waypoints[waypoints.Count - 1].GetComponent<Rigidbody>();
+            newWaypoint.GetComponent<SpringJoint>().maxDistance = (distance / ((waypointCount - extraWaypoints) * 3f));
             waypoints.Add(newWaypoint);
         }
 
         if (anchorPointB)
         {
             anchorPointB.GetComponent<SpringJoint>().connectedBody = waypoints[waypoints.Count - 1].GetComponent<Rigidbody>();
+            anchorPointB.GetComponent<SpringJoint>().maxDistance = (distance / ((waypointCount - extraWaypoints) * 3f));
             waypoints.Add(anchorPointB);
         }
 
@@ -127,17 +155,36 @@ public class DynamicCable : LogicComponent
         lineRenderer.positionCount = waypoints.Count;
     }
 
+    /// <summary>
+    /// Returns True when anchor points have moved enough distance that it should create or remove an anchor point
+    /// </summary>
+    /// <returns></returns>
     private bool AnchorPointsMoved()
     {
         if (anchorPointA.transform.position != lastAnchorAPosition || anchorPointB.transform.position != lastAnchorBPosition)
         {
             lastAnchorAPosition = anchorPointA.transform.position;
             lastAnchorBPosition = anchorPointB.transform.position;
-            return true;
+
+            float newCableDistance = Vector3.Distance(anchorPointA.transform.position, anchorPointB.transform.position);
+            if (GetWaypointCount(newCableDistance) != GetWaypointCount(lastCableDistance))
+            {
+                lastCableDistance = newCableDistance;
+                return true;
+            }
+
+            return false;
         }
         return false;
     }
 
+    private int GetWaypointCount(float distance)
+    {
+        int waypointCount = Mathf.RoundToInt(distance * waypointsPerUnit) + extraWaypoints;
+        if (waypointCount < 0) waypointCount = 0;
+
+        return waypointCount;
+    }
 
     //=-----------------=
     // External Functions
@@ -157,6 +204,9 @@ public class DynamicCable : LogicComponent
     }
     public void SetCablePowered(bool _isPowered)
     {
+        if (!lineRenderer)
+            return;
+
         if (_isPowered)
         {
             lineRenderer.material = cablePowered;
