@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: ../../../FMOD/Projects/CorGeo/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638616999859198190
+  lastModified: 638617693829333855
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -62,10 +62,10 @@ MonoBehaviour:
   Path: ../../../FMOD/Projects/CorGeo/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638616999861766342
+  lastModified: 638617693832920089
   FileSizes:
   - Name: Desktop
-    Value: 55968
+    Value: 83744
   Exists: 1
 --- !u!114 &-7816512686225140561
 MonoBehaviour:
@@ -250,6 +250,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-2381521719004554732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Physics/MetalImpact
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Physics/MetalImpact
+  Guid:
+    Data1: 1784229098
+    Data2: 1236084974
+    Data3: 197885845
+    Data4: 1037337918
+  Banks:
+  - {fileID: -8069026804687005844}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-1864057177360922227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,12 +357,13 @@ MonoBehaviour:
   - {fileID: -5267610012639081873}
   - {fileID: -5774279389530129920}
   - {fileID: -7816512686225140561}
+  - {fileID: -2381521719004554732}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8987139340220904041}
   StringsBanks:
   - {fileID: 6874604145035962213}
-  cacheTime: 638616999883704788
+  cacheTime: 638617693832920089
   cacheVersion: 131619
 --- !u!114 &634030236158804127
 MonoBehaviour:
@@ -661,10 +689,10 @@ MonoBehaviour:
   Path: ../../../FMOD/Projects/CorGeo/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638616999859218189
+  lastModified: 638617693829353818
   FileSizes:
   - Name: Desktop
-    Value: 1324
+    Value: 1374
   Exists: 1
 --- !u!114 &7792921022695920810
 MonoBehaviour:
