@@ -22,6 +22,9 @@ GameObject:
   - component: {fileID: 7739524578549366403}
   - component: {fileID: 2248411336876633828}
   - component: {fileID: 7851563791296439930}
+  - component: {fileID: 8253751922636525564}
+  - component: {fileID: 928758702491143808}
+  - component: {fileID: 3140345061841656019}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -901,3 +904,67 @@ MonoBehaviour:
   playerProjectileIgnoreMask:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &8253751922636525564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80bb693894a04704a89d913889507a86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &928758702491143808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a42a4a544d1dc646aa03de673e8cfd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  metalImpact:
+    Guid:
+      Data1: 1784229098
+      Data2: 1236084974
+      Data3: 197885845
+      Data4: 1037337918
+    Path: event:/SFX/Physics/MetalImpact
+  nixieCrossShoot:
+    Guid:
+      Data1: -447259784
+      Data2: 1258767808
+      Data3: -1068629888
+      Data4: -630590248
+    Path: event:/SFX/NixieCross/NixieCrossShoot
+  nixieTubeBreak:
+    Guid:
+      Data1: -608129823
+      Data2: 1129687097
+      Data3: -316266844
+      Data4: 1135776477
+    Path: event:/SFX/NixieCross/NixieTubeBreak
+  nixieTubePin:
+    Guid:
+      Data1: 1620569559
+      Data2: 1275996662
+      Data3: -741141120
+      Data4: 509640686
+    Path: event:/SFX/NixieCross/NixieTubePin
+--- !u!114 &3140345061841656019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c22c500f986eb45be720068df7e21a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

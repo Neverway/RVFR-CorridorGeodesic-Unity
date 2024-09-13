@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 487768633793523850}
   - component: {fileID: 7707290708619618782}
   - component: {fileID: 3408862803075403484}
+  - component: {fileID: 3622640626294248549}
+  - component: {fileID: 2531408152708616024}
   m_Layer: 3
   m_Name: Volume3DTriggerEvent
   m_TagString: Untagged
@@ -173,6 +175,18 @@ MonoBehaviour:
           m_StringArgument: Press
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 3622640626294248549}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Press
+          m_BoolArgument: 1
+        m_CallState: 2
   onUnoccupied:
     m_PersistentCalls:
       m_Calls:
@@ -200,7 +214,81 @@ MonoBehaviour:
           m_StringArgument: Release
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2531408152708616024}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Release
+          m_BoolArgument: 0
+        m_CallState: 2
   hasBeenTriggered: 0
+--- !u!114 &3622640626294248549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3397088360405504864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1369429199
+      Data2: 1266933166
+      Data3: 814966693
+      Data4: -2074894290
+    Path: event:/SFX/Components/FloorButtonOn
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &2531408152708616024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3397088360405504864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 2103947958
+      Data2: 1233358717
+      Data3: -1315997555
+      Data4: 1272214290
+    Path: event:/SFX/Components/FloorButtonOff
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &3897049799129540707
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,7 +342,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 3990493552151291027, guid: b7fd6756a639f6c408f652106f62715b, type: 3}
+  m_Mesh: {fileID: 8068006899626798563, guid: b7fd6756a639f6c408f652106f62715b, type: 3}
 --- !u!1001 &940987555924636324
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -263,6 +351,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7949558051162055028}
     m_Modifications:
+    - target: {fileID: -8769075152923992835, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b7fd6756a639f6c408f652106f62715b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -323,10 +416,60 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -584710261036092700, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -584710261036092700, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -584710261036092700, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -584710261036092700, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b7fd6756a639f6c408f652106f62715b,
         type: 3}
       propertyPath: m_Name
       value: FloorButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 2423961226433250030, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021399930099697075, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021399930099697075, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021399930099697075, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021399930099697075, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4489505119603554151, guid: b7fd6756a639f6c408f652106f62715b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4795413208467597883, guid: b7fd6756a639f6c408f652106f62715b,
         type: 3}
@@ -439,9 +582,9 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -2629911575469620274, guid: b7fd6756a639f6c408f652106f62715b, type: 3}
+  m_Mesh: {fileID: 8115613632204556092, guid: b7fd6756a639f6c408f652106f62715b, type: 3}
 --- !u!4 &758212563477337423 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b7fd6756a639f6c408f652106f62715b,
