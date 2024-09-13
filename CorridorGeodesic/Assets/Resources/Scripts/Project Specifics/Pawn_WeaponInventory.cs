@@ -60,6 +60,6 @@ public class Pawn_WeaponInventory : MonoBehaviour
     }
     public void ClearGeoGunRifts()
     {
-        geoGun.GetComponent<Alt_Item_Geodesic_Utility_GeoGun>().RecallInfinityMarkers();
+        geoGun.GetComponent<Alt_Item_Geodesic_Utility_GeoGun>().StartRecallInfinityMarkers ();
     }
 }
