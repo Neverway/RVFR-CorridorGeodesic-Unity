@@ -232,7 +232,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             {
                 riftTimer = 0;
             }
-            Debug.Log (riftTimer);
+            //Debug.Log (riftTimer);
         }
         else
         {
@@ -253,7 +253,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 riftTimer = maxRiftTimer;
             }
 
-            Debug.Log (riftTimer);
+            //Debug.Log (riftTimer);
         }
 
         riftTimer = Mathf.Clamp (riftTimer, minRiftTimer, maxRiftTimer);
