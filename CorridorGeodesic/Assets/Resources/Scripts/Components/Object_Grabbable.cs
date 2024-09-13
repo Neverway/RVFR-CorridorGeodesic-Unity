@@ -137,18 +137,18 @@ public class Object_Grabbable : MonoBehaviour
             if (!isHeld)
             {
                 // If this isn't being held, and the pawn is already holding something, exit
-                if (targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject!=null)
+                if (targetPawn.physObjectAttachmentPoint.heldObject!=null)
                 {
                     return;
                 }
-                targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = gameObject;
+                targetPawn.physObjectAttachmentPoint.heldObject = gameObject;
                 wasGravityEnabled = propRigidbody.useGravity; // Store whether gravity was enabled before we get picked up
                 // Lerp to the position of the object to go to the position of the holding point
             }
             else
             {
                 propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
-                targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
+                targetPawn.physObjectAttachmentPoint.heldObject = null;
             }
             ToggleHeld();
             is2D = false;
