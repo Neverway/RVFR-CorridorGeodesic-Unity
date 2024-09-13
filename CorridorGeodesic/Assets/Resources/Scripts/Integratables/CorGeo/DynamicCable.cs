@@ -19,8 +19,8 @@ public class DynamicCable : LogicComponent
     public float waypointsPerUnit; // How many waypoints should be created per unit of distance between the anchors
     public int extraWaypoints; //How many extra waypoints to be added after waypointsPerUnity calculation (Increases slack in cable)
     public bool updateOnMove;
-    public float springinessZeroRift = 10000f; //The springiness of the SpringJoints when rift is not active (this value is interpolated to)
-    public float springinessFullRift = 100000f; //The springiness of the SpringJoints when rift is fully closed or stretched open (this value is interpolated to)
+    //public float springinessZeroRift = 10000f; //The springiness of the SpringJoints when rift is not active (this value is interpolated to)
+    //public float springinessFullRift = 100000f; //The springiness of the SpringJoints when rift is fully closed or stretched open (this value is interpolated to)
 
     //=-----------------=
     // Private Variables
@@ -28,7 +28,6 @@ public class DynamicCable : LogicComponent
     private List<GameObject> waypoints = new List<GameObject>();
     private List<SpringJoint> waypointSpringJoints = new List<SpringJoint>();
     private Vector3 lastAnchorAPosition, lastAnchorBPosition;
-    //Errynei added to fix Cables
     private Rigidbody anchorPointARigidBody, anchorPointBRigidBody;
     private float lastCableDistance;
     private float onRiftClosedTimer;
@@ -82,18 +81,18 @@ public class DynamicCable : LogicComponent
         {
             lineRenderer.SetPosition(i, waypoints[i].transform.position);
 
-            //if (changeMeshCollider)
-            //{
-            //    Collider collider = waypoints[i].GetComponent<Collider>();
-            //    if (collider != null)
-            //        collider.enabled = !(onRiftClosedTimer > 0f);
-            //}
+            if (changeMeshCollider)
+            {
+                Collider collider = waypoints[i].GetComponent<Collider>();
+                if (collider != null)
+                    collider.enabled = !(onRiftClosedTimer > 0f);
+            }
         }
 
-        foreach (SpringJoint spring in waypointSpringJoints)
-        {
-            //spring.spring = Mathf.Lerp(springinessZeroRift, springinessFullRift, ActualLerpAmount);
-        }
+        //foreach (SpringJoint spring in waypointSpringJoints)
+        //{
+        //    //spring.spring = Mathf.Lerp(springinessZeroRift, springinessFullRift, ActualLerpAmount);
+        //}
     }
     private void LateUpdate()
     {
