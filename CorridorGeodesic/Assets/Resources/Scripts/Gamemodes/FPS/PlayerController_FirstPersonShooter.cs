@@ -175,7 +175,7 @@ public class PlayerController_FirstPersonShooter : PawnController
             if (fpsActions.Primary.WasPressedThisFrame())
             {
                 _pawn.physObjectAttachmentPoint.heldObject.
-                    GetComponent<Rigidbody>().AddForce(_pawn.physObjectAttachmentPoint.transform.forward*throwForce, ForceMode.Impulse);
+                    GetComponent<Rigidbody>().AddForce(viewCamera.transform.forward*throwForce, ForceMode.Impulse);
                 _pawn.physObjectAttachmentPoint.heldObject.GetComponent<Object_Grabbable>().ToggleHeld();
             }
         }
