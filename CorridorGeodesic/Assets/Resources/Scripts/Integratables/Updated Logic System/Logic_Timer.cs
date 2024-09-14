@@ -20,7 +20,7 @@ public class Logic_Timer: LogicComponent
     // Private Variables
     //=-----------------=
     [SerializeField] private LogicComponent inputSignal;
-    [SerializeField] private int timerDuration;
+    [SerializeField] private float timerDuration;
 
     //=-----------------=
     // Reference Variables
