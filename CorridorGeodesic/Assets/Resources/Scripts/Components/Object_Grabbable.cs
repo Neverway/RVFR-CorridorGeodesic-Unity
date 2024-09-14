@@ -65,9 +65,8 @@ public class Object_Grabbable : MonoBehaviour
         {
             var direction = targetPawn.physObjectAttachmentPoint.transform.position - gameObject.transform.position;
             var distance = Vector3.Distance(targetPawn.physObjectAttachmentPoint.transform.position, gameObject.transform.position);
-            RaycastHit hit = new RaycastHit();
-            var rayToHold = Physics.Raycast(transform.position, direction, out hit, distance, layerMask);
-            if (rayToHold)
+            
+            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance, layerMask))
             {
                 transform.position = hit.point-(direction.normalized*0.5f);
             }
@@ -75,10 +74,13 @@ public class Object_Grabbable : MonoBehaviour
             {
                 transform.position = targetPawn.physObjectAttachmentPoint.transform.position;
             }
-            var targetRotation = targetPawn.physObjectAttachmentPoint.transform.localRotation;
+            
+            var targetRotation = targetPawn.physObjectAttachmentPoint.transform.rotation;
             transform.rotation = new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
+            
             propRigidbody.velocity = new Vector3();
             propRigidbody.useGravity = false;
+            
             // Drop the object if it's too far away
             if (Vector3.Distance(gameObject.transform.position,
                     targetPawn.physObjectAttachmentPoint.transform.position) > 2)
