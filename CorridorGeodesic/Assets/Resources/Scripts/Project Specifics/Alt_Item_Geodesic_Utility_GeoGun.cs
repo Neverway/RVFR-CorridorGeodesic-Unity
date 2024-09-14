@@ -20,6 +20,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     public int currentAmmo = 2;
     public bool allowNoLinearSlicing;
     public LayerMask viewCastMask;
+    public bool allowExpandingRift = false;
 
 
     //=-----------------=
@@ -42,7 +43,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
-    [SerializeField] private bool allowExpandingRift = false;
 
     public List<Projectile_Vacumm> deployedInfinityMarkers = new List<Projectile_Vacumm> ();
     public static GameObject deployedRift;
