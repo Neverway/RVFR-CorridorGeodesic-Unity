@@ -42,10 +42,18 @@ public class Pawn_PlaceAttachmentPoint : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 forwardPos = transform.forward * attachDistance;
+        if (forwardPos.y > 0)
+        {
+            attachmentPointTransform.position = transform.position + forwardPos;
+            attachmentPointTransform.rotation = transform.parent.rotation;
+            return;
+        }
+        if (forwardPos.y < minYPos) forwardPos.y = minYPos;
         Vector3 playerForward = transform.parent.forward * attachDistance;
         Vector2 horizontalPosition = new Vector2 (playerForward.x, playerForward.z);
         horizontalPosition = horizontalPosition.normalized * attachDistance;
-        Vector3 resultPos = new Vector3 (horizontalPosition.x, Mathf.Clamp(forwardPos.y, minYPos, maxYPos), horizontalPosition.y);
+        Vector3 resultPos = new Vector3 (horizontalPosition.x, forwardPos.y, horizontalPosition.y);
+
         attachmentPointTransform.position = transform.position + resultPos;
         attachmentPointTransform.rotation = transform.parent.rotation;
     }
