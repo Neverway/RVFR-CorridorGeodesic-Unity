@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DynamicCable : LogicComponent
 {
@@ -99,6 +100,25 @@ public class DynamicCable : LogicComponent
         anchorPointARigidBody.isKinematic = true;
         anchorPointBRigidBody.isKinematic = true;
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        lineRenderer = GetComponent<LineRenderer>();
+
+        Vector3 positionA = anchorPointA.transform.position;
+        Vector3 positionB = anchorPointB.transform.position;
+
+        lineRenderer.positionCount = GetWaypointCount(Vector3.Distance(anchorPointA.transform.position, anchorPointB.transform.position));
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            float factor = i / lineRenderer.positionCount;
+            Vector3 position = Vector3.Lerp(positionA, positionB, i / lineRenderer.positionCount);
+            position += Vector3.down * Mathf.Sin(factor * Mathf.PI);
+            lineRenderer.SetPosition(i, position);
+        }
+    }
+#endif
 
     //=-----------------=
     // Internal Functions
