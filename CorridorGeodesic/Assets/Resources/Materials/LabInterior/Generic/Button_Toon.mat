@@ -7,12 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wood_Toon
+  m_Name: Button_Toon
   m_Shader: {fileID: 4800000, guid: 0c01bf2700c9e8f47ad68c9e228d2f99, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _SPECULARMODE_STYLIZEDPBR
+  - _SPECULARMODE_TRUEPBR
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -24,12 +24,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Bump:
-        m_Texture: {fileID: 2800000, guid: 164d492f29dbcac4d915a9ec6cd7dbd9, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 164d492f29dbcac4d915a9ec6cd7dbd9, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -48,19 +44,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Glossiness:
-        m_Texture: {fileID: 2800000, guid: 4cef0c70e41ed044b9474d466f27a135, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _HeightMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 6f2f930553160c55aaf7e868f6a2c006, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Metallic:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -85,32 +73,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: a210dd79390b2a146951e400ce20a1e0, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _RoughnessMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
-        m_Texture: {fileID: 2800000, guid: 4cef0c70e41ed044b9474d466f27a135, type: 3}
+    - _RoughnessMap:
+        m_Texture: {fileID: 2800000, guid: bf8e4072446471c4ca721e190dfc40c3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _AlphaClip: 0.5
-    - _BUILTIN_AlphaClip: 0
-    - _BUILTIN_Blend: 0
-    - _BUILTIN_CullMode: 2
-    - _BUILTIN_DstBlend: 0
-    - _BUILTIN_QueueControl: 0
-    - _BUILTIN_QueueOffset: 0
-    - _BUILTIN_SrcBlend: 1
-    - _BUILTIN_Surface: 0
-    - _BUILTIN_ZTest: 4
-    - _BUILTIN_ZWrite: 1
-    - _BUILTIN_ZWriteControl: 0
-    - _Blend: 1
     - _BumpScale: 1
     - _CullMode: 2
     - _Cutoff: 0.5
@@ -120,43 +92,28 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _HeightScale: 0
-    - _MetaliicPower: 1
-    - _Metallic: 0
+    - _Metallic: 0.125
     - _Mode: 0
     - _NormalPower: 1
     - _OcclusionStrength: 1
-    - _Parallax: 0.025
+    - _Parallax: 0.02
     - _RampSmoothness: 0.1
-    - _Roughness: 0
-    - _RoughnessPower: 1
+    - _Roughness: 0.882
+    - _Sharpness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SpecularMode: 1
+    - _SpecularMode: 0
     - _SrcBlend: 1
-    - _Tiling: 1
     - _UVSec: 0
     - _UseSlice: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.6415094, g: 0.105909556, b: 0.105909556, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _SliceCenterOne: {r: -5.097, g: 1.7, b: -22.31, a: 0}
-    - _SliceCenterTwo: {r: -2.81, g: 1.4, b: -22.31, a: 0}
-    - _SliceNormalOne: {r: 0.89228106, g: -0.45142555, b: 0.007052481, a: 0}
-    - _SliceNormalTwo: {r: -0.887553, g: 0.4395855, b: -0.13789363, a: 0}
+    - _SliceCenterOne: {r: 0, g: 0, b: 0, a: 0}
+    - _SliceCenterTwo: {r: 0, g: 0, b: 0, a: 0}
+    - _SliceNormalOne: {r: 0, g: 0, b: 0, a: 0}
+    - _SliceNormalTwo: {r: 0, g: 0, b: 0, a: 0}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &4762860752329641730
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 0
