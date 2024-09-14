@@ -443,7 +443,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     public void StartRecallInfinityMarkers ()
     {
-        StartCoroutine (RecallInfinityMarkers ());
+        if(gameObject.activeInHierarchy)
+        {
+            StartCoroutine (RecallInfinityMarkers ());
+        }
     }
 
     private IEnumerator RecallInfinityMarkers ()
