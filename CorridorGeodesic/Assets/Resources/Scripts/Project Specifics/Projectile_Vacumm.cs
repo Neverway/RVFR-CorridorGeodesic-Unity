@@ -22,19 +22,16 @@ public class Projectile_Vacumm : Projectile
     [SerializeField] private float gridSize = 1;
     public bool pinned => disabled;
     [SerializeField] private GameObject spawnOnDeath;
-    [SerializeField] private float lifetimeSeconds = 1.5f;
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    private AudioSource_PitchVarienceModulator audioSource;
 
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
     [FormerlySerializedAs("geoFolder")] [HideInInspector] public Alt_Item_Geodesic_Utility_GeoGun geoGun; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
-    [SerializeField] private AudioClip markerPinned;
     
     //=-----------------=
     // Mono Functions
@@ -42,9 +39,6 @@ public class Projectile_Vacumm : Projectile
     public override void Awake()
     {
         base.Awake();
-
-        StartCoroutine(Lifetime());
-        audioSource = GetComponent<AudioSource_PitchVarienceModulator>();
     }
 
     //=-----------------=
@@ -61,7 +55,7 @@ public class Projectile_Vacumm : Projectile
         {
             transform.position = outlet.attachPoint.position;
             transform.DORotateQuaternion (Quaternion.LookRotation (outlet.attachPoint.forward), 0.08f);
-            audioSource.PlaySound (markerPinned);
+            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin, transform.position);
             disabled = true;
             return;
         }
@@ -116,20 +110,13 @@ public class Projectile_Vacumm : Projectile
             transform.position = hitPosition;
             transform.localPosition += hit.normal * pinOffset;
 
-            audioSource.PlaySound(markerPinned);
+            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin, transform.position);
             disabled = true;
         }
         else
         {
             KillProjectile();
-            killScheduled = true;
         }
-    }
-    private IEnumerator Lifetime()
-    {
-        yield return new WaitForSeconds(lifetimeSeconds);
-        if (disabled) yield break; // Exit if the lamp has landed 
-        KillProjectile ();
     }
 
     public void KillProjectile (bool removeProjectileFromList = true)
@@ -153,9 +140,8 @@ public class Projectile_Vacumm : Projectile
         {
             Instantiate (spawnOnDeath, transform.position, Quaternion.identity);
         }
-        
-        // Erase the projectile
-        Destroy (gameObject);
+
+        Destroy(gameObject);
     }
     int GetSubMeshIndex(Mesh mesh, int triIndex)
     {
@@ -191,4 +177,9 @@ public class Projectile_Vacumm : Projectile
     //=-----------------=
     // External Functions
     //=-----------------=
+    public override void OnLifetimeOut()
+    {
+        base.OnLifetimeOut();
+        KillProjectile();
+    }
 }

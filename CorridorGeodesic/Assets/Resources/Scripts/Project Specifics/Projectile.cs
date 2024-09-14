@@ -18,6 +18,7 @@ public class Projectile : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
+    [SerializeField] protected Opt_Lifetime lifetime;
     [SerializeField] protected float radius;
     /// <summary>
     /// Optional field that is used for a motion tween to fake the projectile being shot from the gun barrel.
@@ -56,6 +57,16 @@ public class Projectile : MonoBehaviour
         if (!CollisionLogic ())
             MoveLogic ();
     }
+    private void OnEnable()
+    {
+        if(lifetime)
+            lifetime.OnLifetimeOut += OnLifetimeOut;
+    }
+    private void OnDestroy()
+    {
+        if (lifetime)
+            lifetime.OnLifetimeOut -= OnLifetimeOut;
+    }
 
     //=-----------------=
     // Internal Functions
@@ -80,6 +91,7 @@ public class Projectile : MonoBehaviour
             projectileGraphics.DOKill ();
             projectileGraphics.transform.localPosition = Vector3.zero;
         }
+        lifetime.StopTimer();
     }
 
     //=-----------------=
@@ -102,7 +114,7 @@ public class Projectile : MonoBehaviour
     /// <param name="moveSpeed"></param>
     /// <param name="graphicsPosition"></param>
     /// <param name="distance"></param>
-    public void InitializeProjectile (float moveSpeed, Vector3 graphicsPosition = new Vector3 (), float distance = 0)
+    public void InitializeProjectile (float moveSpeed, Vector3 graphicsPosition = default, float distance = 0)
     {
         this.moveSpeed = moveSpeed;
         if (projectileGraphics == null)
@@ -113,5 +125,9 @@ public class Projectile : MonoBehaviour
         if (time < 0) time = 0;
         projectileGraphics.position = graphicsPosition;
         projectileGraphics.DOLocalMove (Vector3.zero, time);
+    }
+    public virtual void OnLifetimeOut()
+    {
+
     }
 }

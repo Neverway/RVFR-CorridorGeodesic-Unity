@@ -574,8 +574,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     {
         if (currentAmmo <= 0) return;
         currentAmmo--;
-        audioSource.PlaySound(projectileFire);
-        audioSource.PlaySound(projectileTravel);
+
+        Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieCrossShoot);
+
         var projectile = Instantiate (projectileVacumm, centerViewTransform.transform.position, centerViewTransform.rotation, null);
         projectile.InitializeProjectile (projectileForce, barrelTransform.position, viewPoint.distance);
         projectile.geoGun = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration

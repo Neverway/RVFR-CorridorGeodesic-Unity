@@ -11,14 +11,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource_PitchVarienceModulator))]
 public class Actor_SFX_Impact : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public float lightImpactThreshold, heavyImpactThreshold;
-    public AudioClip lightImpact, heavyImpact;
+    public float impactThreshold;
     public float repeatDelay = 0.2f;
 
 
@@ -31,28 +29,17 @@ public class Actor_SFX_Impact : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private AudioSource_PitchVarienceModulator audioSource;
-
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start()
-    {
-        audioSource = GetComponent<AudioSource_PitchVarienceModulator>();
-    }
-
     private void OnCollisionEnter(Collision other)
     {
         if (isPlayingSound) return;
         StartCoroutine(RepeatDelay());
-        if (other.relativeVelocity.magnitude >= lightImpactThreshold && other.relativeVelocity.magnitude < heavyImpactThreshold)
+        if (other.relativeVelocity.magnitude >= impactThreshold)
         {
-            audioSource.PlaySound(lightImpact);
-        }
-        if (other.relativeVelocity.magnitude >= heavyImpactThreshold)
-        {
-            audioSource.PlaySound(heavyImpact);
+            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.metalImpact, transform.position);
         }
     }
 

@@ -14,13 +14,15 @@ public class Opt_Lifetime: MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-
+    public delegate void LifetimeOut();
+    public event LifetimeOut OnLifetimeOut;
 
     //=-----------------=
     // Private Variables
     //=-----------------=
     [SerializeField] private DisableType disableType;
     [SerializeField] private float lifeTime = 1;
+    [SerializeField] private bool startTimerOnEnable;
 
     //=-----------------=
     // Reference Variables
@@ -32,7 +34,8 @@ public class Opt_Lifetime: MonoBehaviour
     //=-----------------=
     private void OnEnable()
     {
-        StartCoroutine(WaitLifetime());
+        if(startTimerOnEnable)
+            StartCoroutine(WaitLifetime());
     }
 
     //=-----------------=
@@ -50,6 +53,9 @@ public class Opt_Lifetime: MonoBehaviour
             case DisableType.Disable:
                 gameObject.SetActive(false);
                 break;
+            case DisableType.Event:
+                OnLifetimeOut?.Invoke();
+                break;
             default:
                 break;
         }
@@ -58,4 +64,13 @@ public class Opt_Lifetime: MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void StartTimer()
+    {
+        if(!startTimerOnEnable)
+            StartCoroutine(WaitLifetime());
+    }
+    public void StopTimer()
+    {
+        StopAllCoroutines();
+    }
 }
