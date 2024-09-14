@@ -225,9 +225,9 @@ Shader "Soulex/SX_Standard Toon Oil"
 
             o.Metallic = lerp(tex2D(_MetallicMap, uv).r * _Metallic, 0, oilLerp);
 
-            o.Roughness = tex2D(_RoughnessMap, uv).r * _Roughness;
+            o.Roughness = lerp(tex2D(_RoughnessMap, uv).r * _Roughness, 0.1, oilLerp);
 
-            o.Occlusion = tex2D(_Occlusion, uv).r;
+            o.Occlusion = lerp(tex2D(_Occlusion, uv).r, 1, oilLerp);
 
             o.Alpha = col.a;
 
