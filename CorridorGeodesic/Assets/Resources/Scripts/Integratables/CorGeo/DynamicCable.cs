@@ -106,6 +106,9 @@ public class DynamicCable : LogicComponent
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        if (UnityEngine.Application.isPlaying)
+            return;
+
         if (lineRenderer == null)
         {
             lineRenderer = GetComponent<LineRenderer>();

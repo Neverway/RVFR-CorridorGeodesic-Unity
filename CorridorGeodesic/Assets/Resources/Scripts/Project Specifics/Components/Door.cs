@@ -21,7 +21,7 @@ public class Door : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent inputSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
@@ -37,12 +37,15 @@ public class Door : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-
+    protected new void OnEnable()
+    {
+        base.OnEnable();
+        SourcePowerStateChanged(isPowered);
+    }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
 
     //=-----------------=
     // External Functions

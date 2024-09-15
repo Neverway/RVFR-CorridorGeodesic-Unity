@@ -19,7 +19,7 @@ public class Logic_And: LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private List<LogicComponent> inputSignals = new List<LogicComponent>();
+    [SerializeField, LogicComponentHandle] private List<LogicComponent> inputSignals = new List<LogicComponent>();
 
     //=-----------------=
     // Reference Variables
@@ -55,7 +55,6 @@ public class Logic_And: LogicComponent
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
 
     //=-----------------=
     // External Functions
