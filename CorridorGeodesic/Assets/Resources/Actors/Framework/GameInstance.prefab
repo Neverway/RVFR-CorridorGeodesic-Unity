@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 8253751922636525564}
   - component: {fileID: 928758702491143808}
   - component: {fileID: 3140345061841656019}
+  - component: {fileID: 6086073707668536111}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -696,7 +697,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6048128124110562263}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 4314411522786588536, guid: 549b84953554a157688e4ed0cb77d9a7,
     type: 2}
@@ -793,7 +794,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6048128124110562263}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 4314411522786588536, guid: 549b84953554a157688e4ed0cb77d9a7,
     type: 2}
@@ -968,3 +969,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54c22c500f986eb45be720068df7e21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6086073707668536111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1390520490
+      Data2: 1112289562
+      Data3: -698473071
+      Data4: -1417144956
+    Path: event:/Ambience/DeepLabAmbience
+  Event: 
+  PlayEvent: 11
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
