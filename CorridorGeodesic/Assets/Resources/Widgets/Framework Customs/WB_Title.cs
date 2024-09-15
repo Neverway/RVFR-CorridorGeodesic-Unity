@@ -15,6 +15,7 @@ public class WB_Title : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public string targetLevelID;
 
 
     //=-----------------=
@@ -63,7 +64,7 @@ public class WB_Title : MonoBehaviour
             case "buttonMainGame":
                 if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
                 if (!levelLoader) levelLoader = FindObjectOfType<LevelManager>();
-                worldLoader.LoadWorld("mp24_01");
+                worldLoader.LoadWorld(targetLevelID);
                 // levelLoader.Load("", true); // Replace with function to load save file level
                 break;
             case "buttonExtras":
