@@ -23,9 +23,7 @@ public class Logic_Not : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField]
-    [LogicComponentHandle]
-    public LogicComponent inputSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
@@ -61,11 +59,11 @@ public class Logic_Not : LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.Add(inputSignal);
-        base.AutoSubscribe();
-    }
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.Add(inputSignal);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         isPowered = !powered;

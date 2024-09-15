@@ -20,7 +20,8 @@ public class Elevator : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField, LogicComponentHandle] private LogicComponent activateSignal, liftSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent activateSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent liftSignal;
     [SerializeField] private float descendSpeed = 3;
     private bool elevatorActivated;
 
@@ -56,12 +57,12 @@ public class Elevator : LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.Add(activateSignal);
-        subscribeLogicComponents.Add(liftSignal);
-        base.AutoSubscribe();
-    }
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.Add(activateSignal);
+    //    subscribeLogicComponents.Add(liftSignal);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);

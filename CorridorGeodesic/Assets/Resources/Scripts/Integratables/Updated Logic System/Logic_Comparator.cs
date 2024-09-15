@@ -50,11 +50,11 @@ public class Logic_Comparator: LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.Add(counter);
-        base.AutoSubscribe();
-    }
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.Add(counter);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);

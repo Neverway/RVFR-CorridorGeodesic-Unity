@@ -62,11 +62,11 @@ public class LogicOr : LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.AddRange(inputSignals);
-        base.AutoSubscribe();
-    }
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.AddRange(inputSignals);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         isPowered = inputSignals.Any(i => i && i.isPowered);

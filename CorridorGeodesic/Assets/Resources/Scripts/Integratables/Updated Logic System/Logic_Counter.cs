@@ -19,8 +19,8 @@ public class Logic_Counter: LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField, LogicComponentHandle(0f, 0.3f, 0f)] private LogicComponent addSignal;
-    [SerializeField, LogicComponentHandle(0f, -0.3f, 0f)] private LogicComponent subtractSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent addSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent subtractSignal;
 
     //=-----------------=
     // Reference Variables
@@ -45,12 +45,12 @@ public class Logic_Counter: LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.Add(addSignal);
-        subscribeLogicComponents.Add(subtractSignal);
-        base.AutoSubscribe();
-    }
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.Add(addSignal);
+    //    subscribeLogicComponents.Add(subtractSignal);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);

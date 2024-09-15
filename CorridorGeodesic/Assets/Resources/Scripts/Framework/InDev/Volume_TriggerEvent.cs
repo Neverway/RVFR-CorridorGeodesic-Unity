@@ -18,7 +18,7 @@ public class Volume_TriggerEvent : Volume
     public bool resetsAutomatically = true;
     public bool checksOnlyForPlayer = true;
     [Header("Signal Events")]
-    public LogicComponent resetSignal;
+    [LogicComponentHandle] public LogicComponent resetSignal;
     
     //[Header("Channel Events")]
     //[Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
@@ -43,16 +43,16 @@ public class Volume_TriggerEvent : Volume
     {
         Reset();
     }
-    private void OnEnable()
-    {
-        if (resetSignal)
-            resetSignal.OnPowerStateChanged += SourcePowerStateChanged;
-    }
+    //public override void OnEnable()
+    //{
+    //    if (resetSignal)
+    //        resetSignal.OnPowerStateChanged += SourcePowerStateChanged;
+    //}
 
-    private void OnDrawGizmos()
-    {
-        if (resetSignal) Debug.DrawLine(transform.position, resetSignal.transform.position, new Color(1,0.5f,0,1));
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    if (resetSignal) Debug.DrawLine(transform.position, resetSignal.transform.position, new Color(1,0.5f,0,1));
+    //}
 
     private new void OnTriggerEnter2D(Collider2D _other)
     {
@@ -136,7 +136,6 @@ public class Volume_TriggerEvent : Volume
     {
         hasBeenTriggered = false;
     }
-
 
     //=-----------------=
     // External Functions
