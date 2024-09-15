@@ -72,7 +72,9 @@ public class LogicLinkerEditorTool : EditorTool
 
                 LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
 
-                if(infos.Length > 0)
+                if (infos.Length > 1)
+                    style.normal.textColor = Color.yellow;
+                else if (infos.Length > 0)
                     style.normal.textColor = Color.green;
                 else
                     style.normal.textColor = Color.red;
