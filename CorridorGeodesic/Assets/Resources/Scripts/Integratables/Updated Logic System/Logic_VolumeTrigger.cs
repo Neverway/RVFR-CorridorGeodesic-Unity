@@ -44,7 +44,6 @@ public class Logic_VolumeTrigger : LogicComponent
     // Internal Functions
     //=-----------------=
 
-
     //=-----------------=
     // External Functions
     //=-----------------=

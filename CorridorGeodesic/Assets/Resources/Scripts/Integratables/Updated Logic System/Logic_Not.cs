@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class Logic_Not : LogicComponent
 {
@@ -22,7 +23,9 @@ public class Logic_Not : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent inputSignal;
+    [SerializeField]
+    [LogicComponentHandle]
+    public LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables

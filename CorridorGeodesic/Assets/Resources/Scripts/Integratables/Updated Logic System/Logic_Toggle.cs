@@ -19,7 +19,7 @@ public class Logic_Toggle : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent inputSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
@@ -43,7 +43,6 @@ public class Logic_Toggle : LogicComponent
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
 
     //=-----------------=
     // External Functions

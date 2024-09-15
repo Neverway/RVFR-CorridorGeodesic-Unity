@@ -19,7 +19,8 @@ public class Logic_Counter: LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent addSignal, subtractSignal;
+    [SerializeField, LogicComponentHandle(0f, 0.3f, 0f)] private LogicComponent addSignal;
+    [SerializeField, LogicComponentHandle(0f, -0.3f, 0f)] private LogicComponent subtractSignal;
 
     //=-----------------=
     // Reference Variables
@@ -40,7 +41,6 @@ public class Logic_Counter: LogicComponent
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
 
     //=-----------------=
     // External Functions
