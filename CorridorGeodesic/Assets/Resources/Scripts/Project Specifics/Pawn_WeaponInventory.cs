@@ -14,7 +14,6 @@ public class Pawn_WeaponInventory : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public bool hasGeoGun;
 
 
     //=-----------------=
@@ -58,6 +57,12 @@ public class Pawn_WeaponInventory : MonoBehaviour
     {
         geoGun.SetActive(false);
     }
+    
+    public void UpgradeGeoGun()
+    {
+        geoGun.GetComponent<Alt_Item_Geodesic_Utility_GeoGun>().allowExpandingRift = true;
+    }
+    
     public void ClearGeoGunRifts()
     {
         geoGun.GetComponent<Alt_Item_Geodesic_Utility_GeoGun>().StartRecallInfinityMarkers ();

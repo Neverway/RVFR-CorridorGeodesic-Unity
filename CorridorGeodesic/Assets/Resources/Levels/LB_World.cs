@@ -15,6 +15,7 @@ public class LB_World : MonoBehaviour
     // Public Variables
     //=-----------------=
     public bool shouldHaveGeoGun=true;
+    public bool shouldHaveUpgradedGeoGund = false;
 
 
     //=-----------------=
@@ -42,6 +43,13 @@ public class LB_World : MonoBehaviour
                 FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
             }
         }
+        if (shouldHaveUpgradedGeoGund)
+        {
+            if (FindObjectOfType<Pawn_WeaponInventory>())
+            {
+                FindObjectOfType<Pawn_WeaponInventory>().UpgradeGeoGun();
+            }
+        }
     }
     private void Update()
     {
@@ -50,6 +58,13 @@ public class LB_World : MonoBehaviour
             if (FindObjectOfType<Pawn_WeaponInventory>())
             {
                 FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
+            }
+        }
+        if (shouldHaveUpgradedGeoGund)
+        {
+            if (FindObjectOfType<Pawn_WeaponInventory>())
+            {
+                FindObjectOfType<Pawn_WeaponInventory>().UpgradeGeoGun();
             }
         }
     }
