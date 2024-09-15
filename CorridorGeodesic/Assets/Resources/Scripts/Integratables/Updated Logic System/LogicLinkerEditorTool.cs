@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.EditorTools;
@@ -11,7 +12,6 @@ using System.Linq;
 //Made by Errynei
 
 
-#if UNITY_EDITOR
 [EditorTool("Logic Component Link Tool")]
 public class LogicLinkerEditorTool : EditorTool
 {
@@ -27,6 +27,8 @@ public class LogicLinkerEditorTool : EditorTool
 
     private LinkerToolPopupWindow activeWindow;
 
+    private GUIStyle style = new GUIStyle();
+
     private void OnEnable()
     {
         _iconContent = new GUIContent(EditorGUIUtility.IconContent("AvatarInspector/DotSelection").image, "Link Tool");
@@ -39,6 +41,9 @@ public class LogicLinkerEditorTool : EditorTool
     public override void OnToolGUI(EditorWindow window)
     {
         if (!(window is SceneView)) return;
+
+        style.alignment = TextAnchor.MiddleCenter;
+        style.fontStyle = FontStyle.Bold;
 
         //Caching the Logic Components
         //if (logicComponents == null)
@@ -65,14 +70,23 @@ public class LogicLinkerEditorTool : EditorTool
             {
                 if (logicComponent == null) continue;
 
+                LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
+
+                if(infos.Length > 0)
+                    style.normal.textColor = Color.green;
+                else
+                    style.normal.textColor = Color.red;
+
+                Handles.Label(logicComponent.transform.position + Vector3.up * 0.5f, logicComponent.name, style);
+
                 if (Event.current.shift)
                 {
-                    HandleClearHandle(logicComponent);
+                    HandleClearHandle(logicComponent, infos);
                     isDragging = false;
                 }
                 else if (isDragging)
                 {
-                    HandleInputHandle(logicComponent);
+                    HandleInputHandle(logicComponent, infos);
                     //foreach (LogicComponentHandleInfo info in infos)
                     //    HandleInputHandle(logicComponent, info);
                 }
@@ -92,10 +106,8 @@ public class LogicLinkerEditorTool : EditorTool
 
         SceneView.RepaintAll(); // Ensure SceneView is updated during dragging
     }
-    private void HandleClearHandle(LogicComponent logicComponent)
+    private void HandleClearHandle(LogicComponent logicComponent, LogicComponentHandleInfo[] infos)
     {
-        LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
-
         if (infos.Length <= 0)
             return;
 
@@ -141,14 +153,9 @@ public class LogicLinkerEditorTool : EditorTool
         }
     }
 
-    private void HandleInputHandle(LogicComponent logicComponent)
+    private void HandleInputHandle(LogicComponent logicComponent, LogicComponentHandleInfo[] infos)
     {
         if (logicComponent == firstLogicComponent)
-            return;
-
-        LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
-
-        if (infos.Length <= 0)
             return;
 
         // Position of the draggable handle (sphere)
