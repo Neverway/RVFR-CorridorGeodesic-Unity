@@ -23,6 +23,9 @@ Shader "Soulex/SX_Standard Surface"
 
         [NoScaleOffset] _Occlusion ("Occlusion", 2D) = "white" {}
 
+        _EmissionColor ("Emission Color", Color) = (0, 0, 0, 0)
+        [NoScaleOffset] _EmissionTex ("Emission", 2D) = "white" {}
+
         _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
     }
@@ -63,6 +66,9 @@ Shader "Soulex/SX_Standard Surface"
         sampler2D _HeightMap;
 
         sampler2D _Occlusion;
+
+        float4 _EmissionColor;
+        sampler2D _EmissionTex;
         
         float2 _Tiling;
         float2 _Offset;
@@ -87,6 +93,8 @@ Shader "Soulex/SX_Standard Surface"
             o.Smoothness = 1 - tex2D(_RoughnessMap, uv).r * _Roughness;
 
             o.Occlusion = tex2D(_Occlusion, uv).r;
+
+            o.Emission = tex2D(_EmissionTex, uv) * _EmissionColor;
 
             o.Alpha = col.a;
             clip(col.a -_AlphaClip);

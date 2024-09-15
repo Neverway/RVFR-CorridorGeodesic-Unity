@@ -22,6 +22,8 @@ Shader "Soulex/SX_Fizzler"
         LOD 100
         Blend SrcAlpha OneMinusSrcAlpha
 
+        Cull Off
+
         Pass
         {
             CGPROGRAM

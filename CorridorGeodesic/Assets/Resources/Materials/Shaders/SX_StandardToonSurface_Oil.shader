@@ -36,6 +36,9 @@ Shader "Soulex/SX_Standard Toon Oil"
 
         [NoScaleOffset] _Occlusion ("Occlusion", 2D) = "white" {}
 
+        _EmissionColor ("Emission Color", Color) = (0, 0, 0, 0)
+        [NoScaleOffset] _EmissionTex ("Emission", 2D) = "white" {}
+
         _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
 
@@ -99,6 +102,9 @@ Shader "Soulex/SX_Standard Toon Oil"
         sampler2D _HeightMap;
 
         sampler2D _Occlusion;
+
+        float4 _EmissionColor;
+        sampler2D _EmissionTex;
         
         float2 _Tiling;
         float2 _Offset;
@@ -228,6 +234,8 @@ Shader "Soulex/SX_Standard Toon Oil"
             o.Roughness = lerp(tex2D(_RoughnessMap, uv).r * _Roughness, 0.1, oilLerp);
 
             o.Occlusion = lerp(tex2D(_Occlusion, uv).r, 1, oilLerp);
+
+            o.Emission = tex2D(_EmissionTex, uv) * _EmissionColor;
 
             o.Alpha = col.a;
 
