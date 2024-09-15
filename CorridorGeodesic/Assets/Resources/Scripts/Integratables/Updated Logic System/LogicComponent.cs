@@ -58,9 +58,9 @@ public abstract class LogicComponent : MonoBehaviour
         foreach (LogicComponentHandleInfo info in infos)
         {
             if (typeof(LogicComponent).IsAssignableFrom(info.field.FieldType))
-                subscribeLogicComponents.Add((LogicComponent)info.field.GetValue(null));
+                subscribeLogicComponents.Add((LogicComponent)info.field.GetValue(this));
             else if (typeof(IEnumerable<LogicComponent>).IsAssignableFrom(info.field.FieldType))
-                subscribeLogicComponents.AddRange((IEnumerable<LogicComponent>)info.field.FieldType);
+                subscribeLogicComponents.AddRange((IEnumerable<LogicComponent>)info.field.GetValue(this));
         }
 
         Subscribe();
