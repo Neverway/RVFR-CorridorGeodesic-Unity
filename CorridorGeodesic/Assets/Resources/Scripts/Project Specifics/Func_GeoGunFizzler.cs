@@ -53,8 +53,9 @@ public class Func_GeoGunFizzler : LogicComponent
         base.SourcePowerStateChanged(powered);
 
         isPowered = powered;
-
-        if (isPowered)
+        if (FindObjectOfType<Pawn_WeaponInventory>())
+        {
             ClearGeoGunRifts();
+        }
     }
 }
