@@ -20,7 +20,7 @@ public class Elevator : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent activateSignal, liftSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent activateSignal, liftSignal;
     [SerializeField] private float descendSpeed = 3;
     private bool elevatorActivated;
 
