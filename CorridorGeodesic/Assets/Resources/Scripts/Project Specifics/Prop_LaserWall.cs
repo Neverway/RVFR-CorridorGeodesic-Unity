@@ -34,15 +34,16 @@ public class Prop_LaserWall : LogicComponent
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private LogicComponent input;
+    [SerializeField, LogicComponentHandle] private LogicComponent input;
     [SerializeField] private Transform checkTop, checkBottom;
     [SerializeField] private Prop_LaserWallCollider laserWallCollider;
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         ray = new Ray(checkTop.position, transform.right);
 
         SetupColliders();
@@ -52,16 +53,16 @@ public class Prop_LaserWall : LogicComponent
         if(isPowered)
             UpdateWall();
     }
-    private void OnEnable()
-    {
-        if(input != null)
-            input.OnPowerStateChanged += SourcePowerStateChanged;
-    }
-    private void OnDestroy()
-    {
-        if (input != null)
-            input.OnPowerStateChanged -= SourcePowerStateChanged;
-    }
+    //private void OnEnable()
+    //{
+    //    if(input != null)
+    //        input.OnPowerStateChanged += SourcePowerStateChanged;
+    //}
+    //private void OnDestroy()
+    //{
+    //    if (input != null)
+    //        input.OnPowerStateChanged -= SourcePowerStateChanged;
+    //}
 
     //=-----------------=
     // Internal Functions

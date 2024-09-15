@@ -19,7 +19,7 @@ public class Func_GeoGunFizzler : LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private LogicComponent inputSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
@@ -43,11 +43,11 @@ public class Func_GeoGunFizzler : LogicComponent
     {
         FindObjectOfType<Pawn_WeaponInventory>().ClearGeoGunRifts();
     }
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.Add(inputSignal);
-        base.AutoSubscribe();
-    }
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.Add(inputSignal);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);

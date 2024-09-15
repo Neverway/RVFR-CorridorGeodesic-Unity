@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -40,7 +41,7 @@ public abstract class LogicComponent : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    protected List<LogicComponent> subscribeLogicComponents = new List<LogicComponent>();
+    private List<LogicComponent> subscribeLogicComponents = new List<LogicComponent>();
 
     //=-----------------=
     // Reference Variables
@@ -50,14 +51,30 @@ public abstract class LogicComponent : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Awake()
+    public virtual void Awake()
     {
-        AutoSubscribe();
+        LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(this.GetType());
+
+        foreach (LogicComponentHandleInfo info in infos)
+        {
+            if (typeof(LogicComponent).IsAssignableFrom(info.field.FieldType))
+                subscribeLogicComponents.Add((LogicComponent)info.field.GetValue(null));
+            else if (typeof(IEnumerable<LogicComponent>).IsAssignableFrom(info.field.FieldType))
+                subscribeLogicComponents.AddRange((IEnumerable<LogicComponent>)info.field.FieldType);
+        }
+
+        Subscribe();
+
+        //AutoSubscribe();
     }
-    protected void OnEnable()
+    public virtual void OnEnable()
     {
         //Fixes Animators to update its power state when re-enabled
+        if (subscribeLogicComponents.Count > 0 && subscribeLogicComponents.TrueForAll(s => s))
+            SourcePowerStateChanged(isPowered);
+
         OnPowerStateChanged?.Invoke(isPowered); //todo: Maybe move this to Subscribe() so event gets triggered on runtime subscriptions???
+        //i dont think subscriptions will happen at runtime unless the player will be able to connect things themselves
     }
 
     private void OnDestroy()
@@ -82,8 +99,8 @@ public abstract class LogicComponent : MonoBehaviour
             if (typeof(LogicComponent).IsAssignableFrom(info.field.FieldType))
                 DrawLinkArrow((LogicComponent)info.field.GetValue(this), info.attribute);
 
-            else if (typeof(List<LogicComponent>).IsAssignableFrom(info.field.FieldType))
-                foreach (LogicComponent logic in (List<LogicComponent>)info.field.GetValue(this))
+            else if (typeof(IEnumerable<LogicComponent>).IsAssignableFrom(info.field.FieldType))
+                foreach (LogicComponent logic in (IEnumerable<LogicComponent>)info.field.GetValue(this))
                     DrawLinkArrow(logic, info.attribute);
         }
     }
@@ -123,10 +140,10 @@ public abstract class LogicComponent : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    public virtual void AutoSubscribe()
-    {
-        Subscribe();
-    }
+    //public virtual void AutoSubscribe()
+    //{
+    //    Subscribe();
+    //}
     public virtual void SourcePowerStateChanged(bool powered)
     {
 

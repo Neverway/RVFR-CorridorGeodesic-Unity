@@ -14,9 +14,7 @@ public class Func_GeoGunGiver : LogicComponent
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [SerializeField] private LogicComponent inputSignal;
-
-
+    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
 
     //=-----------------=
     // Private Variables
@@ -31,11 +29,11 @@ public class Func_GeoGunGiver : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.Add(inputSignal);
-        base.AutoSubscribe();
-    }
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.Add(inputSignal);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);

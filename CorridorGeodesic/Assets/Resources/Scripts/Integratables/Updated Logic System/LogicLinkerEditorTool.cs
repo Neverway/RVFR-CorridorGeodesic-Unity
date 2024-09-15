@@ -25,6 +25,8 @@ public class LogicLinkerEditorTool : EditorTool
     private int previousSceneObjectsCount = -1;
     private LogicComponent[] logicComponents;
 
+    private LinkerToolPopupWindow activeWindow;
+
     private void OnEnable()
     {
         _iconContent = new GUIContent(EditorGUIUtility.IconContent("AvatarInspector/DotSelection").image, "Link Tool");
@@ -41,32 +43,44 @@ public class LogicLinkerEditorTool : EditorTool
         //Caching the Logic Components
         //if (logicComponents == null)
         //{
-            logicComponents = FindObjectsOfType<LogicComponent>();
+        logicComponents = FindObjectsOfType<LogicComponent>();
         //}
 
         if (isDragging && firstLogicComponent == null)
             isDragging = false;
 
-        foreach (LogicComponent logicComponent in logicComponents)
+        if (activeWindow != null)
         {
-            if (logicComponent == null) continue;
+            activeWindow.RenderWindow();
 
-            if (Event.current.shift)
-            {
-                HandleClearHandle(logicComponent);
-                isDragging = false;
-            }
-            else if (isDragging)
-            {
-                LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
-                foreach (LogicComponentHandleInfo info in infos)
-                    HandleInputHandle(logicComponent, info);
-            }
-            else
-            {
-                HandleOutputHandle(logicComponent);
-            }
+            if (Event.current.type == EventType.MouseDown && !activeWindow.windowRect.Contains(Event.current.mousePosition))
+                activeWindow.readyToDestroy = true;
 
+            if (activeWindow.readyToDestroy)
+                activeWindow = null;
+        }
+        else
+        {
+            foreach (LogicComponent logicComponent in logicComponents)
+            {
+                if (logicComponent == null) continue;
+
+                if (Event.current.shift)
+                {
+                    HandleClearHandle(logicComponent);
+                    isDragging = false;
+                }
+                else if (isDragging)
+                {
+                    HandleInputHandle(logicComponent);
+                    //foreach (LogicComponentHandleInfo info in infos)
+                    //    HandleInputHandle(logicComponent, info);
+                }
+                else
+                {
+                    HandleOutputHandle(logicComponent);
+                }
+            }
         }
 
         // If dragging and not releasing over a handle, draw a line to the current mouse position
@@ -80,6 +94,11 @@ public class LogicLinkerEditorTool : EditorTool
     }
     private void HandleClearHandle(LogicComponent logicComponent)
     {
+        LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
+
+        if (infos.Length <= 0)
+            return;
+
         // Position of the draggable handle (sphere)
         Handles.color = Color.red;
         Vector3 handlePosition =
@@ -88,13 +107,21 @@ public class LogicLinkerEditorTool : EditorTool
         // Handle clicking the sphere to start dragging
         if (Handles.Button(handlePosition, Quaternion.identity, SPHERE_HANDLE_SIZE * 0.7f, SPHERE_HANDLE_SIZE, Handles.SphereHandleCap))
         {
-            LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
-            foreach (LogicComponentHandleInfo info in infos)
+            if(infos.Length > 1)
+                activeWindow = new LinkerToolPopupWindow(logicComponent, firstLogicComponent, infos, true);
+            else if(infos.Length > 0)
             {
                 Undo.RecordObject(logicComponent, "Clearing any LogicComponent inputs on " + logicComponent.name);
-                info.TryClear(logicComponent);
+                infos[0].TryClear(logicComponent);
                 EditorUtility.SetDirty(logicComponent);
             }
+
+            //foreach (LogicComponentHandleInfo info in infos)
+            //{
+            //    Undo.RecordObject(logicComponent, "Clearing any LogicComponent inputs on " + logicComponent.name);
+            //    info.TryClear(logicComponent);
+            //    EditorUtility.SetDirty(logicComponent);
+            //}
         }
     }
     private void HandleOutputHandle(LogicComponent logicComponent)
@@ -114,16 +141,22 @@ public class LogicLinkerEditorTool : EditorTool
         }
     }
 
-    private void HandleInputHandle(LogicComponent logicComponent, LogicComponentHandleInfo info)
+    private void HandleInputHandle(LogicComponent logicComponent)
     {
         if (logicComponent == firstLogicComponent)
             return;
 
+        LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
+
+        if (infos.Length <= 0)
+            return;
+
         // Position of the draggable handle (sphere)
         Handles.color = Color.green;
-        Vector3 handlePosition =
-            logicComponent.transform.TransformPoint(
-            new Vector3(info.attribute.xOffset, info.attribute.yOffset, info.attribute.zOffset));
+        Vector3 handlePosition = logicComponent.transform.position;
+        //Vector3 handlePosition =
+        //    logicComponent.transform.TransformPoint(
+        //    new Vector3(info.attribute.xOffset, info.attribute.yOffset, info.attribute.zOffset));
 
         // Handle clicking the sphere to start dragging
         if (Handles.Button(handlePosition, Quaternion.identity, SPHERE_HANDLE_SIZE * 0.7f, SPHERE_HANDLE_SIZE, Handles.SphereHandleCap))
@@ -142,9 +175,14 @@ public class LogicLinkerEditorTool : EditorTool
 
             // Try to assign the first LogicComponent to the next LogicComponent
 
-            Undo.RecordObject(logicComponent, "Link LogicComponent Input from " + firstLogicComponent.name + " to " + logicComponent.name);
-            info.TryAssign(logicComponent, firstLogicComponent);
-            EditorUtility.SetDirty(logicComponent);
+            if (infos.Length > 1)
+                activeWindow = new LinkerToolPopupWindow(logicComponent, firstLogicComponent, infos);
+            else if(infos.Length > 0)
+            {
+                Undo.RecordObject(logicComponent, "Link LogicComponent Input from " + firstLogicComponent.name + " to " + logicComponent.name);
+                infos[0].TryAssign(logicComponent, firstLogicComponent);
+                EditorUtility.SetDirty(logicComponent);
+            }
 
             isDragging = false;
         }
@@ -192,6 +230,69 @@ public class LogicLinkerEditorTool : EditorTool
             }
         }
         return false;
+    }
+    
+}
+public class LinkerToolPopupWindow
+{
+    public bool readyToDestroy;
+
+    private bool clearing;
+
+    public Rect windowRect;
+
+    private GUID windowID;
+
+    private LogicComponent logicComponent;
+    private LogicComponent firstLogicComponent;
+    private List<LogicComponentHandleInfo> infos = new List<LogicComponentHandleInfo>();
+
+    public LinkerToolPopupWindow(LogicComponent logicComponent, LogicComponent firstLogicComponent, LogicComponentHandleInfo[] infos, bool clearing = false)
+    {
+        this.logicComponent = logicComponent;
+        this.firstLogicComponent = firstLogicComponent;
+        this.infos.AddRange(infos);
+        this.clearing = clearing;
+
+        windowRect.size = new Vector2(200, infos.Length * 20);
+        windowRect.center = Event.current.mousePosition;
+
+        windowID = new GUID();
+    }
+    public void RenderWindow()
+    {
+        GUILayout.Window(windowID.GetHashCode(), windowRect, LayoutWindow, "Which Signal?");
+    }
+    public void LayoutWindow(int window)
+    {
+        bool pressedButton = false;
+
+        for (int i = 0; i < infos.Count; i++)
+        {
+            if (GUILayout.Button(infos[i].field.Name))
+            {
+                pressedButton = true;
+                if (!clearing)
+                    AssignLogicComponent(infos[i]);
+                else
+                    UnAssignLogicComponent(infos[i]);
+            }
+        }
+
+        if (pressedButton)
+            readyToDestroy = true;
+    }
+    private void AssignLogicComponent(LogicComponentHandleInfo info)
+    {
+        Undo.RecordObject(logicComponent, "Link LogicComponent Input from " + firstLogicComponent.name + " to " + logicComponent.name);
+        info.TryAssign(logicComponent, firstLogicComponent);
+        EditorUtility.SetDirty(logicComponent);
+    }
+    private void UnAssignLogicComponent(LogicComponentHandleInfo info)
+    {
+        Undo.RecordObject(logicComponent, "Clearing any LogicComponent inputs on " + logicComponent.name);
+        info.TryClear(logicComponent);
+        EditorUtility.SetDirty(logicComponent);
     }
 }
 #endif

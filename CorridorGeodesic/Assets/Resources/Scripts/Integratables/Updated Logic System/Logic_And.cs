@@ -59,11 +59,11 @@ public class Logic_And: LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.AddRange(inputSignals);
-        base.AutoSubscribe();
-    }
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.AddRange(inputSignals);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         isPowered = inputSignals.TrueForAll(i => i && i.isPowered);

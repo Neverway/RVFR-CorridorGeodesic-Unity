@@ -30,8 +30,8 @@ public class Door : LogicComponent
     [SerializeField] private Animator animator;
     //[SerializeField] private Material poweredMaterial, unpoweredMaterial;
     //[SerializeField] private GameObject indicatorMesh;
-    [HideInInspector] [SerializeField] private UnityEvent onPowered;
-    [HideInInspector] [SerializeField] private UnityEvent onUnpowered;
+    private UnityEvent onPowered;
+    private UnityEvent onUnpowered;
 
 
     //=-----------------=
@@ -50,11 +50,11 @@ public class Door : LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.Add(inputSignal);
-        base.AutoSubscribe();
-    }
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.Add(inputSignal);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);

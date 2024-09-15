@@ -85,6 +85,5 @@ public struct LogicComponentHandleInfo
 
         else if (field.FieldType.IsNullable())
             field.SetValue(obj, null);
-
     }
 }
