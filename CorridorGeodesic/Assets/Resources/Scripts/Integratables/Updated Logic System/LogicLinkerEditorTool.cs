@@ -91,7 +91,9 @@ public class LogicLinkerEditorTool : EditorTool
             LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
             foreach (LogicComponentHandleInfo info in infos)
             {
+                Undo.RecordObject(logicComponent, "Clearing any LogicComponent inputs on " + logicComponent.name);
                 info.TryClear(logicComponent);
+                EditorUtility.SetDirty(logicComponent);
             }
         }
     }
@@ -139,7 +141,10 @@ public class LogicLinkerEditorTool : EditorTool
             //}*/
 
             // Try to assign the first LogicComponent to the next LogicComponent
+
+            Undo.RecordObject(logicComponent, "Link LogicComponent Input from " + firstLogicComponent.name + " to " + logicComponent.name);
             info.TryAssign(logicComponent, firstLogicComponent);
+            EditorUtility.SetDirty(logicComponent);
 
             isDragging = false;
         }
