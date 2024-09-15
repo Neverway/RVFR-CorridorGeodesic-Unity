@@ -19,7 +19,7 @@ public class Logic_Comparator: LogicComponent
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private Logic_Counter counter;
+    [SerializeField, LogicComponentHandle] private Logic_Counter counter;
     [SerializeField] private CompareOperation compareOperation;
     [SerializeField] private int compareValue;
 

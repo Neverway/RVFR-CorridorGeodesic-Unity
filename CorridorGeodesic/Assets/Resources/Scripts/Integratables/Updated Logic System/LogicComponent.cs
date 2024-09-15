@@ -5,11 +5,14 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
-public abstract class LogicComponent: MonoBehaviour
+public abstract class LogicComponent : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -51,10 +54,10 @@ public abstract class LogicComponent: MonoBehaviour
     {
         AutoSubscribe();
     }
-    private void OnEnable()
+    protected void OnEnable()
     {
         //Fixes Animators to update its power state when re-enabled
-        SourcePowerStateChanged(isPowered);
+        OnPowerStateChanged?.Invoke(isPowered); //todo: Maybe move this to Subscribe() so event gets triggered on runtime subscriptions???
     }
 
     private void OnDestroy()
@@ -69,25 +72,53 @@ public abstract class LogicComponent: MonoBehaviour
 
         isPowered = false;
     }
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
-        if(subscribeLogicComponents.Count > 0)
+        LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(this.GetType());
+
+        foreach (LogicComponentHandleInfo info in infos)
         {
-            subscribeLogicComponents.ForEach(c =>
-            {
-                if (!c)
-                    return;
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(transform.position, 0.2f);
+            if (typeof(LogicComponent).IsAssignableFrom(info.field.FieldType))
+                DrawLinkArrow((LogicComponent)info.field.GetValue(this), info.attribute);
 
-                Gizmos.color = Color.green;
-                Gizmos.DrawSphere(c.transform.position, 0.2f);
-
-                Gizmos.color = Color.blue;
-                Gizmos.DrawLine(transform.position, c.transform.position);
-            });
+            else if (typeof(List<LogicComponent>).IsAssignableFrom(info.field.FieldType))
+                foreach (LogicComponent logic in (List<LogicComponent>)info.field.GetValue(this))
+                    DrawLinkArrow(logic, info.attribute);
         }
     }
+    
+    void DrawLinkArrow(LogicComponent from, LogicComponentHandleAttribute handle)
+    {
+        //todo: Try making this method not the ugliest thing you've ever seen? It draws fancy arrows tho!
+
+        if (from == null) return;
+
+        Vector3 targetPos = transform.TransformPoint(new Vector3(handle.xOffset, handle.yOffset, handle.zOffset));
+        Vector3 startPos = from.transform.position;
+
+        Vector3 dir = startPos - targetPos;
+        dir.Normalize();
+        Handles.color = (from.isPowered ? Color.cyan : Color.blue);
+        Handles.DrawLine(startPos, targetPos, 2f);
+        Vector3 crossVector = Vector3.Cross(dir, SceneView.lastActiveSceneView.camera.transform.forward);
+
+        float time = 1f - ((Time.time * 0.2f) % 1f);
+        Vector3 arrowPos = Vector3.Lerp(targetPos, startPos, time);
+        Handles.DrawLine(arrowPos, arrowPos + Vector3.Lerp(dir, crossVector * 1f, 0.4f) * (0.3f + 0.4f * Mathf.Sin(Mathf.PI * time)), 4f);
+        Handles.DrawLine(arrowPos, arrowPos + Vector3.Lerp(dir, crossVector * -1f, 0.4f) * (0.3f + 0.4f * Mathf.Sin(Mathf.PI * time)), 4f);
+
+        time = 1f - (((Time.time * 0.2f) + 0.33f) % 1f);
+        arrowPos = Vector3.Lerp(targetPos, startPos, time);
+        Handles.DrawLine(arrowPos, arrowPos + Vector3.Lerp(dir, crossVector * 1f, 0.4f) * (0.3f + 0.4f * Mathf.Sin(Mathf.PI * time)), 4f);
+        Handles.DrawLine(arrowPos, arrowPos + Vector3.Lerp(dir, crossVector * -1f, 0.4f) * (0.3f + 0.4f * Mathf.Sin(Mathf.PI * time)), 4f);
+
+        time = 1f - (((Time.time * 0.2f) + 0.66f) % 1f);
+        arrowPos = Vector3.Lerp(targetPos, startPos, time);
+        Handles.DrawLine(arrowPos, arrowPos + Vector3.Lerp(dir, crossVector * 1f, 0.4f) * (0.3f + 0.4f * Mathf.Sin(Mathf.PI * time)), 4f);
+        Handles.DrawLine(arrowPos, arrowPos + Vector3.Lerp(dir, crossVector * -1f, 0.4f) * (0.3f + 0.4f * Mathf.Sin(Mathf.PI * time)), 4f);
+    }
+#endif
 
     //=-----------------=
     // Internal Functions
