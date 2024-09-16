@@ -102,7 +102,8 @@ public class QuickLevelDemoSetupController : MonoBehaviour
                 levelSetup = levelSetup.nextLevelDemoSetup;
                 levelID = 0;
             }
-            if (levelSetup == firstLevelSetup) //Protects infinite loops and if no next levelSetup was found
+            //Protects infinite loops and if no next levelSetup was found
+            if (levelSetup == null || (levelSetup == firstLevelSetup && levelSetup.sceneNames.Length == 0)) 
             {
                 Destroy(this);
                 return;
