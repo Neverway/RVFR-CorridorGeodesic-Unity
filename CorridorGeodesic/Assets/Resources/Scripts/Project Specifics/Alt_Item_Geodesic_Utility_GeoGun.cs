@@ -7,7 +7,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -38,7 +37,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private Transform centerViewTransform;
     [SerializeField] private GameObject debugObject;
-    [FormerlySerializedAs("vacuumProjectile")] [SerializeField] private Projectile_Vacumm projectileVacumm;
+    [FormerlySerializedAs ("vacuumProjectile")][SerializeField] private Projectile_Vacumm projectileVacumm;
     [SerializeField] private GameObject riftObject;
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
@@ -65,7 +64,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private float riftTimer = 0f;
     private float maxRiftTimer;
     public static float lerpAmount;
-    [SerializeField] private float riftSecondsPerUnit = 1f;
+    [SerializeField] private float riftSecondsPerUnit = 1.8f;
     public static float riftWidth;
     private float minRiftTimer;
     private float maxRiftWidth = 50f;
@@ -76,6 +75,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private bool isCollapseStarted = false;
     private bool delayRiftCollapse = false;
     private bool forceTweenRift = false;
+
+    private float timeRiftHeld = 0f;
+    private float maxRiftSpeedMod = 2.5f;
+    private float secondsToMaxSpeedMod = 1.3f;
+    private float timeMoveRiftButtonHeld = 0f;
 
     enum SliceSpace
     {
@@ -92,7 +96,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         meshSlicers = FindObjectsByType<Mesh_Slicable> (FindObjectsSortMode.None);
 
         CreateCutPreviews ();
-        audioSource = GetComponent<AudioSource_PitchVarienceModulator>();
+        audioSource = GetComponent<AudioSource_PitchVarienceModulator> ();
     }
 
     public override void UsePrimary ()
@@ -117,7 +121,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         delayRiftCollapse = true;
         foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
         {
-             actor.Freeze ();
+            actor.Freeze ();
         }
         yield return null;
         foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
@@ -161,7 +165,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             moveRiftBackwards = false;
             moveRift = true;
         }
-        else if (Input.GetKey(KeyCode.LeftAlt) && allowExpandingRift)
+        else if (Input.GetKey (KeyCode.LeftAlt) && allowExpandingRift)
         {
             if (!isCollapseStarted)
             {
@@ -169,6 +173,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
             moveRiftBackwards = true;
             moveRift = true;
+        }
+
+        if (!moveRift && !forceTweenRift)
+        {
+            timeMoveRiftButtonHeld = 0f;
         }
 
         if (forceTweenRift && riftTimer < 0)
@@ -192,13 +201,25 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work, we need to re-activate things that were trapped inside of it.
     {
-        // If converging, increase the riftTimer and relocate actors and meshes
         float speedMod = 1f;
-        if (forceTweenRift)
+        //Calculate speed based on how long we've held the button down.
+        if (timeMoveRiftButtonHeld < secondsToMaxSpeedMod)
         {
-            speedMod = 4f;
+            //Scales speed up from 1 to maxRiftSpeedMod based on how long button was held
+            timeMoveRiftButtonHeld += Time.fixedDeltaTime;
+            if (timeMoveRiftButtonHeld > secondsToMaxSpeedMod)
+            {
+                timeMoveRiftButtonHeld = secondsToMaxSpeedMod;
+            }
         }
+        speedMod = (timeMoveRiftButtonHeld / secondsToMaxSpeedMod) * (maxRiftSpeedMod - 1) + 1;
+        if (forceTweenRift) //if rift is being reset, increase the speed modifier.
+        {
+            speedMod *= 2.5f;
+        }
+        Debug.Log ("Sped" + speedMod);
 
+        // If converging, increase the riftTimer and relocate actors and meshes
         if (moveRiftBackwards)
         {
             if (riftTimer >= maxRiftTimer)
@@ -228,7 +249,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
 
             riftTimer -= Time.fixedDeltaTime * speedMod;
-            if ( forceTweenRift && riftTimer < 0)
+            if (forceTweenRift && riftTimer < 0)
             {
                 riftTimer = 0;
             }
@@ -362,7 +383,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         Vector3 markerPos2 = deployedInfinityMarkers[1].transform.position;
         float markerDistance = Vector3.Distance (markerPos1, markerPos2);
 
-        if (Mathf.Approximately(markerDistance,0f))
+        if (Mathf.Approximately (markerDistance, 0f))
         {
             deployedInfinityMarkers[1].KillProjectile (true);
             return;
@@ -386,7 +407,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         float planeOffset = .25f;
 
-        if (markerDistance < planeOffset*2)
+        if (markerDistance < planeOffset * 2)
         {
             planeOffset = markerDistance / 2;
         }
@@ -443,7 +464,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     public void StartRecallInfinityMarkers ()
     {
-        if(gameObject.activeInHierarchy)
+        if (gameObject.activeInHierarchy)
         {
             StartCoroutine (RecallInfinityMarkers ());
         }
@@ -452,6 +473,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private IEnumerator RecallInfinityMarkers ()
     {
         if (currentAmmo >= 2) yield break;
+
+        timeMoveRiftButtonHeld = 0f;
 
         while (riftTimer != 0)
         {
@@ -462,7 +485,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         foreach (var projectile in deployedInfinityMarkers)
         {
-            projectile.GetComponent<Projectile_Vacumm> ().KillProjectile(false);
+            projectile.GetComponent<Projectile_Vacumm> ().KillProjectile (false);
         }
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;
@@ -578,7 +601,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         if (currentAmmo <= 0) return;
         currentAmmo--;
 
-        Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieCrossShoot);
+        Audio_FMODAudioManager.PlayOneShot (Audio_FMODEvents.Instance.nixieCrossShoot);
 
         var projectile = Instantiate (projectileVacumm, centerViewTransform.transform.position, centerViewTransform.rotation, null);
         projectile.InitializeProjectile (projectileForce, barrelTransform.position, viewPoint.distance);
@@ -602,7 +625,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
         return false;
     }
-    
+
     private void SetupForConvergingMarkers ()
     {
         if (AreMarkersPinned ())
