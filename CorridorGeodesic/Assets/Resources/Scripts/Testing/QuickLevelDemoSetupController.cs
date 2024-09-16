@@ -9,6 +9,8 @@ using Scene = UnityEngine.SceneManagement.Scene;
 
 public class QuickLevelDemoSetupController : MonoBehaviour
 {
+    public static QuickLevelDemoSetupController Instance;
+
     public QuickLevelDemoSetup levelSetup;
 
     private Volume_LevelChange levelChangeVolume;
@@ -20,7 +22,12 @@ public class QuickLevelDemoSetupController : MonoBehaviour
 
     public void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this);
+
+        //DontDestroyOnLoad(this);
         nextSceneName = SceneManager.GetActiveScene().name;
         SceneManager.sceneLoaded += (s, m) => { OverrideLevelExit(s); } ;
     }
@@ -29,6 +36,11 @@ public class QuickLevelDemoSetupController : MonoBehaviour
         OverrideVolumeLevelChangeWorldID(nextSceneName);
         if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && Input.GetKeyDown(KeyCode.N))
         {
+            if (player == null)
+                player = FindAnyObjectByType<Pawn>();
+            if (levelChangeVolume == null)
+                levelChangeVolume = FindObjectOfType<Volume_LevelChange>();
+
             if (player != null && levelChangeVolume != null)
             {
                 player.transform.position = levelChangeVolume.transform.position;
@@ -96,15 +108,15 @@ public class QuickLevelDemoSetupController : MonoBehaviour
                 return;
             }
         }
+        if (levelChangeVolume == null) { return; }
 
-        if (levelChangeVolume == null)
+        do
         {
-            return;
-        }
-        nextSceneName = levelSetup.sceneNames[levelID];
-        OverrideVolumeLevelChangeWorldID(nextSceneName);
+            nextSceneName = levelSetup.sceneNames[levelID];
+            levelID += 1;
+        } while (nextSceneName == currentScene.name);
 
-        levelID += 1;
+        OverrideVolumeLevelChangeWorldID(nextSceneName);
     }
 
     public void OverrideVolumeLevelChangeWorldID(string newID)
