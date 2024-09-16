@@ -2,7 +2,7 @@ using System;
 using System.Net.Http.Headers;
 using UnityEngine;
 
-public class Laser_Raycast : MonoBehaviour
+public class Laser_Raycast : LogicComponent
 {
 
     //===================== (Neverway 2024) Written by Connorses =====================
@@ -16,13 +16,13 @@ public class Laser_Raycast : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [SerializeField] private LogicComponent inputSignal;
     [SerializeField] private Transform halo;
     [SerializeField] private int maxReflectionCount = 5;
     [SerializeField] private float maxStepDistance = 200f;
     [SerializeField] private LineRenderer prefabLine;
-    public bool isPowered;
     public Transform laserOriginTransform;
-    [SerializeField] private Transform laserAimTransform;
+    public Transform laserAimTransform;
     
     //=-----------------=
     // Private Variables
@@ -45,14 +45,22 @@ public class Laser_Raycast : MonoBehaviour
 
     private void Update ()
     {
-        ShootLaser ();
+        ShootLaser();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (inputSignal) Debug.DrawLine(gameObject.transform.position, inputSignal.transform.position, Color.blue);
     }
 
     private void OnDisable ()
     {
         foreach (var line in lineRenderers)
         {
-            line.gameObject.SetActive (false);
+            if (line != null)
+            {
+                line.gameObject.SetActive (false);
+            }
         }
     }
 
@@ -77,7 +85,7 @@ public class Laser_Raycast : MonoBehaviour
         {
             l.gameObject.SetActive (false);
         }
-        if (!isPowered)
+        if (inputSignal != null && !isPowered)
         {
             return;
         }
@@ -151,10 +159,15 @@ public class Laser_Raycast : MonoBehaviour
             detector.OnHit ();
         }
     }
-
-    public void SetIsPowered(bool _isPowered)
+    public override void AutoSubscribe()
     {
-        isPowered = _isPowered;
+        subscribeLogicComponents.Add(inputSignal);
+        base.AutoSubscribe();
     }
+    public override void SourcePowerStateChanged(bool powered)
+    {
+        base.SourcePowerStateChanged(powered);
 
+        isPowered = powered;
+    }
 }

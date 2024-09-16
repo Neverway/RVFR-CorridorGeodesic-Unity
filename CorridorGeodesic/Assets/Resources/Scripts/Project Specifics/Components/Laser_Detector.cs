@@ -8,7 +8,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Laser_Detector : MonoBehaviour
+public class Laser_Detector : LogicComponent
 {
     //=-----------------=
     // Public Variables
@@ -20,8 +20,6 @@ public class Laser_Detector : MonoBehaviour
 
     private float timeSinceHit = 0f;
     private float timeToCancelHit = 0.1f;
-    [SerializeField] private Material offMaterial;
-    [SerializeField] private Material onMaterial;
     [SerializeField] private GameObject laserLight;
     private bool isActive = false;
 
@@ -39,20 +37,18 @@ public class Laser_Detector : MonoBehaviour
 
     private void Start ()
     {
-        laserRenderer.material = offMaterial;
         laserLight.SetActive(false);
     }
 
     private void Update ()
     {
         timeSinceHit += Time.deltaTime;
-        if (timeSinceHit > timeToCancelHit)//if (timeSinceHit > timeToCancelHit || meshSlicer.isCut)
+        if (timeSinceHit > timeToCancelHit)
         {
             if (isActive)
             {
                 isActive = false;
-                laserRenderer.material = offMaterial;
-                laserLight.SetActive (false);
+                isPowered = false;
                 OnNotPowered.Invoke();
             }
         }
@@ -74,7 +70,7 @@ public class Laser_Detector : MonoBehaviour
         {
             OnPowered.Invoke();
             isActive = true;
-            laserRenderer.material = onMaterial;
+            isPowered = true;
             laserLight.SetActive(true);
         }
     }
