@@ -94,16 +94,22 @@ public class QuickLevelDemoSetupController : MonoBehaviour
 
         StartCoroutine(PutPlayerAtStart());
 
-        QuickLevelDemoSetup firstLevelSetup = levelSetup;
+        int bigNumber = 100;
         while (levelID >= levelSetup.sceneNames.Length)
         {
+            //Replace levelSetup with next set of levels if it exists
             if (levelSetup.nextLevelDemoSetup != null)
             {
                 levelSetup = levelSetup.nextLevelDemoSetup;
                 levelID = 0;
             }
+            else
+            {
+                Destroy(this);
+                return;
+            }
             //Protects infinite loops and if no next levelSetup was found
-            if (levelSetup == null || (levelSetup == firstLevelSetup && levelSetup.sceneNames.Length == 0)) 
+            if (bigNumber-- <= 0) 
             {
                 Destroy(this);
                 return;
@@ -115,7 +121,7 @@ public class QuickLevelDemoSetupController : MonoBehaviour
         {
             nextSceneName = levelSetup.sceneNames[levelID];
             levelID += 1;
-        } while (nextSceneName == currentScene.name);
+        } while (levelID < levelSetup.sceneNames.Length && nextSceneName == currentScene.name);
 
         OverrideVolumeLevelChangeWorldID(nextSceneName);
     }
