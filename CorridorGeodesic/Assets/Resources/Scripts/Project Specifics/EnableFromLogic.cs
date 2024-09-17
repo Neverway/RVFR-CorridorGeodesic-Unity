@@ -44,6 +44,8 @@ public class EnableFromLogic : LogicComponent
     //=-----------------=
     public override void SourcePowerStateChanged(bool powered)
     {
+        isPowered = powered;
+
         foreach(Transform t in objectsToEnableWhenActive)
             t.gameObject.SetActive(powered);
 
