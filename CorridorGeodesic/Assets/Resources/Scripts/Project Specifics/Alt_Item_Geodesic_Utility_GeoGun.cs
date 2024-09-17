@@ -21,7 +21,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     public LayerMask viewCastMask;
     public bool allowExpandingRift = false;
 
-
     //=-----------------=
     // Private Variables
     //=-----------------=
@@ -42,6 +41,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
     [SerializeField] private float projectileForce;
+    [SerializeField] private CrushDetector crushDetector;
 
     public List<Projectile_Vacumm> deployedInfinityMarkers = new List<Projectile_Vacumm> ();
     public static GameObject deployedRift;
@@ -73,13 +73,15 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     private bool isCutPreviewActive = false;
     private bool isCollapseStarted = false;
-    private bool delayRiftCollapse = false;
+    public static bool delayRiftCollapse = false;
     private bool forceTweenRift = false;
+    private bool delayRiftForCrushDamage = false;
 
     private float timeRiftHeld = 0f;
     private float maxRiftSpeedMod = 2.5f;
     private float secondsToMaxSpeedMod = 1.3f;
     private float timeMoveRiftButtonHeld = 0f;
+    
 
     enum SliceSpace
     {
@@ -97,6 +99,15 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         CreateCutPreviews ();
         audioSource = GetComponent<AudioSource_PitchVarienceModulator> ();
+
+        crushDetector.onCrushed.AddListener (()=>StartCoroutine(DelayRift (0.5f)));
+    }
+
+    private IEnumerator DelayRift (float delay)
+    {
+        delayRiftForCrushDamage = true;
+        yield return new WaitForSeconds (delay);
+        delayRiftForCrushDamage = false;
     }
 
     public override void UsePrimary ()
@@ -175,6 +186,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             moveRift = true;
         }
 
+        if (delayRiftForCrushDamage)
+        {
+            moveRift = false;
+        }
+
         if (!moveRift && !forceTweenRift)
         {
             timeMoveRiftButtonHeld = 0f;
@@ -202,6 +218,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work, we need to re-activate things that were trapped inside of it.
     {
         float speedMod = 1f;
+
+        float cutPreviewDistance = Vector3.Distance (cutPreviews[0].transform.position, cutPreviews[1].transform.position);
+
         //Calculate speed based on how long we've held the button down.
         if (timeMoveRiftButtonHeld < secondsToMaxSpeedMod)
         {
@@ -213,11 +232,17 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
         }
         speedMod = (timeMoveRiftButtonHeld / secondsToMaxSpeedMod) * (maxRiftSpeedMod - 1) + 1;
+        
         if (forceTweenRift) //if rift is being reset, increase the speed modifier.
         {
             speedMod *= 2.5f;
         }
-        Debug.Log ("Sped" + speedMod);
+
+        if (!forceTweenRift && !moveRiftBackwards && cutPreviewDistance < 1f)
+        {
+            speedMod = 0.8f;
+        }
+        //Debug.Log ("Sped" + speedMod);
 
         // If converging, increase the riftTimer and relocate actors and meshes
         if (moveRiftBackwards)
@@ -269,7 +294,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
 
             //If rift is smaller than 0.4f then close it completely.
-            if (Vector3.Distance (cutPreviews[0].transform.position, cutPreviews[1].transform.position) < 0.4f)
+            if (cutPreviewDistance < 0.4f)
             {
                 riftTimer = maxRiftTimer;
             }
