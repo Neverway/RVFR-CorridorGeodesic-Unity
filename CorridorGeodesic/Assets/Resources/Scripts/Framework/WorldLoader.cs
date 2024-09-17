@@ -110,11 +110,11 @@ public class WorldLoader : MonoBehaviour
     {
         isLoading = true;
         yield return new WaitForSeconds(delayBeforeWorldChange);
-        print("Active scene was " + SceneManager.GetActiveScene().name);
+        //print("Active scene was " + SceneManager.GetActiveScene().name);
 
         // Load the target scene
-        AsyncOperation targetLevel = SceneManager.LoadSceneAsync(targetWorldID, LoadSceneMode.Additive);
-        print("Active scene is " + SceneManager.GetActiveScene().name);
+        AsyncOperation targetLevel = SceneManager.LoadSceneAsync(targetWorldID);
+        //print("Active scene is " + SceneManager.GetActiveScene().name);
 
         targetLevel.allowSceneActivation = false;
 
@@ -128,10 +128,15 @@ public class WorldLoader : MonoBehaviour
 
         GameObject[] streamedObjects = SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects();
 
-        EjectStreamedActors(streamedObjects);
-
         targetLevel.allowSceneActivation = true;
-        //SceneManager.SetActiveScene(SceneManager.GetSceneByName(targetWorldID)); // Assign the new scene to be the active scene
+
+        while (!targetLevel.isDone)
+            yield return null;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(targetWorldID)); // Assign the new scene to be the active scene
+
+        print(streamedObjects.Length);
+
+        EjectStreamedActors(streamedObjects);
     }
     private IEnumerator LoadAsync()
     {
