@@ -159,11 +159,12 @@ public class Laser_Raycast : LogicComponent
             detector.OnHit ();
         }
     }
-    public override void AutoSubscribe()
-    {
-        subscribeLogicComponents.Add(inputSignal);
-        base.AutoSubscribe();
-    }
+    //todo: Was causing an error, I think AutoSubscribe was reworked, but here it is in case this messes things up
+    //public override void AutoSubscribe()
+    //{
+    //    subscribeLogicComponents.Add(inputSignal);
+    //    base.AutoSubscribe();
+    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);

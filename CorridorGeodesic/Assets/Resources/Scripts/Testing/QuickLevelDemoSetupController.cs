@@ -27,7 +27,6 @@ public class QuickLevelDemoSetupController : MonoBehaviour
         else
             Destroy(this);
 
-        //DontDestroyOnLoad(this);
         nextSceneName = SceneManager.GetActiveScene().name;
         SceneManager.sceneLoaded += (s, m) => { OverrideLevelExit(s); } ;
     }
@@ -48,38 +47,6 @@ public class QuickLevelDemoSetupController : MonoBehaviour
         }
     }
 
-    public IEnumerator PutPlayerAtStart()
-    {
-        //while (player == null)
-        //{
-        //    player = FindAnyObjectByType<Pawn>();
-        //    yield return null;
-        //}
-        //while (playerStart == null)
-        //{
-        //    playerStart = FindAnyObjectByType<PlayerStart>();
-        //    yield return null;
-        //}
-        //yield return new WaitForSeconds(1);
-
-        while(SceneManager.GetAllScenes().Contains(previousScene))
-        {
-            yield return null;
-        }
-
-        while(playerStart == null)
-        {
-            playerStart = FindAnyObjectByType<PlayerStart>();
-            yield return null;
-        }
-
-        if (player != null && playerStart != null)
-        {
-            Debug.LogWarning("SETTING PLAYER POSITION MANUALLY TO THE START, SHOULD FIX LEVEL LOADING INSTEAD");
-            player.transform.position = playerStart.transform.position;
-        }
-    }
-
     public void OverrideLevelExit(Scene scene)
     {
         if (scene.name != nextSceneName)
@@ -88,11 +55,9 @@ public class QuickLevelDemoSetupController : MonoBehaviour
         previousScene = currentScene;
         currentScene = scene;
 
-        levelChangeVolume = FindObjectOfType<Volume_LevelChange>();
-        playerStart = FindAnyObjectByType<PlayerStart>();
-        player = FindAnyObjectByType<Pawn>();
-
-        StartCoroutine(PutPlayerAtStart());
+        //levelChangeVolume = FindObjectOfType<Volume_LevelChange>();
+        //playerStart = FindAnyObjectByType<PlayerStart>();
+        //player = FindAnyObjectByType<Pawn>();
 
         int bigNumber = 100;
         while (levelID >= levelSetup.sceneNames.Length)
@@ -115,15 +80,13 @@ public class QuickLevelDemoSetupController : MonoBehaviour
                 return;
             }
         }
-        if (levelChangeVolume == null) { return; }
-
+        
         do
         {
             nextSceneName = levelSetup.sceneNames[levelID];
             levelID += 1;
-        } while (levelID < levelSetup.sceneNames.Length && nextSceneName == currentScene.name);
 
-        OverrideVolumeLevelChangeWorldID(nextSceneName);
+        } while (nextSceneName == currentScene.name);
     }
 
     public void OverrideVolumeLevelChangeWorldID(string newID)
