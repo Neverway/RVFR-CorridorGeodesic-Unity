@@ -94,6 +94,10 @@ public class QuickLevelDemoSetupController : MonoBehaviour
         if(levelChangeVolume == null)
         {
             levelChangeVolume = levelChangeVolume = FindObjectOfType<Volume_LevelChange>();
+            if (levelChangeVolume == null)
+            {
+                return;
+            }
         }
         if(levelChangeVolume.worldID != newID)
         {
