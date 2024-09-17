@@ -2,7 +2,6 @@ using BzKovSoft.ObjectSlicer.EventHandlers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Scene = UnityEngine.SceneManagement.Scene;
