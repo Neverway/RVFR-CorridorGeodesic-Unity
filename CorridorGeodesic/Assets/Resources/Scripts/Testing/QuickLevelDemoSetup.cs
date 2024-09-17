@@ -11,15 +11,19 @@ public class QuickLevelDemoSetup : ScriptableObject
 
     public void OnValidate()
     {
-        List<string> newSceneNames = new List<string>();
-        foreach(SceneAsset scene in sceneList)
+        try
         {
-            newSceneNames.Add(scene.name);
+            List<string> newSceneNames = new List<string>();
+            foreach (SceneAsset scene in sceneList)
+            {
+                newSceneNames.Add(scene.name);
+            }
+            sceneNames = newSceneNames.ToArray();
         }
-        sceneNames = newSceneNames.ToArray();
+        catch { }
     }
 #endif
-    [DebugReadOnly] public string[] sceneNames;  
+    [DebugReadOnly, SerializeField] public string[] sceneNames;  
 
     public QuickLevelDemoSetup nextLevelDemoSetup;
 }
