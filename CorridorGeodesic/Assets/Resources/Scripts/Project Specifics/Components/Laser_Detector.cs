@@ -26,7 +26,7 @@ public class Laser_Detector : LogicComponent
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private Renderer laserRenderer;
+
     public UnityEvent OnPowered;
     public UnityEvent OnNotPowered;
 
