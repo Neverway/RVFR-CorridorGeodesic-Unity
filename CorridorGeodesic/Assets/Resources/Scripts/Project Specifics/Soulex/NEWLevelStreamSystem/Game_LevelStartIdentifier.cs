@@ -14,7 +14,7 @@ public class Game_LevelStartIdentifier : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-	//public static Game_LevelStartIdentifier Instance;
+	public static Game_LevelStartIdentifier Instance;
     public Transform startTransform;
 
     //=-----------------=
@@ -30,10 +30,10 @@ public class Game_LevelStartIdentifier : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    //private void OnEnable()
-    //{
-    //    Instance = this;
-    //}
+    private void OnEnable()
+    {
+        Instance = this;
+    }
 
     //=-----------------=
     // Internal Functions

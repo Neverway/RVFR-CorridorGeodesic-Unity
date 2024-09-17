@@ -110,11 +110,11 @@ public class WorldLoader : MonoBehaviour
     {
         isLoading = true;
         yield return new WaitForSeconds(delayBeforeWorldChange);
-        //print("Active scene was " + SceneManager.GetActiveScene().name);
+        print("Active scene was " + SceneManager.GetActiveScene().name);
 
         // Load the target scene
-        AsyncOperation targetLevel = SceneManager.LoadSceneAsync(targetWorldID);
-        //print("Active scene is " + SceneManager.GetActiveScene().name);
+        AsyncOperation targetLevel = SceneManager.LoadSceneAsync(targetWorldID, LoadSceneMode.Additive);
+        print("Active scene is " + SceneManager.GetActiveScene().name);
 
         targetLevel.allowSceneActivation = false;
 
