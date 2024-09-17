@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1399404393967185586}
   m_Layer: 0
-  m_Name: LevelStartPosition
+  m_Name: LevelStart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf54448b1f1a0fc09a1508bddfa2d764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPowered: 0
+  _isPowered: 1
   OnReachFinalTarget:
     m_PersistentCalls:
       m_Calls: []
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c580606ea08de4e90d471fc7f8041e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPosition: {fileID: 1399404393967185586}
+  startTransform: {fileID: 1399404393967185586}
 --- !u!1 &6574186461588617929
 GameObject:
   m_ObjectHideFlags: 0

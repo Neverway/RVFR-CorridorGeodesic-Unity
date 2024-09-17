@@ -15,7 +15,7 @@ public class Game_LevelEndIdentifier : MonoBehaviour
     // Public Variables
     //=-----------------=
 	public static Game_LevelEndIdentifier Instance;
-    public Transform endPosition;
+    public Transform endTransform;
 
     //=-----------------=
     // Private Variables
@@ -30,7 +30,7 @@ public class Game_LevelEndIdentifier : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Awake()
+    private void OnEnable()
     {
         Instance = this;
     }
