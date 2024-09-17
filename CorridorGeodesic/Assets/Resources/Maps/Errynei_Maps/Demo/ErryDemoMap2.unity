@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.40274975, g: 0.2552883, b: 0.13714215, a: 1}
+  m_IndirectSpecularColor: {r: 0.4027497, g: 0.25528827, b: 0.13714227, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11528,6 +11528,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 299680709173304390, guid: 0df916e8b02abc36cb457b116f6b55b6,
         type: 3}
+      propertyPath: m_Positions.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 299680709173304390, guid: 0df916e8b02abc36cb457b116f6b55b6,
+        type: 3}
       propertyPath: m_Positions.Array.data[0].x
       value: 33.81594
       objectReference: {fileID: 0}
@@ -11570,6 +11575,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Positions.Array.data[2].z
       value: -1.1703801
+      objectReference: {fileID: 0}
+    - target: {fileID: 1579795009698135374, guid: 0df916e8b02abc36cb457b116f6b55b6,
+        type: 3}
+      propertyPath: m_Positions.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1579795009698135374, guid: 0df916e8b02abc36cb457b116f6b55b6,
         type: 3}
@@ -11618,6 +11628,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5117177789793573210, guid: 0df916e8b02abc36cb457b116f6b55b6,
         type: 3}
+      propertyPath: m_Positions.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117177789793573210, guid: 0df916e8b02abc36cb457b116f6b55b6,
+        type: 3}
       propertyPath: m_Positions.Array.data[0].x
       value: 34.30583
       objectReference: {fileID: 0}
@@ -11660,6 +11675,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Positions.Array.data[2].z
       value: 0.8296206
+      objectReference: {fileID: 0}
+    - target: {fileID: 6928320312988846929, guid: 0df916e8b02abc36cb457b116f6b55b6,
+        type: 3}
+      propertyPath: m_Positions.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6928320312988846929, guid: 0df916e8b02abc36cb457b116f6b55b6,
         type: 3}
@@ -12379,6 +12399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shouldHaveGeoGun: 0
+  shouldHaveUpgradedGeoGund: 0
 --- !u!43 &1122588908
 Mesh:
   m_ObjectHideFlags: 0
@@ -13785,12 +13806,6 @@ MonoBehaviour:
   _isPowered: 0
   inputSignal: {fileID: 1301696172}
   animator: {fileID: 902338094}
-  onPowered:
-    m_PersistentCalls:
-      m_Calls: []
-  onUnpowered:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1572921897
 GameObject:
   m_ObjectHideFlags: 0
