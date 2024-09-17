@@ -11,6 +11,8 @@ public class EnableFromLogic : LogicComponent
     //=-----------------=
     public Transform[] objectsToEnableWhenActive;
     public Transform[] objectsToDisableWhenActive;
+    public Component[] componentsToEnableWhenActive;
+    public Component[] componentsToDisableWhenActive;
 
     //=-----------------=
     // Private Variables
@@ -30,8 +32,8 @@ public class EnableFromLogic : LogicComponent
     //=-----------------=
     protected new void OnEnable()
     {
-        base.OnEnable();
-        SourcePowerStateChanged(isPowered);
+        //base.OnEnable();
+        //SourcePowerStateChanged(isPowered);
     }
     //=-----------------=
     // Internal Functions
@@ -42,13 +44,41 @@ public class EnableFromLogic : LogicComponent
     //=-----------------=
     public override void SourcePowerStateChanged(bool powered)
     {
-        isPowered = powered;
-
         foreach(Transform t in objectsToEnableWhenActive)
             t.gameObject.SetActive(powered);
 
         foreach (Transform t in objectsToDisableWhenActive)
             t.gameObject.SetActive(!powered);
 
+        //todo: Set this to use reflection to just find if it has an "enabled" property
+        foreach (Component c in componentsToEnableWhenActive) 
+        {
+            if (c is Behaviour)
+                ((Behaviour)c).enabled = powered;
+
+            else if (c is Renderer)
+                ((Renderer)c).enabled = powered;
+
+            else if (c is Collider)
+                ((Collider)c).enabled = powered;
+
+            else
+                Debug.LogWarning("Component " + c.GetType().Name + " on " + c.gameObject + " is not setup to be enabled/disabled yet");
+        }
+
+        foreach (Component c in componentsToDisableWhenActive)
+        {
+            if (c is Behaviour)
+                ((Behaviour)c).enabled = !powered;
+
+            else if (c is Renderer)
+                ((Renderer)c).enabled = !powered;
+
+            else if (c is Collider)
+                ((Collider)c).enabled = !powered;
+
+            else
+                Debug.LogWarning("Component " + c.GetType().Name + " on " + c.gameObject + " is not setup to be enabled/disabled yet");
+        }
     }
 }
