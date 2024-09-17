@@ -11,6 +11,8 @@ public class QuickLevelDemoSetupController : MonoBehaviour
     public static QuickLevelDemoSetupController Instance;
 
     public QuickLevelDemoSetup levelSetup;
+    public bool destroyStreamingVolumes;
+
 
     private Volume_LevelChange levelChangeVolume;
     private PlayerStart playerStart;
@@ -21,6 +23,8 @@ public class QuickLevelDemoSetupController : MonoBehaviour
 
     public void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+
         if (Instance == null)
             Instance = this;
         else
@@ -57,6 +61,15 @@ public class QuickLevelDemoSetupController : MonoBehaviour
         //levelChangeVolume = FindObjectOfType<Volume_LevelChange>();
         //playerStart = FindAnyObjectByType<PlayerStart>();
         //player = FindAnyObjectByType<Pawn>();
+
+        if (destroyStreamingVolumes)
+        {
+            Volume_LevelStreaming[] streamingVolumes = FindObjectsOfType<Volume_LevelStreaming>();
+            foreach (Volume_LevelStreaming v in streamingVolumes)
+            {
+                Destroy(v);
+            }
+        }
 
         int bigNumber = 100;
         while (levelID >= levelSetup.sceneNames.Length)
