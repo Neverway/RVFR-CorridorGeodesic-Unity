@@ -81,6 +81,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private float maxRiftSpeedMod = 2.5f;
     private float secondsToMaxSpeedMod = 1.3f;
     private float timeMoveRiftButtonHeld = 0f;
+    private float slowDistance = 1.5f;
     
 
     enum SliceSpace
@@ -238,7 +239,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             speedMod *= 2.5f;
         }
 
-        if (!forceTweenRift && !moveRiftBackwards && cutPreviewDistance < 1f)
+        if (!forceTweenRift && !moveRiftBackwards && cutPreviewDistance < slowDistance)
         {
             speedMod = 0.8f;
         }
