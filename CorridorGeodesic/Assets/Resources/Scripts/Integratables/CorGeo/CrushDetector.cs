@@ -26,6 +26,8 @@ public class CrushDetector : MonoBehaviour
     private int frameCount = 0;
     private Pawn pawn;
 
+    public UnityEvent onCrushed {  get; private set; } = new UnityEvent();
+
     //=-----------------=
     // Reference Variables
     //=-----------------=
@@ -42,15 +44,21 @@ public class CrushDetector : MonoBehaviour
 
     private void FixedUpdate ()
     {
+        //skip detection if objects are frozen to calculate mesh colliders. (avoids false positives)
+        if (Alt_Item_Geodesic_Utility_GeoGun.delayRiftCollapse)
+        {
+            return;
+        }
         frameCount++;
         if (frameCount >= checkFrequency)
         {
             frameCount = 0;
-            if (CheckOppositeRays ())
+            if (CheckForOverlaps ())
             {
                 if (pawn)
                 {
-                    pawn.ModifyHealth (-55);
+                    onCrushed?.Invoke ();
+                    pawn.Kill ();
                 }
             }
         }
@@ -60,21 +68,22 @@ public class CrushDetector : MonoBehaviour
     // Internal Functions
     //=-----------------=
 
-    private bool CheckOppositeRays ()
+    private bool CheckForOverlaps ()
     {
-        if (Physics.Raycast (transform.position, transform.right, rayDistance.x, layerMask)
-            && Physics.Raycast (transform.position, -transform.right, rayDistance.x, layerMask))
+        Collider[] colliders = Physics.OverlapCapsule (transform.position + transform.up * rayDistance.y, transform.position - transform.up * downDistance, rayDistance.x);
+        foreach (Collider collider in colliders)
         {
-            return true;
-        }
-        if (Physics.Raycast (transform.position, transform.forward, rayDistance.z, layerMask)
-            && Physics.Raycast (transform.position, -transform.forward, rayDistance.z, layerMask))
-        {
-            return true;
-        }
-        if (Physics.Raycast (transform.position, transform.up, rayDistance.y, layerMask)
-            && Physics.Raycast (transform.position, -transform.up, downDistance, layerMask))
-        {
+            if (collider.gameObject == gameObject)
+            {
+                continue;
+            }
+            if (collider.isTrigger)
+            {
+                continue;
+            }
+            if (collider.attachedRigidbody != null && !collider.attachedRigidbody.isKinematic) {
+                continue;
+            }
             return true;
         }
         return false;
