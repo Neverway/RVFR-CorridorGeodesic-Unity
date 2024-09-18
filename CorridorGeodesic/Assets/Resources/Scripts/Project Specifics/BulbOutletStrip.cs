@@ -7,23 +7,41 @@ using UnityEditor.ProBuilder;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
+[DisallowMultipleComponent]
 public class BulbOutletStrip : MonoBehaviour, BulbCollisionBehaviour
 {
     public Transform startPoint;
     public Transform endPoint;
     public float snapDistance;
 
-
-    [Space, Header("EditorHelpers"), Tooltip("Right click this and choose \"MoveMesh\"")]
+    [Space, Header("EditorHelpers")]
     public ProBuilderMesh meshToModify;
 
-    public Vector3 StripVector => (endPoint.position - startPoint.position).normalized;
+    public Vector3 StripVectorNormalized => StripVector.normalized;
+    public Vector3 StripVector => (endPoint.position - startPoint.position);
 
     public bool OnBulbCollision(Projectile_Vacumm bulb, RaycastHit hit)
     {
+        //Get closest point between start and end in a line
         Vector3 attachPos = GetClosestPointOnLineSegment(hit.point, startPoint.position, endPoint.position);
+
+        //Process position snapping
+        attachPos = SnapPosition(attachPos);
+
+        //Attach bulb to position
         bulb.Attach(attachPos, startPoint.forward);
         return true;
+    }
+
+    public Vector3 SnapPosition(Vector3 position)
+    {
+        if (snapDistance <= 0f)
+            return position;
+
+        Vector3 attachVector = position - startPoint.position;
+        float snappedMagnitude = Mathf.Round(attachVector.magnitude / snapDistance) * snapDistance;
+        attachVector = (attachVector.normalized) * snappedMagnitude;
+        return startPoint.position + attachVector;
     }
 
 #if UNITY_EDITOR
@@ -93,10 +111,11 @@ public class BulbOutletStripEditor : Editor
 
         if (EditorGUI.EndChangeCheck())
         {
+            newStartPosition = outletStrip.SnapPosition(newStartPosition);
             newStartPosition = BulbOutletStrip.GetClosestPointOnLineSegment(
                 newStartPosition, 
-                oldStartPos + outletStrip.StripVector * -20f,
-                oldEndPos + outletStrip.StripVector * 20f);
+                oldStartPos + outletStrip.StripVectorNormalized * -20f,
+                oldEndPos + outletStrip.StripVectorNormalized * 20f);
             if (Vector3.Distance(newStartPosition, oldEndPos) > 1f)
             {
                 Object[] undoObjects = { outletStrip, outletStrip.startPoint };
@@ -116,10 +135,11 @@ public class BulbOutletStripEditor : Editor
 
         if (EditorGUI.EndChangeCheck())
         {
+            newEndPosition = outletStrip.SnapPosition(newEndPosition);
             newEndPosition = BulbOutletStrip.GetClosestPointOnLineSegment(
                 newEndPosition,
-                oldStartPos + outletStrip.StripVector * -20f,
-                oldEndPos + outletStrip.StripVector * 20f);
+                oldStartPos + outletStrip.StripVectorNormalized * -20f,
+                oldEndPos + outletStrip.StripVectorNormalized * 20f);
             if (Vector3.Distance(newEndPosition, oldStartPos) > 1f)
             {
                 Object[] undoObjects = { outletStrip, outletStrip.endPoint };

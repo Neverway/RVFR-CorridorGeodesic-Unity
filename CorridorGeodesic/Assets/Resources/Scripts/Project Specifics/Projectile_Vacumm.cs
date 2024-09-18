@@ -10,7 +10,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
-using static UnityEditor.Rendering.CameraUI;
 
 public class Projectile_Vacumm : Projectile
 {
