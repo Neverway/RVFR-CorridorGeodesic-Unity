@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Logic_Timer: LogicComponent
 {
@@ -21,6 +22,8 @@ public class Logic_Timer: LogicComponent
     //=-----------------=
     [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
     [SerializeField] private float timerDuration;
+    [field:SerializeField] public UnityEvent onTimerStart { get; private set; } = new UnityEvent();
+    [field:SerializeField] public UnityEvent onTimerEnd { get; private set; } = new UnityEvent();
 
     //=-----------------=
     // Reference Variables
@@ -47,8 +50,10 @@ public class Logic_Timer: LogicComponent
     IEnumerator CountDown()
     {
         isPowered = true;
+        onTimerStart?.Invoke();
         yield return new WaitForSeconds(timerDuration);
         isPowered = false;
+        onTimerEnd?.Invoke();
     }
 
     //=-----------------=
