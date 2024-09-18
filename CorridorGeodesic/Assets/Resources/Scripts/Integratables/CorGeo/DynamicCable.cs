@@ -15,13 +15,11 @@ public class DynamicCable : LogicComponent
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public LogicComponent inputSignal;
+    [LogicComponentHandle] public LogicComponent inputSignal;
     public bool generateWaypointsUsingLength; // Auto-generate waypoints based on the distance between the two anchors
     public float waypointsPerUnit; // How many waypoints should be created per unit of distance between the anchors
     public int extraWaypoints; //How many extra waypoints to be added after waypointsPerUnity calculation (Increases slack in cable)
     public bool updateOnMove;
-    //public float springinessZeroRift = 10000f; //The springiness of the SpringJoints when rift is not active (this value is interpolated to)
-    //public float springinessFullRift = 100000f; //The springiness of the SpringJoints when rift is fully closed or stretched open (this value is interpolated to)
 
     //=-----------------=
     // Private Variables
@@ -89,11 +87,6 @@ public class DynamicCable : LogicComponent
                     collider.enabled = !(onRiftClosedTimer > 0f);
             }
         }
-
-        //foreach (SpringJoint spring in waypointSpringJoints)
-        //{
-        //    //spring.spring = Mathf.Lerp(springinessZeroRift, springinessFullRift, ActualLerpAmount);
-        //}
     }
     private void LateUpdate()
     {
@@ -253,6 +246,7 @@ public class DynamicCable : LogicComponent
     //}
     public override void SourcePowerStateChanged(bool powered)
     {
+        Debug.Log("RAH Did this work");
         base.SourcePowerStateChanged(powered);
 
         isPowered = powered;

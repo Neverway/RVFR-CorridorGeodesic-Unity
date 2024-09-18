@@ -73,8 +73,7 @@ public abstract class LogicComponent : MonoBehaviour
         if (subscribeLogicComponents.Count > 0 && subscribeLogicComponents.TrueForAll(s => s))
             SourcePowerStateChanged(isPowered);
 
-        OnPowerStateChanged?.Invoke(isPowered); //todo: Maybe move this to Subscribe() so event gets triggered on runtime subscriptions???
-        //i dont think subscriptions will happen at runtime unless the player will be able to connect things themselves
+        OnPowerStateChanged?.Invoke(isPowered);
     }
 
     private void OnDestroy()
