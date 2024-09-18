@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using FMODUnity;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
@@ -39,6 +40,12 @@ public class ApplicationSettings : MonoBehaviour
     public GameObject cameraPrefab;
     public PostProcessProfile postProcessProfile;
 
+    private FMOD.Studio.Bus masterBus;
+    private FMOD.Studio.Bus sfxBus;
+    private FMOD.Studio.Bus musicBus;
+    private FMOD.Studio.Bus ambienceBus;
+    private FMOD.Studio.Bus voicesBus;
+
 
     //=-----------------=
     // Mono Functions
@@ -47,6 +54,13 @@ public class ApplicationSettings : MonoBehaviour
     {
         path = $"{Application.persistentDataPath}/settings.json";
         gameInstance = GetComponent<GameInstance>();
+
+        masterBus = RuntimeManager.GetBus("bus:/Master");
+        sfxBus = RuntimeManager.GetBus("bus:/Master/SFX");
+        musicBus = RuntimeManager.GetBus("bus:/Master/Music");
+        musicBus = RuntimeManager.GetBus("bus:/Master/Ambience");
+        voicesBus = RuntimeManager.GetBus("bus:/Master/Voices");
+
         LoadSettings();
         GetCurrentResolutionFromList();
         ApplySettings();
@@ -437,6 +451,12 @@ public class ApplicationSettings : MonoBehaviour
         audioMixer.SetFloat("characterChatter", ConvertVolumeToPercentage(currentSettingsData.chatterVolume));
         audioMixer.SetFloat("ambient", ConvertVolumeToPercentage(currentSettingsData.ambientVolume));
         audioMixer.SetFloat("menus", ConvertVolumeToPercentage(currentSettingsData.menuVolume));
+
+        masterBus.setVolume(LinearVolumeFromSliderValue(currentSettingsData.masterVolume));
+        sfxBus.setVolume(LinearVolumeFromSliderValue(currentSettingsData.soundVolume));
+        ambienceBus.setVolume(LinearVolumeFromSliderValue(currentSettingsData.ambientVolume));
+        musicBus.setVolume(LinearVolumeFromSliderValue(currentSettingsData.musicVolume));
+        voicesBus.setVolume(LinearVolumeFromSliderValue(currentSettingsData.voiceVolume));
         
         // GAMEPLAY SETTINGS
         // Camera FOV
@@ -580,5 +600,12 @@ public class ApplicationSettings : MonoBehaviour
 
         return mappedValue;
     }
+    public static float LinearVolumeFromSliderValue(int sliderValue)
+    {
+        float normalizedValue = sliderValue / 100f;
+        return normalizedValue;
+        //float adjustedValue = Mathf.Log10(normalizedValue) * 20;
 
+        //return sliderValue == 0 ? -80 : adjustedValue;
+    }
 }
