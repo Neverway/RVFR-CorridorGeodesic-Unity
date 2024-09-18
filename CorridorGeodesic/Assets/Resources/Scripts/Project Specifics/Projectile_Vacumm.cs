@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
+using static UnityEditor.Rendering.CameraUI;
 
 public class Projectile_Vacumm : Projectile
 {
@@ -40,7 +41,7 @@ public class Projectile_Vacumm : Projectile
     {
         base.Awake();
     }
-
+    
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -50,14 +51,13 @@ public class Projectile_Vacumm : Projectile
 
         bool killScheduled = false;
 
-        //If we hit an Outlet, then snap to it's attachpoint.
-        if (hit.collider.gameObject.TryGetComponent<BulbOutlet> (out var outlet))
+        //If we hit a BulbCollisionBehaviour, (such as an Outlet), call method to determine what to do (such as attach bulb to position)
+        if (hit.collider.gameObject.TryGetComponent<BulbCollisionBehaviour> (out var bulbBehaviourObj))
         {
-            transform.position = outlet.attachPoint.position;
-            transform.DORotateQuaternion (Quaternion.LookRotation (outlet.attachPoint.forward), 0.08f);
-            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin, transform.position);
-            disabled = true;
-            return;
+            //Stop logic if OnBulbCollision returns true, denoting that it has overriden the collision behaviour
+            // and we should stop checking logic
+            if (bulbBehaviourObj.OnBulbCollision(this, hit))
+                return;
         }
 
         hit.collider.gameObject.TryGetComponent<Mesh_Slicable>(out var _out);
@@ -118,7 +118,13 @@ public class Projectile_Vacumm : Projectile
             KillProjectile();
         }
     }
-
+    public void Attach(Vector3 position, Vector3 pointingDirection)
+    {
+        transform.position = position;
+        transform.DORotateQuaternion(Quaternion.LookRotation(pointingDirection), 0.08f);
+        Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin, transform.position);
+        disabled = true;
+    }
     public void KillProjectile (bool removeProjectileFromList = true)
     {
         // Note: I added removeProjectileFromList because otherwise, calling this function from the geoFolder, will
