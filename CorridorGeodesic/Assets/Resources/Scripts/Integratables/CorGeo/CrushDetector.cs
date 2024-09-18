@@ -1,7 +1,7 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Connorses =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Provides crush detection for pawns
+// Notes: can be repurposed for other objects
 //
 //=============================================================================
 
@@ -57,6 +57,7 @@ public class CrushDetector : MonoBehaviour
             {
                 if (pawn)
                 {
+                    Debug.Log ("Player was crushed to death.");
                     onCrushed?.Invoke ();
                     pawn.Kill ();
                 }
