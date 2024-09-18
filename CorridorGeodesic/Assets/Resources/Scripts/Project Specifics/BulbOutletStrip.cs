@@ -70,7 +70,7 @@ public class BulbOutletStrip : MonoBehaviour, BulbCollisionBehaviour
         meshToModify.SetVertices(positions);
         meshToModify.ToMesh();
         meshToModify.Refresh();
-        ProBuilderEditor.Refresh();
+        ProBuilderEditor.Refresh(true);
     }
 #endif
 
