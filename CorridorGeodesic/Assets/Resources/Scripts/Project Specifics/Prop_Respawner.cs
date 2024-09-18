@@ -23,7 +23,10 @@ public class Prop_Respawner : MonoBehaviour
     //=-----------------=
     [SerializeField] private float spawnDelay;
     private Coroutine spawnWorker;
+    [Tooltip("Wait for a DestroySpawnedObject call before spawning the first object.")]
     [SerializeField] private bool waitForRespawn = false;
+    [Tooltip("If false, the spawner will always set waitForRespawn when the spawned object is destroyed.")]
+    [SerializeField] private bool autoRespawn = true;
 
 
     //=-----------------=
@@ -50,6 +53,10 @@ public class Prop_Respawner : MonoBehaviour
         yield return new WaitForSeconds(spawnDelay);
         spawnedObject = Instantiate(prefabToSpawn, transform.position, transform.rotation);
         spawnWorker = null;
+        if (autoRespawn == false)
+        {
+            waitForRespawn = true;
+        }
     }
 
     //=-----------------=
