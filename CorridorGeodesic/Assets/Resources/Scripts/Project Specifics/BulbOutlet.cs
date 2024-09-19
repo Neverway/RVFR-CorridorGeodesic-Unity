@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulbOutlet : MonoBehaviour
+public class BulbOutlet : MonoBehaviour, BulbCollisionBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -26,7 +26,6 @@ public class BulbOutlet : MonoBehaviour
     //=-----------------=
 
     [field:SerializeField] public Transform attachPoint { get; private set; }
-
 
     //=-----------------=
     // Mono Functions
@@ -48,4 +47,9 @@ public class BulbOutlet : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public bool OnBulbCollision(Projectile_Vacumm bulb, RaycastHit hit)
+    {
+        bulb.Attach(attachPoint.position, attachPoint.forward);
+        return true;
+    }
 }

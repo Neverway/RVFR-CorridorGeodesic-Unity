@@ -27,9 +27,9 @@ public class Button_Sounds : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
     // Reference Variables
     //=-----------------=
     private Button button;
-    private AudioSource audioSource;
-    [SerializeField] private AudioClip hover;
-    [SerializeField] private AudioClip select;
+    //private AudioSource audioSource;
+    //[SerializeField] private AudioClip hover;
+    //[SerializeField] private AudioClip select;
 
 
     //=-----------------=
@@ -38,19 +38,21 @@ public class Button_Sounds : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
     private void Start()
     {
         button = GetComponent<Button>();
-        audioSource = GetComponent<AudioSource>();
+        //audioSource = GetComponent<AudioSource>();
     }
 
     public void OnPointerEnter( PointerEventData _pointerEventData ) 
     {
-        audioSource.clip = hover;
-        audioSource.Play();
+        Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.hover);
+        //audioSource.clip = hover;
+        //audioSource.Play();
     }
 
     public void OnPointerDown( PointerEventData _pointerEventData ) 
     {
-        audioSource.clip = select;
-        audioSource.Play();
+        Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.select);
+        //audioSource.clip = select;
+        //audioSource.Play();
     }    
     
 

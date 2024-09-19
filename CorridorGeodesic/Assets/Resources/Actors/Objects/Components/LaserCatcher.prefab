@@ -120,13 +120,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3833969803650778817}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: 5.684342e-14, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.245}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4594761704708236044}
-  m_Father: {fileID: 6698333222549412351}
+  m_Children: []
+  m_Father: {fileID: 8696483336030234177}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4716838167504903795
 MonoBehaviour:
@@ -219,12 +218,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5005785911622042871}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.01}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalRotation: {x: -0, y: 5.684342e-14, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.243}
+  m_LocalScale: {x: 0.040000003, y: 0.040000003, z: 0.040000003}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1059557058105996073}
+  m_Father: {fileID: 8696483336030234177}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2391523960109341235
 SpriteRenderer:
@@ -294,7 +293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8755937001737694202
 Transform:
   m_ObjectHideFlags: 0
@@ -303,13 +302,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6919020028671226849}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: 0.000000014901159, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1539812144969977682}
-  m_Father: {fileID: 220902340854671638}
+  m_Father: {fileID: 8696483336030234177}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &2479635940530314647
 LineRenderer:
@@ -415,38 +414,6 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!1 &7839574005648141469
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6698333222549412351}
-  m_Layer: 0
-  m_Name: LaserShooter
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6698333222549412351
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7839574005648141469}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
-  m_LocalPosition: {x: 0, y: 0, z: -0.255}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1059557058105996073}
-  m_Father: {fileID: 220902340854671638}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8198421864142156905
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +443,10 @@ Transform:
   m_LocalPosition: {x: -0.00000058114523, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8755937001737694202}
+  - {fileID: 1059557058105996073}
+  - {fileID: 4594761704708236044}
   m_Father: {fileID: 220902340854671638}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &7170857359644901027
@@ -645,12 +615,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1127187639986504231}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &6859278990388198036 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5806721884615096499, guid: 206248817d2cf30228e69460d6132eab,
-    type: 3}
-  m_PrefabInstance: {fileID: 1127187639986504231}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5992366730937719968
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -727,19 +691,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8696483336030234177}
-    - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8755937001737694202}
-    - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6698333222549412351}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 138700334862779070}
+      insertIndex: 1
+      addedObject: {fileID: 3210418527852625655}
     - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       insertIndex: -1
@@ -757,7 +713,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5992366730937719968}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &138700334862779070
+--- !u!114 &3210418527852625655
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -766,14 +722,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 290464974157155360}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfb3f28467d9817448bbc57dcf7874e7, type: 3}
+  m_Script: {fileID: 11500000, guid: ffd506debf213194eaa88d518206ffe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 0
-  offMaterial: {fileID: 2100000, guid: 291de02b41e16cac0aa88ad232b18407, type: 2}
-  onMaterial: {fileID: 2100000, guid: 83e70c8276382c146bbf5a7db4d932d1, type: 2}
-  laserLight: {fileID: 6919020028671226849}
-  laserRenderer: {fileID: 6859278990388198036}
+  laserLight: {fileID: 8198421864142156905}
+  laserRenderer: {fileID: 0}
   OnPowered:
     m_PersistentCalls:
       m_Calls: []

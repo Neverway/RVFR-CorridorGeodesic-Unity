@@ -31,6 +31,10 @@ public class Audio_FMODEvents: MonoBehaviour
     public EventReference nixieTubeBreak;
     public EventReference nixieTubePin;
 
+    [Header("FrameWork")]
+    public EventReference hover;
+    public EventReference select;
+
     //=-----------------=
     // Private Variables
     //=-----------------=

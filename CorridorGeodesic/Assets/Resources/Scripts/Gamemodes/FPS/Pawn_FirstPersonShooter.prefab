@@ -284,7 +284,7 @@ Transform:
   m_GameObject: {fileID: 6843292025573277241}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.683, z: 0}
+  m_LocalPosition: {x: 0, y: 0.86, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -411,15 +411,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2254121618581813435, guid: 64f7175221f42d94eb140fa78f5f824c,
         type: 3}
+      propertyPath: crushDetector
+      value: 
+      objectReference: {fileID: 5583646988449171408}
+    - target: {fileID: 2254121618581813435, guid: 64f7175221f42d94eb140fa78f5f824c,
+        type: 3}
       propertyPath: vacuumProjectile
       value: 
       objectReference: {fileID: 8064634614578769581, guid: ed82fd31b6042c558abf0fb0727b922f,
         type: 3}
-    - target: {fileID: 2254121618581813435, guid: 64f7175221f42d94eb140fa78f5f824c,
-        type: 3}
-      propertyPath: allowExpandingRift
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2254121618581813435, guid: 64f7175221f42d94eb140fa78f5f824c,
         type: 3}
       propertyPath: riftSecondsPerUnit
@@ -1436,13 +1436,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2448181450499351524}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe251027271837b4fbdeb8e12fb0cf98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDistance: {x: 0.192, y: 0.983, z: 0.192}
-  downDistance: -0.683
+  rayDistance: {x: 0.192, y: 0.86, z: 0.192}
+  downDistance: -0.514
   layerMask:
     serializedVersion: 2
     m_Bits: 1
