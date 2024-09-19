@@ -6,6 +6,7 @@ using UnityEngine;
 public class MoveOnLogic : LogicComponent
 {
     [LogicComponentHandle] public LogicComponent inputSignal;
+    [LogicComponentHandle] public LogicComponent pauseMovement;
     public float duration = 1f;
     
     public Transform startPosition, endPosition;
@@ -21,10 +22,14 @@ public class MoveOnLogic : LogicComponent
         Debug.LogWarning("TODO: Make sure this script doesnt break when rifts are active");
         transform.SetParent(null);
         transform.position = startPosition.position;
+        lastPosition= transform.position;
     }
     private void Update()
     {
-        Vector3 positionChange = lastPosition - transform.position;
+        if (pauseMovement.isPowered)
+            return;
+
+        Vector3 positionChange = transform.position - lastPosition;
         lastPosition = transform.position;
 
         foreach (Transform obj in objectsToMove)
@@ -37,7 +42,10 @@ public class MoveOnLogic : LogicComponent
     {
         base.SourcePowerStateChanged(powered);
 
-        Vector3 target = (powered ? endPosition.position : startPosition.position);
+        if (pauseMovement != null && pauseMovement.isPowered)
+            return;
+
+        Vector3 target = (inputSignal.isPowered ? endPosition.position : startPosition.position);
         transform.DOKill();
         transform.DOMove(target, 1f, false);
     }
