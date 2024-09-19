@@ -41,14 +41,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 295651025935429012}
   serializedVersion: 8
-  lengthInSec: 1.7
+  lengthInSec: 0.05
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -4836,7 +4836,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 148a2e64c71ed3b49949f94cc61f5ee8, type: 2}
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 148a2e64c71ed3b49949f94cc61f5ee8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5470,16 +5470,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3106338478274925666, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3106338478274925666, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
-        type: 3}
-      propertyPath: m_BounceIntensity
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9091732219487806314, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Enabled
@@ -5498,6 +5488,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1961034664082918761}
+    - targetCorrespondingSourceObject: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3602168810818894085}
   m_SourcePrefab: {fileID: 100100000, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
 --- !u!108 &5264496781848229307 stripped
 Light:
@@ -5523,11 +5517,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b41414066d6b69a468f52d7349963903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  __power: 0
   _light: {fileID: 5264496781848229307}
-  rend: {fileID: 8879330633765819675}
-  lightMat: {fileID: 2100000, guid: 148a2e64c71ed3b49949f94cc61f5ee8, type: 2}
+  materialPropertyChange: {fileID: 3602168810818894085}
   sparks: {fileID: 5534390401969421951}
+--- !u!114 &3602168810818894085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6943340519218294258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04d690c57de463a4889c75e098dac11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertyType: 0
+  propertyName: _EmissionColor
+  changeToColor: {r: 0, g: 0, b: 0, a: 0}
+  changeToFloat: 0
+  material: {fileID: 2100000, guid: 148a2e64c71ed3b49949f94cc61f5ee8, type: 2}
+  meshRenderer: {fileID: 8879330633765819675}
+  useAnimationLengthForDuration: 0
+  animClip: {fileID: 0}
+  animationLengthMultiplier: 1
 --- !u!4 &7443481183090919620 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
@@ -5611,7 +5624,7 @@ PrefabInstance:
     - target: {fileID: 8019735095488302505, guid: 73403a250b23478b4a05e7f933758a75,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 8019735095488302505, guid: 73403a250b23478b4a05e7f933758a75,
         type: 3}
@@ -5621,7 +5634,7 @@ PrefabInstance:
     - target: {fileID: 8019735095488302505, guid: 73403a250b23478b4a05e7f933758a75,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 8019735095488302505, guid: 73403a250b23478b4a05e7f933758a75,
         type: 3}

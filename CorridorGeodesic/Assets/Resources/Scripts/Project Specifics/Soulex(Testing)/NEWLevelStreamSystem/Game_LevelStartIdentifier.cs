@@ -30,14 +30,22 @@ public class Game_LevelStartIdentifier : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void OnEnable()
+    private void Start()
     {
         Instance = this;
+
+        StartCoroutine(WaitForLocalPlayer());
     }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    IEnumerator WaitForLocalPlayer()
+    {
+        yield return new WaitUntil(()=> GameInstance.Instance.localPlayerCharacter != null);
+
+        GameInstance.Instance.localPlayerCharacter.transform.position = startTransform.position + Vector3.up;
+    }
 
 
     //=-----------------=

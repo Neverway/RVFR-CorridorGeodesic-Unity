@@ -47,7 +47,7 @@ public class Volume_LevelStreaming : Volume
         {
             _other.transform.SetParent(null);
 
-            Game_LevelHelpers.StoreObjectRelativePosition(_other.gameObject.GetInstanceID(), _other.transform);
+            //Game_LevelHelpers.StoreObjectRelativePosition(_other.gameObject.GetInstanceID(), _other.transform);
 
             SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetSceneByName(worldLoader.streamingWorldID));
         }
@@ -69,10 +69,10 @@ public class Volume_LevelStreaming : Volume
         {
             SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetActiveScene());
 
-            RotationPositionBinding binding = Game_LevelHelpers.GetObjectWorldStartPosition(_other.gameObject.GetInstanceID());
+            //RotationPositionBinding binding = Game_LevelHelpers.GetObjectWorldStartPosition(_other.gameObject.GetInstanceID());
 
-            _other.transform.position = binding.position;
-            _other.transform.rotation = binding.rotation;
+            //_other.transform.position = binding.position;
+            //_other.transform.rotation = binding.rotation;
         }
     }
 

@@ -19,7 +19,6 @@ public class Graphics_Light: MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField][Range(0, 1)] private float __power = 1;
     private float _power = 1;
 
     private float power
@@ -28,9 +27,7 @@ public class Graphics_Light: MonoBehaviour
         set 
         {
             if (value == 0 && _power != 0)
-                StartSparks();
-            if (value > 0 && _power == 0)
-                StopSparks();
+                sparks.Play();
 
             _power = value;
             AdjustIntensity();
@@ -43,8 +40,7 @@ public class Graphics_Light: MonoBehaviour
     // Reference Variables
     //=-----------------=
     [SerializeField] private Light _light;
-    [SerializeField] private Renderer rend;
-    [SerializeField] private Material lightMat;
+    [SerializeField] Graphics_ChangeMaterialProperty materialPropertyChange;
     [SerializeField] private ParticleSystem sparks;
 
     //=-----------------=
@@ -52,20 +48,11 @@ public class Graphics_Light: MonoBehaviour
     //=-----------------=
     private void Awake()
     {
-        List<Material> mats = new List<Material>();
-
-        mats.AddRange(rend.sharedMaterials);
-
-        mats[mats.IndexOf(lightMat)] = new Material(lightMat);
-
-        rend.sharedMaterials = mats.ToArray();
-
         lightIntensity = _light.intensity;
-        emisColor = lightMat.GetColor("_EmissionColor");
     }
-    private void OnValidate()
+    private void Start()
     {
-        power = __power;
+        emisColor = materialPropertyChange.material.GetColor("_EmissionColor");
     }
 
     //=-----------------=
@@ -75,18 +62,28 @@ public class Graphics_Light: MonoBehaviour
     {
         _light.intensity = lightIntensity * power;
 
-        lightMat.SetColor("_EmissionColor", emisColor * power);
+        materialPropertyChange.ChangePropertyManual(emisColor * power);
     }
-    void StartSparks()
+    IEnumerator SetLight(float value)
     {
-        sparks.Play();
+        while (power != value)
+        {
+            power = Mathf.MoveTowards(power, value, Time.deltaTime * 0.5f);
+            yield return null;
+        }
     }
-    void StopSparks()
-    {
-        sparks.Stop();
-    }
-	
+
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void TurnOffLight()
+    {
+        StopAllCoroutines();
+        StartCoroutine(SetLight(0));
+    }
+    public void TurnOnLight()
+    {
+        StopAllCoroutines();
+        StartCoroutine(SetLight(1));
+    }
 }
