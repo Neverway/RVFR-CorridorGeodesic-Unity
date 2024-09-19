@@ -31,7 +31,7 @@ public class Projectile : MonoBehaviour
 
     private Vector3 lastPosition;
 
-    private LayerMask ignoreMask;
+    public LayerMask ignoreMask;
 
     private Vector3 moveVector; //used in update loop collision & move
 
@@ -45,7 +45,7 @@ public class Projectile : MonoBehaviour
     //=-----------------=
     public virtual void Awake ()
     {
-        ignoreMask = CorGeo_ReferenceManager.Instance.playerProjectileIgnoreMask;
+        //ignoreMask = CorGeo_ReferenceManager.Instance.playerProjectileIgnoreMask;
         lastPosition = transform.position;
     }
     private void Update ()
