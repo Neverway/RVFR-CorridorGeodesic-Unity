@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour
 
     public LayerMask ignoreMask;
 
-    private Vector3 moveVector; //used in update loop collision & move
+    public Vector3 moveVector { get; private set; } //used in update loop collision & move
 
     //=-----------------=
     // Reference Variables

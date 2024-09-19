@@ -442,6 +442,11 @@ PrefabInstance:
       propertyPath: onUnpowered.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 7067936726703923289, guid: c0d1c07e0f9e2935db0265879b1f8518,
+        type: 3}
+      propertyPath: keepHomeScaleDuringCrush
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8237108701098330144, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -500,17 +505,17 @@ PrefabInstance:
     - target: {fileID: 8767485977656216626, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 2.70831
       objectReference: {fileID: 0}
     - target: {fileID: 8767485977656216626, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 3
+      value: 2.70831
       objectReference: {fileID: 0}
     - target: {fileID: 8767485977656216626, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 2.70831
       objectReference: {fileID: 0}
     - target: {fileID: 8767485977656216626, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}
@@ -567,9 +572,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Volume3DTriggerInteractable
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7067936726703923289, guid: c0d1c07e0f9e2935db0265879b1f8518, type: 3}
-    - {fileID: 1525601095434817537, guid: c0d1c07e0f9e2935db0265879b1f8518, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -577,6 +580,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1721952540460605576}
+    - targetCorrespondingSourceObject: {fileID: 9132002430392707332, guid: c0d1c07e0f9e2935db0265879b1f8518,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4666828205535067182}
   m_SourcePrefab: {fileID: 100100000, guid: c0d1c07e0f9e2935db0265879b1f8518, type: 3}
 --- !u!1 &7520148591385847967 stripped
 GameObject:
@@ -615,6 +622,18 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 1
   OverrideMaxDistance: 20
+--- !u!114 &4666828205535067182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7520148591385847967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8019735095488302505 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8767485977656216626, guid: c0d1c07e0f9e2935db0265879b1f8518,
