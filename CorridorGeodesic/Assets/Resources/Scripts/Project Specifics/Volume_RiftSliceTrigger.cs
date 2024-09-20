@@ -15,7 +15,7 @@ public class Volume_RiftSliceTrigger : Volume
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public enum RiftIntersection { AnyPartInsideRift, NoPartInsideRift, FullyEncapsulatedOnly, PartiallyEncapsulatedOnly }
+    public enum RiftIntersection { AnyPartInsideRift, NoPartInsideRift, FullyEncapsulatedOnly, PartiallyEncapsulatedOnly, RiftActiveAtAll }
     public RiftIntersection riftIntersectionType;
 
     //=-----------------=
@@ -40,6 +40,10 @@ public class Volume_RiftSliceTrigger : Volume
 
         switch (riftIntersectionType)
         {
+            case RiftIntersection.RiftActiveAtAll:
+                {
+                    return true;
+                }
             case RiftIntersection.AnyPartInsideRift:
                 {
                     foreach (CorGeo_ActorData c in corners)
