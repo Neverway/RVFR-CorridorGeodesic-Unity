@@ -52,6 +52,10 @@ public class WorldLoader : MonoBehaviour
         }
     }
 
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        throw new NotImplementedException();
+    }
 
     //=-----------------=
     // Internal Functions
@@ -95,9 +99,71 @@ public class WorldLoader : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         isLoading = false;
+
+        //GameObject[] streamedObjects = SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects();
+
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(targetWorldID)); // Assign the new scene to be the active scene
-        EjectStreamedActors();
+
+        EjectStreamedActors(/*streamedObjects*/);
     }
+    //private IEnumerator StreamLoadDos()
+    //{
+    //    isLoading = true;
+    //    yield return new WaitForSeconds(delayBeforeWorldChange);
+    //    print("Active scene was " + SceneManager.GetActiveScene().name);
+
+    //    // Load the target scene
+    //    AsyncOperation targetLevel = SceneManager.LoadSceneAsync(targetWorldID, LoadSceneMode.Additive);
+    //    print("Active scene is " + SceneManager.GetActiveScene().name);
+
+    //    targetLevel.allowSceneActivation = false;
+
+    //    // Unload the active scene
+    //    SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+    //    while (targetLevel != null && targetLevel.progress < 0.9f)
+    //    {
+    //        yield return null;
+    //    }
+    //    isLoading = false;
+
+    //    GameObject[] streamedObjects = SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects();
+
+    //    targetLevel.allowSceneActivation = true;
+
+    //    while (!targetLevel.isDone)
+    //        yield return null;
+    //    SceneManager.SetActiveScene(SceneManager.GetSceneByName(targetWorldID)); // Assign the new scene to be the active scene
+
+    //    print(streamedObjects.Length);
+
+    //    EjectStreamedActors(streamedObjects);
+    //}
+    //private IEnumerator LoadAsync()
+    //{
+    //    isLoading = true;
+
+    //    yield return new WaitForSeconds(delayBeforeWorldChange);
+
+    //    AsyncOperation loadAsync = SceneManager.LoadSceneAsync(targetWorldID);
+    //    loadAsync.allowSceneActivation = false;
+
+    //    while (loadAsync.progress < 0.9f)
+    //    {
+    //        yield return null;
+    //    }
+
+    //    GameObject[] streamedObjects = SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects();
+
+    //    loadAsync.allowSceneActivation = true;
+
+    //    yield return null;
+
+    //    EjectStreamedActors(streamedObjects);
+
+    //    isLoading = false;
+
+    //    print("Active scene is " + SceneManager.GetActiveScene().name);
+    //}
 
     private IEnumerator LoadAsyncOperation()
     {
@@ -119,11 +185,15 @@ public class WorldLoader : MonoBehaviour
         }
     }
 
-    private void EjectStreamedActors()
+    private void EjectStreamedActors(/*GameObject[] streamedObjects*/)
     {
         foreach (var actor in SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects())
         {
             SceneManager.MoveGameObjectToScene(actor.gameObject, SceneManager.GetActiveScene());
+            //RotationPositionBinding binding = Game_LevelHelpers.GetObjectWorldStartPosition(actor.gameObject.GetInstanceID());
+
+            //actor.transform.position = binding.position;
+            //actor.transform.rotation = binding.rotation;
         }
     }
 
@@ -166,6 +236,8 @@ public class WorldLoader : MonoBehaviour
         }
         if (isLoading) return;
         StartCoroutine(StreamLoad());
+        //StartCoroutine(LoadAsync());
+        //StartCoroutine(StreamLoadDos());
     }
     
     // This code was expertly copied from @Yagero on github.com

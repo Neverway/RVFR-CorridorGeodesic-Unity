@@ -153,9 +153,18 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     public bool IsGrounded3D()
     {
+        //return Physics.SphereCast(transform.position, currentState.groundCheckRadius, Vector3.down, out RaycastHit hit,
+        //    1.1f, currentState.groundMask);
+
+        //return hit.distance < 1.5f;
+
         return Physics.CheckSphere(transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, currentState.groundMask);
     }
-    
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius);
+    }
+
     public bool IsGroundSloped3D()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
