@@ -11,7 +11,7 @@ public class MoveOnLogic : LogicComponent
     
     public Transform startPosition, endPosition;
     public Transform[] objectsToMove;
-
+    public Vector3[] storedPositions;
 
 
     public Vector3 lastPosition;
@@ -23,8 +23,14 @@ public class MoveOnLogic : LogicComponent
         transform.SetParent(null);
         transform.position = startPosition.position;
         lastPosition= transform.position;
+
+        storedPositions = new Vector3[objectsToMove.Length];
+        for (int i = 0; i < objectsToMove.Length; i++)
+        {
+            storedPositions[i] = objectsToMove[i].transform.position;
+        }
     }
-    private void Update()
+    private void LateUpdate()
     {
         if (pauseMovement.isPowered)
             return;
@@ -32,9 +38,9 @@ public class MoveOnLogic : LogicComponent
         Vector3 positionChange = transform.position - lastPosition;
         lastPosition = transform.position;
 
-        foreach (Transform obj in objectsToMove)
+        for (int i = 0; i < objectsToMove.Length; i++)
         {
-            obj.transform.position += positionChange;
+            objectsToMove[i].transform.position = storedPositions[i] + (transform.position - startPosition.position);
         }
     }
 
