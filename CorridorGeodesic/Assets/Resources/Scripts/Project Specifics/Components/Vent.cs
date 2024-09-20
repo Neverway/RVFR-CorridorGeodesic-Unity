@@ -12,8 +12,8 @@ public class Vent : LogicComponent
     //=-----------------=
     public Transform airCurrent;
     public Transform sparks;
-    //public CorGeo_ActorData airStart;
-    //public CorGeo_ActorData airEnd;
+    public Transform airStart;
+    public Transform airEnd;
 
     [Space]
     public Transform[] ventBlades;
@@ -48,6 +48,7 @@ public class Vent : LogicComponent
     //}
     protected new void OnEnable()
     {
+        airCurrent.SetParent(null);
         base.OnEnable();
         SourcePowerStateChanged(isPowered);
     }
@@ -82,9 +83,9 @@ public class Vent : LogicComponent
         //Alt_Item_Geodesic_Utility_GeoGun.
         //
         ////position
-        //airCurrent.transform.position = airStart.transform.position;
-        ////rotation
-        //airCurrent.transform.LookAt(airEnd.transform.position);
+        airCurrent.transform.position = airStart.transform.position;
+        //rotation
+        airCurrent.transform.LookAt(airEnd);
         ////scale
         //Vector3 newScale = airCurrent.transform.localScale;
         //newScale.z = storedAirMagnitude;

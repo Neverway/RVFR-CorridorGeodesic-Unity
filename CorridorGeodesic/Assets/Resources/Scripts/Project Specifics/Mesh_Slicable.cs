@@ -39,6 +39,8 @@ public class Mesh_Slicable : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [Tooltip("Optional field for object that slices can be sent to.")]
+    [SerializeField] private SlicedPartsReference partsReference;
     private BzSliceableObject sliceableObject;
     private IBzMeshSlicer meshSlicer;
 
@@ -50,6 +52,7 @@ public class Mesh_Slicable : MonoBehaviour
     {
         meshSlicer = GetComponent<IBzMeshSlicer> ();
         sliceableObject = GetComponent<BzSliceableObject> ();
+        if (partsReference) partsReference.Setup (this);
 
         if (!sliceableObject.defaultSliceMaterial)
         {
@@ -59,7 +62,7 @@ public class Mesh_Slicable : MonoBehaviour
     
     public void Update()
     {
-        foreach (var meshCollider in gameObject.GetComponents<MeshCollider>())
+        foreach (var meshCollider in gameObject.GetComponents<MeshCollider>())  //todo no no no no no
         {
             if (!meshCollider.isTrigger)
             {
@@ -80,6 +83,10 @@ public class Mesh_Slicable : MonoBehaviour
     //=-----------------=
     public void ApplyCuts()
     {
+        if (partsReference != null)
+        {
+            partsReference.DoReset ();
+        }
         Mesh_Slicable sliceThis = Instantiate (this, transform.position, transform.rotation);
         sliceThis.gameObject.name = $"[CUT] {name}";
         isCut = false;
@@ -107,12 +114,13 @@ public class Mesh_Slicable : MonoBehaviour
             sliced = true;
             foreach (var obj in result.resultObjects)
             {
-                obj.gameObject.GetComponent<Mesh_Slicable> ().isCut = true;
+                Mesh_Slicable objMesh1 = GetComponent<Mesh_Slicable> ();
+                objMesh1.isCut = true;
                 foreach (Collider collider in obj.gameObject.GetComponents<Collider> ())
                 {
                     collider.isTrigger = isTrigger;
                     MeshCollider meshColl = collider as MeshCollider;
-                    if (meshColl != null)
+                    if (meshColl != null) //todo is this a bug? i think i meant to only do this if the mesh was a trigger
                     {
                         meshColl.convex = true;
                     }
@@ -140,8 +148,15 @@ public class Mesh_Slicable : MonoBehaviour
                                     meshColl.convex = true;
                                 }
                             }
-                            obj.gameObject.GetComponent<Mesh_Slicable> ().isCut = true;
+                            Mesh_Slicable objMesh2 = obj2.gameObject.GetComponent<Mesh_Slicable> ();
+                            objMesh2.isCut = true;
                             Alt_Item_Geodesic_Utility_GeoGun.slicedMeshes.Add (obj.gameObject);
+
+                            if (partsReference)
+                            {
+                                partsReference.AddSlice (objMesh2);
+                            }
+
                             if (obj2.side)
                             {
                                 Alt_Item_Geodesic_Utility_GeoGun.nullSlices.Add (obj2.gameObject);
@@ -156,6 +171,17 @@ public class Mesh_Slicable : MonoBehaviour
                     {
                         //if slice 2 failed, we still add this object
                         Alt_Item_Geodesic_Utility_GeoGun.nullSlices.Add (obj.gameObject);
+                        if (partsReference)
+                        {
+                            partsReference.AddSlice (obj.gameObject.GetComponent<Mesh_Slicable> ());
+                        }
+                    }
+                }
+                else //if !obj.side
+                {
+                    if (partsReference)
+                    {
+                        partsReference.AddSlice (obj.gameObject.GetComponent<Mesh_Slicable> ());
                     }
                 }
             }
@@ -168,9 +194,9 @@ public class Mesh_Slicable : MonoBehaviour
             {
                 _original.SetActive (false);
                 sliced = true;
-                foreach (var obj in result2.resultObjects)
+                foreach (var obj3 in result2.resultObjects)
                 {
-                    foreach (Collider collider in obj.gameObject.GetComponents<Collider> ())
+                    foreach (Collider collider in obj3.gameObject.GetComponents<Collider> ())
                     {
                         collider.isTrigger = isTrigger;
                         MeshCollider meshColl = coll as MeshCollider;
@@ -179,15 +205,21 @@ public class Mesh_Slicable : MonoBehaviour
                             meshColl.convex = true;
                         }
                     }
-                    obj.gameObject.GetComponent<Mesh_Slicable> ().isCut = true;
-                    Alt_Item_Geodesic_Utility_GeoGun.slicedMeshes.Add (obj.gameObject);
-                    if (obj.side)
+                    Mesh_Slicable objMesh3 = obj3.gameObject.GetComponent<Mesh_Slicable> ();
+                    objMesh3.isCut = true;
+                    Alt_Item_Geodesic_Utility_GeoGun.slicedMeshes.Add (obj3.gameObject);
+                    if (partsReference)
                     {
-                        Alt_Item_Geodesic_Utility_GeoGun.nullSlices.Add (obj.gameObject);
+                        partsReference.AddSlice (objMesh3);
+                    }
+
+                    if (obj3.side)
+                    {
+                        Alt_Item_Geodesic_Utility_GeoGun.nullSlices.Add (obj3.gameObject);
                     }
                     else
                     {
-                        obj.gameObject.transform.SetParent (Alt_Item_Geodesic_Utility_GeoGun.planeBMeshes.transform);
+                        obj3.gameObject.transform.SetParent (Alt_Item_Geodesic_Utility_GeoGun.planeBMeshes.transform);
                     }
                 }
             }
@@ -235,6 +267,10 @@ public class Mesh_Slicable : MonoBehaviour
 
     public void GoHome()
     {
+        if (partsReference != null)
+        {
+            partsReference.DoReset ();
+        }
         transform.SetParent(homeParent);
         gameObject.SetActive (true);
         transform.position = homePosition;
