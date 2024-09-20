@@ -9,8 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
-#if UNITY_EDITOR
+[ExecuteAlways]
 public class Tool_AutoStair : MonoBehaviour
 {
     //=-----------------=
@@ -36,7 +35,7 @@ public class Tool_AutoStair : MonoBehaviour
             {
                 _platformCount = value;
 
-                ChangeStairAmount();
+                //ChangeStairAmount();
             }
         }
     }
@@ -58,9 +57,17 @@ public class Tool_AutoStair : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Awake()
+    {
+        if (Application.isPlaying)
+            this.enabled = false;
+    }
     private void Update()
     {
         if (!active)
+            return;
+
+        if (!(Application.isEditor && !Application.isPlaying))
             return;
 
         stairStartPosition = new Vector3(stairStart.position.x, transform.position.y, stairStart.position.z);
@@ -89,7 +96,7 @@ public class Tool_AutoStair : MonoBehaviour
 
         Gizmos.color = Color.blue;
 
-        for (int i = 0; i <= platformCount; i++)
+        for (int i = 0; i < platformCount; i++)
         {
             Vector3 xzPos = stairVector.normalized * i;
             Vector3 pos = stairStartPosition + new Vector3(xzPos.x, (platformCount - i) * 0.5f, xzPos.z);
@@ -101,8 +108,12 @@ public class Tool_AutoStair : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    void ChangeStairAmount()
+    [ContextMenu("Set Stairs")]
+    public void ChangeStairAmount()
     {
+        if (!(Application.isEditor && !Application.isPlaying))
+            return;
+
         if (platforms.Count > 0)
         {
             int _platformCount = platforms.Count;
@@ -176,4 +187,3 @@ public class Platform
         autoStair.AddPlatform(this);
     }
 }
-#endif
