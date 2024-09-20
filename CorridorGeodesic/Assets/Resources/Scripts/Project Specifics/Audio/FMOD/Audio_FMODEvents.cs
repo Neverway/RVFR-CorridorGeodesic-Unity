@@ -21,6 +21,10 @@ public class Audio_FMODEvents: MonoBehaviour
 
     [Header("Physics")]
     public EventReference metalImpact;
+    public EventReference footstepsConcrete;
+    public EventReference footstepsMetal;
+    public EventReference footstepsGlass;
+    public EventReference footstepsPlatic;
 
     [Header("Weapons")]
     public EventReference nixieCrossShoot;

@@ -108,7 +108,7 @@ public class WorldSettings : MonoBehaviour
         }
     }
 
-    private static Transform GetPlayerStartPoint(bool _usePlayerStart = true)
+    public static Transform GetPlayerStartPoint(bool _usePlayerStart = true)
     {
         if (!_usePlayerStart) return null;
         var allPossibleStartPoints = FindObjectsOfType<PlayerStart>();

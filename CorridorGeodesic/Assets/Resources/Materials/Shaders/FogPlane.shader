@@ -12,6 +12,8 @@ Shader "Unlit/FogPlane"
 		LOD 100
 		Blend SrcAlpha OneMinusSrcAlpha
 
+		Cull Off
+
 		Pass
 		{
 			CGPROGRAM

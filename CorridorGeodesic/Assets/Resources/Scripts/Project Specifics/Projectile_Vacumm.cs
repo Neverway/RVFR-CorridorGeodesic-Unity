@@ -69,7 +69,8 @@ public class Projectile_Vacumm : Projectile
 
             int triIndex = hit.triangleIndex;
 
-            DisplayDebugTriangle(colMesh, triIndex, hit.collider.transform);
+            //todo: Commented out this line of code, actually ended up throwing an IndexOutOfRangeException
+            //DisplayDebugTriangle(colMesh, triIndex, hit.collider.transform);
 
             if (hit.collider.gameObject.TryGetComponent(out Renderer rend))
             {
@@ -167,7 +168,7 @@ public class Projectile_Vacumm : Projectile
             return;
         Vector3[] vertices = mesh.vertices;
         int[] triangles = mesh.triangles;
-        Vector3 p0 = vertices[triangles[triangleIndex * 3 + 0]];
+        Vector3 p0 = vertices[triangles[triangleIndex * 3 + 0]]; //todo: This actually threw an error once, IndexOutOfRangeException?
         Vector3 p1 = vertices[triangles[triangleIndex * 3 + 1]];
         Vector3 p2 = vertices[triangles[triangleIndex * 3 + 2]];
         p0 = hitTransform.TransformPoint(p0);

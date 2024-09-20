@@ -46,6 +46,9 @@ public class Volume_LevelStreaming : Volume
         if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
         {
             _other.transform.SetParent(null);
+
+            //Game_LevelHelpers.StoreObjectRelativePosition(_other.gameObject.GetInstanceID(), _other.transform);
+
             SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetSceneByName(worldLoader.streamingWorldID));
         }
     }
@@ -65,6 +68,11 @@ public class Volume_LevelStreaming : Volume
         if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
         {
             SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetActiveScene());
+
+            //RotationPositionBinding binding = Game_LevelHelpers.GetObjectWorldStartPosition(_other.gameObject.GetInstanceID());
+
+            //_other.transform.position = binding.position;
+            //_other.transform.rotation = binding.rotation;
         }
     }
 

@@ -19,6 +19,7 @@ public class GameInstance : MonoBehaviour
     // Public Variables
     //=-----------------=
     public GameMode defaultGamemode;
+    public static GameInstance Instance;
 
 
     //=-----------------=
@@ -37,6 +38,10 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Awake()
+    {
+        Instance = this;
+    }
     public void LateUpdate()
     {
         // If no player was found, enable a random pawns camera

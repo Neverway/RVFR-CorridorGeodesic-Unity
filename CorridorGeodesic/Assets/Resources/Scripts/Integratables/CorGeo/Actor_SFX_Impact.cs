@@ -39,7 +39,16 @@ public class Actor_SFX_Impact : MonoBehaviour
         StartCoroutine(RepeatDelay());
         if (other.relativeVelocity.magnitude >= impactThreshold)
         {
-            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.metalImpact, transform.position);
+            int contactCount = other.contactCount;
+            float averageDot = 0;
+            for (int i = 0; i < contactCount; i++) 
+            {
+                averageDot += Vector3.Dot(other.GetContact(i).normal, other.relativeVelocity);
+            }
+            averageDot /= contactCount;
+
+            if(averageDot > 0.25f)
+                Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.metalImpact, transform.position);
         }
     }
 
