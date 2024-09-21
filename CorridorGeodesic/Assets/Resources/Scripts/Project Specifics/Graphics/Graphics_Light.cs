@@ -66,6 +66,9 @@ public class Graphics_Light: MonoBehaviour
     }
     IEnumerator SetLight(float value)
     {
+        if (value == 1)
+            power = 0;
+
         while (power != value)
         {
             power = Mathf.MoveTowards(power, value, Time.deltaTime * 0.5f);
