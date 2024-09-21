@@ -33,7 +33,7 @@ public class Volume_Physics : Volume
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Update()
+    private void FixedUpdate()
     {
         foreach (var entity in pawnsInTrigger)
         {
