@@ -2074,7 +2074,7 @@ PrefabInstance:
     - target: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       propertyPath: m_Name
-      value: Vent
+      value: Actor_Vent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2158,6 +2158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 1
+  ventObject: {fileID: 5285778941786842816}
   airCurrent: {fileID: 4285461950206921089}
   sparks: {fileID: 6598547728379423599}
   airStart: {fileID: 7533996436215640512}
@@ -2175,6 +2176,18 @@ MonoBehaviour:
   inputSignal: {fileID: 0}
   isBeingSliced: {fileID: 2518666569930693272}
   animator: {fileID: 0}
+--- !u!114 &5285778941786842816 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1816597418772026633, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 5795853768738059209}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 522940767048590153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9328f886ac63731bba9d85776baa2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6123055413773112483
 PrefabInstance:
   m_ObjectHideFlags: 0

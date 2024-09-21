@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.ProBuilder;
+using UnityEditor.SceneManagement;
 #endif
 
 using UnityEngine;
 using UnityEngine.ProBuilder;
+using UnityEngine.SceneManagement;
 
 [DisallowMultipleComponent]
 public class BulbOutletStrip : MonoBehaviour, BulbCollisionBehaviour
@@ -70,7 +72,6 @@ public class BulbOutletStrip : MonoBehaviour, BulbCollisionBehaviour
         meshToModify.SetVertices(positions);
         meshToModify.ToMesh();
         meshToModify.Refresh();
-        ProBuilderEditor.Refresh(true);
     }
 #endif
 
@@ -118,7 +119,7 @@ public class BulbOutletStripEditor : Editor
                 oldEndPos + outletStrip.StripVectorNormalized * 20f);
             if (Vector3.Distance(newStartPosition, oldEndPos) > 1f)
             {
-                Object[] undoObjects = { outletStrip, outletStrip.startPoint };
+                Object[] undoObjects = { outletStrip.GetComponent<ProBuilderMesh>(), outletStrip.startPoint };
                 Undo.RecordObjects(undoObjects, "Moved Start Handle of Bulb Outlet Strip and modified ProBuilder Mesh");
 
                 outletStrip.EDITOR_StretchProbuilderMesh(outletStrip.startPoint.position, newStartPosition, outletStrip.endPoint.position);
@@ -126,6 +127,7 @@ public class BulbOutletStripEditor : Editor
 
                 UnityEditor.EditorUtility.SetDirty(outletStrip);
                 UnityEditor.EditorUtility.SetDirty(outletStrip.startPoint);
+                ProBuilderEditor.Refresh(true);
             }
         }
 
@@ -142,7 +144,7 @@ public class BulbOutletStripEditor : Editor
                 oldEndPos + outletStrip.StripVectorNormalized * 20f);
             if (Vector3.Distance(newEndPosition, oldStartPos) > 1f)
             {
-                Object[] undoObjects = { outletStrip, outletStrip.endPoint };
+                Object[] undoObjects = { outletStrip.GetComponent<ProBuilderMesh>(), outletStrip.endPoint };
                 Undo.RecordObjects(undoObjects, "Moved End Handle of Bulb Outlet Strip and modified ProBuilder Mesh");
 
                 outletStrip.EDITOR_StretchProbuilderMesh(outletStrip.endPoint.position, newEndPosition, outletStrip.startPoint.position);
@@ -150,6 +152,7 @@ public class BulbOutletStripEditor : Editor
 
                 UnityEditor.EditorUtility.SetDirty(outletStrip);
                 UnityEditor.EditorUtility.SetDirty(outletStrip.endPoint);
+                ProBuilderEditor.Refresh(true);
             }
         }
     }
