@@ -10,6 +10,7 @@ public class Vent : LogicComponent
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public CorGeo_ActorData ventObject;
     public Transform airCurrent;
     public Transform sparks;
     public Transform airStart;
@@ -52,10 +53,15 @@ public class Vent : LogicComponent
         base.OnEnable();
         SourcePowerStateChanged(isPowered);
     }
+    protected void OnDisable()
+    {
+        airCurrent.gameObject.SetActive(false);
+    }
+
     [ExecuteAlways]
     protected void Update()
     {
-        airCurrent.gameObject.SetActive(isPowered);
+        airCurrent.gameObject.SetActive(isPowered && ventObject.gameObject.activeInHierarchy);
         sparks.gameObject.SetActive(isBeingSliced.isPowered);
 
         UpdateAirCurrent();
