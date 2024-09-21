@@ -56,9 +56,14 @@ public class OverrideLevelChangeExitWithSceneList : MonoBehaviour
         
     }
     
-    public string IndexToSceneName(int index) => 
-        index < 0 || index >= levelpack.sceneNames.Length ? //check if out of range of levelpack.sceneNames
+    public string IndexToSceneName(int index)
+    {
+        string toReturn = 
+            (index < 0 || index >= levelpack.sceneNames.Length) ? //check if out of range of levelpack.sceneNames
         "_Title" : levelpack.sceneNames[index]; //use the indexed scene name, or if out of range, use "_Title"
+
+        return toReturn;
+    }
 
     public void OnLevelLoad(string loadingScene)
     {
