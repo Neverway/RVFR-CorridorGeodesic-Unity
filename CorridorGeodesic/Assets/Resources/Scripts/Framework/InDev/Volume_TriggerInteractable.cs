@@ -24,7 +24,7 @@ public class Volume_TriggerInteractable : Volume
     public bool useTalkIndicator;
     [Tooltip("If enabled, then the actor who created the interaction volume must also be inside this trigger")]
     public bool requireActivatingActorInside = true;
-    
+
     [Header("Signal Events")]
     //[Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
     public UnityEvent onInteract;

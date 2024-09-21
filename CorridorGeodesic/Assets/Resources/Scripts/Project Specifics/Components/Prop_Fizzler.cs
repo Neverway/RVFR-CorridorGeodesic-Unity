@@ -37,7 +37,7 @@ public class Prop_Fizzler: MonoBehaviour
         if(fizzlerStart && fizzlerEnd && fizzler)
         {
             fizzler.position = (fizzlerStart.position + fizzlerEnd.position) * 0.5f;
-            fizzler.localScale = new Vector3(Vector3.Distance(fizzlerStart.position, fizzlerEnd.position), 4, 1);
+            fizzler.localScale = new Vector3(Vector3.Distance(fizzlerStart.position, fizzlerEnd.position), 3.9f, 0.025f);
         }
     }
 

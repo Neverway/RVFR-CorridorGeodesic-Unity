@@ -32,7 +32,7 @@ public class Graphics_ChangeMaterialProperty: MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private Material material;
+    public Material material;
     [SerializeField] private Renderer meshRenderer;
 
     [Header("Animation")]
@@ -84,6 +84,20 @@ public class Graphics_ChangeMaterialProperty: MonoBehaviour
         StopAllCoroutines();
         ResetMaterial();
         StartCoroutine(WaitChangeProperty(useAnimationLengthForDuration ? animClip.length * animationLengthMultiplier : duration));
+    }
+    public void ChangePropertyManual(object value)
+    {
+        switch (propertyType)
+        {
+            case PropertyType.Color:
+                instanceMat.SetColor(propertyName, (Color)value);
+                break;
+            case PropertyType.Float:
+                instanceMat.SetFloat(propertyName, (float)value);
+                break;
+            default:
+                break;
+        }
     }
     IEnumerator WaitChangeProperty(float duration)
     {
