@@ -48,8 +48,9 @@ public class Laser_Raycast : LogicComponent
         ShootLaser();
     }
 
-    private void OnDrawGizmos()
+    new protected void OnDrawGizmos()
     {
+        base.OnDrawGizmos ();
         if (inputSignal) Debug.DrawLine(gameObject.transform.position, inputSignal.transform.position, Color.blue);
     }
 
@@ -64,8 +65,9 @@ public class Laser_Raycast : LogicComponent
         }
     }
 
-    private void OnDestroy ()
+    new protected void OnDestroy ()
     {
+        base.OnDestroy ();
         foreach (var line in lineRenderers)
         {
             if (line != null)

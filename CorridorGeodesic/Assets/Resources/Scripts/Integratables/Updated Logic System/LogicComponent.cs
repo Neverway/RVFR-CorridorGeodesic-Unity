@@ -53,6 +53,7 @@ public abstract class LogicComponent : MonoBehaviour
     //=-----------------=
     public virtual void Awake()
     {
+        Debug.Log (gameObject.name);
         LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(this.GetType());
 
         foreach (LogicComponentHandleInfo info in infos)
@@ -76,7 +77,7 @@ public abstract class LogicComponent : MonoBehaviour
         OnPowerStateChanged?.Invoke(isPowered);
     }
 
-    private void OnDestroy()
+    protected void OnDestroy()
     {
         if (subscribeLogicComponents.Count <= 0)
             return;
@@ -89,7 +90,7 @@ public abstract class LogicComponent : MonoBehaviour
         isPowered = false;
     }
 #if UNITY_EDITOR
-    void OnDrawGizmos()
+    protected void OnDrawGizmos()
     {
         LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(this.GetType());
 
