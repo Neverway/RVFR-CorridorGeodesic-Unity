@@ -82,9 +82,9 @@ public class PlayerController_FirstPersonShooter : PawnController
             _pawn.ModifyHealth(-9999);
         }
         
-        UpdateMovement(_pawn);
+        //? UpdateMovement(_pawn);
         UpdateRotation(_pawn);
-        UpdateJumping(_pawn);
+        //? UpdateJumping(_pawn);
         
         // Calculate Slope Movement
         slopMoveDirection = Vector3.ProjectOnPlane(moveDirection, _pawn.slopeHit.normal);

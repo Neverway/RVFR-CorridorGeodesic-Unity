@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using KinematicCharacterController.Examples;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ public class Pawn : MonoBehaviour
     public PawnController currentController;
     public CharacterData defaultState;
     public CharacterState currentState;
+    public ExampleCharacterController kinematicCharacterDummy;
 
     public bool isPossessed;
     public bool isPaused;
@@ -61,6 +63,8 @@ public class Pawn : MonoBehaviour
 
     private void Update()
     {
+        transform.position = kinematicCharacterDummy.transform.position;
+
         // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
         if (FindObjectOfType<GameInstance>())
         {
@@ -183,13 +187,15 @@ public class Pawn : MonoBehaviour
 
     public void Move(Vector3 _movement, string _mode)
     {
-        if (_mode == "translate") transform.Translate(_movement * (
-            currentState.movementSpeed * Time.deltaTime));
+        //? OVERRIDING WITH KINEMATIC CONTROLLER
+        //if (_mode == "translate") transform.Translate(_movement * (
+        //    currentState.movementSpeed * Time.deltaTime));
     }
     
     public void Move(Vector3 _movement, string _mode, float _movementSpeed)
     {
-        if (_mode == "translate") transform.Translate(_movement * (_movementSpeed * Time.deltaTime));
+        //? OVERRIDING WITH KINEMATIC CONTROLLER
+        //if (_mode == "translate") transform.Translate(_movement * (_movementSpeed * Time.deltaTime));
     }
     
     public void ModifyHealth(float _value)
