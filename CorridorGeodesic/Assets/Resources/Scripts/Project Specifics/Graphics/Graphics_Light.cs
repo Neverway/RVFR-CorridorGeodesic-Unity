@@ -48,7 +48,7 @@ public class Graphics_Light: MonoBehaviour
     //=-----------------=
     private void Awake()
     {
-        lightIntensity = _light.intensity;
+        //lightIntensity = _light.intensity;
     }
     private void Start()
     {
@@ -60,7 +60,7 @@ public class Graphics_Light: MonoBehaviour
     //=-----------------=
     void AdjustIntensity()
     {
-        _light.intensity = lightIntensity * power;
+        _light.intensity = power;
 
         materialPropertyChange.ChangePropertyManual(emisColor * power);
     }
