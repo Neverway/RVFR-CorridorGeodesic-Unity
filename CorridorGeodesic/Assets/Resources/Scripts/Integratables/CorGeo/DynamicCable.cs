@@ -246,7 +246,6 @@ public class DynamicCable : LogicComponent
     //}
     public override void SourcePowerStateChanged(bool powered)
     {
-        Debug.Log("RAH Did this work");
         base.SourcePowerStateChanged(powered);
 
         isPowered = powered;
