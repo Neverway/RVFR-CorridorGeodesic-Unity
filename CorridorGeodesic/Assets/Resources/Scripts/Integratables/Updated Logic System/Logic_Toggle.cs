@@ -29,16 +29,10 @@ public class Logic_Toggle : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    //private void OnEnable()
-    //{
-    //    if (input)
-    //        input.OnPowerStateChanged += SourcePowerStateChanged;
-    //}
-    //private void OnDestroy()
-    //{
-    //    if (input)
-    //        input.OnPowerStateChanged -= SourcePowerStateChanged;
-    //}
+    private new void OnEnable()
+    {
+        //This override is necessary to avoid SourcePowerStateChanged(); from getting called
+    }
 
     //=-----------------=
     // Internal Functions
