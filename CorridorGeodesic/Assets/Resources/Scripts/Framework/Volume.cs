@@ -141,7 +141,13 @@ public class Volume : LogicComponent
             if(propsInTrigger.Contains(targetProp)) { propsInTrigger.Remove(targetProp); }
         }
     }
-    
+
+    public virtual void OnDisable ()
+    {
+        pawnsInTrigger.Clear();
+        propsInTrigger.Clear();
+    }
+
 
     //=-----------------=
     // Internal Functions

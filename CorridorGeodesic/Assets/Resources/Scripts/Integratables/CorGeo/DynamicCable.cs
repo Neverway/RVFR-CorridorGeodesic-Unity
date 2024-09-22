@@ -95,10 +95,10 @@ public class DynamicCable : LogicComponent
     }
 
 
-
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    new private void OnDrawGizmos()
     {
+        base.OnDrawGizmos();
         if (UnityEngine.Application.isPlaying)
             return;
 
@@ -120,8 +120,8 @@ public class DynamicCable : LogicComponent
             position += Vector3.down * Mathf.Sin(factor * Mathf.PI) * (extraWaypoints * 0.2f + 1f);
             lineRenderer.SetPosition(i, position);
         }
-    }
 #endif
+    }
 
     //=-----------------=
     // Internal Functions
@@ -246,7 +246,6 @@ public class DynamicCable : LogicComponent
     //}
     public override void SourcePowerStateChanged(bool powered)
     {
-        Debug.Log("RAH Did this work");
         base.SourcePowerStateChanged(powered);
 
         isPowered = powered;
