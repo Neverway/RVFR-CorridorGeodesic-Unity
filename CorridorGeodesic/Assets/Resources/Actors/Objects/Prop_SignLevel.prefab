@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 2180385774472713252}
   - component: {fileID: 3414234055505445306}
   - component: {fileID: 4402533126028275222}
+  - component: {fileID: 8305852024530591397}
   m_Layer: 0
   m_Name: Prop_SignLevel
   m_TagString: Untagged
@@ -1324,6 +1325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isReflective: 0
+  partsReference: {fileID: 0}
 --- !u!114 &4402533126028275222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1336,6 +1338,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8305852024530591397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2874165821208296306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30e1e85659a68cc489a9a3eb2912fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hazards: 0
+  symbolPairs:
+  - hazard: 1
+    symbol: {fileID: 21300000, guid: bdaa155d2d943fcf7bc5818aceb16032, type: 3}
+  - hazard: 16
+    symbol: {fileID: 21300000, guid: db4dfd4cb329ca3d2b628c21950c0bc4, type: 3}
+  - hazard: 2
+    symbol: {fileID: 21300000, guid: 52a695b7541028d16a917177395bdd46, type: 3}
+  - hazard: 32
+    symbol: {fileID: 21300000, guid: 8fada7fc746305411a3e72504ce8fe4c, type: 3}
+  - hazard: 8
+    symbol: {fileID: 21300000, guid: 91a9a046722057fb7b3ba3410724534f, type: 3}
+  - hazard: 4
+    symbol: {fileID: 21300000, guid: f63f564df8840e9dcb2a7f61c1cff0f9, type: 3}
+  screenText: {fileID: 2775861511194625036}
+  signs:
+  - {fileID: 8189723632568740412}
+  - {fileID: 6239734519922607806}
+  - {fileID: 7400934197891338085}
+  - {fileID: 198520502872305612}
+  - {fileID: 4602151151858357181}
+  - {fileID: 6408593347664144028}
+  - {fileID: 5847272779339763036}
+  - {fileID: 4527625193676953846}
 --- !u!1 &3306482026257207794
 GameObject:
   m_ObjectHideFlags: 0
@@ -1664,12 +1702,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: -0.07097244, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 42476278209537342}
-  m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 42476278209537342}
+  m_maskType: 0
 --- !u!1 &6191389173715075904
 GameObject:
   m_ObjectHideFlags: 0
@@ -2352,12 +2390,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 6776109089125402976}
-  m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 6776109089125402976}
+  m_maskType: 0
 --- !u!1 &8568226936834119752
 GameObject:
   m_ObjectHideFlags: 0
