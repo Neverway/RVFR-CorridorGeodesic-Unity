@@ -15,7 +15,7 @@ public class TeslaSender : LogicComponent, TeslaPowerSource
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public LogicComponent inputSignal;
+    [LogicComponentHandle] public LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
