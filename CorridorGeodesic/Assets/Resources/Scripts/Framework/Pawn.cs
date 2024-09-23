@@ -143,6 +143,7 @@ public class Pawn : MonoBehaviour
         currentState.airMovementMultiplier = defaultState.airMovementMultiplier;
         currentState.gravityMultiplier = defaultState.gravityMultiplier;
         currentState.jumpForce = defaultState.jumpForce;
+        currentState.steepSlopeAngle = defaultState.steepSlopeAngle;
         currentState.sprintSpeedMultiplier = defaultState.sprintSpeedMultiplier;
         currentState.sprintAcceleration = defaultState.sprintAcceleration;
     }
@@ -176,11 +177,15 @@ public class Pawn : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Returns true if the angle of the slope is greater than steepSlopeAngle.
+    /// </summary>
+    /// <returns></returns>
     public bool IsGroundSteep3D ()
     {
         if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
         {
-            return Vector3.Angle (slopeHit.normal, Vector3.up) > 45;
+            return Vector3.Angle (slopeHit.normal, Vector3.up) > currentState.steepSlopeAngle;
         }
         return false;
     }

@@ -45,6 +45,7 @@ public class CharacterState
     public float airMovementMultiplier;
     public float gravityMultiplier;
     public float jumpForce;
+    public float steepSlopeAngle;
     [Tooltip("The multiplier added to the movementSpeed while grounded and sprinting")]
     public float sprintSpeedMultiplier;
     [Tooltip("Essentially how long it takes you to get up to speed while sprinting")]

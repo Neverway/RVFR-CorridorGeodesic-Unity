@@ -225,7 +225,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     private void UpdateJumping(Pawn _pawn)
     {
         //Debug.Log(_pawn.IsGrounded3D());
-        if (fpsActions.Jump.WasPressedThisFrame() && _pawn.IsGrounded3D())
+        if (fpsActions.Jump.WasPressedThisFrame() && _pawn.IsGrounded3D() && !_pawn.IsGroundSteep3D())
         {
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
             rigidbody.AddForce(Vector3.up * _pawn.currentState.jumpForce, ForceMode.Impulse);
@@ -272,7 +272,6 @@ public class PlayerController_FirstPersonShooter : PawnController
 
             float movementMult = _pawn.currentState.movementMultiplier;
             if (!_pawn.IsGrounded3D() || _pawn.IsGroundSteep3D()) {
-                Debug.Log ("grogh");
                 movementMult = _pawn.currentState.airMovementMultiplier;
             }
 
