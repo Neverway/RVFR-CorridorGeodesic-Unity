@@ -51,7 +51,7 @@ public class Mesh_Slicable : MonoBehaviour
     private void Start()
     {
         meshSlicer = GetComponent<IBzMeshSlicer> ();
-        sliceableObject = GetComponent<BzSliceableObject> ();
+        sliceableObject = GetComponent<BzSliceableObject>();
         if (partsReference) partsReference.Setup (this);
 
         if (!sliceableObject.defaultSliceMaterial)
