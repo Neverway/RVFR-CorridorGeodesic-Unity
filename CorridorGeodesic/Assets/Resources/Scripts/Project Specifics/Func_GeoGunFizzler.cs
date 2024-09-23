@@ -29,7 +29,10 @@ public class Func_GeoGunFizzler : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-
+    public override void OnEnable()
+    {
+        //Causes glitch if SourcePowerChanged is called on frame 1
+    }
 
     //=-----------------=
     // Internal Functions
@@ -41,7 +44,9 @@ public class Func_GeoGunFizzler : LogicComponent
     //=-----------------=
     public void ClearGeoGunRifts()
     {
-        FindObjectOfType<Pawn_WeaponInventory>().ClearGeoGunRifts();
+        Pawn_WeaponInventory nixieCross = FindObjectOfType<Pawn_WeaponInventory>();
+        if(nixieCross)
+            nixieCross.ClearGeoGunRifts();
     }
     //public override void AutoSubscribe()
     //{
@@ -53,7 +58,7 @@ public class Func_GeoGunFizzler : LogicComponent
         base.SourcePowerStateChanged(powered);
 
         isPowered = powered;
-        if (FindObjectOfType<Pawn_WeaponInventory>())
+        if (powered)
         {
             ClearGeoGunRifts();
         }
