@@ -9,12 +9,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class TeslaReciever : MonoBehaviour
+public class TeslaReciever : LogicComponent
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [DebugReadOnly] public bool isRecievingPower;
 
 
     //=-----------------=
@@ -25,8 +25,6 @@ public class TeslaReciever : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-
-    [HideInInspector] public NEW_LogicProcessor processor;
     [SerializeField] private GameObject lightObject;
 
     //=-----------------=
@@ -34,19 +32,19 @@ public class TeslaReciever : MonoBehaviour
     //=-----------------=
     private IEnumerator Start()
     {
-        processor = GetComponent<NEW_LogicProcessor>();
         yield return null;
         TeslaManager.recievers.Add (this);
     }
 
     private void Update ()
     {
-        lightObject.SetActive (processor.isPowered);
+        lightObject.SetActive(isRecievingPower);
+        isPowered = isRecievingPower;
     }
 
     private void OnDestroy ()
     {
-        TeslaManager.recievers.Remove (this);
+        TeslaManager.recievers.Remove(this);
     }
 
     //=-----------------=

@@ -8,7 +8,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeslaManager : MonoBehaviour
+public class TeslaManager : LogicComponent
 {
     //=-----------------=
     // Public Variables
@@ -46,7 +46,7 @@ public class TeslaManager : MonoBehaviour
     {
         foreach (TeslaReciever reciever in recievers)
         {
-            reciever.processor.isPowered = false;
+            reciever.isRecievingPower = false;
             if (!reciever.gameObject.activeInHierarchy)
             {
                 continue;
@@ -59,7 +59,7 @@ public class TeslaManager : MonoBehaviour
                 }
                 if (Vector3.Distance (sender.transform.position, reciever.transform.position) < MIN_DISTANCE)
                 {
-                    reciever.processor.isPowered = true;
+                    reciever.isRecievingPower = true;
                 }
             }
         }
