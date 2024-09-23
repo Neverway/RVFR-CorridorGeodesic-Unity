@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,6 +30,10 @@ public class Laser_Detector : LogicComponent
 
     public UnityEvent OnPowered;
     public UnityEvent OnNotPowered;
+    [SerializeField] private Material glassOff;
+    [SerializeField] private Material glassOn;
+    [SerializeField] private MeshRenderer lampRenderer;
+    private List<Material> materials = new List<Material>();
 
 
     //=-----------------=
@@ -37,7 +42,10 @@ public class Laser_Detector : LogicComponent
 
     private void Start ()
     {
+        lampRenderer.GetMaterials (materials);
         laserLight.SetActive(false);
+        materials[2] = glassOff;
+        lampRenderer.SetMaterials (materials);
     }
 
     private void Update ()
@@ -51,6 +59,8 @@ public class Laser_Detector : LogicComponent
                 isActive = false;
                 isPowered = false;
                 laserLight.SetActive (false);
+                materials[2] = glassOff;
+                lampRenderer.SetMaterials (materials);
             }
         }
     }
@@ -73,6 +83,8 @@ public class Laser_Detector : LogicComponent
             isActive = true;
             isPowered = true;
             laserLight.SetActive(true);
+            materials[2] = glassOn;
+            lampRenderer.SetMaterials (materials);
         }
     }
 
