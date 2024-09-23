@@ -234,7 +234,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     
     private void MovePlayer(Pawn _pawn)
     {
-        if (_pawn.IsGrounded3D() && !_pawn.IsGroundSloped3D())
+        /*if (_pawn.IsGrounded3D() && !_pawn.IsGroundSloped3D())
         {
             rigidbody.AddForce(
                 moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier),
@@ -251,6 +251,48 @@ public class PlayerController_FirstPersonShooter : PawnController
             rigidbody.AddForce(
                 moveDirection.normalized * (_pawn.currentState.movementSpeed * (_pawn.currentState.movementMultiplier * _pawn.currentState.airMovementMultiplier)),
                 ForceMode.Acceleration);
+        }*/
+
+        //if (_pawn.IsGrounded3D ())
+        {
+            //horizontalVelocity represents the X and Z axis of the velocity. YVel is kept separate.
+            Vector2 horizonalVelocity = new Vector2 (rigidbody.velocity.x, rigidbody.velocity.z);
+            float yVel = rigidbody.velocity.y;
+            float horizontalMagnitude = horizonalVelocity.magnitude;
+
+
+            float velocityClamp = _pawn.currentState.maxHorizontalMovementSpeed;
+
+            if (horizonalVelocity.magnitude > _pawn.currentState.maxHorizontalMovementSpeed)
+            {
+                velocityClamp = horizonalVelocity.magnitude;
+            }
+
+            Vector2 horiMove = new Vector2(moveDirection.x, moveDirection.z);
+
+            float movementMult = _pawn.currentState.movementMultiplier;
+            if (!_pawn.IsGrounded3D()) {
+                movementMult = _pawn.currentState.airMovementMultiplier;
+            }
+
+            horizonalVelocity += horiMove.normalized * _pawn.currentState.movementSpeed * movementMult;
+
+            if (horizonalVelocity.magnitude > velocityClamp)
+            {
+                horizonalVelocity = horizonalVelocity.normalized * velocityClamp;
+            }
+
+            if (_pawn.IsGrounded3D() && Mathf.Abs(moveDirection.x) < 0.2f && Mathf.Abs(moveDirection.z) < 0.2f)
+            {
+                //if within a dead zone, we add some friction on the ground.
+                Debug.Log ("moveDir = " + moveDirection);
+                horizonalVelocity *= 0.8f;
+            }
+
+
+            rigidbody.velocity = new Vector3 (horizonalVelocity.x, yVel, horizonalVelocity.y);
+
+            Debug.Log (horiMove.magnitude);
         }
     }
 

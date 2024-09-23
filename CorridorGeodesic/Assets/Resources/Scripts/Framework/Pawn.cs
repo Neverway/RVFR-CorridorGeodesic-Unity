@@ -138,6 +138,7 @@ public class Pawn : MonoBehaviour
         // Add project specific variables below this line!
         currentState.groundDrag = defaultState.groundDrag;
         currentState.airDrag = defaultState.airDrag;
+        currentState.maxHorizontalMovementSpeed = defaultState.maxHorizontalMovementSpeed;
         currentState.movementMultiplier = defaultState.movementMultiplier;
         currentState.airMovementMultiplier = defaultState.airMovementMultiplier;
         currentState.gravityMultiplier = defaultState.gravityMultiplier;

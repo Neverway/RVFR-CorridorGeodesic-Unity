@@ -40,6 +40,7 @@ public class CharacterState
     // Add project specific variables below this line!
     public float groundDrag;
     public float airDrag;
+    public float maxHorizontalMovementSpeed;
     public float movementMultiplier;
     public float airMovementMultiplier;
     public float gravityMultiplier;
