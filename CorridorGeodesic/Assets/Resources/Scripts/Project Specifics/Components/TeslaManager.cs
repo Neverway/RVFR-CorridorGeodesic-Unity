@@ -13,7 +13,7 @@ public class TeslaManager : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-
+    public LightningLine _lightningLinePrefab;
 
     //=-----------------=
     // Private Variables
@@ -23,16 +23,18 @@ public class TeslaManager : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-
+    public static LightningLine lightningLinePrefab;
     public static List<TeslaSender> senders = new List<TeslaSender> ();
     public static List<TeslaConductor> conductors = new List<TeslaConductor>();
-    private const float MIN_DISTANCE = 5f;
+    public const float MIN_DISTANCE = 5f;
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
     private void Awake()
     {
+        lightningLinePrefab = _lightningLinePrefab; //todo: Maybe use an instance setup instead?
+
         senders.Clear ();
         conductors.Clear ();
         InvokeRepeating ("CheckSenders", 0f, 0.2f);
@@ -44,28 +46,34 @@ public class TeslaManager : MonoBehaviour
 
     private void CheckSenders ()
     {
-        foreach (TeslaConductor conductor in conductors)
-        {
-            conductor.isRecievingPower = false;
-            if (!conductor.gameObject.activeInHierarchy)
-            {
-                continue;
-            }
-            foreach (TeslaSender sender in senders)
-            {
-                if (!sender.gameObject.activeInHierarchy)
-                {
-                    continue;
-                }
-                if (Vector3.Distance (sender.transform.position, conductor.transform.position) < MIN_DISTANCE)
-                {
-                    conductor.isRecievingPower = true;
-                }
-            }
-        }
+        //foreach (TeslaConductor conductor in conductors)
+        //{
+        //    conductor.IsTeslaPowered() = false;
+        //    if (!conductor.gameObject.activeInHierarchy)
+        //    {
+        //        continue;
+        //    }
+        //    foreach (TeslaSender sender in senders)
+        //    {
+        //        if (!sender.gameObject.activeInHierarchy)
+        //        {
+        //            continue;
+        //        }
+        //        if (Vector3.Distance (sender.transform.position, conductor.transform.position) < MIN_DISTANCE)
+        //        {
+        //            conductor.IsTeslaPowered() = true;
+        //        }
+        //    }
+        //}
     }
 
     //=-----------------=
     // External Functions
     //=-----------------=
+}
+
+public interface TeslaPowerSource
+{
+    public bool IsTeslaPowered();
+    public Transform GetZapTargetTransform();
 }
