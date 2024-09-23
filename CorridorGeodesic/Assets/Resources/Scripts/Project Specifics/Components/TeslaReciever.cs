@@ -9,18 +9,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(TeslaConductor))]
 public class TeslaReciever : LogicComponent
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    [DebugReadOnly] public bool isRecievingPower;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
+    private TeslaConductor conductor;
 
     //=-----------------=
     // Reference Variables
@@ -28,29 +20,19 @@ public class TeslaReciever : LogicComponent
     [SerializeField] private GameObject lightObject;
 
     //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private IEnumerator Start()
-    {
-        yield return null;
-        TeslaManager.recievers.Add (this);
-    }
-
-    private void Update ()
-    {
-        lightObject.SetActive(isRecievingPower);
-        isPowered = isRecievingPower;
-    }
-
-    private void OnDestroy ()
-    {
-        TeslaManager.recievers.Remove(this);
-    }
-
-    //=-----------------=
     // Internal Functions
     //=-----------------=
+    private new void Awake()
+    {
+        base.Awake();
+        conductor = GetComponent<TeslaConductor>();
+    }
 
+    private void Update()
+    {
+        lightObject.SetActive(conductor.isRecievingPower);
+        isPowered = conductor.isRecievingPower;
+    }
 
     //=-----------------=
     // External Functions

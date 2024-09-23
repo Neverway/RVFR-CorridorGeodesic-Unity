@@ -8,7 +8,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeslaManager : LogicComponent
+public class TeslaManager : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -25,16 +25,16 @@ public class TeslaManager : LogicComponent
     //=-----------------=
 
     public static List<TeslaSender> senders = new List<TeslaSender> ();
-    public static List<TeslaReciever> recievers = new List<TeslaReciever> ();
+    public static List<TeslaConductor> conductors = new List<TeslaConductor>();
     private const float MIN_DISTANCE = 5f;
 
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Start ()
+    private void Awake()
     {
         senders.Clear ();
-        recievers.Clear ();
+        conductors.Clear ();
         InvokeRepeating ("CheckSenders", 0f, 0.2f);
     }
 
@@ -44,10 +44,10 @@ public class TeslaManager : LogicComponent
 
     private void CheckSenders ()
     {
-        foreach (TeslaReciever reciever in recievers)
+        foreach (TeslaConductor conductor in conductors)
         {
-            reciever.isRecievingPower = false;
-            if (!reciever.gameObject.activeInHierarchy)
+            conductor.isRecievingPower = false;
+            if (!conductor.gameObject.activeInHierarchy)
             {
                 continue;
             }
@@ -57,9 +57,9 @@ public class TeslaManager : LogicComponent
                 {
                     continue;
                 }
-                if (Vector3.Distance (sender.transform.position, reciever.transform.position) < MIN_DISTANCE)
+                if (Vector3.Distance (sender.transform.position, conductor.transform.position) < MIN_DISTANCE)
                 {
-                    reciever.isRecievingPower = true;
+                    conductor.isRecievingPower = true;
                 }
             }
         }

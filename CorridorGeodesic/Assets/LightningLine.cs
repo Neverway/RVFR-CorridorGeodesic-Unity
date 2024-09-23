@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
+[ExecuteAlways]
 public class LightningLine : MonoBehaviour
 {
     //=-----------------=
@@ -25,7 +26,7 @@ public class LightningLine : MonoBehaviour
     // Reference Variables
     //=-----------------=
 
-    [SerializeField] private Transform endTransform;
+    public Transform endTransform;
     public float jitter = 0.12f;
 
     private LineRenderer lineRenderer;
@@ -42,8 +43,6 @@ public class LightningLine : MonoBehaviour
     private void Start ()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        points = new Vector3[lineRenderer.positionCount];
-        noisyPoints = new Vector3[lineRenderer.positionCount];
         SetPoints ();
     }
 
@@ -77,6 +76,11 @@ public class LightningLine : MonoBehaviour
         startPos = transform.position;
         endPos = endTransform.position;
         Vector3 diff = endPos - startPos;
+
+        lineRenderer.positionCount = Mathf.RoundToInt(diff.magnitude) + 1;
+        points = new Vector3[lineRenderer.positionCount];
+        noisyPoints = new Vector3[lineRenderer.positionCount];
+
         Vector3 forward = diff.magnitude / (lineRenderer.positionCount-1) * diff.normalized;
         for (int i = 0; i < lineRenderer.positionCount; i++)
         {
@@ -93,6 +97,14 @@ public class LightningLine : MonoBehaviour
         Start();
         Update();
         lastTime = 0;
+    }
+    public void SetStartAndEndPoints(Transform start, Transform end)
+    {
+        transform.SetParent(start);
+        transform.position = start.position;
+
+        endTransform.SetParent(end);
+        endTransform.position = end.position;
     }
 
     //=-----------------=

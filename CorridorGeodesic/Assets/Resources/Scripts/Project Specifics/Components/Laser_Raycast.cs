@@ -16,7 +16,7 @@ public class Laser_Raycast : LogicComponent
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private LogicComponent inputSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
     [SerializeField] private Transform halo;
     [SerializeField] private int maxReflectionCount = 5;
     [SerializeField] private float maxStepDistance = 200f;
