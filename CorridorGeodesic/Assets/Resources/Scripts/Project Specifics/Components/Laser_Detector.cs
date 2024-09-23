@@ -47,9 +47,10 @@ public class Laser_Detector : LogicComponent
         {
             if (isActive)
             {
+                OnNotPowered.Invoke();
                 isActive = false;
                 isPowered = false;
-                OnNotPowered.Invoke();
+                laserLight.SetActive (false);
             }
         }
     }
