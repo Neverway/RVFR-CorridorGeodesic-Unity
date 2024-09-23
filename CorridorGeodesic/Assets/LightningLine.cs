@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(LineRenderer))]
 public class LightningLine : MonoBehaviour
 {
     //=-----------------=
@@ -25,11 +26,15 @@ public class LightningLine : MonoBehaviour
     //=-----------------=
 
     [SerializeField] private Transform endTransform;
+    public float jitter = 0.12f;
+
     private LineRenderer lineRenderer;
     private Vector3[] points;
     private Vector3[] noisyPoints;
     private Vector3 startPos;
     private Vector3 endPos;
+    private int lastTime;
+
     //=-----------------=
     // Mono Functions
     //=-----------------=
@@ -44,14 +49,22 @@ public class LightningLine : MonoBehaviour
 
     private void Update()
     {
+
+
         if (startPos != transform.position || endPos != endTransform.position)
         {
             SetPoints();
         }
 
+        int newTime = Mathf.RoundToInt(Time.time * 16f);
+        if (newTime == lastTime)
+            return;
+
+        lastTime = newTime;
+
         for (int i = 1; i < points.Length-1; i++)
         {
-            noisyPoints[i] = points[i] + new Vector3 (Random.Range (-.3f, .3f), Random.Range (-.3f, .3f), Random.Range (-.3f, .3f));
+            noisyPoints[i] = points[i] + new Vector3 (Random.Range (-jitter, jitter), Random.Range (-jitter, jitter), Random.Range (-jitter, jitter));
         }
         lineRenderer.SetPositions(noisyPoints);
     }
@@ -59,7 +72,6 @@ public class LightningLine : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
     private void SetPoints ()
     {
         startPos = transform.position;
@@ -72,6 +84,15 @@ public class LightningLine : MonoBehaviour
         }
         noisyPoints[0] = points[0];
         noisyPoints[points.Length-1] = points[points.Length-1];
+    }
+
+    [ContextMenu("UpdatePoints")]
+    public void UpdatePoints()
+    {
+        lastTime = -1;
+        Start();
+        Update();
+        lastTime = 0;
     }
 
     //=-----------------=
