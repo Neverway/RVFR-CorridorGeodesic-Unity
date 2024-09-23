@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour
 
     public LayerMask ignoreMask;
 
-    public Vector3 moveVector { get; private set; } //used in update loop collision & move
+    public Vector3 moveVector { get; protected set; } //used in update loop collision & move
 
     //=-----------------=
     // Reference Variables
@@ -53,7 +53,6 @@ public class Projectile : MonoBehaviour
         if (disabled)
             return;
 
-        moveVector = transform.forward * moveSpeed * Time.deltaTime;
         if (!CollisionLogic ())
             MoveLogic ();
     }
@@ -73,6 +72,7 @@ public class Projectile : MonoBehaviour
     //=-----------------=
     public virtual void MoveLogic ()
     {
+        moveVector = transform.forward * moveSpeed * Time.deltaTime;
         transform.position += moveVector;
     }
     public virtual bool CollisionLogic ()

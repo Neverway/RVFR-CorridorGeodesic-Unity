@@ -14,7 +14,8 @@ public class Logic_Toggle : LogicComponent
     //=-----------------=
     // Public Variables
     //=-----------------=
-
+    [Tooltip("If true, the toggle will stay powered once powered a single time. No other signals will turn it off")]
+    public bool stayPowered = false;
 
     //=-----------------=
     // Private Variables
@@ -49,6 +50,12 @@ public class Logic_Toggle : LogicComponent
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);
+
+        if (stayPowered)
+        {
+            isPowered = isPowered || powered;
+            return;
+        }    
 
         isPowered = powered ? !isPowered : isPowered;
     }

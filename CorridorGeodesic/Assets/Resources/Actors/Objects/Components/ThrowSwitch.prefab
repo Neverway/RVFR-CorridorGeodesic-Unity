@@ -187,7 +187,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9132002430392707332, guid: c0d1c07e0f9e2935db0265879b1f8518,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5696693415929149625}
   m_SourcePrefab: {fileID: 100100000, guid: c0d1c07e0f9e2935db0265879b1f8518, type: 3}
 --- !u!4 &6565491989813768641 stripped
 Transform:
@@ -195,13 +199,31 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2499794826752392691}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6632234301169652983 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9132002430392707332, guid: c0d1c07e0f9e2935db0265879b1f8518,
+    type: 3}
+  m_PrefabInstance: {fileID: 2499794826752392691}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5696693415929149625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6632234301169652983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8849186111962511164 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6376975871621139151, guid: c0d1c07e0f9e2935db0265879b1f8518,
     type: 3}
   m_PrefabInstance: {fileID: 2499794826752392691}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6632234301169652983}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbf978b39f9a2b6508a1bb2cebc9cd4a, type: 3}
@@ -233,7 +255,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.06
+      value: -5.920294
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
@@ -243,7 +265,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 30.91
+      value: 38.91
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}

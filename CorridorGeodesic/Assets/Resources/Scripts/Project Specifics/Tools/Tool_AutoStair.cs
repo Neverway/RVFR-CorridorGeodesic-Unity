@@ -92,8 +92,6 @@ public class Tool_AutoStair : MonoBehaviour
         Gizmos.DrawLine(stairStartPosition, stairEndPosition);
         Gizmos.DrawLine(stairStartPosition + Vector3.up * stairVector.magnitude * 0.5f, stairEndPosition);
 
-        stairVector = stairEndPosition - stairStartPosition;
-
         Gizmos.color = Color.blue;
 
         for (int i = 0; i < platformCount; i++)
@@ -161,11 +159,12 @@ public class Platform
         platform = new GameObject("Platform");
 
         Vector3 right = Vector3.Cross(forward, Vector3.up);
-        //Vector3 up = Vector3.Cross(forward, right);
 
         Quaternion rotation = Quaternion.LookRotation(forward, Vector3.up);
+        Quaternion stepRotation = Quaternion.LookRotation(Quaternion.AngleAxis(-10, right) * forward);
 
-        MonoBehaviour.Instantiate(stairPlatform, bottomPosition + Vector3.up * height, rotation, platform.transform);
+        MonoBehaviour.Instantiate(stairPlatform, bottomPosition + Vector3.up * (height - 0.1f),
+            stepRotation, platform.transform);
 
         int supportCount = Mathf.CeilToInt(height/4);
 
