@@ -271,7 +271,8 @@ public class PlayerController_FirstPersonShooter : PawnController
             Vector2 horiMove = new Vector2(moveDirection.x, moveDirection.z);
 
             float movementMult = _pawn.currentState.movementMultiplier;
-            if (!_pawn.IsGrounded3D()) {
+            if (!_pawn.IsGrounded3D() || _pawn.IsGroundSteep3D()) {
+                Debug.Log ("grogh");
                 movementMult = _pawn.currentState.airMovementMultiplier;
             }
 
@@ -280,12 +281,15 @@ public class PlayerController_FirstPersonShooter : PawnController
             if (horizonalVelocity.magnitude > velocityClamp)
             {
                 horizonalVelocity = horizonalVelocity.normalized * velocityClamp;
+                if (_pawn.IsGrounded3D ())
+                {
+                    horizonalVelocity *= 0.99f;
+                }
             }
 
             if (_pawn.IsGrounded3D() && Mathf.Abs(moveDirection.x) < 0.2f && Mathf.Abs(moveDirection.z) < 0.2f)
             {
-                //if within a dead zone, we add some friction on the ground.
-                Debug.Log ("moveDir = " + moveDirection);
+                //if player isn't moving (beyond a dead zone), we add some friction on the ground.
                 horizonalVelocity *= 0.8f;
             }
 

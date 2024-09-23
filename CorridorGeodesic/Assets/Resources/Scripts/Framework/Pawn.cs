@@ -175,6 +175,15 @@ public class Pawn : MonoBehaviour
 
         return false;
     }
+
+    public bool IsGroundSteep3D ()
+    {
+        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
+        {
+            return Vector3.Angle (slopeHit.normal, Vector3.up) > 45;
+        }
+        return false;
+    }
     
     public bool IsPlayerControlled()
     {
