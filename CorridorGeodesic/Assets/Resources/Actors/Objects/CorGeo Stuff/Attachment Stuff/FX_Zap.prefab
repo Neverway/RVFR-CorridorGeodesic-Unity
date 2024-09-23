@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3449981027059545148
+--- !u!1 &3838561264208788133
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4546015912943696758}
-  - component: {fileID: 4313024832642595624}
-  - component: {fileID: 7714265669823268445}
+  - component: {fileID: 6687713643506939401}
+  - component: {fileID: 6521249025155539797}
+  - component: {fileID: 5917406844916810592}
   m_Layer: 0
-  m_Name: Start
+  m_Name: FX_Zap
   m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4546015912943696758
+--- !u!4 &6687713643506939401
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3449981027059545148}
+  m_GameObject: {fileID: 3838561264208788133}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 11.591, y: -43.048, z: 2.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6687713643506939401}
+  m_Children:
+  - {fileID: 7427225521230069907}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!120 &4313024832642595624
+--- !u!120 &6521249025155539797
 LineRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3449981027059545148}
+  m_GameObject: {fileID: 3838561264208788133}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -77,9 +78,6 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 11.591, y: -43.048, z: 2.06}
-  - {x: 11.509557, y: -42.952564, z: 2.2647648}
-  - {x: 11.473642, y: -43.039158, z: 2.5043948}
-  - {x: 11.513835, y: -43.00378, z: 2.847084}
   - {x: 11.591, y: -43.048, z: 3.06}
   m_Parameters:
     serializedVersion: 3
@@ -176,53 +174,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &7714265669823268445
+--- !u!114 &5917406844916810592
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3449981027059545148}
+  m_GameObject: {fileID: 3838561264208788133}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 720a274b7db1d4244b6a75baa6842d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 6521249025155539797}
   endTransform: {fileID: 7427225521230069907}
   jitter: 0.12
---- !u!1 &3838561264208788133
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6687713643506939401}
-  m_Layer: 0
-  m_Name: FX_Zap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6687713643506939401
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3838561264208788133}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.591, y: -43.048, z: 2.06}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4546015912943696758}
-  - {fileID: 7427225521230069907}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6084920922511104523
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7427225521230069907}
   m_Layer: 0
-  m_Name: End
+  m_Name: Target
   m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

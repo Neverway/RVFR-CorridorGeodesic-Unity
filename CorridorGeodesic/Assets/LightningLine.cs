@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-[ExecuteAlways]
 public class LightningLine : MonoBehaviour
 {
     //=-----------------=
@@ -25,11 +24,13 @@ public class LightningLine : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-
+    [HideInInspector] public TeslaPowerSource source1;
+    [HideInInspector] public TeslaPowerSource source2;
+    
+    public LineRenderer lineRenderer;
     public Transform endTransform;
     public float jitter = 0.12f;
 
-    private LineRenderer lineRenderer;
     private Vector3[] points;
     private Vector3[] noisyPoints;
     private Vector3 startPos;
@@ -43,17 +44,17 @@ public class LightningLine : MonoBehaviour
     private void Start ()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        SetPoints ();
+        Update();
     }
 
     private void Update()
     {
-
-
-        if (startPos != transform.position || endPos != endTransform.position)
+        if (source1 == null || source2 == null || !(source1.IsTeslaPowered() && source2.IsTeslaPowered()))
         {
-            SetPoints();
+            Destroy(gameObject);
+            return;
         }
+
 
         int newTime = Mathf.RoundToInt(Time.time * 16f);
         if (newTime == lastTime)
@@ -61,6 +62,7 @@ public class LightningLine : MonoBehaviour
 
         lastTime = newTime;
 
+        SetPoints();
         for (int i = 1; i < points.Length-1; i++)
         {
             noisyPoints[i] = points[i] + new Vector3 (Random.Range (-jitter, jitter), Random.Range (-jitter, jitter), Random.Range (-jitter, jitter));
@@ -98,13 +100,12 @@ public class LightningLine : MonoBehaviour
         Update();
         lastTime = 0;
     }
-    public void SetStartAndEndPoints(Transform start, Transform end)
+    public void SetStartAndEndPoints(Vector3 start, Vector3 end)
     {
-        transform.SetParent(start);
-        transform.position = start.position;
+        transform.position = start;
 
-        endTransform.SetParent(end);
-        endTransform.position = end.position;
+        endTransform.position = end;
+        Update();
     }
 
     //=-----------------=

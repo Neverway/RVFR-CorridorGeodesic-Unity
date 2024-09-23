@@ -12,12 +12,11 @@ using UnityEngine;
 [RequireComponent(typeof(TeslaConductor))]
 public class TeslaReciever : LogicComponent
 {
-    private TeslaConductor conductor;
-
     //=-----------------=
     // Reference Variables
     //=-----------------=
     [SerializeField] private GameObject lightObject;
+    private TeslaConductor conductor;
 
     //=-----------------=
     // Internal Functions
@@ -30,8 +29,8 @@ public class TeslaReciever : LogicComponent
 
     private void Update()
     {
-        lightObject.SetActive(conductor.isRecievingPower);
-        isPowered = conductor.isRecievingPower;
+        lightObject.SetActive(conductor.IsTeslaPowered());
+        isPowered = conductor.IsTeslaPowered();
     }
 
     //=-----------------=
