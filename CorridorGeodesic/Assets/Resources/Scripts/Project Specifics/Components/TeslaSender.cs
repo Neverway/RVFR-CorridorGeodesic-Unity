@@ -37,6 +37,7 @@ public class TeslaSender : LogicComponent, TeslaPowerSource
     public void Update()
     {
         conductor.SetPowerSource(this);
+        lightObject.SetActive(conductor.IsTeslaPowered());
     }
 
     public Transform GetZapTargetTransform() => transform;
