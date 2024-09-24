@@ -22,8 +22,7 @@ public class CrushDetector : MonoBehaviour
     [SerializeField] private Vector3 rayDistance;
     [SerializeField] private float downDistance;
     [SerializeField] private LayerMask layerMask;
-    private int checkFrequency = 4;
-    private int frameCount = 0;
+    [SerializeField] private float crushDamageAmount = 40f;
     private Pawn pawn;
 
     public UnityEvent onCrushed {  get; private set; } = new UnityEvent();
@@ -49,20 +48,15 @@ public class CrushDetector : MonoBehaviour
         {
             return;
         }
-        frameCount++;
-        if (frameCount >= checkFrequency)
-        {
-            frameCount = 0;
             if (CheckForOverlaps ())
             {
                 if (pawn)
                 {
-                    Debug.Log ("Player was crushed to death.");
+                    Debug.Log ("! Crush Damage !");
                     onCrushed?.Invoke ();
-                    pawn.Kill ();
+                    pawn.ModifyHealth (-crushDamageAmount);
                 }
             }
-        }
     }
 
     //=-----------------=

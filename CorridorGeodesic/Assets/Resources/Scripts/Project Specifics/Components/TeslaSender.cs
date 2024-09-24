@@ -9,42 +9,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 //todo: make a manager that Lists senders and receivers and calls them accordionly
-public class TeslaSender : MonoBehaviour
+[RequireComponent(typeof(TeslaConductor))]
+public class TeslaSender : LogicComponent, TeslaPowerSource
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
+    [LogicComponentHandle] public LogicComponent inputSignal;
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [SerializeField] private GameObject lightObject;
+    private TeslaConductor conductor;
 
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private IEnumerator Start()
-    {
-        yield return null;
-        TeslaManager.senders.Add(this);
-    }
-
-    private void OnDestroy ()
-    {
-        TeslaManager.senders.Remove(this);
-    }
+    public bool IsTeslaPowered() => inputSignal == null || inputSignal.isPowered;
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private new void Awake()
+    {
+        base.Awake();
+        conductor = GetComponent<TeslaConductor>();
+    }
 
+    public void Update()
+    {
+        conductor.SetPowerSource(this);
+        lightObject.SetActive(conductor.IsTeslaPowered());
+    }
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+    public Transform GetZapTargetTransform() => transform;
 }

@@ -27,19 +27,21 @@ public class Pawn : MonoBehaviour
     public bool isNearInteractable; // Imported from old system
     public bool destroyOnDeath; // Should this object be deleted once it dies
     public float destroyOnDeathDelay; // How long, in seconds, should we wait before deleting the pawn after death
-    
-    private List<ContactPoint> contactPoints = new List<ContactPoint>(); // Used to perform advanced collision checks (like step-up checks)
+
+    private List<ContactPoint> contactPoints = new List<ContactPoint> (); // Used to perform advanced collision checks (like step-up checks)
 
     public event Action OnPawnHurt;
     public event Action OnPawnHeal;
     public event Action OnPawnDeath;
-    
+
 
 
     //=-----------------=
     // Private Variables
     //=-----------------=
 
+    private Coroutine pawnHurtRoutine;
+    private Coroutine pawnAutoHealRoutine;
 
     //=-----------------=
     // Reference Variables
@@ -53,18 +55,18 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Awake()
+    private void Awake ()
     {
-        PassCharacterDataToCurrentState();
-        currentController.PawnAwake(this);
+        PassCharacterDataToCurrentState ();
+        currentController.PawnAwake (this);
     }
 
-    private void Update()
+    private void Update ()
     {
         // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
-        if (FindObjectOfType<GameInstance>())
+        if (FindObjectOfType<GameInstance> ())
         {
-            if (FindObjectOfType<GameInstance>().PlayerControllerClasses.Contains(currentController))
+            if (FindObjectOfType<GameInstance> ().PlayerControllerClasses.Contains (currentController))
             {
                 isPossessed = true;
             }
@@ -73,57 +75,62 @@ public class Pawn : MonoBehaviour
                 isPossessed = false;
             }
         }
-        gameInstance = FindObjectOfType<GameInstance>();
-        CheckCameraState();
+        gameInstance = FindObjectOfType<GameInstance> ();
+        CheckCameraState ();
         if (isDead) return;
-        currentController.PawnUpdate(this);
+        currentController.PawnUpdate (this);
+
+        if (currentState.autoRegenHealth && pawnHurtRoutine == null && pawnAutoHealRoutine == null && currentState.health < defaultState.health)
+        {
+            pawnAutoHealRoutine = StartCoroutine (PawnAutoHealRoutine ());
+        }
     }
 
-    private void FixedUpdate()
+    private void FixedUpdate ()
     {
         if (isDead) return;
-        currentController.PawnFixedUpdate(this);
-        contactPoints.Clear(); //Deletes all ContactPoints collected from the last physics frame
+        currentController.PawnFixedUpdate (this);
+        contactPoints.Clear (); //Deletes all ContactPoints collected from the last physics frame
     }
-    
-    void OnCollisionEnter(Collision col)
+
+    void OnCollisionEnter (Collision col)
     {
-        contactPoints.AddRange(col.contacts);
+        contactPoints.AddRange (col.contacts);
     }
-    
-    void OnCollisionStay(Collision col)
+
+    void OnCollisionStay (Collision col)
     {
-        contactPoints.AddRange(col.contacts);
+        contactPoints.AddRange (col.contacts);
     }
-    
+
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private void CheckCameraState()
+    private void CheckCameraState ()
     {
-        var viewCamera = GetComponentInChildren<Camera>(true);
-        if (IsPlayerControlled() && viewCamera)
+        var viewCamera = GetComponentInChildren<Camera> (true);
+        if (IsPlayerControlled () && viewCamera)
         {
-            viewCamera.gameObject.SetActive(true);
+            viewCamera.gameObject.SetActive (true);
         }
         else if (viewCamera)
         {
-            viewCamera.gameObject.SetActive(false);
+            viewCamera.gameObject.SetActive (false);
         }
     }
 
-    private IEnumerator InvulnerabilityCooldown()
+    private IEnumerator InvulnerabilityCooldown ()
     {
         isInvulnerable = true;
-        yield return new WaitForSeconds(currentState.invulnerabilityTime);
+        yield return new WaitForSeconds (currentState.invulnerabilityTime);
         isInvulnerable = false;
     }
-    
+
     // ------------------------------------------------------------------
     // MODIFY ME TO MATCH YOUR CharacterState & CharacterData CLASSES!!!
     // ------------------------------------------------------------------
-    private void PassCharacterDataToCurrentState()
+    private void PassCharacterDataToCurrentState ()
     {
         currentState.characterName = defaultState.actorName;
         currentState.health = defaultState.health;
@@ -138,12 +145,18 @@ public class Pawn : MonoBehaviour
         // Add project specific variables below this line!
         currentState.groundDrag = defaultState.groundDrag;
         currentState.airDrag = defaultState.airDrag;
+        currentState.maxHorizontalMovementSpeed = defaultState.maxHorizontalMovementSpeed;
+        currentState.maxHorizontalAirSpeed = defaultState.maxHorizontalAirSpeed;
         currentState.movementMultiplier = defaultState.movementMultiplier;
         currentState.airMovementMultiplier = defaultState.airMovementMultiplier;
         currentState.gravityMultiplier = defaultState.gravityMultiplier;
         currentState.jumpForce = defaultState.jumpForce;
+        currentState.steepSlopeAngle = defaultState.steepSlopeAngle;
         currentState.sprintSpeedMultiplier = defaultState.sprintSpeedMultiplier;
         currentState.sprintAcceleration = defaultState.sprintAcceleration;
+        currentState.autoRegenHealth = defaultState.autoRegenHealth;
+        currentState.healthRegenPerSecond = defaultState.healthRegenPerSecond;
+        currentState.healthRegenDelay = defaultState.healthRegenDelay;
     }
     // ------------------------------------------------------------------
 
@@ -151,110 +164,165 @@ public class Pawn : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public bool IsGrounded3D()
+    public bool IsGrounded3D ()
     {
         //return Physics.SphereCast(transform.position, currentState.groundCheckRadius, Vector3.down, out RaycastHit hit,
         //    1.1f, currentState.groundMask);
 
         //return hit.distance < 1.5f;
 
-        return Physics.CheckSphere(transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, currentState.groundMask);
+        return Physics.CheckSphere (transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, currentState.groundMask);
     }
-    private void OnDrawGizmos()
+    private void OnDrawGizmos ()
     {
-        Gizmos.DrawSphere(transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius);
+        Gizmos.DrawSphere (transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius);
     }
 
-    public bool IsGroundSloped3D()
+    public bool IsGroundSloped3D ()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
+        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
         {
             return slopeHit.normal != Vector3.up;
         }
 
         return false;
     }
-    
-    public bool IsPlayerControlled()
+
+    /// <summary>
+    /// Returns true if the angle of the slope is greater than steepSlopeAngle.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsGroundSteep3D ()
     {
-        if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-        return gameInstance.PlayerControllerClasses.Contains(currentController);
+        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
+        {
+            return Vector3.Angle (slopeHit.normal, Vector3.up) > currentState.steepSlopeAngle;
+        }
+        return false;
     }
 
-    public void Move(Vector3 _movement, string _mode)
+    public bool IsPlayerControlled ()
     {
-        if (_mode == "translate") transform.Translate(_movement * (
+        if (!gameInstance) gameInstance = FindObjectOfType<GameInstance> ();
+        return gameInstance.PlayerControllerClasses.Contains (currentController);
+    }
+
+    public void Move (Vector3 _movement, string _mode)
+    {
+        if (_mode == "translate") transform.Translate (_movement * (
             currentState.movementSpeed * Time.deltaTime));
     }
-    
-    public void Move(Vector3 _movement, string _mode, float _movementSpeed)
+
+    public void Move (Vector3 _movement, string _mode, float _movementSpeed)
     {
-        if (_mode == "translate") transform.Translate(_movement * (_movementSpeed * Time.deltaTime));
+        if (_mode == "translate") transform.Translate (_movement * (_movementSpeed * Time.deltaTime));
     }
-    
-    public void ModifyHealth(float _value)
+
+    public void ModifyHealth (float _value)
     {
         if (isInvulnerable) return;
-        StartCoroutine(InvulnerabilityCooldown());
+        StartCoroutine (InvulnerabilityCooldown ());
         switch (_value)
         {
             case > 0:
-                OnPawnHeal?.Invoke();
+                OnPawnHeal?.Invoke ();
                 isDead = false;
-                if (currentState.characterSounds.heal) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.heal);
+                if (currentState.characterSounds.heal) GetComponent<AudioSource_PitchVarienceModulator> ().PlaySound (currentState.characterSounds.heal);
                 break;
             case < 0:
                 if (isDead) return;
-                try 
+                StartHealthRegen ();
+                try
                 {
-                    OnPawnHurt?.Invoke();
+                    OnPawnHurt?.Invoke ();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    Console.WriteLine (e);
                 }
-                if (currentState.characterSounds.hurt) GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.hurt);
+                if (currentState.characterSounds.hurt) GetComponent<AudioSource_PitchVarienceModulator> ().PlaySound (currentState.characterSounds.hurt);
                 break;
         }
 
         if (currentState.health + _value <= 0)
         {
             if (isDead) return;
-            GetComponent<AudioSource_PitchVarienceModulator>().PlaySound(currentState.characterSounds.death);
-            OnPawnDeath?.Invoke();
+            GetComponent<AudioSource_PitchVarienceModulator> ().PlaySound (currentState.characterSounds.death);
+            OnPawnDeath?.Invoke ();
             isDead = true;
             if (destroyOnDeath)
             {
-                Destroy(gameObject, destroyOnDeathDelay);
+                Destroy (gameObject, destroyOnDeathDelay);
             }
         }
 
-        if (currentState.health + _value > currentState.health) currentState.health = defaultState.health;
+        if (currentState.health + _value > defaultState.health) currentState.health = defaultState.health;
         else if (currentState.health + _value < 0) currentState.health = 0;
         else currentState.health += _value;
     }
 
-    public void Kill()
+    private void StartHealthRegen ()
+    {
+        if (!currentState.autoRegenHealth)
+        {
+            return;
+        }
+
+        if (pawnHurtRoutine != null)
+        {
+            StopCoroutine (pawnHurtRoutine);
+        }
+        if (pawnAutoHealRoutine != null)
+        {
+            StopCoroutine (pawnAutoHealRoutine);
+        }
+        pawnHurtRoutine = StartCoroutine (PawnHurtRoutine ());
+    }
+
+    public void Kill ()
     {
         // Instantly sets the pawns health to zero, firing its onDeath event
-        ModifyHealth(-999999);
+        ModifyHealth (-999999);
     }
-    
-    public void GetPawnController()
+
+    public void GetPawnController ()
     {
         // Returns the type of controller that is possessing this pawn
         // This can be used to do things like checking if a pawn is possessed by a player
     }
 
-    public void SetPawnController()
+    public void SetPawnController ()
     {
         // Sets the type of controller that is possessing this pawn
     }
 
-    public void SetPawnDefaultState(CharacterData _playerState)
+    public void SetPawnDefaultState (CharacterData _playerState)
     {
         // Sets the type of character
         defaultState = _playerState;
-        PassCharacterDataToCurrentState();
+        PassCharacterDataToCurrentState ();
     }
+
+    private IEnumerator PawnHurtRoutine ()
+    {
+        yield return new WaitForSeconds (currentState.healthRegenDelay);
+        if (pawnAutoHealRoutine != null)
+        {
+            StopCoroutine(pawnAutoHealRoutine);
+        }
+        pawnAutoHealRoutine = StartCoroutine(PawnAutoHealRoutine ());
+        pawnHurtRoutine = null;
+    }
+
+    private IEnumerator PawnAutoHealRoutine ()
+    {
+        while (currentState.health > 0 && currentState.health < defaultState.health)
+        {
+            yield return new WaitForSeconds (1f);
+            Debug.Log ("Auto-healing");
+            ModifyHealth (currentState.healthRegenPerSecond);
+        }
+        pawnAutoHealRoutine = null;
+    }
+
 }

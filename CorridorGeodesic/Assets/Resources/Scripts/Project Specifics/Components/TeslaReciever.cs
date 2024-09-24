@@ -9,50 +9,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(NEW_LogicProcessor))]
-public class TeslaReciever : MonoBehaviour
+[RequireComponent(typeof(TeslaConductor))]
+public class TeslaReciever : LogicComponent
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
     //=-----------------=
     // Reference Variables
     //=-----------------=
-
-    [HideInInspector] public NEW_LogicProcessor processor;
     [SerializeField] private GameObject lightObject;
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private IEnumerator Start()
-    {
-        processor = GetComponent<NEW_LogicProcessor>();
-        yield return null;
-        TeslaManager.recievers.Add (this);
-    }
-
-    private void Update ()
-    {
-        lightObject.SetActive (processor.isPowered);
-    }
-
-    private void OnDestroy ()
-    {
-        TeslaManager.recievers.Remove (this);
-    }
+    private TeslaConductor conductor;
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private new void Awake()
+    {
+        base.Awake();
+        conductor = GetComponent<TeslaConductor>();
+    }
 
+    private void Update()
+    {
+        lightObject.SetActive(conductor.IsTeslaPowered());
+        isPowered = conductor.IsTeslaPowered();
+    }
 
     //=-----------------=
     // External Functions

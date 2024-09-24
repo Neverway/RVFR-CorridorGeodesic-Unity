@@ -16,7 +16,7 @@ public class Laser_Raycast : LogicComponent
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private LogicComponent inputSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
     [SerializeField] private Transform halo;
     [SerializeField] private int maxReflectionCount = 5;
     [SerializeField] private float maxStepDistance = 200f;
@@ -48,11 +48,14 @@ public class Laser_Raycast : LogicComponent
         ShootLaser();
     }
 
-    new protected void OnDrawGizmos()
+#if UNITY_EDITOR
+    
+    protected new void OnDrawGizmos()
     {
         base.OnDrawGizmos ();
         if (inputSignal) Debug.DrawLine(gameObject.transform.position, inputSignal.transform.position, Color.blue);
     }
+#endif
 
     private void OnDisable ()
     {
@@ -65,7 +68,7 @@ public class Laser_Raycast : LogicComponent
         }
     }
 
-    new protected void OnDestroy ()
+    protected new void OnDestroy ()
     {
         base.OnDestroy ();
         foreach (var line in lineRenderers)

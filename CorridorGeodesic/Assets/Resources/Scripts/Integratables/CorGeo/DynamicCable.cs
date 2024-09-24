@@ -96,7 +96,7 @@ public class DynamicCable : LogicComponent
 
 
 #if UNITY_EDITOR
-    new private void OnDrawGizmos()
+    private new void OnDrawGizmos()
     {
         base.OnDrawGizmos();
         if (UnityEngine.Application.isPlaying)
@@ -120,8 +120,8 @@ public class DynamicCable : LogicComponent
             position += Vector3.down * Mathf.Sin(factor * Mathf.PI) * (extraWaypoints * 0.2f + 1f);
             lineRenderer.SetPosition(i, position);
         }
-#endif
     }
+#endif
 
     //=-----------------=
     // Internal Functions

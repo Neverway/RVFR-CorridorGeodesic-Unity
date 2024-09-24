@@ -6,6 +6,7 @@
 //=============================================================================
 
 using System;
+using System.Runtime.CompilerServices;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,7 +20,7 @@ public class Volume_TriggerEvent : Volume
     public bool checksOnlyForPlayer = true;
     [Header("Signal Events")]
     [LogicComponentHandle] public LogicComponent resetSignal;
-    
+
     //[Header("Channel Events")]
     //[Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
     public UnityEvent onOccupied, onUnoccupied;

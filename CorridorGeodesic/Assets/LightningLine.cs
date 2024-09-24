@@ -9,12 +9,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(LineRenderer))]
 public class LightningLine : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-
+    public bool clearIfNoTeslaPowerSource = true;
 
     //=-----------------=
     // Private Variables
@@ -23,13 +24,19 @@ public class LightningLine : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [HideInInspector] public TeslaPowerSource source1;
+    [HideInInspector] public TeslaPowerSource source2;
+    
+    public LineRenderer lineRenderer;
+    public Transform endTransform;
+    public float jitter = 0.12f;
 
-    [SerializeField] private Transform endTransform;
-    private LineRenderer lineRenderer;
     private Vector3[] points;
     private Vector3[] noisyPoints;
     private Vector3 startPos;
     private Vector3 endPos;
+    private int lastTime;
+
     //=-----------------=
     // Mono Functions
     //=-----------------=
@@ -37,21 +44,31 @@ public class LightningLine : MonoBehaviour
     private void Start ()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        points = new Vector3[lineRenderer.positionCount];
-        noisyPoints = new Vector3[lineRenderer.positionCount];
-        SetPoints ();
+        Update();
     }
 
     private void Update()
     {
-        if (startPos != transform.position || endPos != endTransform.position)
+        if (clearIfNoTeslaPowerSource)
         {
-            SetPoints();
+            if (source1 == null || source2 == null || !(source1.IsTeslaPowered() && source2.IsTeslaPowered()))
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
 
+
+        int newTime = Mathf.RoundToInt(Time.time * 16f);
+        if (newTime == lastTime)
+            return;
+
+        lastTime = newTime;
+
+        SetPoints();
         for (int i = 1; i < points.Length-1; i++)
         {
-            noisyPoints[i] = points[i] + new Vector3 (Random.Range (-.3f, .3f), Random.Range (-.3f, .3f), Random.Range (-.3f, .3f));
+            noisyPoints[i] = points[i] + new Vector3 (Random.Range (-jitter, jitter), Random.Range (-jitter, jitter), Random.Range (-jitter, jitter));
         }
         lineRenderer.SetPositions(noisyPoints);
     }
@@ -59,12 +76,16 @@ public class LightningLine : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
     private void SetPoints ()
     {
         startPos = transform.position;
         endPos = endTransform.position;
         Vector3 diff = endPos - startPos;
+
+        lineRenderer.positionCount = Mathf.RoundToInt(diff.magnitude) + 1;
+        points = new Vector3[lineRenderer.positionCount];
+        noisyPoints = new Vector3[lineRenderer.positionCount];
+
         Vector3 forward = diff.magnitude / (lineRenderer.positionCount-1) * diff.normalized;
         for (int i = 0; i < lineRenderer.positionCount; i++)
         {
@@ -72,6 +93,22 @@ public class LightningLine : MonoBehaviour
         }
         noisyPoints[0] = points[0];
         noisyPoints[points.Length-1] = points[points.Length-1];
+    }
+
+    [ContextMenu("UpdatePoints")]
+    public void UpdatePoints()
+    {
+        lastTime = -1;
+        Start();
+        Update();
+        lastTime = 0;
+    }
+    public void SetStartAndEndPoints(Vector3 start, Vector3 end)
+    {
+        transform.position = start;
+
+        endTransform.position = end;
+        Update();
     }
 
     //=-----------------=

@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Prop_Respawner : MonoBehaviour
+public class Prop_Respawner : LogicComponent
 {
     //=-----------------=
     // Public Variables
@@ -17,6 +17,7 @@ public class Prop_Respawner : MonoBehaviour
 
     [SerializeField] GameObject prefabToSpawn;
     private GameObject spawnedObject;
+    [LogicComponentHandle] public LogicComponent respawnProp;
 
     //=-----------------=
     // Private Variables
@@ -84,10 +85,24 @@ public class Prop_Respawner : MonoBehaviour
         }
 
         //Move the spawne dobject far away, triggering OnTriggerExit for anything it may have been inside of
-        spawnedObject.transform.position = new Vector3(0, 1000, 0);
+        spawnedObject.transform.position = transform.position + Vector3.one * 10000f;
         //wait one frame, then destroy object
         yield return null;
         Destroy(spawnedObject);
     }
 
+    public override void SourcePowerStateChanged(bool powered)
+    {
+        base.SourcePowerStateChanged(powered);
+
+        if (respawnProp.isPowered)
+        {
+            DestroySpawnedObject();
+
+            if (spawnWorker == null)
+            {
+                spawnWorker = StartCoroutine(SpawnWorker());
+            }
+        }
+    }
 }
