@@ -48,9 +48,9 @@ Shader "Soulex/SX_Fizzler"
             {
                 UNITY_FOG_COORDS(1)
                 float2 uv : TEXCOORD0;
-                float3 worldPos : TEXCOORD1;
+                float3 worldPos : TEXCOORD2;
                 float3 normal : NORMAL;
-                float4 screenPos : TEXCOORD2;
+                float4 screenPos : TEXCOORD3;
                 float4 position : SV_POSITION;
             };
 
@@ -83,7 +83,7 @@ Shader "Soulex/SX_Fizzler"
 
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                UNITY_TRANSFER_FOG(o,o.position);
                 return o;
             }
 
