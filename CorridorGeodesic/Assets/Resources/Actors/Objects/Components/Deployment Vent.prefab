@@ -45,8 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f231441f7344341927264250e499cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPowered: 0
   prefabToSpawn: {fileID: 6153716924502838921, guid: f4ae20d884a5de22789265f6a01b72a1,
     type: 3}
+  respawnProp: {fileID: 0}
   spawnDelay: 1.25
   waitForRespawn: 0
   autoRespawn: 1
@@ -1162,6 +1164,11 @@ PrefabInstance:
       propertyPath: receivers.Array.data[0]
       value: 
       objectReference: {fileID: 3188430219668366389}
+    - target: {fileID: 5051199325652713641, guid: 25ecce1d4d40796fc80bc4111abf4700,
+        type: 3}
+      propertyPath: checksOnlyForPlayer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8333927859922366228, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
       propertyPath: m_LocalScale.x

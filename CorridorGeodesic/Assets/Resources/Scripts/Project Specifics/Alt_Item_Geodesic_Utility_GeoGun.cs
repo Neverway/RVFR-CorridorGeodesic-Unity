@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using DG.Tweening;
 
 public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 {
@@ -471,6 +472,13 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         isCutPreviewActive = true;
 
         lerpAmount = 0f;
+
+        foreach (GameObject g in cutPreviews)
+        {
+            g.transform.DOKill ();
+            g.transform.localScale = Vector3.zero;
+            g.transform.DOScale (1f, 10f);
+        }
     }
 
 

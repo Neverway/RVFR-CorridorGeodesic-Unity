@@ -35,7 +35,6 @@ public class BulbOutlet : MonoBehaviour, BulbCollisionBehaviour
     {
         yield return null;
         attachPoint.SetParent (null);
-        attachPoint.GetComponent<CorGeo_ActorData>().homeParent = null;
     }
 
 

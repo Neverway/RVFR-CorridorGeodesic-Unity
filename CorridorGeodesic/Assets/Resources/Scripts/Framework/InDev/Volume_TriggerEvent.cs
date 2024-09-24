@@ -81,6 +81,7 @@ public class Volume_TriggerEvent : Volume
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
+
             onUnoccupied.Invoke();
             isPowered = false;
             if (resetsAutomatically) hasBeenTriggered = false;
@@ -96,17 +97,26 @@ public class Volume_TriggerEvent : Volume
     private new void OnTriggerEnter(Collider _other)
     {
         base.OnTriggerEnter(_other); // Call the base class method
+
+        if (checksOnlyForPlayer && _other.tag == "PhysProp")
+        {
+            Debug.LogWarning("QUICKFIX: Just making sure cubes dont trigger this when they shouldn't, fix this properly later");
+            return;
+        }
+
         if (!resetsAutomatically && hasBeenTriggered) return;
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
-            onOccupied.Invoke();
+            if (!isPowered) //todo: quickfix
+                onOccupied.Invoke();
             isPowered = true;
             hasBeenTriggered = true;
         }
         else if (pawnsInTrigger.Count != 0 || propsInTrigger.Count != 0)
         {
-            onOccupied.Invoke();
+            if (!isPowered) //todo: quickfix
+                onOccupied.Invoke();
             isPowered = true;
             hasBeenTriggered = true;
         }
@@ -115,6 +125,13 @@ public class Volume_TriggerEvent : Volume
     private new void OnTriggerExit(Collider _other)
     {
         base.OnTriggerExit(_other); // Call the base class method
+
+        if (checksOnlyForPlayer && _other.tag == "PhysProp")
+        {
+            Debug.LogWarning("QUICKFIX: Just making sure cubes dont trigger this when they shouldn't, fix this properly later");
+            return;
+        }
+
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
             if (!targetEnt.isPossessed) return;
