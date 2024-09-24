@@ -15,7 +15,7 @@ public class LightningLine : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-
+    public bool clearIfNoTeslaPowerSource = true;
 
     //=-----------------=
     // Private Variables
@@ -49,10 +49,13 @@ public class LightningLine : MonoBehaviour
 
     private void Update()
     {
-        if (source1 == null || source2 == null || !(source1.IsTeslaPowered() && source2.IsTeslaPowered()))
+        if (clearIfNoTeslaPowerSource)
         {
-            Destroy(gameObject);
-            return;
+            if (source1 == null || source2 == null || !(source1.IsTeslaPowered() && source2.IsTeslaPowered()))
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
 
 
