@@ -23,8 +23,6 @@ public class CrushDetector : MonoBehaviour
     [SerializeField] private float downDistance;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private float crushDamageAmount = 40f;
-    private int checkFrequency = 4;
-    private int frameCount = 0;
     private Pawn pawn;
 
     public UnityEvent onCrushed {  get; private set; } = new UnityEvent();
@@ -50,10 +48,6 @@ public class CrushDetector : MonoBehaviour
         {
             return;
         }
-        frameCount++;
-        if (frameCount >= checkFrequency)
-        {
-            frameCount = 0;
             if (CheckForOverlaps ())
             {
                 if (pawn)
@@ -63,7 +57,6 @@ public class CrushDetector : MonoBehaviour
                     pawn.ModifyHealth (-crushDamageAmount);
                 }
             }
-        }
     }
 
     //=-----------------=

@@ -51,4 +51,7 @@ public class CharacterState
     public float sprintSpeedMultiplier;
     [Tooltip("Essentially how long it takes you to get up to speed while sprinting")]
     public float sprintAcceleration;
+    public bool autoRegenHealth;
+    public float healthRegenPerSecond;
+    public float healthRegenDelay;
 }

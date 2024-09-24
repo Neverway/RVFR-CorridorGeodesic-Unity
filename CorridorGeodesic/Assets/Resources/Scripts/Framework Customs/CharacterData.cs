@@ -41,6 +41,11 @@ public class CharacterData : Actor
     public float stepSearchOvershoot;
     [Tooltip ("How steep of an angle can you walk normally/jump on?")]
     public float steepSlopeAngle;
+    [Tooltip("Wether to use the health regen per second or not.")]
+    public bool autoRegenHealth;
+    public float healthRegenPerSecond;
+    [Tooltip("Delay after taking damage before health regens.")]
+    public float healthRegenDelay;
 }
 
 [Serializable]

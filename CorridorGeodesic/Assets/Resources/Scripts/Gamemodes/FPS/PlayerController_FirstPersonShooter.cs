@@ -297,8 +297,6 @@ public class PlayerController_FirstPersonShooter : PawnController
 
 
             rigidbody.velocity = new Vector3 (horizonalVelocity.x, yVel, horizonalVelocity.y);
-
-            Debug.Log (horiMove.magnitude);
         }
     }
 
