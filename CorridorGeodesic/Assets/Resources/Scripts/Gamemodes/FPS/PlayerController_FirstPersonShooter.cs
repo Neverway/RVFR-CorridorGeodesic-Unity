@@ -225,7 +225,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     private void UpdateJumping(Pawn _pawn)
     {
         //Debug.Log(_pawn.IsGrounded3D());
-        if (fpsActions.Jump.WasPressedThisFrame() && _pawn.IsGrounded3D())
+        if (fpsActions.Jump.WasPressedThisFrame() && _pawn.IsGrounded3D() && !_pawn.IsGroundSteep3D())
         {
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
             rigidbody.AddForce(Vector3.up * _pawn.currentState.jumpForce, ForceMode.Impulse);
@@ -234,7 +234,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     
     private void MovePlayer(Pawn _pawn)
     {
-        if (_pawn.IsGrounded3D() && !_pawn.IsGroundSloped3D())
+        /*if (_pawn.IsGrounded3D() && !_pawn.IsGroundSloped3D())
         {
             rigidbody.AddForce(
                 moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier),
@@ -251,6 +251,54 @@ public class PlayerController_FirstPersonShooter : PawnController
             rigidbody.AddForce(
                 moveDirection.normalized * (_pawn.currentState.movementSpeed * (_pawn.currentState.movementMultiplier * _pawn.currentState.airMovementMultiplier)),
                 ForceMode.Acceleration);
+        }*/
+
+        //if (_pawn.IsGrounded3D ())
+        {
+            //horizontalVelocity represents the X and Z axis of the velocity. YVel is kept separate.
+            Vector2 horizonalVelocity = new Vector2 (rigidbody.velocity.x, rigidbody.velocity.z);
+            float yVel = rigidbody.velocity.y;
+            float horizontalMagnitude = horizonalVelocity.magnitude;
+
+
+            float velocityClamp = _pawn.currentState.maxHorizontalMovementSpeed;
+            if (!_pawn.IsGrounded3D() || _pawn.IsGroundSteep3D()) {
+                velocityClamp = _pawn.currentState.maxHorizontalAirSpeed;
+            }
+
+            if (horizonalVelocity.magnitude > velocityClamp)
+            {
+                velocityClamp = horizonalVelocity.magnitude;
+            }
+
+            Vector2 horiMove = new Vector2(moveDirection.x, moveDirection.z);
+
+            float movementMult = _pawn.currentState.movementMultiplier;
+            if (!_pawn.IsGrounded3D() || _pawn.IsGroundSteep3D()) {
+                movementMult = _pawn.currentState.airMovementMultiplier;
+            }
+
+            horizonalVelocity += horiMove.normalized * _pawn.currentState.movementSpeed * movementMult;
+
+            if (horizonalVelocity.magnitude > velocityClamp)
+            {
+                horizonalVelocity = horizonalVelocity.normalized * velocityClamp;
+                if (_pawn.IsGrounded3D ())
+                {
+                    horizonalVelocity *= 0.99f;
+                }
+            }
+
+            if (_pawn.IsGrounded3D() && Mathf.Abs(moveDirection.x) < 0.2f && Mathf.Abs(moveDirection.z) < 0.2f)
+            {
+                //if player isn't moving (beyond a dead zone), we add some friction on the ground.
+                horizonalVelocity *= 0.8f;
+            }
+
+
+            rigidbody.velocity = new Vector3 (horizonalVelocity.x, yVel, horizonalVelocity.y);
+
+            Debug.Log (horiMove.magnitude);
         }
     }
 

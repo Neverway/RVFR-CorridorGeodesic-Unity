@@ -25,6 +25,8 @@ public class CharacterData : Actor
     // Add project specific variables below this line!
     public float groundDrag;
     public float airDrag;
+    public float maxHorizontalMovementSpeed;
+    public float maxHorizontalAirSpeed;
     public float movementMultiplier;
     public float airMovementMultiplier;
     public float gravityMultiplier;
@@ -37,6 +39,8 @@ public class CharacterData : Actor
     public float maxStepHeight;
     [Tooltip("How much to overshoot into the direction a potential step in units when testing. High values prevent player from walking up tiny steps but may cause problems.")]
     public float stepSearchOvershoot;
+    [Tooltip ("How steep of an angle can you walk normally/jump on?")]
+    public float steepSlopeAngle;
 }
 
 [Serializable]

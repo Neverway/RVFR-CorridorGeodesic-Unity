@@ -22,6 +22,7 @@ public class CrushDetector : MonoBehaviour
     [SerializeField] private Vector3 rayDistance;
     [SerializeField] private float downDistance;
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] private float crushDamageAmount = 40f;
     private int checkFrequency = 4;
     private int frameCount = 0;
     private Pawn pawn;
@@ -57,9 +58,9 @@ public class CrushDetector : MonoBehaviour
             {
                 if (pawn)
                 {
-                    Debug.Log ("Player was crushed to death.");
+                    Debug.Log ("! Crush Damage !");
                     onCrushed?.Invoke ();
-                    pawn.Kill ();
+                    pawn.ModifyHealth (-crushDamageAmount);
                 }
             }
         }

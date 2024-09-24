@@ -40,10 +40,13 @@ public class CharacterState
     // Add project specific variables below this line!
     public float groundDrag;
     public float airDrag;
+    public float maxHorizontalMovementSpeed;
+    public float maxHorizontalAirSpeed;
     public float movementMultiplier;
     public float airMovementMultiplier;
     public float gravityMultiplier;
     public float jumpForce;
+    public float steepSlopeAngle;
     [Tooltip("The multiplier added to the movementSpeed while grounded and sprinting")]
     public float sprintSpeedMultiplier;
     [Tooltip("Essentially how long it takes you to get up to speed while sprinting")]
