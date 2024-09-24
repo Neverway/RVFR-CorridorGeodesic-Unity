@@ -15,6 +15,9 @@ Shader "Soulex/SX_Fizzler"
         _DistortStrength ("Distort Strength", Float) = 1.0
         _DepthStrength ("Depth Strength", Float) = 0.2
         _ScrollDirection ("Scroll Direction", Vector) = (1, 1, 0, 0)
+        
+        [Header(Transparency)]
+        _Alpha ("Alpha", Range(0.0, 1.0)) = 1.0
     }
     SubShader
     {
@@ -64,6 +67,8 @@ Shader "Soulex/SX_Fizzler"
             float _DepthStrength;
             float2 _ScrollDirection;
 
+            float _Alpha;
+
             v2f vert (appdata v)
             {
                 v2f o;
@@ -112,10 +117,10 @@ Shader "Soulex/SX_Fizzler"
 
                 col.rgb += distort;
 
-                float a = max(col.a, fogColor.a);
+                col.a = max(col.a, fogColor.a) * _Alpha;
 
                 UNITY_APPLY_FOG(i.fogCoord, col);
-                return float4((col * fogColor).rgb, a);
+                return float4((col * fogColor).rgb, col.a);
             }
             ENDCG
         }

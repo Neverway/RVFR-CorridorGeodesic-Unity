@@ -15,7 +15,7 @@ Material:
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
+  m_DoubleSidedGI: 1
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 1b97cb1d35c8903458ba1efd49a03e98, type: 3}
+        m_Texture: {fileID: 2800000, guid: a335603e084e7b84e84db4622a4ab5ab, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Noise:
@@ -33,11 +33,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DepthStrength: 0.6
-    - _DistortStrength: 0.1
-    - _TriplanarSharpness: 4
+    - _Alpha: 0.16
+    - _DepthStrength: 0.75
+    - _DistortStrength: 0.25
+    - _TriplanarSharpness: 1
     m_Colors:
-    - _DeepColor: {r: 0.5860669, g: 1, b: 0.5707547, a: 0}
-    - _ScrollDirection: {r: 2, g: 2, b: 0, a: 0}
-    - _ShallowColor: {r: 1, g: 0.06511355, b: 0, a: 1}
+    - _DeepColor: {r: 0.42168677, g: 1, b: 0.96385545, a: 1}
+    - _ScrollDirection: {r: 1, g: 1, b: 0, a: 0}
+    - _ShallowColor: {r: 1, g: 0.4820764, b: 0.95187366, a: 1}
   m_BuildTextureStacks: []
