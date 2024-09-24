@@ -262,8 +262,11 @@ public class PlayerController_FirstPersonShooter : PawnController
 
 
             float velocityClamp = _pawn.currentState.maxHorizontalMovementSpeed;
+            if (!_pawn.IsGrounded3D() || _pawn.IsGroundSteep3D()) {
+                velocityClamp = _pawn.currentState.maxHorizontalAirSpeed;
+            }
 
-            if (horizonalVelocity.magnitude > _pawn.currentState.maxHorizontalMovementSpeed)
+            if (horizonalVelocity.magnitude > velocityClamp)
             {
                 velocityClamp = horizonalVelocity.magnitude;
             }

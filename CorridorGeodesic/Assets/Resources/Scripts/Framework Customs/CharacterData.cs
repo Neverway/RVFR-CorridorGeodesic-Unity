@@ -26,6 +26,7 @@ public class CharacterData : Actor
     public float groundDrag;
     public float airDrag;
     public float maxHorizontalMovementSpeed;
+    public float maxHorizontalAirSpeed;
     public float movementMultiplier;
     public float airMovementMultiplier;
     public float gravityMultiplier;

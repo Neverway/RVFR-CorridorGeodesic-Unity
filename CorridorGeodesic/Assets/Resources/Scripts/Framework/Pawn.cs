@@ -139,6 +139,7 @@ public class Pawn : MonoBehaviour
         currentState.groundDrag = defaultState.groundDrag;
         currentState.airDrag = defaultState.airDrag;
         currentState.maxHorizontalMovementSpeed = defaultState.maxHorizontalMovementSpeed;
+        currentState.maxHorizontalAirSpeed = defaultState.maxHorizontalAirSpeed;
         currentState.movementMultiplier = defaultState.movementMultiplier;
         currentState.airMovementMultiplier = defaultState.airMovementMultiplier;
         currentState.gravityMultiplier = defaultState.gravityMultiplier;
