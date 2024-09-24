@@ -58,7 +58,7 @@ public class Func_GeoGunFizzler : LogicComponent
         base.SourcePowerStateChanged(powered);
 
         isPowered = powered;
-        if (powered)
+        if (inputSignal.isPowered)
         {
             ClearGeoGunRifts();
         }
