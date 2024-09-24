@@ -31,7 +31,8 @@ public class Graphics_Skybox: MonoBehaviour
     //=-----------------=
     private void Update()
     {
-        transform.position = Camera.main.transform.position;
+        if(Camera.main)
+            transform.position = Camera.main.transform.position;
     }
 
     //=-----------------=

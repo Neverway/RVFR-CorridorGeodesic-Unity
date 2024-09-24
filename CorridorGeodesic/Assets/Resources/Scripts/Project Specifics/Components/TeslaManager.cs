@@ -33,7 +33,7 @@ public class TeslaManager : MonoBehaviour
     //=-----------------=
     private void Awake()
     {
-        lightningLinePrefab = _lightningLinePrefab; //todo: Maybe use an instance setup instead?
+        lightningLinePrefab = _lightningLinePrefab; //todo: Maybe use an instance setup instead? -use the Reference Manager for this
 
         senders.Clear ();
         conductors.Clear ();
