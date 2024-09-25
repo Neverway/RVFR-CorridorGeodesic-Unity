@@ -27,6 +27,11 @@ public class TeslaReciever : LogicComponent
         conductor = GetComponent<TeslaConductor>();
     }
 
+    private void OnDisable()
+    {
+        isPowered = false;
+    }
+
     private void Update()
     {
         lightObject.SetActive(conductor.IsTeslaPowered());
