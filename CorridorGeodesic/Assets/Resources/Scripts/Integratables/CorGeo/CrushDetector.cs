@@ -65,7 +65,7 @@ public class CrushDetector : MonoBehaviour
 
     private bool CheckForOverlaps ()
     {
-        Collider[] colliders = Physics.OverlapCapsule (transform.position + transform.up * rayDistance.y, transform.position - transform.up * downDistance, rayDistance.x);
+        Collider[] colliders = Physics.OverlapCapsule (transform.position + transform.up * rayDistance.y, transform.position - transform.up * downDistance, rayDistance.x, layerMask);
         foreach (Collider collider in colliders)
         {
             if (collider.gameObject == gameObject)

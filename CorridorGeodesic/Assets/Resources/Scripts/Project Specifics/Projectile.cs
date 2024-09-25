@@ -31,7 +31,7 @@ public class Projectile : MonoBehaviour
 
     private Vector3 lastPosition;
 
-    public LayerMask ignoreMask;
+    public LayerMask layerMask;
 
     public Vector3 moveVector { get; protected set; } //used in update loop collision & move
 
@@ -77,7 +77,7 @@ public class Projectile : MonoBehaviour
     }
     public virtual bool CollisionLogic ()
     {
-        if (Physics.Raycast (transform.position, transform.forward * moveSpeed * Time.deltaTime, out RaycastHit hit, moveVector.magnitude + radius + 1f, ignoreMask))
+        if (Physics.Raycast (transform.position, transform.forward * moveSpeed * Time.deltaTime, out RaycastHit hit, moveVector.magnitude + radius + 1f, layerMask))
         {
             OnCollision (hit);
             return true;
