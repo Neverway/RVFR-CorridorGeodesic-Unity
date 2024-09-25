@@ -231,7 +231,7 @@ public class Mesh_Slicable : MonoBehaviour
             //If all the slices miss, we have to figure out where this mesh is.
 
             MeshFilter meshFilter = GetComponent<MeshFilter> ();
-            if (meshFilter != null)
+            if (meshFilter != null && meshFilter.mesh.vertices.Length > 0)
             {
                 var vert = meshFilter.mesh.vertices[0];
                 Vector3 testPoint = new Vector3 (vert.x, vert.y, vert.z);
