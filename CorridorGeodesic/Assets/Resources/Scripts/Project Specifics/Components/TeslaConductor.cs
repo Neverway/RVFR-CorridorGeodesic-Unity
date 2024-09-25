@@ -8,6 +8,8 @@ public class TeslaConductor : MonoBehaviour, TeslaPowerSource
     // Public Variables
     //=-----------------=
     public Transform zapPosition;
+    [Tooltip("Enable this if you want to avoid a players precise adjustment to get messed up by small physics movements from afar")]
+    public bool increaseRangeAwayFromPlayer = false;
 
     //=-----------------=
     // Private Variables
@@ -15,6 +17,7 @@ public class TeslaConductor : MonoBehaviour, TeslaPowerSource
     private List<TeslaReciever> powering;
     private LightningLine lineEffect;
     private TeslaPowerSource powerSource;
+    private Transform playerPosition;
 
     //=-----------------=
     // Mono Functions
@@ -26,6 +29,9 @@ public class TeslaConductor : MonoBehaviour, TeslaPowerSource
     }
     public void Update()
     {
+        if (increaseRangeAwayFromPlayer && playerPosition == null)
+            playerPosition = FindObjectOfType<Pawn>()?.transform;
+
         if (!IsTeslaPowered())
             return;
 
@@ -57,6 +63,7 @@ public class TeslaConductor : MonoBehaviour, TeslaPowerSource
     }
     private void OnDisable()
     {
+        powerSource = null;
         TeslaManager.conductors.Remove(this);
     }
 
@@ -64,12 +71,16 @@ public class TeslaConductor : MonoBehaviour, TeslaPowerSource
     {
         float distance = Vector3.Distance(GetZapTargetTransform().position, obj.position);
 
+        if (increaseRangeAwayFromPlayer && playerPosition != null && IsTeslaPowered())
+            if (Vector3.Distance(playerPosition.position, transform.position) > 13f)
+                distance *= 0.8f;
+
         return distance <= TeslaManager.MIN_DISTANCE;
     }
 
     public void SetPowerSource(TeslaPowerSource newSource)
     {
-        if (!newSource.IsTeslaPowered())
+        if (!gameObject.activeInHierarchy || !newSource.IsTeslaPowered())
             return;
 
         powerSource = newSource;
