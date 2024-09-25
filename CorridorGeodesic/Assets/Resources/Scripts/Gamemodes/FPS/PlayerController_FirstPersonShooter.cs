@@ -108,7 +108,6 @@ public class PlayerController_FirstPersonShooter : PawnController
         {
             viewCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
         }
-        _pawn.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
     
 
@@ -220,6 +219,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         xRotation -= fpsActions.LookAxis.ReadValue<Vector2>().y*(20*applicationSettings.currentSettingsData.verticalLookSpeed)*multiplier;
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        _pawn.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
     private void UpdateJumping(Pawn _pawn)
