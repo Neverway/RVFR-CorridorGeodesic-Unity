@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class Projectile_Vacumm : Projectile
 {
@@ -22,6 +23,7 @@ public class Projectile_Vacumm : Projectile
     [SerializeField] private float gridSize = 1;
     public bool pinned => disabled;
     [SerializeField] private GameObject spawnOnDeath;
+    [SerializeField] private GameObject shatteredGlassEffect;
 
     //=-----------------=
     // Private Variables
@@ -145,6 +147,22 @@ public class Projectile_Vacumm : Projectile
         if (spawnOnDeath)
         {
             Instantiate (spawnOnDeath, transform.position, Quaternion.identity);
+        }
+
+        //Spawn shattered glass effect and add force to pieces to carry over speed into them
+        if (shatteredGlassEffect != null)
+        {
+            GameObject shatteredGlass = Instantiate(shatteredGlassEffect, transform.position, transform.rotation);
+            shatteredGlass.SetActive(true);
+
+            foreach(Rigidbody rb in shatteredGlass.GetComponentsInChildren<Rigidbody>())
+            {
+                if (!pinned)
+                    rb.AddForce(moveVector * moveSpeed * 1.5f, ForceMode.Impulse);
+
+                Vector3 randomVector = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1));
+                rb.AddForce(randomVector * 4f, ForceMode.Impulse);
+            }
         }
 
         Destroy(gameObject);

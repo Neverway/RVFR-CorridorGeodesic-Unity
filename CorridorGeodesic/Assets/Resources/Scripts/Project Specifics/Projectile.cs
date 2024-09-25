@@ -25,7 +25,7 @@ public class Projectile : MonoBehaviour
     /// </summary>
     [SerializeField] private Transform projectileGraphics;
 
-    private float moveSpeed;
+    protected float moveSpeed;
 
     protected bool disabled;
 
