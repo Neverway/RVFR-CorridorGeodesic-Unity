@@ -21,6 +21,9 @@ public class Graphics_LevelSign: MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
+    [SerializeField] private string section = "1";
+    [SerializeField] private string floor = "B";
+    [SerializeField] private string info = "";
     [SerializeField] private Hazard hazards;
     [SerializeField] private List<HazardSymbolPair> symbolPairs = new List<HazardSymbolPair>();
 
@@ -62,11 +65,8 @@ public class Graphics_LevelSign: MonoBehaviour
     }
     void SetText()
     {
-        string sceneName = SceneManager.GetActiveScene().name;
 
-        string chapterSplit = sceneName.Substring(0, 4);
-
-        screenText.text = $"<b>Section -</b> {chapterSplit[1]}\r\n<size=2>Floor - {chapterSplit[3]}\r\n-------------------------------\r\n";
+        screenText.text = $"<b>Section -</b> {section}\r\n<size=2>Floor - {floor}\r\n-------------------------------\r\n{info}";
     }
 
     //=-----------------=
