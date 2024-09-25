@@ -1,3 +1,4 @@
+#include "SX_SGHelpers.cginc"
 sampler2D _CameraDepthTexture;
 
 struct TriplanarUV
@@ -20,7 +21,6 @@ inline half4 GetDepth(float4 screenPos, float strength)
 	half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(screenPos)));
 	return saturate(strength * (depth - screenPos.w));
 }
-
 inline TriplanarUV GetTriplanarUVs(float3 worldPos, float3 normal, float sharpness, sampler2D _MainTex, float4 _MainTex_ST)
 {
 	TriplanarUV uv;
@@ -46,11 +46,7 @@ inline TriplanarUV GetTriplanarUVs(float3 worldPos, float3 normal, float sharpne
     uv.uv_side = TRANSFORM_TEX(worldPos.zy, _MainTex) * mod.uvScale + mod.uvOffset;
     uv.uv_top = TRANSFORM_TEX(worldPos.xz, _MainTex) * mod.uvScale + mod.uvOffset;
 
-	float3 weights = abs(normal);
-	weights = pow(weights, sharpness);
-    weights /= (weights.x + weights.y + weights.z);
-
-	uv.weights = weights;
+	GetTriplanarUVChannels_float(normal, sharpness, uv.weights);
 
 	return uv;
 }
