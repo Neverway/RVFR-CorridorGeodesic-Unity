@@ -42,7 +42,7 @@ Shader "Soulex/SX_NullSpace"
                 float4 position : SV_POSITION;
                 float3 worldPos : TEXCOORD0;
                 float3 normal : NORMAL;
-                float4 screenPos : TEXCOORD1;
+                float4 screenPos : TEXCOORD3;
             };
 
             sampler2D _MainTex;
@@ -64,7 +64,7 @@ Shader "Soulex/SX_NullSpace"
                 o.normal = UnityObjectToWorldNormal(v.normal);
                 o.screenPos = ComputeScreenPos(o.position);
 
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                UNITY_TRANSFER_FOG(o,o.position);
                 return o;
             }
             float3 GetInternalProjectionUVs(float3 viewDir){
