@@ -83,6 +83,12 @@ public class Mesh_Slicable : MonoBehaviour
     //=-----------------=
     public void ApplyCuts()
     {
+        if (gameObject.name.StartsWith("[CUT]"))
+        {
+            Debug.LogError("TRYING TO CUT SOMETHING ALREADY CUT");
+            return;
+        }
+
         if (partsReference != null)
         {
             partsReference.DoReset ();

@@ -31,12 +31,6 @@ public class BulbOutlet : MonoBehaviour, BulbCollisionBehaviour
     // Mono Functions
     //=-----------------=
 
-    private IEnumerator Start ()
-    {
-        yield return null;
-        attachPoint.SetParent (null);
-    }
-
 
     //=-----------------=
     // Internal Functions
