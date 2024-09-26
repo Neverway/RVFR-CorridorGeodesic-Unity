@@ -77,7 +77,6 @@ public class Pawn_PlaceAttachmentPoint : MonoBehaviour
 
             if (hit.distance < nearestHit)
             {
-                Debug.Log (hit.collider.gameObject);
                 nearestHit = hit.distance;
             }
         }
@@ -85,12 +84,12 @@ public class Pawn_PlaceAttachmentPoint : MonoBehaviour
         if (nearestHit < resultPos.magnitude)
         {
             nearestHit = nearestHit - 0.25f;
-            Debug.Log ("nearest = " + nearestHit);
             if (nearestHit < 0.35)
             {
                 if (
-                    Alt_Item_Geodesic_Utility_GeoGun.delayRiftCollapse == false
-                    && targetPawn.physObjectAttachmentPoint.heldObject.TryGetComponent<Object_Grabbable> (out var heldObject)
+                    targetPawn.physObjectAttachmentPoint.heldObject != null &&
+                    Alt_Item_Geodesic_Utility_GeoGun.delayRiftCollapse == false &&
+                    targetPawn.physObjectAttachmentPoint.heldObject.TryGetComponent<Object_Grabbable> (out var heldObject)
                     )
                 {
                     heldObject.Drop ();
