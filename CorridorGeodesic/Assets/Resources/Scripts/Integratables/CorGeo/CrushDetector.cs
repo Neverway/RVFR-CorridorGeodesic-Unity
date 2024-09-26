@@ -52,7 +52,6 @@ public class CrushDetector : MonoBehaviour
             {
                 if (pawn)
                 {
-                    Debug.Log ("! Crush Damage !");
                     onCrushed?.Invoke ();
                     pawn.ModifyHealth (-crushDamageAmount);
                 }

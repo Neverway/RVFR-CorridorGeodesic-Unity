@@ -677,7 +677,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             if (deployedRift)
             {
                 StartCoroutine (FreezeActors ());
-                Debug.Log ("CONVERGING");
                 meshSlicers = FindObjectsOfType<Mesh_Slicable> ();
                 nullSlices = new List<GameObject> ();
                 planeBMeshes = Instantiate (new GameObject ());
@@ -776,7 +775,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 case CorGeo_ActorData.Space.A:
                     if (actor.space == CorGeo_ActorData.Space.Null)
                     {
-                        Debug.Log ($"{actor.gameObject.name} moved [Null] -> [A]");
+                        //Debug.Log ($"{actor.gameObject.name} moved [Null] -> [A]");
                         if (actor.crushInNullSpace)
                         {
                             actor.transform.SetParent (actor.homeParent);
@@ -787,7 +786,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                     }
                     if (actor.space == CorGeo_ActorData.Space.B)
                     {
-                        Debug.Log ($"{actor.gameObject.name} moved [B] -> [A]");
+                        //Debug.Log ($"{actor.gameObject.name} moved [B] -> [A]");
                         actor.space = CorGeo_ActorData.Space.A;
                         continue;
                     }
@@ -802,13 +801,13 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                             actor.transform.localScale = actor.homeScale;
                         }
                         actor.space = CorGeo_ActorData.Space.B;
-                        Debug.Log ($"{actor.gameObject.name} moved [Null] -> [B]");
+                        //Debug.Log ($"{actor.gameObject.name} moved [Null] -> [B]");
                         continue;
                     }
                     if (actor.space == CorGeo_ActorData.Space.A)
                     {
                         actor.space = CorGeo_ActorData.Space.B;
-                        Debug.Log ($"{actor.gameObject.name} moved [A] -> [B]");
+                        //Debug.Log ($"{actor.gameObject.name} moved [A] -> [B]");
                         continue;
                     }
                     actor.space = CorGeo_ActorData.Space.B;
@@ -822,7 +821,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                             actor.transform.SetParent (deployedRift.transform);
                         }
                         actor.space = CorGeo_ActorData.Space.Null;
-                        Debug.Log ($"{actor.gameObject.name} moved [A] -> [Null]");
+                        //Debug.Log ($"{actor.gameObject.name} moved [A] -> [Null]");
                         continue;
                     }
                     if (actor.space == CorGeo_ActorData.Space.B)
@@ -833,7 +832,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                             actor.transform.SetParent (deployedRift.transform);
                         }
                         actor.space = CorGeo_ActorData.Space.Null;
-                        Debug.Log ($"{actor.gameObject.name} moved [B] -> [Null]");
+                        //Debug.Log ($"{actor.gameObject.name} moved [B] -> [Null]");
                         continue;
                     }
                     actor.space = CorGeo_ActorData.Space.Null;
@@ -875,7 +874,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         float distance1 = planeA.GetDistanceToPoint (_actor.transform.position);
         float distance2 = planeB.GetDistanceToPoint (_actor.transform.position);
 
-        if (_actor.debugLogData) print ($"{_actor.gameObject.name}: A{distance1} | B{distance2}");
+        if (_actor.debugLogData)
+        {
+            
+        }//print ($"{_actor.gameObject.name}: A{distance1} | B{distance2}");
 
         if (distance1 < 0)
         {

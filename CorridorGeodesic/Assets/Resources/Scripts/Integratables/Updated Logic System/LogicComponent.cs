@@ -53,7 +53,6 @@ public abstract class LogicComponent : MonoBehaviour
     //=-----------------=
     public virtual void Awake()
     {
-        Debug.Log (gameObject.name);
         LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(this.GetType());
 
         foreach (LogicComponentHandleInfo info in infos)
