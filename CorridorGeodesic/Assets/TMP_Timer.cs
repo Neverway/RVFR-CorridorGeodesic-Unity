@@ -42,7 +42,12 @@ public class TMP_Timer : MonoBehaviour
     {
         if (stopwatch && text)
         {
-            text.text = stopwatch.timer.ElapsedMilliseconds.ToString();
+            text.text = $"{stopwatch.timer.Elapsed}";
+        }
+        else
+        {
+            text = GetComponent<TMP_Text>();
+            stopwatch = FindObjectOfType<Stopwatch>();
         }
     }
 
