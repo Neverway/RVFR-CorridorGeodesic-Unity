@@ -75,6 +75,7 @@ public class Object_Grabbable : MonoBehaviour
             {
                 targetPosition = (targetPawn.physObjectAttachmentPoint.transform.position);
             }
+            propRigidbody.velocity = Vector3.zero;
             propRigidbody.MovePosition (targetPosition);
             
             var targetRotation = targetPawn.physObjectAttachmentPoint.transform.rotation;

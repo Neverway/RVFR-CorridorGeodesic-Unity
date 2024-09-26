@@ -88,7 +88,10 @@ public class Pawn_PlaceAttachmentPoint : MonoBehaviour
             Debug.Log ("nearest = " + nearestHit);
             if (nearestHit < 0.35)
             {
-                if (targetPawn.physObjectAttachmentPoint.heldObject.TryGetComponent<Object_Grabbable> (out var heldObject))
+                if (
+                    Alt_Item_Geodesic_Utility_GeoGun.delayRiftCollapse == false
+                    && targetPawn.physObjectAttachmentPoint.heldObject.TryGetComponent<Object_Grabbable> (out var heldObject)
+                    )
                 {
                     heldObject.Drop ();
                 }
