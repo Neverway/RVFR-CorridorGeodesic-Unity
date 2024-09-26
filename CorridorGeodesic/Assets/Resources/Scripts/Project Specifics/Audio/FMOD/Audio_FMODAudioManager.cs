@@ -49,6 +49,10 @@ public class Audio_FMODAudioManager: MonoBehaviour
     {
         return RuntimeManager.CreateInstance(sound);
     }
+    public static void DestroyInstance(EventInstance instance)
+    {
+        instance.release();
+    }
     public static void SetParameter(EventInstance instance, string parameter, float value)
     {
         instance.setParameterByName(parameter, value);
