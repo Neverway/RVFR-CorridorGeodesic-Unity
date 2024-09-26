@@ -14,12 +14,13 @@ public class Func_GeoGunFizzler : LogicComponent
     //=-----------------=
     // Public Variables
     //=-----------------=
-
+    public Transform fizzlerObject;
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
+    [SerializeField, LogicComponentHandle] private LogicComponent fizzleBulbsTrigger;
+    [SerializeField, LogicComponentHandle] private LogicComponent disableFizzler;
 
     //=-----------------=
     // Reference Variables
@@ -57,10 +58,12 @@ public class Func_GeoGunFizzler : LogicComponent
     {
         base.SourcePowerStateChanged(powered);
 
-        isPowered = powered;
-        if (inputSignal.isPowered)
+        isPowered = disableFizzler == null || !disableFizzler.isPowered;
+
+        if (isPowered && fizzleBulbsTrigger.isPowered)
         {
             ClearGeoGunRifts();
         }
+        fizzlerObject.gameObject.SetActive(isPowered);
     }
 }
