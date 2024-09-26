@@ -99,7 +99,7 @@ public class Volume_NEWMusicChange : Volume
         switch (musicPlayType)
         {
             case MusicPlayType.Play:
-                musicManager.SwitchMusic(musicEvent);
+                musicManager.PlayMusic(musicEvent);
                 break;
             case MusicPlayType.StopAllowFadeOut:
                 musicManager.StopMusic(true);

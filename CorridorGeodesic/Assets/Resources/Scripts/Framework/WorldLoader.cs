@@ -223,7 +223,7 @@ public class WorldLoader : MonoBehaviour
             Destroy(GameInstance.GetWidget("WB_Loading"));
         }
         StartCoroutine(ForceLoad(_delay));
-    }
+    } 
     
     public void StreamLoadWorld(string _targetSceneID)
     {
@@ -238,6 +238,11 @@ public class WorldLoader : MonoBehaviour
         StartCoroutine(StreamLoad());
         //StartCoroutine(LoadAsync());
         //StartCoroutine(StreamLoadDos());
+    }
+
+    public void LoadByIndex(int _targetSceneID)
+    {
+        SceneManager.LoadScene(_targetSceneID);
     }
     
     // This code was expertly copied from @Yagero on github.com

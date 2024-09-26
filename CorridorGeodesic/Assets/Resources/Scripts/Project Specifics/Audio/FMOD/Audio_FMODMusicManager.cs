@@ -34,6 +34,7 @@ public class Audio_FMODMusicManager: MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        Audio_FMODAudioManager.SetGlobalParameter("MusicPlaying", 0);
     }
 
     //=-----------------=
@@ -49,7 +50,7 @@ public class Audio_FMODMusicManager: MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-    public void SwitchMusic(EventReference musicReference)
+    public void PlayMusic(EventReference musicReference)
     {
         if (currentInstance.isValid())
         {

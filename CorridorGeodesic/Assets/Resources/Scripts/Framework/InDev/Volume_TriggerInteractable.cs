@@ -50,7 +50,7 @@ public class Volume_TriggerInteractable : Volume
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void OnDrawGizmos()
+    private new void OnDrawGizmos()
     {
         //if (resetSignal) Debug.DrawLine(transform.position, resetSignal.transform.position, new Color(1,0.5f,0,1));
     }

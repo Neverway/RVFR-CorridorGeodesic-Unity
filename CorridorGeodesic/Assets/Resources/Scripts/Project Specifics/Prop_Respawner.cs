@@ -18,6 +18,7 @@ public class Prop_Respawner : LogicComponent
     [SerializeField] GameObject prefabToSpawn;
     private GameObject spawnedObject;
     [LogicComponentHandle] public LogicComponent respawnProp;
+    private bool previousPowered = false;
 
     //=-----------------=
     // Private Variables
@@ -95,7 +96,7 @@ public class Prop_Respawner : LogicComponent
     {
         base.SourcePowerStateChanged(powered);
 
-        if (respawnProp.isPowered)
+        if (respawnProp.isPowered && !previousPowered)
         {
             DestroySpawnedObject();
 
@@ -104,5 +105,7 @@ public class Prop_Respawner : LogicComponent
                 spawnWorker = StartCoroutine(SpawnWorker());
             }
         }
+        previousPowered = respawnProp.isPowered;
+
     }
 }

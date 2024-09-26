@@ -106,6 +106,11 @@ PrefabInstance:
       propertyPath: diesInKillTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4375735627713653125, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
+        type: 3}
+      propertyPath: actorId
+      value: Phys_Cube
+      objectReference: {fileID: 0}
     - target: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -277,7 +282,7 @@ MonoBehaviour:
   lastFaceDirection: {x: 0, y: 0, z: 0}
   layerMask:
     serializedVersion: 2
-    m_Bits: 3143105
+    m_Bits: 0
 --- !u!64 &5330668223782809977
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -340,3 +345,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zapPosition: {fileID: 5940627414859672511}
+  increaseRangeAwayFromPlayer: 1
