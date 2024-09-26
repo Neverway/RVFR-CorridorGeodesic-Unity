@@ -50,7 +50,8 @@ MonoBehaviour:
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
-  Parameters: []
+  Parameters:
+  - {fileID: 7974973235493500341}
   MinDistance: 1
   MaxDistance: 20
   Length: 112000
@@ -314,7 +315,7 @@ MonoBehaviour:
   - {fileID: 3043948592415538638}
   StringsBanks:
   - {fileID: 6789660203900004077}
-  cacheTime: 638628282443073177
+  cacheTime: 638628656356127667
   cacheVersion: 131619
 --- !u!114 &356280109094568044
 MonoBehaviour:
@@ -475,7 +476,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638628282443073177
+  lastModified: 638628656356127667
   FileSizes: []
   Exists: 1
 --- !u!114 &3723091465547944228
@@ -631,6 +632,32 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &7974973235493500341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Warning;Symbol/MusicPlaying
+  m_EditorClassIdentifier: 
+  Name: MusicPlaying
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 345115324
+    data2: 805261349
+  Type: 2
+  IsGlobal: 0
+  Labels:
+  - False
+  - True
+  Exists: 1
 --- !u!114 &8095839509911341240
 MonoBehaviour:
   m_ObjectHideFlags: 0
