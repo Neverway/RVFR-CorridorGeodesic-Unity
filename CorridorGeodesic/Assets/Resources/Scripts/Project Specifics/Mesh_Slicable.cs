@@ -85,7 +85,7 @@ public class Mesh_Slicable : MonoBehaviour
     {
         if (gameObject.name.StartsWith("[CUT]"))
         {
-            Debug.LogError("TRYING TO CUT SOMETHING ALREADY CUT");
+            Debug.LogError("TRYING TO CUT " + gameObject.name + " BUT ITS ALREADY CUT: Maybe make sure read/write is enabled for this model?");
             return;
         }
 
