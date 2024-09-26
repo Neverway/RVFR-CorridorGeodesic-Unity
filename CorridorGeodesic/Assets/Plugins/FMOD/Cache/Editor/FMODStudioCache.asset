@@ -243,6 +243,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-4238637875597440575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/FizzlerParty
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/FizzlerParty
+  Guid:
+    Data1: -393136925
+    Data2: 1234263027
+    Data3: 1742356913
+    Data4: 812560721
+  Banks:
+  - {fileID: 8095839509911341240}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1420
 --- !u!114 &-3282548046571141706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +297,87 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-3257811632500639286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/LemonBuddy
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/LemonBuddy
+  Guid:
+    Data1: 1237243664
+    Data2: 1239986861
+    Data3: -306230358
+    Data4: -1353176015
+  Banks:
+  - {fileID: 8095839509911341240}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -759578526622182857}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 44690
+--- !u!114 &-759578526622182857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/LemonBuddy/MusicPlaying
+  m_EditorClassIdentifier: 
+  Name: MusicPlaying
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 345115324
+    data2: 805261349
+  Type: 2
+  IsGlobal: 0
+  Labels:
+  - False
+  - True
+  Exists: 1
+--- !u!114 &-524031891521035018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/Fizzler
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/Fizzler
+  Guid:
+    Data1: 1027490716
+    Data2: 1144668284
+    Data3: -546886509
+    Data4: 532053479
+  Banks:
+  - {fileID: 8095839509911341240}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 4808
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,13 +417,20 @@ MonoBehaviour:
   - {fileID: 356280109094568044}
   - {fileID: 1665678927524727546}
   - {fileID: 1827889555643880929}
-  - {fileID: -8746270012252065485}
+  - {fileID: 2147004410540894270}
+  - {fileID: -3257811632500639286}
+  - {fileID: -524031891521035018}
+  - {fileID: -4238637875597440575}
   EditorParameters: []
   MasterBanks:
   - {fileID: 3043948592415538638}
   StringsBanks:
   - {fileID: 6789660203900004077}
+<<<<<<< HEAD
   cacheTime: 638628656356127667
+=======
+  cacheTime: 638629089359121805
+>>>>>>> develop
   cacheVersion: 131619
 --- !u!114 &356280109094568044
 MonoBehaviour:
@@ -359,9 +474,36 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Ambience.bank
   Name: Ambience
   StudioPath: bank:/Ambience
-  lastModified: 638628226069563482
+  lastModified: 638629089358881805
   FileSizes: []
   Exists: 1
+--- !u!114 &1526868237836406383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Warning;Symbol
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Warning;Symbol
+  Guid:
+    Data1: 93814641
+    Data2: 1077451019
+    Data3: -1638475892
+    Data4: 1150390067
+  Banks:
+  - {fileID: 3528721210664590912}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 112000
 --- !u!114 &1665678927524727546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,6 +558,60 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &1862880307717778946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/Fizzler
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/Fizzler
+  Guid:
+    Data1: 1027490716
+    Data2: 1144668284
+    Data3: -546886509
+    Data4: 532053479
+  Banks:
+  - {fileID: 8095839509911341240}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 4808
+--- !u!114 &2147004410540894270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Warning;Symbol
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Warning;Symbol
+  Guid:
+    Data1: 93814641
+    Data2: 1077451019
+    Data3: -1638475892
+    Data4: 1150390067
+  Banks:
+  - {fileID: 3528721210664590912}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 112000
 --- !u!114 &2493285280084435834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -443,6 +639,32 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &2605818085983563597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/LemonBuddy/MusicPlaying
+  m_EditorClassIdentifier: 
+  Name: MusicPlaying
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 345115324
+    data2: 805261349
+  Type: 2
+  IsGlobal: 0
+  Labels:
+  - False
+  - True
+  Exists: 1
 --- !u!114 &3043948592415538638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,9 +680,36 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638628232021359589
+  lastModified: 638629089358881805
   FileSizes: []
   Exists: 1
+--- !u!114 &3102367337613947513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/Fizzler
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/Fizzler
+  Guid:
+    Data1: 1027490716
+    Data2: 1144668284
+    Data3: -546886509
+    Data4: 532053479
+  Banks:
+  - {fileID: 8095839509911341240}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 4808
 --- !u!114 &3528721210664590912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,7 +725,11 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
+<<<<<<< HEAD
   lastModified: 638628656356127667
+=======
+  lastModified: 638629089359081805
+>>>>>>> develop
   FileSizes: []
   Exists: 1
 --- !u!114 &3723091465547944228
@@ -506,6 +759,34 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &4133001064502076638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/LemonBuddy
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/LemonBuddy
+  Guid:
+    Data1: 1237243664
+    Data2: 1239986861
+    Data3: -306230358
+    Data4: -1353176015
+  Banks:
+  - {fileID: 8095839509911341240}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 2605818085983563597}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 44690
 --- !u!114 &4264371611573705125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,6 +814,61 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &4284255110117944673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/FizzlerParty
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/FizzlerParty
+  Guid:
+    Data1: -393136925
+    Data2: 1234263027
+    Data3: 1742356913
+    Data4: 812560721
+  Banks:
+  - {fileID: 8095839509911341240}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1420
+--- !u!114 &4346689175873804907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/LemonBuddy
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/LemonBuddy
+  Guid:
+    Data1: 1237243664
+    Data2: 1239986861
+    Data3: -306230358
+    Data4: -1353176015
+  Banks:
+  - {fileID: 8095839509911341240}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 8694252933435847810}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 44690
 --- !u!114 &4749171369961218412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,6 +896,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &4784258282958412727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Warning;Symbol
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Warning;Symbol
+  Guid:
+    Data1: 93814641
+    Data2: 1077451019
+    Data3: -1638475892
+    Data4: 1150390067
+  Banks:
+  - {fileID: 3528721210664590912}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 112000
 --- !u!114 &6789660203900004077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,7 +938,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638628232021379616
+  lastModified: 638629089358881805
   FileSizes: []
   Exists: 1
 --- !u!114 &7621464215903668470
@@ -673,7 +1036,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638628226108492544
+  lastModified: 638629089359121805
   FileSizes: []
   Exists: 1
 --- !u!114 &8155104393013560528
@@ -691,7 +1054,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Voices.bank
   Name: Voices
   StudioPath: bank:/Voices
-  lastModified: 638628226108606165
+  lastModified: 638628985295679873
   FileSizes: []
   Exists: 1
 --- !u!114 &8201389663238511936
@@ -722,6 +1085,32 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 213333
+--- !u!114 &8694252933435847810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/LemonBuddy/MusicPlaying
+  m_EditorClassIdentifier: 
+  Name: MusicPlaying
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 345115324
+    data2: 805261349
+  Type: 2
+  IsGlobal: 0
+  Labels:
+  - False
+  - True
+  Exists: 1
 --- !u!114 &9034514703932547416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -749,3 +1138,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &9129378200627795294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/FizzlerParty
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/FizzlerParty
+  Guid:
+    Data1: -393136925
+    Data2: 1234263027
+    Data3: 1742356913
+    Data4: 812560721
+  Banks:
+  - {fileID: 8095839509911341240}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1420

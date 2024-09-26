@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Volume_LevelChange : Volume
 {
@@ -15,6 +16,9 @@ public class Volume_LevelChange : Volume
     // Public Variables
     //=-----------------=
     public string worldID;
+    public bool useIndexInsteadOfID;
+    public bool indexBackwards;
+    
 
 
     //=-----------------=
@@ -46,7 +50,14 @@ public class Volume_LevelChange : Volume
         {
             if (!_other.GetComponent<Pawn>().isPossessed) return;
             if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
-            worldLoader.StreamLoadWorld(worldID);
+            if (useIndexInsteadOfID)
+            {
+                worldLoader.LoadByIndex(SceneManager.GetActiveScene().buildIndex+1);
+            }
+            else if (!useIndexInsteadOfID)
+            {
+                worldLoader.StreamLoadWorld(worldID);
+            }
         }
     }
 
