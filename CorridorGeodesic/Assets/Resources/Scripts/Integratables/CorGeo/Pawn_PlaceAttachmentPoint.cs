@@ -1,7 +1,7 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Connorses. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Places the point that held objects will magnet to.
+// Notes: Ignores rigidbodies and triggers for now.
 //
 //=============================================================================
 
@@ -24,6 +24,7 @@ public class Pawn_PlaceAttachmentPoint : MonoBehaviour
     [SerializeField] private float maxYPos = 0.7f;
     [SerializeField] private float minYPos = -0.7f;
     [SerializeField] private Transform attachmentPointTransform;
+    [SerializeField] private Pawn targetPawn;
 
     //=-----------------=
     // Reference Variables
@@ -39,17 +40,61 @@ public class Pawn_PlaceAttachmentPoint : MonoBehaviour
         Vector3 forwardPos = transform.forward * attachDistance;
         Vector3 playerForward = transform.parent.forward * attachDistance;
         Vector2 horizontalPosition = new Vector2 (playerForward.x, playerForward.z);
-        
+
+        Vector3 resultPos;
         // Constrain the y-position of the attachment point
         if (forwardPos.y > 0)
         {
-            attachmentPointTransform.position = transform.position + forwardPos;
-            return;
+            resultPos = forwardPos;
         }
-        if (forwardPos.y < minYPos) forwardPos.y = minYPos;
+        else
+        {
+            if (forwardPos.y < minYPos) forwardPos.y = minYPos;
         
-        horizontalPosition = horizontalPosition.normalized * attachDistance;
-        Vector3 resultPos = new Vector3 (horizontalPosition.x, forwardPos.y, horizontalPosition.y);
+            horizontalPosition = horizontalPosition.normalized * attachDistance;
+            resultPos = new Vector3 (horizontalPosition.x, forwardPos.y, horizontalPosition.y);
+        }
+
+        RaycastHit[] hits = Physics.SphereCastAll (transform.position, 0.2f, resultPos, resultPos.magnitude);
+        float nearestHit = resultPos.magnitude;
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider != null)
+            {
+                if (hit.collider.isTrigger)
+                {
+                    continue;
+                }
+                if (hit.collider.tag == "PhysProp")
+                {
+                    continue;
+                }
+                if (hit.collider.TryGetComponent<Rigidbody> (out var rb))
+                {
+                    continue;
+                }
+            }
+
+            if (hit.distance < nearestHit)
+            {
+                Debug.Log (hit.collider.gameObject);
+                nearestHit = hit.distance;
+            }
+        }
+
+        if (nearestHit < resultPos.magnitude)
+        {
+            nearestHit = nearestHit - 0.25f;
+            Debug.Log ("nearest = " + nearestHit);
+            if (nearestHit < 0.35)
+            {
+                if (targetPawn.physObjectAttachmentPoint.heldObject.TryGetComponent<Object_Grabbable> (out var heldObject))
+                {
+                    heldObject.Drop ();
+                }
+            }
+            resultPos = resultPos.normalized * (nearestHit);
+        }
 
         attachmentPointTransform.position = transform.position + resultPos;
     }
