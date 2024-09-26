@@ -109,6 +109,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //Used for stopping rift collapse when getting crushed
     private IEnumerator InterruptRiftCollapse(float delay)
     {
+        if (!secondaryHeld)
+            yield break;
+
         secondaryHeld = false; //release close rift input
         ignoreRiftInputAfterCrush = true;
 
