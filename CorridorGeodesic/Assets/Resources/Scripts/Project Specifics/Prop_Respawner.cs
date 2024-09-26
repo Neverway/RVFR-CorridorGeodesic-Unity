@@ -15,20 +15,20 @@ public class Prop_Respawner : LogicComponent
     // Public Variables
     //=-----------------=
 
-    [SerializeField] GameObject prefabToSpawn;
-    private GameObject spawnedObject;
+    [SerializeField] public GameObject prefabToSpawn;
+    protected GameObject spawnedObject;
     [LogicComponentHandle] public LogicComponent respawnProp;
     private bool previousPowered = false;
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField] private float spawnDelay;
-    private Coroutine spawnWorker;
+    [SerializeField] protected float spawnDelay;
+    protected Coroutine spawnWorker;
     [Tooltip("Wait for a DestroySpawnedObject call before spawning the first object.")]
-    [SerializeField] private bool waitForRespawn = false;
+    [SerializeField] protected bool waitForRespawn = false;
     [Tooltip("If false, the spawner will always set waitForRespawn when the spawned object is destroyed.")]
-    [SerializeField] private bool autoRespawn = true;
+    [SerializeField] protected bool autoRespawn = true;
 
 
     //=-----------------=
@@ -50,7 +50,7 @@ public class Prop_Respawner : LogicComponent
     // Internal Functions
     //=-----------------=
 
-    private IEnumerator SpawnWorker()
+    protected virtual IEnumerator SpawnWorker()
     {
         yield return new WaitForSeconds(spawnDelay);
         spawnedObject = Instantiate(prefabToSpawn, transform.position, transform.rotation);
