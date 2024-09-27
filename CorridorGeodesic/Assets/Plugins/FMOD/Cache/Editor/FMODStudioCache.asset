@@ -1,5 +1,59 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9014450141881134164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/ElevatorOpen
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/ElevatorOpen
+  Guid:
+    Data1: -870487340
+    Data2: 1255828052
+    Data3: 1562062241
+    Data4: 941632284
+  Banks:
+  - {fileID: 6830968979482899775}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-7439153405713330712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/FizzlerIdle
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/FizzlerIdle
+  Guid:
+    Data1: -1258789880
+    Data2: 1131479550
+    Data3: 1707253164
+    Data4: -1070351066
+  Banks:
+  - {fileID: 6830968979482899775}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 6517
 --- !u!114 &-7229915896482216844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,7 +123,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638629652824729144
+  lastModified: 638630310834897963
   FileSizes: []
   Exists: 1
 --- !u!114 &-6866017230893626452
@@ -159,7 +213,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Ambience.bank
   Name: Ambience
   StudioPath: bank:/Ambience
-  lastModified: 638629652824601104
+  lastModified: 638630310834792435
   FileSizes: []
   Exists: 1
 --- !u!114 &-4296948824249502834
@@ -258,7 +312,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638629652826501825
+  lastModified: 638630310859558074
   FileSizes: []
   Exists: 1
 --- !u!114 &-2527964886095554483
@@ -315,6 +369,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-2381706902470738077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Player/Footsteps
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Player/Footsteps
+  Guid:
+    Data1: -1994162058
+    Data2: 1275970664
+    Data3: 160341127
+    Data4: 690403690
+  Banks:
+  - {fileID: 6830968979482899775}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 500
 --- !u!114 &-2105338821713186881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,12 +628,19 @@ MonoBehaviour:
   - {fileID: -4296948824249502834}
   - {fileID: -6866017230893626452}
   - {fileID: -1667310696804899798}
+  - {fileID: -7439153405713330712}
+  - {fileID: 8187295569836435314}
+  - {fileID: 8712733657547197406}
+  - {fileID: 6750340663187337205}
+  - {fileID: -2381706902470738077}
+  - {fileID: 8566597073583322721}
+  - {fileID: -9014450141881134164}
   EditorParameters: []
   MasterBanks:
   - {fileID: 6782660519129768230}
   StringsBanks:
   - {fileID: -7057762056479707437}
-  cacheTime: 638629652837598057
+  cacheTime: 638630310874918626
   cacheVersion: 131619
 --- !u!114 &544341727582389708
 MonoBehaviour:
@@ -689,6 +777,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 29088
+--- !u!114 &6750340663187337205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/ElevatorReady
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/ElevatorReady
+  Guid:
+    Data1: 550675275
+    Data2: 1161096347
+    Data3: -2037904706
+    Data4: 2066133922
+  Banks:
+  - {fileID: 6830968979482899775}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &6782660519129768230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,7 +819,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638629652824719259
+  lastModified: 638630310834882833
   FileSizes: []
   Exists: 1
 --- !u!114 &6830968979482899775
@@ -722,7 +837,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638629652837317640
+  lastModified: 638630310874918626
   FileSizes: []
   Exists: 1
 --- !u!114 &7845796997216236843
@@ -806,6 +921,87 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 44690
+--- !u!114 &8187295569836435314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/ElevatorMove
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/ElevatorMove
+  Guid:
+    Data1: -2088181998
+    Data2: 1206525639
+    Data3: 1488647587
+    Data4: 166444065
+  Banks:
+  - {fileID: 6830968979482899775}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 8378
+--- !u!114 &8566597073583322721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/ElevatorClose
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/ElevatorClose
+  Guid:
+    Data1: -1739242868
+    Data2: 1286673304
+    Data3: 1904586926
+    Data4: 26895712
+  Banks:
+  - {fileID: 6830968979482899775}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &8712733657547197406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Components/Vent
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Components/Vent
+  Guid:
+    Data1: 234119981
+    Data2: 1202831052
+    Data3: 1488448655
+    Data4: 123183532
+  Banks:
+  - {fileID: 6830968979482899775}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 8389
 --- !u!114 &8823516651066673987
 MonoBehaviour:
   m_ObjectHideFlags: 0
