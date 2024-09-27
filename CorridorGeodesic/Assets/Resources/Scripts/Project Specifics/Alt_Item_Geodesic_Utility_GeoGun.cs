@@ -1,15 +1,16 @@
 //===================== (Neverway 2024) Written by Liz M. & Connorses =====================
 //
-// Purpose:
+// Purpose: |  V  |   ->   M
 // Notes:
 //
 //=============================================================================
 
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
-using DG.Tweening;
 
 public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 {
@@ -41,6 +42,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [SerializeField] private GameObject riftObject;
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
+    [SerializeField] private Rift_Audio riftAudioPrefab;
+    private Rift_Audio[] riftAudioList = new Rift_Audio[2];
     [SerializeField] private float projectileForce;
     [SerializeField] private CrushDetector crushDetector;
 
@@ -84,14 +87,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private float secondsToMaxSpeedMod = 1.3f;
     private float timeMoveRiftButtonHeld = 0f;
     private float slowDistance = 1.5f;
-    
 
-    enum SliceSpace
-    {
-        Plane1,
-        Plane2,
-        Null
-    }
+    public static RiftState previousState = RiftState.None;
+    public static RiftState currentState = RiftState.None;
+
+    public static UnityEvent onStateChanged = new UnityEvent ();
 
     //=-----------------=
     // Mono Functions
@@ -103,11 +103,17 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         CreateCutPreviews ();
         audioSource = GetComponent<AudioSource_PitchVarienceModulator> ();
 
-        crushDetector.onCrushed.AddListener (()=>StartCoroutine(InterruptRiftCollapse(0.1f)));
+        crushDetector.onCrushed.AddListener (() => StartCoroutine (InterruptRiftCollapse (0.1f)));
+
+        for (int i = 0; i < 2; i++)
+        {
+            riftAudioList[i] = Instantiate (riftAudioPrefab);
+            riftAudioList[i].OnSetup (i == 0);
+        }
     }
 
     //Used for stopping rift collapse when getting crushed
-    private IEnumerator InterruptRiftCollapse(float delay)
+    private IEnumerator InterruptRiftCollapse (float delay)
     {
         if (!secondaryHeld)
             yield break;
@@ -116,7 +122,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         ignoreRiftInputAfterCrush = true;
 
         expandingRiftDueToCrush = true;
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds (delay);
         expandingRiftDueToCrush = false;
     }
 
@@ -166,6 +172,14 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         StartRecallInfinityMarkers ();
     }
 
+    public void OnDestroy ()
+    {
+        foreach (var audio in riftAudioList)
+        {
+            Destroy (audio);
+        }
+    }
+
     public void FixedUpdate ()
     {
         AimTowardsCenterOfView ();
@@ -190,7 +204,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             moveRiftBackwards = false;
             moveRift = true;
         }
-        else if (Input.GetKey(KeyCode.LeftAlt) && allowExpandingRift)
+        else if (Input.GetKey (KeyCode.LeftAlt) && allowExpandingRift)
         {
             if (!isCollapseStarted)
             {
@@ -219,6 +233,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         if (forceTweenRift && riftTimer > 0)
         {
             MoveRift (true);
+            return;
         }
 
         if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
@@ -226,12 +241,26 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             if (moveRift && !delayRiftCollapse)
             {
                 MoveRift (moveRiftBackwards);
+                return;
+            }
+        }
+
+        if (!deployedRift)
+        {
+            UpdateState (RiftState.None);
+        }
+        else
+        {
+            if (currentState != RiftState.Closed && currentState != RiftState.Preview)
+            {
+                UpdateState (RiftState.Idle);
             }
         }
     }
 
     private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work, we need to re-activate things that were trapped inside of it.
     {
+
         float speedMod = 1f;
 
         float cutPreviewDistance = Vector3.Distance (cutPreviews[0].transform.position, cutPreviews[1].transform.position);
@@ -247,7 +276,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
         }
         speedMod = (timeMoveRiftButtonHeld / secondsToMaxSpeedMod) * (maxRiftSpeedMod - 1) + 1;
-        
+
         if (forceTweenRift) //if rift is being reset, increase the speed modifier.
         {
             speedMod *= 2.5f;
@@ -284,9 +313,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
             if (riftTimer <= minRiftTimer)
             {
+                UpdateState (RiftState.Idle);
                 return;
             }
-
+            UpdateState (RiftState.Expanding);
 
             riftTimer -= Time.fixedDeltaTime * speedMod;
             if (forceTweenRift && riftTimer < 0)
@@ -300,8 +330,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             //Move rift forwards
             if (riftTimer >= maxRiftTimer)
             {
+                UpdateState (RiftState.Closed);
                 return;
             }
+
+            UpdateState (RiftState.Collapsing);
             riftTimer += Time.fixedDeltaTime * speedMod;
             if (forceTweenRift && riftTimer > 0)
             {
@@ -416,8 +449,23 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
     }
 
+    private void UpdateState (RiftState _newState)
+    {
+        if (currentState == _newState)
+        {
+            return;
+        }
+        previousState = currentState;
+
+        currentState = _newState;
+
+        onStateChanged?.Invoke ();
+        Debug.Log ("RiftState: " + currentState);
+    }
+
     private void DeployRiftAndPreview ()
     {
+        UpdateState (RiftState.Preview);
 
         Vector3 markerPos1 = deployedInfinityMarkers[0].transform.position;
         Vector3 markerPos2 = deployedInfinityMarkers[1].transform.position;
@@ -879,7 +927,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         if (_actor.debugLogData)
         {
-            
+
         }//print ($"{_actor.gameObject.name}: A{distance1} | B{distance2}");
 
         if (distance1 < 0)

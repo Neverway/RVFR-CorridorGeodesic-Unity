@@ -65,20 +65,23 @@ public class Object_Grabbable : MonoBehaviour
         {
             var direction = targetPawn.physObjectAttachmentPoint.transform.position - gameObject.transform.position;
             var distance = Vector3.Distance(targetPawn.physObjectAttachmentPoint.transform.position, gameObject.transform.position);
-            
+            Vector3 targetPosition;
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance, layerMask))
             {
-                transform.position = hit.point-(direction.normalized*0.5f);
+
+                targetPosition = (hit.point - (direction.normalized * 0.5f));
             }
             else
             {
-                transform.position = targetPawn.physObjectAttachmentPoint.transform.position;
+                targetPosition = (targetPawn.physObjectAttachmentPoint.transform.position);
             }
+            propRigidbody.velocity = Vector3.zero;
+            propRigidbody.MovePosition (targetPosition);
             
             var targetRotation = targetPawn.physObjectAttachmentPoint.transform.rotation;
             transform.rotation = new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
             
-            propRigidbody.velocity = new Vector3();
+            //propRigidbody.velocity = new Vector3();
             propRigidbody.useGravity = false;
             
             // Drop the object if it's too far away
@@ -186,6 +189,14 @@ public class Object_Grabbable : MonoBehaviour
         {
             propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
             targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
+        }
+    }
+
+    public void Drop ()
+    {
+        if (isHeld)
+        {
+            ToggleHeld ();
         }
     }
 }
