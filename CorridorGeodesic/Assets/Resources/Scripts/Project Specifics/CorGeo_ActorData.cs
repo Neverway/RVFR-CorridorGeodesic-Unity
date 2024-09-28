@@ -30,6 +30,12 @@ public class CorGeo_ActorData : MonoBehaviour
     [ReadOnly] [SerializeField] public bool dynamic = false;
     [ReadOnly] [SerializeField] public bool crushInNullSpace = true;
     [ReadOnly] [SerializeField] public bool isParentedIgnoreOffsets = false;
+
+    /// <summary>
+    /// Prevents actor from being moved during rift movement.
+    /// Set during when actor is grabbed by Player.
+    /// </summary>
+    public bool isHeld = false;
     public event Action OnRiftRestore;
 
     public enum Space

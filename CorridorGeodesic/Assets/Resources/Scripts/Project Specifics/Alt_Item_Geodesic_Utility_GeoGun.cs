@@ -377,7 +377,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             if (obj.space == CorGeo_ActorData.Space.B)
             {
 
-                if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
+                if (obj.TryGetComponent<Rigidbody> (out var objRigidBody) && obj.isHeld == false)
                 {
                     objRigidBody.MovePosition (obj.transform.position + moveInB);
                 }
@@ -397,7 +397,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 Vector3 move = riftNormal * (newDistance - oldDistance);
                 if (move.x != float.NaN)
                 {
-                    if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
+                    if (obj.TryGetComponent<Rigidbody> (out var objRigidBody) && obj.isHeld == false)
                     {
                         objRigidBody.MovePosition (obj.transform.position + move);
                     }
@@ -677,17 +677,24 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
             float oldDistance = scaledRiftWidth * percent;
             float newDistance = riftWidth * percent;
-            _actor.transform.position += riftNormal * (newDistance - oldDistance);
+            if (_actor.isHeld == false)
+            {
+                _actor.transform.position += riftNormal * (newDistance - oldDistance);
+            }
             return;
         }
 
         if (_actor.space != CorGeo_ActorData.Space.Null && Alt_Item_Geodesic_Utility_GeoGun.planeA.GetDistanceToPoint (_actor.transform.position) > 0)
         {
             if (!Alt_Item_Geodesic_Utility_GeoGun.deployedRift) return;
-            //move actor away from collapse direction scaled by the rift timer's progress
-            _actor.transform.position += Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform.forward *
-                                    Alt_Item_Geodesic_Utility_GeoGun.riftWidth *
-                                    (Alt_Item_Geodesic_Utility_GeoGun.lerpAmount);
+
+            if (_actor.isHeld == false)
+            {
+                //move actor away from collapse direction scaled by the rift timer's progress
+                _actor.transform.position += Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform.forward *
+                                        Alt_Item_Geodesic_Utility_GeoGun.riftWidth *
+                                        (Alt_Item_Geodesic_Utility_GeoGun.lerpAmount);
+            }
         }
     }
 
