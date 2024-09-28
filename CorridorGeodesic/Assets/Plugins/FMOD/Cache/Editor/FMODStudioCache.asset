@@ -123,7 +123,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638630784169978249
+  lastModified: 638630851067433761
   FileSizes: []
   Exists: 1
 --- !u!114 &-6866017230893626452
@@ -213,7 +213,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Ambience.bank
   Name: Ambience
   StudioPath: bank:/Ambience
-  lastModified: 638630784169946360
+  lastModified: 638630806030042721
   FileSizes: []
   Exists: 1
 --- !u!114 &-4296948824249502834
@@ -635,12 +635,13 @@ MonoBehaviour:
   - {fileID: -2381706902470738077}
   - {fileID: 8566597073583322721}
   - {fileID: -9014450141881134164}
+  - {fileID: 7488892665737737986}
   EditorParameters: []
   MasterBanks:
   - {fileID: 6782660519129768230}
   StringsBanks:
   - {fileID: -7057762056479707437}
-  cacheTime: 638630784170080169
+  cacheTime: 638630851069372392
   cacheVersion: 131619
 --- !u!114 &544341727582389708
 MonoBehaviour:
@@ -819,7 +820,7 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638630784169958391
+  lastModified: 638630851067423760
   FileSizes: []
   Exists: 1
 --- !u!114 &6830968979482899775
@@ -837,9 +838,36 @@ MonoBehaviour:
   Path: Assets/StreamingAssets/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638630784170080169
+  lastModified: 638630851069372392
   FileSizes: []
   Exists: 1
+--- !u!114 &7488892665737737986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Physics/Explosion
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Physics/Explosion
+  Guid:
+    Data1: 1889354364
+    Data2: 1260971174
+    Data3: 1898720189
+    Data4: -2128169793
+  Banks:
+  - {fileID: 6830968979482899775}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &7845796997216236843
 MonoBehaviour:
   m_ObjectHideFlags: 0
