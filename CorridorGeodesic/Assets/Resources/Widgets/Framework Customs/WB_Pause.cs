@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class WB_Pause : MonoBehaviour
@@ -27,7 +28,7 @@ public class WB_Pause : MonoBehaviour
     //=-----------------=
     private GameInstance gameInstance;
     private WorldLoader worldLoader;
-    [SerializeField] private Button buttonResume, buttonSettings, buttonTitle, buttonQuit;
+    [SerializeField] private Button buttonResume, buttonSettings, buttonTitle, buttonQuit, buttonRestart;
     [SerializeField] private GameObject settingsWidget;
 
 
@@ -42,6 +43,7 @@ public class WB_Pause : MonoBehaviour
         buttonSettings.onClick.AddListener(delegate { OnClick("buttonSettings"); });
         buttonTitle.onClick.AddListener(delegate { OnClick("buttonTitle"); });
         buttonQuit.onClick.AddListener(delegate { OnClick("buttonQuit"); });
+        buttonRestart.onClick.AddListener(delegate { OnClick("buttonRestart"); });
     }
     
 
@@ -66,6 +68,9 @@ public class WB_Pause : MonoBehaviour
                 break;
             case "buttonQuit":
                 Application.Quit();
+                break;
+            case "buttonRestart":
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 break;
         }
     }

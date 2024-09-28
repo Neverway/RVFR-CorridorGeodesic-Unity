@@ -5,8 +5,11 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GeolitePanel : MonoBehaviour
+public class GeolitePanel : LogicComponent
 {
+    [LogicComponentHandle] public LogicComponent regeneratePanel;
+
+
     private Mesh_Slicable[] sliceableChildren;
     public Mesh_Slicable panel;
     public CorGeo_ActorData[] boundingPositions;
@@ -46,8 +49,9 @@ public class GeolitePanel : MonoBehaviour
             RegeneratePanel();
     }
 
-    private void OnEnable()
+    private new void OnEnable()
     {
+        base.OnEnable();
         boundingPositions[0].OnRiftRestore += CheckBreakOnRiftClose;
         boundingPositions[0].OnRiftRestore += ClearSlicedParts;
     }
@@ -70,6 +74,9 @@ public class GeolitePanel : MonoBehaviour
 
     public void Update()
     {
+        if (regeneratePanel != null && regeneratePanel.isPowered)
+            RegeneratePanel();
+
         DEBUG_lerpAmount = ActualLerpAmount;
         IsIntersectingNullSpace = IsPanelIntersectingNullSpace();
 
@@ -112,6 +119,9 @@ public class GeolitePanel : MonoBehaviour
 
     private bool ShouldBreakPanel()
     {
+        if (regeneratePanel != null && regeneratePanel.isPowered)
+            return false;
+
         if (IsBroken)
             return false;
 
