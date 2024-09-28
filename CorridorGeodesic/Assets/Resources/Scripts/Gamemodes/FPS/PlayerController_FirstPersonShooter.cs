@@ -8,6 +8,7 @@
 //
 //=============================================================================
 
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
@@ -24,8 +25,9 @@ public class PlayerController_FirstPersonShooter : PawnController
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [SerializeField] public float throwForce=150;
-
+    [SerializeField] public float throwForce = 150;
+    [SerializeField] public float coyoteTime = 0.2f;
+    [SerializeField] public float jumpInputBuffer = 0.2f;
 
     //=-----------------=
     // Private Variables
@@ -66,6 +68,9 @@ public class PlayerController_FirstPersonShooter : PawnController
         
         // Subscribe to events
         _pawn.OnPawnDeath += () => { OnDeath(_pawn); };
+
+        //Turn off jump cheat
+        doJumpCheat = false;
     }
     
     public override void PawnUpdate(Pawn _pawn)
@@ -222,11 +227,54 @@ public class PlayerController_FirstPersonShooter : PawnController
         _pawn.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
+    private float timeLastCouldJump = -1f;
+    private float timeLastInputJump = -1f;
+    private float timeLastJumped = -1f;
+    private bool ignoreGroundCheckToAvoidDoubleJump = false;
+
+    private bool doJumpCheat = false;
+    public bool inputCheck;
+    public bool conditionCheck;
     private void UpdateJumping(Pawn _pawn)
     {
-        //Debug.Log(_pawn.IsGrounded3D());
-        if (fpsActions.Jump.WasPressedThisFrame() && _pawn.IsGrounded3D() && !_pawn.IsGroundSteep3D())
+        if (Input.GetKeyDown(KeyCode.J) && 
+            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) &&
+            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
         {
+            doJumpCheat = !doJumpCheat;
+        }    
+
+        if (fpsActions.Jump.WasPressedThisFrame())
+            timeLastInputJump = Time.time;
+
+        if (!ignoreGroundCheckToAvoidDoubleJump && _pawn.IsGrounded3D() && !_pawn.IsGroundSteep3D())
+            timeLastCouldJump = Time.time;
+
+        bool jumpInputValid = Time.time <= (timeLastInputJump + jumpInputBuffer);
+        bool jumpConditionValid = Time.time <= (timeLastCouldJump + coyoteTime);
+
+        //start mchecking for ground again if moving down or stationary (0.1 instead of 0 for some degree of error)
+        ignoreGroundCheckToAvoidDoubleJump = ignoreGroundCheckToAvoidDoubleJump && rigidbody.velocity.y > 0.1f;
+
+        if (Time.time <= timeLastJumped + (coyoteTime * 2f)) //If enough time passed and the flag is STILL not set false, just set it false
+        {
+            ignoreGroundCheckToAvoidDoubleJump = false;
+        }
+
+        inputCheck = jumpInputValid;
+        conditionCheck = jumpConditionValid;
+
+        if (doJumpCheat)
+            jumpConditionValid = true;
+
+        //Debug.Log(_pawn.IsGrounded3D());
+        if (jumpInputValid && jumpConditionValid)
+        {
+            timeLastCouldJump = -1f;
+            timeLastInputJump = -1f;
+            timeLastJumped = Time.time;
+            ignoreGroundCheckToAvoidDoubleJump = true;
+
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
             rigidbody.AddForce(Vector3.up * _pawn.currentState.jumpForce, ForceMode.Impulse);
         }
