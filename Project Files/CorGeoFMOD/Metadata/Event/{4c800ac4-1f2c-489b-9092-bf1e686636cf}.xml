@@ -109,7 +109,7 @@
 	<object class="MixerBusEffectChain" id="{cd17f601-4140-49d9-b25a-713eda8fe6e1}">
 		<relationship name="effects">
 			<destination>{9f4a8251-bdad-46f2-b51e-65357eeb7c7b}</destination>
-			<destination>{9cef5c2e-1ca5-4144-bc44-affb5804c289}</destination>
+			<destination>{5db0b732-7fff-4891-86e6-8ef0005d30f8}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{65019c83-a4cc-473e-8fbc-2315990a6399}" />
@@ -121,13 +121,19 @@
 	</object>
 	<object class="MixerBusPanner" id="{46441600-e80a-44fd-a1e0-2c5483482ea5}" />
 	<object class="MixerBusFader" id="{9f4a8251-bdad-46f2-b51e-65357eeb7c7b}" />
-	<object class="ProxyEffect" id="{9cef5c2e-1ca5-4144-bc44-affb5804c289}">
-		<property name="inputFormat">
-			<value>0</value>
+	<object class="SpatialiserEffect" id="{5db0b732-7fff-4891-86e6-8ef0005d30f8}">
+		<property name="distanceRolloffType">
+			<value>2</value>
 		</property>
-		<relationship name="preset">
-			<destination>{68df1098-670c-46f8-a962-50dbda897936}</destination>
-		</relationship>
+		<property name="maximumDistance">
+			<value>500</value>
+		</property>
+		<property name="overrideRange">
+			<value>true</value>
+		</property>
+		<property name="LFEUpmixEnabled">
+			<value>true</value>
+		</property>
 	</object>
 	<object class="MixerBusFader" id="{16e69d43-9b90-4228-bfa9-64bda311cf5e}" />
 </objects>

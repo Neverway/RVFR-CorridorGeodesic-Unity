@@ -49,6 +49,18 @@ public class Audio_FMODAudioManager: MonoBehaviour
     {
         return RuntimeManager.CreateInstance(sound);
     }
+    public static EventInstance CreateInstance(EventReference sound, Transform _transform)
+    {
+        EventInstance instance = CreateInstance(sound);
+
+        //instance.start();
+
+        //RuntimeManager.AttachInstanceToGameObject(instance, _transform);
+
+        //instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
+        return instance;
+    }
     public static void DestroyInstance(EventInstance instance)
     {
         instance.release();

@@ -95,7 +95,7 @@
 	</object>
 	<object class="EventMixerMaster" id="{9e057235-920b-4f2c-b1f9-ca0e9ab578db}">
 		<property name="volume">
-			<value>-2</value>
+			<value>-15</value>
 		</property>
 		<relationship name="modulators">
 			<destination>{4c917bb3-cac2-4982-ac83-2d7effe4df12}</destination>
@@ -197,15 +197,12 @@
 		<property name="nameOfPropertyBeingModulated">
 			<value>pitch</value>
 		</property>
-		<property name="amount">
-			<value>4.16666698</value>
-		</property>
 	</object>
 	<object class="MixerBusEffectChain" id="{a175ba59-76eb-411c-86ed-74b9cfe114aa}">
 		<relationship name="effects">
 			<destination>{c8b2585d-a473-4c72-88d5-faa13001a9d2}</destination>
-			<destination>{4f3db913-faa9-45cd-b9ee-1ec3254b4a67}</destination>
 			<destination>{e52934a7-9568-4cca-8ebc-41a627f5b5c4}</destination>
+			<destination>{bde5e68d-0f25-428f-a229-05d5bcaa2d19}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{4b06deba-ff91-4206-975e-8a215c7a3457}" />
@@ -239,17 +236,23 @@
 	</object>
 	<object class="MixerBusPanner" id="{38bf662a-19d6-4a49-acff-d6c409b8c6d3}" />
 	<object class="MixerBusFader" id="{c8b2585d-a473-4c72-88d5-faa13001a9d2}" />
-	<object class="ProxyEffect" id="{4f3db913-faa9-45cd-b9ee-1ec3254b4a67}">
-		<property name="inputFormat">
-			<value>1</value>
-		</property>
-		<relationship name="preset">
-			<destination>{68df1098-670c-46f8-a962-50dbda897936}</destination>
-		</relationship>
-	</object>
 	<object class="PitchShifterEffect" id="{e52934a7-9568-4cca-8ebc-41a627f5b5c4}">
 		<property name="pitch">
 			<value>1.5</value>
+		</property>
+	</object>
+	<object class="SpatialiserEffect" id="{bde5e68d-0f25-428f-a229-05d5bcaa2d19}">
+		<property name="distanceRolloffType">
+			<value>2</value>
+		</property>
+		<property name="maximumDistance">
+			<value>500</value>
+		</property>
+		<property name="overrideRange">
+			<value>true</value>
+		</property>
+		<property name="LFEUpmixEnabled">
+			<value>true</value>
 		</property>
 	</object>
 	<object class="AutomationCurve" id="{073f64c0-2e75-403e-bc01-be7e9df22653}">

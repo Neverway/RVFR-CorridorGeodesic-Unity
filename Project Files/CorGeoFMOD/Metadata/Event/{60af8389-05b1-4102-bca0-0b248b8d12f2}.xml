@@ -83,7 +83,7 @@
 	</object>
 	<object class="EventMixerMaster" id="{eeb43542-b37d-48e6-bcd5-af60c34568b0}">
 		<property name="volume">
-			<value>-2</value>
+			<value>-10</value>
 		</property>
 		<relationship name="modulators">
 			<destination>{1ce747cb-6b46-42aa-92db-527d0054fe54}</destination>
@@ -166,16 +166,14 @@
 		<property name="nameOfPropertyBeingModulated">
 			<value>pitch</value>
 		</property>
-		<property name="amount">
-			<value>4.16666698</value>
-		</property>
 	</object>
 	<object class="MixerBusEffectChain" id="{f00a0c0d-facc-47a3-a376-22e9e17d8e32}">
 		<relationship name="effects">
 			<destination>{5d7c91e6-4c77-4f68-8de0-5971e43bc8d7}</destination>
-			<destination>{68927992-e86d-4369-b6c1-5431ea013857}</destination>
+			<destination>{7ac40f1e-5616-47ee-83a2-3a964b849c95}</destination>
 			<destination>{ea599678-c63e-4139-b0d4-95b0cf6b40db}</destination>
 			<destination>{59fe3672-fe9f-47df-a81b-1058ee0e34c8}</destination>
+			<destination>{0d77072b-66fc-4868-8ec8-5ba4529702f0}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{7f2e8c38-9353-44df-8fbb-7f8f49671af0}" />
@@ -187,13 +185,19 @@
 	</object>
 	<object class="MixerBusPanner" id="{09d2f59a-f8d0-4a56-8eb2-85475a8717ca}" />
 	<object class="MixerBusFader" id="{5d7c91e6-4c77-4f68-8de0-5971e43bc8d7}" />
-	<object class="ProxyEffect" id="{68927992-e86d-4369-b6c1-5431ea013857}">
-		<property name="inputFormat">
-			<value>1</value>
+	<object class="SpatialiserEffect" id="{7ac40f1e-5616-47ee-83a2-3a964b849c95}">
+		<property name="distanceRolloffType">
+			<value>2</value>
 		</property>
-		<relationship name="preset">
-			<destination>{68df1098-670c-46f8-a962-50dbda897936}</destination>
-		</relationship>
+		<property name="maximumDistance">
+			<value>500</value>
+		</property>
+		<property name="overrideRange">
+			<value>true</value>
+		</property>
+		<property name="LFEUpmixEnabled">
+			<value>true</value>
+		</property>
 	</object>
 	<object class="FlangerEffect" id="{ea599678-c63e-4139-b0d4-95b0cf6b40db}">
 		<property name="rate">
@@ -202,7 +206,21 @@
 	</object>
 	<object class="PitchShifterEffect" id="{59fe3672-fe9f-47df-a81b-1058ee0e34c8}">
 		<property name="pitch">
-			<value>0.699999988</value>
+			<value>0.550000012</value>
+		</property>
+	</object>
+	<object class="ThreeEQEffect" id="{0d77072b-66fc-4868-8ec8-5ba4529702f0}">
+		<property name="lowGain">
+			<value>-2</value>
+		</property>
+		<property name="midGain">
+			<value>-3.5</value>
+		</property>
+		<property name="highGain">
+			<value>-14.5</value>
+		</property>
+		<property name="crossoverSlope">
+			<value>0</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{3dca6757-7bf0-4755-a10c-71674b1458dd}" />

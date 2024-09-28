@@ -34,7 +34,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private AudioClip projectileTravel, projectileFire;
+    //[SerializeField] private AudioClip projectileTravel, projectileFire;
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private Transform centerViewTransform;
     [SerializeField] private GameObject debugObject;
@@ -43,7 +43,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
     [SerializeField] private Rift_Audio riftAudioPrefab;
-    private Rift_Audio[] riftAudioList = new Rift_Audio[2];
+    //private Rift_Audio[] riftAudioList = new Rift_Audio[2];
+    private Rift_Audio activeRiftAudio;
     [SerializeField] private float projectileForce;
     [SerializeField] private CrushDetector crushDetector;
 
@@ -91,7 +92,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     public static RiftState previousState = RiftState.None;
     public static RiftState currentState = RiftState.None;
 
-    public static UnityEvent onStateChanged = new UnityEvent ();
+    public delegate void StateChanged();
+    public static event StateChanged OnStateChanged;
+    //public static UnityEvent onStateChanged = new UnityEvent ();
 
     //=-----------------=
     // Mono Functions
@@ -101,15 +104,17 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         meshSlicers = FindObjectsByType<Mesh_Slicable> (FindObjectsSortMode.None);
 
         CreateCutPreviews ();
-        audioSource = GetComponent<AudioSource_PitchVarienceModulator> ();
+        //audioSource = GetComponent<AudioSource_PitchVarienceModulator> ();
 
         crushDetector.onCrushed.AddListener (() => StartCoroutine (InterruptRiftCollapse (0.1f)));
 
-        for (int i = 0; i < 2; i++)
-        {
-            riftAudioList[i] = Instantiate (riftAudioPrefab);
-            riftAudioList[i].OnSetup (i == 0);
-        }
+        //for (int i = 0; i < 2; i++)
+        //{
+        //    riftAudioList[i] = Instantiate (riftAudioPrefab);
+        //    riftAudioList[i].OnSetup (i == 0);
+        //}
+
+        activeRiftAudio = Instantiate (riftAudioPrefab);
     }
 
     //Used for stopping rift collapse when getting crushed
@@ -174,10 +179,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     public void OnDestroy ()
     {
-        foreach (var audio in riftAudioList)
-        {
-            Destroy (audio);
-        }
+        Destroy(activeRiftAudio);
+        //foreach (var audio in riftAudioList)
+        //{
+        //    Destroy (audio);
+        //}
     }
 
     public void FixedUpdate ()
@@ -459,14 +465,12 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         currentState = _newState;
 
-        onStateChanged?.Invoke ();
-        Debug.Log ("RiftState: " + currentState);
+        OnStateChanged?.Invoke();
+        Debug.Log("RiftState: " + currentState);
     }
 
     private void DeployRiftAndPreview ()
     {
-        UpdateState (RiftState.Preview);
-
         Vector3 markerPos1 = deployedInfinityMarkers[0].transform.position;
         Vector3 markerPos2 = deployedInfinityMarkers[1].transform.position;
         float markerDistance = Vector3.Distance (markerPos1, markerPos2);
@@ -540,6 +544,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             g.transform.localScale = Vector3.zero;
             g.transform.DOScale (1f, 10f);
         }
+
+        UpdateState(RiftState.Preview);
     }
 
 

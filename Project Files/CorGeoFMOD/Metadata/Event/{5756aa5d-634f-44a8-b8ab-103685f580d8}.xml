@@ -5,7 +5,7 @@
 			<value>RiftDie</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{22cb2d27-9c14-49fe-ade1-466962743e0d}</destination>
@@ -113,7 +113,6 @@
 	<object class="MixerBusEffectChain" id="{273e3525-962b-4b4d-bae4-a04eec95ce3a}">
 		<relationship name="effects">
 			<destination>{01f83ccd-699b-489d-b6d8-9f1e35518d5d}</destination>
-			<destination>{0dacf36f-5f99-43e9-9332-52a092bec09f}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{2921c5c1-bbcf-4e1b-8f31-08ba9ad30d06}" />
@@ -124,12 +123,4 @@
 	</object>
 	<object class="MixerBusFader" id="{7e446737-6fc1-47da-9663-e81a1ce92358}" />
 	<object class="MixerBusFader" id="{01f83ccd-699b-489d-b6d8-9f1e35518d5d}" />
-	<object class="ProxyEffect" id="{0dacf36f-5f99-43e9-9332-52a092bec09f}">
-		<property name="inputFormat">
-			<value>1</value>
-		</property>
-		<relationship name="preset">
-			<destination>{68df1098-670c-46f8-a962-50dbda897936}</destination>
-		</relationship>
-	</object>
 </objects>

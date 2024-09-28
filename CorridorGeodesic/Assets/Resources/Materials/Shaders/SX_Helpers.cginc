@@ -21,6 +21,29 @@ inline half4 GetDepth(float4 screenPos, float strength)
 	half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(screenPos)));
 	return saturate(strength * (depth - screenPos.w));
 }
+inline float GetDepthProjection(float2 screenPos)
+{
+	float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, screenPos);
+	return Linear01Depth(depth) * _ProjectionParams.z;
+}
+inline float3 GetProjectedObjectPos(float2 screenPos, float3 ray)
+{
+	float depth = GetDepthProjection(screenPos);
+
+	float3 worldRay = normalize(ray);
+
+	worldRay /= dot(worldRay, -UNITY_MATRIX_V[2].xyz);
+
+	float3 worldPos = _WorldSpaceCameraPos + worldRay * depth;
+
+	float3 objectPos = mul(unity_WorldToObject, float4(worldPos, 1)).xyz;
+
+	clip(0.5 - abs(objectPos));
+
+	objectPos += 0.5;
+
+	return objectPos;
+}
 inline TriplanarUV GetTriplanarUVs(float3 worldPos, float3 normal, float sharpness, sampler2D _MainTex, float4 _MainTex_ST)
 {
 	TriplanarUV uv;
