@@ -10,7 +10,7 @@ public class Graphics_RiftPreviewEffects : MonoBehaviour
     public float opacity = 0.05f;
     public float edgeStrengthFactorPower = 1f;
     public float opacityFactorPower = 2f;
-    
+    public float burstFactorPower = 0.7f;
 
     public void Update()
     {
@@ -18,7 +18,7 @@ public class Graphics_RiftPreviewEffects : MonoBehaviour
         if (bulb == null)
             return;
 
-        float lerpFactor = bulb.glowFactor * bulb.previewBurstFactor;
+        float lerpFactor = bulb.glowFactor * Mathf.Pow(bulb.previewBurstFactor, burstFactorPower);
 
         foreach(GameObject obj in geoGun.cutPreviews)
         {
