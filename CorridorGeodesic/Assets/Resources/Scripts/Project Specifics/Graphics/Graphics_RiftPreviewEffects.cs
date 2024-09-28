@@ -28,6 +28,6 @@ public class Graphics_RiftPreviewEffects : MonoBehaviour
             mat.SetFloat("_opacity", opacity * Mathf.Pow(lerpFactor, opacityFactorPower));
         }
 
-        geoGun.cutPreviews[0].SetActive(Alt_Item_Geodesic_Utility_GeoGun.currentState != RiftState.Closed);
+        //geoGun.cutPreviews[0].SetActive(Alt_Item_Geodesic_Utility_GeoGun.currentState != RiftState.Closed);
     }
 }

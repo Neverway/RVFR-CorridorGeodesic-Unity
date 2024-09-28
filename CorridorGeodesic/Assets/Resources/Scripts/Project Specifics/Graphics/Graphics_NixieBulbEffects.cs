@@ -73,8 +73,8 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
 
         if (connectingLine != null)
         {
-            connectingLine.SetPosition(0, transform.position);
-            connectingLine.SetPosition(1, firstBulb.transform.position);
+            connectingLine.SetPosition(0, bulbGlowEffect.position);
+            connectingLine.SetPosition(1, firstBulb.bulbGlowEffect.position);
 
             connectingLine.widthMultiplier = actualFactor * actualFactor;
         }
