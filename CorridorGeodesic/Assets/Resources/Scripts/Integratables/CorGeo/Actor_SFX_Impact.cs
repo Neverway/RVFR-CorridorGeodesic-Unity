@@ -6,6 +6,7 @@
 //
 //=============================================================================
 
+using FMODUnity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ public class Actor_SFX_Impact : MonoBehaviour
     // Private Variables
     //=-----------------=
     private bool isPlayingSound;
+    [SerializeField] private EventReference impactSound;
 
 
     //=-----------------=
@@ -48,7 +50,7 @@ public class Actor_SFX_Impact : MonoBehaviour
             averageDot /= contactCount;
 
             if(averageDot > 0.25f)
-                Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.metalImpact, transform.position);
+                Audio_FMODAudioManager.PlayOneShot(impactSound, transform.position);
         }
     }
 
