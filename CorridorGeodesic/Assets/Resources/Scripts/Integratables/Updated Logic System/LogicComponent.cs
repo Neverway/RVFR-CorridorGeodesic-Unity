@@ -70,6 +70,7 @@ public abstract class LogicComponent : MonoBehaviour
     public virtual void OnEnable()
     {
         //Fixes Animators to update its power state when re-enabled
+
         if (subscribeLogicComponents.Count > 0 && subscribeLogicComponents.TrueForAll(s => s))
             SourcePowerStateChanged(isPowered);
 
