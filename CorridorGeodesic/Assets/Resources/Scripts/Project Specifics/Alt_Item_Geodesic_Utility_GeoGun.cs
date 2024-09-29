@@ -263,6 +263,49 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
         }
     }
+    //Added by Errynei to get closed rift previews to work right
+    private void LateUpdate()
+    {
+        if (currentState == RiftState.Closed)
+        {
+            SetClosedPreview();
+        }
+        else
+        {
+            float offset = 0.25f;
+            Vector3 markerPos1 = deployedInfinityMarkers[0].transform.position;
+            Vector3 markerPos2 = deployedInfinityMarkers[1].transform.position;
+            float markerDistance = Vector3.Distance(markerPos1, markerPos2);
+            if (markerDistance < offset * 2)
+            {
+                offset = markerDistance / 2;
+            }
+
+            UpdateRiftOffset(offset);
+        }
+    }
+
+    //Added by Errynei to get closed rift previews to work right
+    private void SetClosedPreview()
+    {
+        Transform player = Camera.main.transform;
+        float distanceToPlane0 = Vector3.Distance(player.position, cutPreviews[0].transform.position);
+        float distanceToPlane1 = Vector3.Distance(player.position, cutPreviews[1].transform.position);
+        bool plane0isClosest = distanceToPlane0 < distanceToPlane1;
+        cutPreviews[0].SetActive(plane0isClosest);
+        cutPreviews[1].SetActive(!plane0isClosest);
+
+        UpdateRiftOffset(0.05f);
+    }
+
+    //Added by Errynei to get closed rift previews to work right
+    private void UpdateRiftOffset(float offset)
+    {
+        Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * offset;
+        Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * offset;
+        cutPreviews[0].transform.position = pos1;
+        cutPreviews[1].transform.position = pos2;
+    }
 
     private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work, we need to re-activate things that were trapped inside of it.
     {
@@ -428,10 +471,12 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 }
                 deployedRift.transform.GetChild (i).gameObject.SetActive (false);
             }
-            foreach (var plane in cutPreviews)
-            {
-                plane.SetActive (false);
-            }
+
+            SetClosedPreview();
+            //foreach (var plane in cutPreviews)
+            //{
+            //    plane.SetActive (false);
+            //}
         }
         else
         {
