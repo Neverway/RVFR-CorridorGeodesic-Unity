@@ -86,7 +86,7 @@ public class Volume_TriggerInteractable : Volume
 
     private new void OnTriggerExit(Collider _other)
     {
-d        base.OnTriggerExit(_other); // Call the base class method
+        base.OnTriggerExit(_other); // Call the base class method
         SetInteractionIndicatorState();
 
         // Disable the indicator if the player left
