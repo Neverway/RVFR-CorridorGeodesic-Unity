@@ -26,7 +26,10 @@ public class BulbPowerSocket : LogicComponent, BulbCollisionBehaviour
     {
         yield return null;
         attachPoint.SetParent(null);
-        attachPoint.GetComponent<CorGeo_ActorData>().homeParent = null;
+        if (attachPoint.TryGetComponent<CorGeo_ActorData> (out var actor))
+        {
+            actor.homeParent = null;
+        }
     }
     private void Update()
     {
