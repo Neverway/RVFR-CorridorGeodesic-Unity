@@ -124,7 +124,7 @@ Shader "Soulex/SX_SlicePreview"
 
                 half depthMask = pow(oneMinusDepth, 2);
 
-                half4 depthCol = lerp(_ShallowColor, half4(_DeepColor.rgb, lerp(0.1, _DeepColor.a, lerpTimer)), depth);
+                half4 depthCol = lerp(_ShallowColor, half4(_DeepColor.rgb, lerp(0.025, _DeepColor.a, lerpTimer)), depth);
                 
                 alpha = max(alpha, depthMask);
 
