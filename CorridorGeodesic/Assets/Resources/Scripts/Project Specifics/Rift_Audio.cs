@@ -21,8 +21,6 @@ public class Rift_Audio : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-
-    private bool bPlane = false;
     private Transform playerTransform;
     private CorGeo_ActorData playerActorData;
     private Vector3 camPos => Camera.main.transform.position;
@@ -159,9 +157,4 @@ public class Rift_Audio : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-
-    public void OnSetup (bool _bPlane)
-    {
-        bPlane = _bPlane;
-    }
 }
