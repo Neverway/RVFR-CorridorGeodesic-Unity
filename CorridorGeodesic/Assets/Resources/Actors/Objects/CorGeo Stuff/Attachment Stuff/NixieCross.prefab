@@ -607,6 +607,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4239303407447738887}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 55990a22a7fac7a4ca558e0da272f73f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3713524395875821559}
   m_SourcePrefab: {fileID: 100100000, guid: 55990a22a7fac7a4ca558e0da272f73f, type: 3}
 --- !u!1 &1593285613858167579 stripped
 GameObject:
@@ -634,8 +638,6 @@ MonoBehaviour:
     m_Bits: 1
   allowExpandingRift: 0
   previousPlanePosition: {x: 0, y: 0, z: 0}
-  projectileTravel: {fileID: 8300000, guid: 842cbfc4aa8f9f5d787c00272fa06c2d, type: 3}
-  projectileFire: {fileID: 8300000, guid: 5a6c2d4583547396f922a70ab49fd3c7, type: 3}
   barrelTransform: {fileID: 4015725417602206536}
   centerViewTransform: {fileID: 0}
   debugObject: {fileID: 0}
@@ -646,6 +648,7 @@ MonoBehaviour:
   cutPreviewPrefab: {fileID: 2325414591476811082, guid: 077c8ba8d12051f4aa063cdafdcf5a3d,
     type: 3}
   cutPreviews: []
+  riftAudioPrefab: {fileID: 0}
   projectileForce: 25
   crushDetector: {fileID: 0}
   deployedInfinityMarkers: []
@@ -762,6 +765,24 @@ MonoBehaviour:
   pitchVariance: {x: 0.8, y: 1.2}
   playOnAwake: 0
   playOnAwakeDelay: 0
+--- !u!114 &3713524395875821559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593285613858167579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1db0e900330dcb04cad200a7f0547c58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  geoGun: {fileID: 2254121618581813435}
+  edgeStrength: 1.1
+  opacity: 0.05
+  edgeStrengthFactorPower: 0.7
+  opacityFactorPower: 2.5
+  burstFactorPower: 0.8
 --- !u!4 &2114348208941547937 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 55990a22a7fac7a4ca558e0da272f73f,

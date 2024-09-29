@@ -33,6 +33,7 @@ public class Object_Grabbable : MonoBehaviour
     public Vector3 lastFaceDirection;
     private Volume_TriggerInteractable interactableTrigger;
     private Rigidbody propRigidbody;
+    private CorGeo_ActorData corGeoActorData;
     [SerializeField] private LayerMask layerMask;
 
 
@@ -44,6 +45,7 @@ public class Object_Grabbable : MonoBehaviour
         if (transform.childCount == 0) return;
         interactableTrigger = transform.GetChild(0).GetComponent<Volume_TriggerInteractable>();
         propRigidbody = GetComponent<Rigidbody>();
+        corGeoActorData = GetComponent<CorGeo_ActorData>();
     }
 
     private void FixedUpdate()
@@ -85,12 +87,18 @@ public class Object_Grabbable : MonoBehaviour
             propRigidbody.useGravity = false;
             
             // Drop the object if it's too far away
-            if (Vector3.Distance(gameObject.transform.position,
+            if (Alt_Item_Geodesic_Utility_GeoGun.delayRiftCollapse == false
+                && Vector3.Distance(gameObject.transform.position,
                     targetPawn.physObjectAttachmentPoint.transform.position) > 2)
             {
                 ToggleHeld();
             }
         }
+    }
+
+    private void OnDisable ()
+    {
+        Drop ();
     }
 
 //=-----------------=
@@ -185,10 +193,17 @@ public class Object_Grabbable : MonoBehaviour
     public void ToggleHeld()
     {
         isHeld = !isHeld;
+
+        if (corGeoActorData !=  null)
+        {
+            corGeoActorData.isHeld = isHeld;
+        }
+
         if (!isHeld)
         {
             propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
             targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
+
         }
     }
 
@@ -196,6 +211,8 @@ public class Object_Grabbable : MonoBehaviour
     {
         if (isHeld)
         {
+            propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
+            targetPawn.physObjectAttachmentPoint.heldObject = null;
             ToggleHeld ();
         }
     }
