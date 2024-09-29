@@ -71,7 +71,7 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
     {
         bulbTrailToDisable.enabled = !self.pinned;
 
-        if (connectingLine != null)
+        if (connectingLine != null && bulbGlowEffect && firstBulb && firstBulb.bulbGlowEffect)
         {
             connectingLine.SetPosition(0, bulbGlowEffect.position);
             connectingLine.SetPosition(1, firstBulb.bulbGlowEffect.position);

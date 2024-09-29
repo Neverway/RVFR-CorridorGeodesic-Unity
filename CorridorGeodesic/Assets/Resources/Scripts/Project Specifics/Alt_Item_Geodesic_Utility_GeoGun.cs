@@ -271,7 +271,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         {
             SetClosedPreview();
         }
-        else
+        else if(deployedInfinityMarkers.Count > 1) //Check if there is any markers deployed
         {
             float offset = 0.25f;
             Vector3 markerPos1 = deployedInfinityMarkers[0].transform.position;
