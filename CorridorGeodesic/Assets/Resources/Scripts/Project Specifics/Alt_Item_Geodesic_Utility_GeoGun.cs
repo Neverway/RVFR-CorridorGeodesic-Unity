@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 {
@@ -289,8 +290,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private void SetClosedPreview()
     {
         Transform player = Camera.main.transform;
-        float distanceToPlane0 = Vector3.Distance(player.position, cutPreviews[0].transform.position);
-        float distanceToPlane1 = Vector3.Distance(player.position, cutPreviews[1].transform.position);
+        float distanceToPlane0 = Vector3.Distance(player.position, cutPreviews[0].transform.GetChild(0).position);
+        float distanceToPlane1 = Vector3.Distance(player.position, cutPreviews[1].transform.GetChild(0).position);
         bool plane0isClosest = distanceToPlane0 < distanceToPlane1;
         cutPreviews[0].SetActive(plane0isClosest);
         cutPreviews[1].SetActive(!plane0isClosest);
@@ -303,8 +304,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     {
         Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * offset;
         Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * offset;
-        cutPreviews[0].transform.position = pos1;
-        cutPreviews[1].transform.position = pos2;
+        cutPreviews[0].transform.GetChild(0).position = pos1;
+        cutPreviews[1].transform.GetChild(0).position = pos2;
     }
 
     private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work, we need to re-activate things that were trapped inside of it.
