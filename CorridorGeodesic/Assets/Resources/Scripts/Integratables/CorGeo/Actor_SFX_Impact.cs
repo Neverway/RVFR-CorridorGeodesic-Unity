@@ -6,6 +6,7 @@
 //
 //=============================================================================
 
+using FMOD.Studio;
 using FMODUnity;
 using System;
 using System.Collections;
@@ -50,7 +51,14 @@ public class Actor_SFX_Impact : MonoBehaviour
             averageDot /= contactCount;
 
             if(averageDot > 0.25f)
-                Audio_FMODAudioManager.PlayOneShot(impactSound, transform.position);
+            {
+                EventInstance impactInstance = Audio_FMODAudioManager.CreateInstance(impactSound);
+
+                impactInstance.start();
+                RuntimeManager.AttachInstanceToGameObject(impactInstance, transform);
+
+                StartCoroutine(RemoveInstance(impactInstance));
+            }
         }
     }
 
@@ -62,6 +70,15 @@ public class Actor_SFX_Impact : MonoBehaviour
         isPlayingSound = true;
         yield return new WaitForSeconds(repeatDelay);
         isPlayingSound = false;
+    }
+    IEnumerator RemoveInstance(EventInstance instance)
+    {
+        instance.getPlaybackState(out PLAYBACK_STATE state);
+        while (state == PLAYBACK_STATE.PLAYING)
+        {
+            yield return null;
+        }
+        instance.release();
     }
 
 

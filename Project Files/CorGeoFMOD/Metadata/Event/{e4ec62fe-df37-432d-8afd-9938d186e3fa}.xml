@@ -62,7 +62,11 @@
 			<destination>{5d01c0d5-e946-432b-bcb3-d5f9fd20246f}</destination>
 		</relationship>
 	</object>
-	<object class="EventAutomatableProperties" id="{ffda2c2b-d788-472c-bd8d-28730dba8f49}" />
+	<object class="EventAutomatableProperties" id="{ffda2c2b-d788-472c-bd8d-28730dba8f49}">
+		<property name="dopplerEnabled">
+			<value>true</value>
+		</property>
+	</object>
 	<object class="MarkerTrack" id="{1ac2e7d0-7f77-4f1f-9111-3d53b99f1f30}" />
 	<object class="Timeline" id="{f3463f6a-f2aa-43a7-981c-1ebb7afe985b}">
 		<property name="isProxyEnabled">
@@ -75,6 +79,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{3e393d23-01a3-4d8a-8001-eab2d90e1132}">
+		<property name="volume">
+			<value>-8</value>
+		</property>
 		<relationship name="modulators">
 			<destination>{6e7568cb-afcd-423a-a4f1-87f5ea85f777}</destination>
 		</relationship>
@@ -107,7 +114,8 @@
 	<object class="MixerBusEffectChain" id="{d5760f5f-6300-4041-a2d3-bbc805d7c923}">
 		<relationship name="effects">
 			<destination>{eef50613-1dcc-43e7-97de-e027cf9943b4}</destination>
-			<destination>{683e36aa-d422-4962-a931-3596201f1e01}</destination>
+			<destination>{7a586a47-2da3-4987-b828-77783723843a}</destination>
+			<destination>{8590bff4-b8bd-48c7-a5f5-07864a2dd7d5}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{5f411a9c-1f78-4758-8d75-c240cd6f42cc}" />
@@ -118,18 +126,20 @@
 	</object>
 	<object class="MixerBusFader" id="{a9fe004d-4237-453f-b6fa-cf981fae91d8}" />
 	<object class="MixerBusFader" id="{eef50613-1dcc-43e7-97de-e027cf9943b4}" />
-	<object class="SpatialiserEffect" id="{683e36aa-d422-4962-a931-3596201f1e01}">
-		<property name="distanceRolloffType">
-			<value>2</value>
+	<object class="ProxyEffect" id="{7a586a47-2da3-4987-b828-77783723843a}">
+		<property name="inputFormat">
+			<value>1</value>
 		</property>
-		<property name="maximumDistance">
-			<value>500</value>
+		<relationship name="preset">
+			<destination>{fe4154ae-cea2-4d72-b128-1e701bab5cac}</destination>
+		</relationship>
+	</object>
+	<object class="ThreeEQEffect" id="{8590bff4-b8bd-48c7-a5f5-07864a2dd7d5}">
+		<property name="midGain">
+			<value>-6</value>
 		</property>
-		<property name="overrideRange">
-			<value>true</value>
-		</property>
-		<property name="LFEUpmixEnabled">
-			<value>true</value>
+		<property name="highGain">
+			<value>-8</value>
 		</property>
 	</object>
 </objects>

@@ -103,14 +103,12 @@
 		<property name="nameOfPropertyBeingModulated">
 			<value>pitch</value>
 		</property>
-		<property name="amount">
-			<value>4.16666698</value>
-		</property>
 	</object>
 	<object class="MixerBusEffectChain" id="{9816f160-9e31-478f-b787-0bdfd5a7b501}">
 		<relationship name="effects">
 			<destination>{ffe28c5e-3e32-4249-9cba-c6a9897c090d}</destination>
-			<destination>{18010ec6-18ae-49c5-9b37-ec089e5413a8}</destination>
+			<destination>{f31bca06-5181-42e4-9ad8-f25a1e75349c}</destination>
+			<destination>{7381b2f7-e30e-48d4-b126-b77530f269da}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{14c13de4-833c-4a1b-9a6c-51dd86f4253c}" />
@@ -121,18 +119,20 @@
 	</object>
 	<object class="MixerBusFader" id="{61f893a2-e315-4a1a-a505-73c6199345c4}" />
 	<object class="MixerBusFader" id="{ffe28c5e-3e32-4249-9cba-c6a9897c090d}" />
-	<object class="SpatialiserEffect" id="{18010ec6-18ae-49c5-9b37-ec089e5413a8}">
-		<property name="distanceRolloffType">
-			<value>2</value>
+	<object class="ProxyEffect" id="{f31bca06-5181-42e4-9ad8-f25a1e75349c}">
+		<property name="inputFormat">
+			<value>0</value>
 		</property>
-		<property name="maximumDistance">
-			<value>500</value>
+		<relationship name="preset">
+			<destination>{fe4154ae-cea2-4d72-b128-1e701bab5cac}</destination>
+		</relationship>
+	</object>
+	<object class="ThreeEQEffect" id="{7381b2f7-e30e-48d4-b126-b77530f269da}">
+		<property name="midGain">
+			<value>-8</value>
 		</property>
-		<property name="overrideRange">
-			<value>true</value>
-		</property>
-		<property name="LFEUpmixEnabled">
-			<value>true</value>
+		<property name="highGain">
+			<value>-15</value>
 		</property>
 	</object>
 </objects>

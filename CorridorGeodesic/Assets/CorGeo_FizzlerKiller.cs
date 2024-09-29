@@ -21,7 +21,7 @@ public class CorGeo_FizzlerKiller : Volume
     //=-----------------=
     // Private Variables
     //=-----------------=
-
+    [SerializeField] private string buddyID;
 
     //=-----------------=
     // Reference Variables
@@ -37,7 +37,7 @@ public class CorGeo_FizzlerKiller : Volume
         base.OnTriggerEnter(_other); // Call the base class method
         if (_other.TryGetComponent<ActorData> (out ActorData actor))
         {
-            if (actor.actorId == "Phys_LemonBuddy")
+            if (actor.actorId == buddyID)
             {
                 Instantiate(fizzleParty, actor.transform.position, actor.transform.rotation, null);
                 Destroy(actor.gameObject);

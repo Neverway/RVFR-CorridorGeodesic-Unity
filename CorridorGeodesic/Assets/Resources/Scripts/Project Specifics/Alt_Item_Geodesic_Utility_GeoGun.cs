@@ -48,6 +48,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private Rift_Audio activeRiftAudio;
     [SerializeField] private float projectileForce;
     [SerializeField] private CrushDetector crushDetector;
+    [SerializeField] private Animator anims;
 
     public List<Projectile_Vacumm> deployedInfinityMarkers = new List<Projectile_Vacumm> ();
     public static GameObject deployedRift;
@@ -190,6 +191,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     public void FixedUpdate ()
     {
         AimTowardsCenterOfView ();
+
+        anims.SetBool("Empty", currentAmmo <= 0);
 
         if (!isCutPreviewActive)
         {
@@ -637,6 +640,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         deployedInfinityMarkers.Clear ();
         currentAmmo = 2;
 
+        anims.SetBool("Empty", false);
+
 
         if (cutPreviews[0])
         {
@@ -702,6 +707,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             actor.space = CorGeo_ActorData.Space.None;
         }
 
+        anims.SetTrigger("Clear");
+
         if (isCollapseStarted == false && deployedRift)
         {
             Destroy (deployedRift.gameObject);
@@ -754,6 +761,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     {
         if (currentAmmo <= 0) return;
         currentAmmo--;
+
+        anims.SetTrigger("Shoot");
 
         Audio_FMODAudioManager.PlayOneShot (Audio_FMODEvents.Instance.nixieCrossShoot);
 
