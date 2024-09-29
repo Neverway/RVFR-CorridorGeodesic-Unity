@@ -17,6 +17,7 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
     public float sinWave2Factor = 0.1f;
 
     [Space]
+    public float noRiftFactor = 0.6f;
     public float startPreviewFactor = 5f;
     public float startPreviewTime = 1f;
     public float adjustRiftFactor = 2f;
@@ -91,7 +92,7 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
         {
             hasDonePreviewBurst = false;
             previewBurstTimer = startPreviewTime;
-            targetFactor = 0f;
+            targetFactor = noRiftFactor;
         }
         else if (!hasDonePreviewBurst && currentState == RiftState.Preview)
         {
