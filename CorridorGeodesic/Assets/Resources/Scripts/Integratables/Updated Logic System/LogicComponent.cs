@@ -70,6 +70,9 @@ public abstract class LogicComponent : MonoBehaviour
     public virtual void OnEnable()
     {
         //Fixes Animators to update its power state when re-enabled
+
+        //todo: ask Soulex that the hell he's doing with all the subscribers
+        //I commented out this "if" because it seems unnecessary and the elevator failed this check, so the door wasn't opening.
         //if (subscribeLogicComponents.Count > 0 && subscribeLogicComponents.TrueForAll(s => s))
             SourcePowerStateChanged(isPowered);
 
