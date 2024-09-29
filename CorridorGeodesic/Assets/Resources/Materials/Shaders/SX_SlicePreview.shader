@@ -4,6 +4,9 @@ Shader "Unlit/SX_SlicePreview"
     {
         [NoScaleOffset] _MainTex ("Overlay Tex", 2D) = "white" {}
         [NoScaleOffset] _EdgeTex ("Edge Tex", 2d) = "white" {}
+
+        _EdgeStrength ("Edge Strength", Float) = 1
+
     }
     SubShader
     {
@@ -36,6 +39,10 @@ Shader "Unlit/SX_SlicePreview"
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
+            sampler2D _EdgeTex;
+
+            half _EdgeStrength;
+
             v2f vert (appdata v)
             {
                 v2f o;
@@ -55,8 +62,18 @@ Shader "Unlit/SX_SlicePreview"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                //fixed4 col = tex2D(_MainTex, i.uv);
-                fixed4 col = fixed4(i.screenPos.xyz, 1);
+                float depth = GetDepth(i.screenPos, _EdgeStrength).r;
+
+                UVMod mainMod;
+                mainMod.uvScale = 0.25;
+                mainMod.uvOffset = 0;
+
+
+
+                fixed4 col = tex2D(_MainTex, i.worldPos.xy);
+                //fixed4 col = fixed4(i.screenPos.xyz, 1);
+
+                col *= depth;
 
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
