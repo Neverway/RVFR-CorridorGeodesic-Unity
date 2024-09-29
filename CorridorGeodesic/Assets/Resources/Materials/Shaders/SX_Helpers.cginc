@@ -100,3 +100,11 @@ inline float4 GetTriplanarTexture(sampler2D _Tex, TriplanarUV uv)
 
 	return tex_front + tex_side + tex_top;
 }
+inline float4 GetTriplanarTextureFull(sampler2D _Tex, float2 uvScale, float2 uvOffset)
+{
+	UVMod mod;
+	mod.uvScale = uvScale;
+	mod.uvOffset = uvOffset;
+
+
+}

@@ -203,6 +203,7 @@
 			<destination>{c8b2585d-a473-4c72-88d5-faa13001a9d2}</destination>
 			<destination>{e52934a7-9568-4cca-8ebc-41a627f5b5c4}</destination>
 			<destination>{bde5e68d-0f25-428f-a229-05d5bcaa2d19}</destination>
+			<destination>{5681bf58-235b-4841-9050-8b7cd772fe31}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{4b06deba-ff91-4206-975e-8a215c7a3457}" />
@@ -238,7 +239,7 @@
 	<object class="MixerBusFader" id="{c8b2585d-a473-4c72-88d5-faa13001a9d2}" />
 	<object class="PitchShifterEffect" id="{e52934a7-9568-4cca-8ebc-41a627f5b5c4}">
 		<property name="pitch">
-			<value>1.5</value>
+			<value>2</value>
 		</property>
 	</object>
 	<object class="SpatialiserEffect" id="{bde5e68d-0f25-428f-a229-05d5bcaa2d19}">
@@ -253,6 +254,11 @@
 		</property>
 		<property name="LFEUpmixEnabled">
 			<value>true</value>
+		</property>
+	</object>
+	<object class="ThreeEQEffect" id="{5681bf58-235b-4841-9050-8b7cd772fe31}">
+		<property name="highGain">
+			<value>-15</value>
 		</property>
 	</object>
 	<object class="AutomationCurve" id="{073f64c0-2e75-403e-bc01-be7e9df22653}">
