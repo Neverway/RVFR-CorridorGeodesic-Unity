@@ -94,6 +94,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{d758d8de-4e19-428e-9d80-e3c8e497742d}">
+		<property name="volume">
+			<value>-7.5</value>
+		</property>
 		<relationship name="modulators">
 			<destination>{807b73a0-32ac-4adc-bee2-a444198f5cc6}</destination>
 		</relationship>
@@ -194,15 +197,12 @@
 		<property name="nameOfPropertyBeingModulated">
 			<value>pitch</value>
 		</property>
-		<property name="amount">
-			<value>4.16666698</value>
-		</property>
 	</object>
 	<object class="MixerBusEffectChain" id="{e9c01c34-6876-4d9b-8138-19979562e375}">
 		<relationship name="effects">
 			<destination>{26d6a285-ee5e-4e4b-a6a6-307683cb7567}</destination>
-			<destination>{3b179952-0c9e-4826-993a-85743ee4bdd9}</destination>
 			<destination>{ed7f3eb6-4812-46d0-86b9-a501edd29fad}</destination>
+			<destination>{4ba0cef4-9ad7-40b0-93f0-fe3e13227f29}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{a76c9887-4b12-446a-9145-d9780589a4f6}" />
@@ -236,17 +236,23 @@
 	</object>
 	<object class="MixerBusPanner" id="{0ad51dfc-b8db-497e-8a8b-5dfedc034ce3}" />
 	<object class="MixerBusFader" id="{26d6a285-ee5e-4e4b-a6a6-307683cb7567}" />
-	<object class="ProxyEffect" id="{3b179952-0c9e-4826-993a-85743ee4bdd9}">
-		<property name="inputFormat">
-			<value>1</value>
-		</property>
-		<relationship name="preset">
-			<destination>{68df1098-670c-46f8-a962-50dbda897936}</destination>
-		</relationship>
-	</object>
 	<object class="PitchShifterEffect" id="{ed7f3eb6-4812-46d0-86b9-a501edd29fad}">
 		<property name="pitch">
 			<value>0.899999976</value>
+		</property>
+	</object>
+	<object class="SpatialiserEffect" id="{4ba0cef4-9ad7-40b0-93f0-fe3e13227f29}">
+		<property name="distanceRolloffType">
+			<value>2</value>
+		</property>
+		<property name="maximumDistance">
+			<value>500</value>
+		</property>
+		<property name="overrideRange">
+			<value>true</value>
+		</property>
+		<property name="LFEUpmixEnabled">
+			<value>true</value>
 		</property>
 	</object>
 	<object class="AutomationCurve" id="{95be439d-2a26-419e-b868-6f2fc9b9cba7}">

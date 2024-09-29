@@ -8,6 +8,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -23,6 +24,7 @@ public class Projectile_Vacumm : Projectile
     [SerializeField] private float gridSize = 1;
     public bool pinned => disabled;
     [SerializeField] private GameObject spawnOnDeath;
+    [SerializeField] private float spawnOnDeathScaleFactorWhenPinned = 2f;
     [SerializeField] private GameObject shatteredGlassEffect;
 
     //=-----------------=
@@ -146,7 +148,9 @@ public class Projectile_Vacumm : Projectile
         //Spawn particle effect
         if (spawnOnDeath)
         {
-            Instantiate (spawnOnDeath, transform.position, Quaternion.identity);
+            GameObject effect = Instantiate (spawnOnDeath, transform.position, Quaternion.identity);
+            if (pinned)
+                effect.transform.localScale *= spawnOnDeathScaleFactorWhenPinned;
         }
 
         //Spawn shattered glass effect and add force to pieces to carry over speed into them

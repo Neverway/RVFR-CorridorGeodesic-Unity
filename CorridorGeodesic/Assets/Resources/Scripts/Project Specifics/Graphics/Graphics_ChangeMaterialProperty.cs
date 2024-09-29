@@ -139,4 +139,16 @@ public class Graphics_ChangeMaterialProperty: MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public object GetProperty()
+    {
+        switch (propertyType)
+        {
+            case PropertyType.Color:
+                return instanceMat.GetColor(propertyName);
+            case PropertyType.Float:
+                return instanceMat.GetFloat(propertyName);
+            default:
+                return null;
+        }
+    }
 }

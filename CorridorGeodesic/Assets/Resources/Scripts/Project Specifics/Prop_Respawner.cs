@@ -46,6 +46,15 @@ public class Prop_Respawner : LogicComponent
         }
     }
 
+    private void OnDisable ()
+    {
+        if (spawnWorker != null)
+        {
+            StopCoroutine(spawnWorker);
+        }
+        spawnWorker = null;
+    }
+
     //=-----------------=
     // Internal Functions
     //=-----------------=

@@ -60,6 +60,12 @@ public class Elevator : LogicComponent
         currentState = startingState;
     }
 
+    public override void OnEnable ()
+    {
+        base.OnEnable ();
+        SourcePowerStateChanged (isPowered);
+    }
+
     //=-----------------=
     // Internal Functions
     //=-----------------=

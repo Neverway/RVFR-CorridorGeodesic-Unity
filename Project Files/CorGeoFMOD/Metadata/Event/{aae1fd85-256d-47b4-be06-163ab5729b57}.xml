@@ -100,6 +100,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{902206d2-78df-44c7-af17-82a141748d4b}">
+		<property name="volume">
+			<value>-6</value>
+		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>
@@ -138,6 +141,7 @@
 		<relationship name="effects">
 			<destination>{acf36c0e-e863-46a4-9514-7b27594ee2fb}</destination>
 			<destination>{cd99d16e-afc7-42ed-b8f6-9bbcfd5f7551}</destination>
+			<destination>{bf6180a2-a1de-4891-85f8-516f1fb21f74}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{26c8427d-de13-42c9-af8b-8ed38d86e82a}" />
@@ -152,6 +156,11 @@
 		</property>
 		<property name="overrideRange">
 			<value>true</value>
+		</property>
+	</object>
+	<object class="ThreeEQEffect" id="{bf6180a2-a1de-4891-85f8-516f1fb21f74}">
+		<property name="lowGain">
+			<value>-8</value>
 		</property>
 	</object>
 </objects>

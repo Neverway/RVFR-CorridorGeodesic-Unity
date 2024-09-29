@@ -13,6 +13,7 @@ Shader "Soulex/SX_Standard Toon Oil"
         _RampSmoothness ("Ramp Smoothness", Range(0.1, 1.0)) = 0.1
 
         _OilAmount ("Oil Amount", Range(0.0, 1.0)) = 0.0
+        _OilSmoothing ("Oil Smoothing", Range(0.0, 1.0)) = 0.4
 
         _OilColor ("Oil Color", Color) = (0.05,0.01,0.07,1)
 
@@ -82,6 +83,7 @@ Shader "Soulex/SX_Standard Toon Oil"
         half _NormalPower;
 
         half _OilAmount;
+        half _OilSmoothing;
         float4 _OilColor;
         sampler2D _OilTex;
         sampler2D _OilNormal;
@@ -198,17 +200,25 @@ Shader "Soulex/SX_Standard Toon Oil"
             float3 viewReflectDirection = normalize(reflect(-viewDirection, normal));
 
             half oneMinusReflectivity;
-            //half outputAlpha;
             half3 specColor;
 
             s.Albedo = DiffuseAndSpecularFromMetallic(s.Albedo, s.Metallic, specColor, oneMinusReflectivity);
-            //s.Albedo = PreMultiplyAlpha(s.Albedo, s.Alpha, oneMinusReflectivity, outputAlpha);
 
             half3 c = BRDFToon(s.Albedo, specColor, oneMinusReflectivity, 1 - s.Roughness, normal, viewDirection, gi.light, gi.indirect);
 
             half4 emission = half4(s.Emission + c, s.Alpha);
 
             return emission;
+        }
+        half HistogramScan(half input, half position, half smoothing)
+        {
+            smoothing *= 0.5;
+            float low = saturate(position - smoothing);
+            float high = saturate(position + smoothing);
+
+            position = position * 2 - 1;
+
+            return smoothstep(low, high, input + position);
         }
 
         void surf (Input IN, inout SurfaceOutputToon o)
@@ -220,14 +230,15 @@ Shader "Soulex/SX_Standard Toon Oil"
 
             fixed4 col = tex2D(_MainTex, uv) * _Color;
 
-            half oilLerp = tex2D(_OilTex, uv).r * _OilAmount;
+            half oilLerp = HistogramScan(tex2D(_OilTex, uv).r, _OilAmount, _OilSmoothing);
 
             o.viewDir = IN.viewDir;
             o.worldPos = IN.worldPos;
 
             o.Albedo = lerp(col.rgb, _OilColor, oilLerp);
 
-            o.Normal = lerp(UnpackScaleNormal(tex2D(_Normal, uv), _NormalPower), UnpackScaleNormal(tex2D(_OilNormal, uv), _NormalPower), oilLerp);
+            o.Normal = lerp(UnpackScaleNormal(tex2D(_Normal, uv), _NormalPower), 
+            UnpackScaleNormal(tex2D(_OilNormal, uv), _NormalPower * pow(oilLerp, 2)), oilLerp);
 
             o.Metallic = lerp(tex2D(_MetallicMap, uv).r * _Metallic, 0, oilLerp);
 

@@ -37,6 +37,10 @@ public class Pawn_PlaceAttachmentPoint : MonoBehaviour
     
     private void FixedUpdate()
     {
+        if (Alt_Item_Geodesic_Utility_GeoGun.delayRiftCollapse == true)
+        {
+            return;
+        }
         Vector3 forwardPos = transform.forward * attachDistance;
         Vector3 playerForward = transform.parent.forward * attachDistance;
         Vector2 horizontalPosition = new Vector2 (playerForward.x, playerForward.z);

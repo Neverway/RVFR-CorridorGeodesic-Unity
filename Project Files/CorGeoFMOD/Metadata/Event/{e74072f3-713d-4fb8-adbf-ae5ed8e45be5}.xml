@@ -5,7 +5,7 @@
 			<value>RiftPlace</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{22cb2d27-9c14-49fe-ade1-466962743e0d}</destination>
@@ -75,6 +75,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{e191c345-2be1-4ff9-b625-8d6f85b5b056}">
+		<property name="volume">
+			<value>-8</value>
+		</property>
 		<relationship name="modulators">
 			<destination>{e261741e-c8e5-43fe-a52e-dca0003cf5cd}</destination>
 		</relationship>
@@ -110,7 +113,6 @@
 	<object class="MixerBusEffectChain" id="{09733300-8d79-4a7e-9d11-2b3eb99a3751}">
 		<relationship name="effects">
 			<destination>{84a0b795-6fa8-48f7-a5fe-123f4117d5c3}</destination>
-			<destination>{24a918fc-1207-4c41-b747-5fb3db23f07c}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{3d28be34-d8c2-4b66-b25d-aa2e329f9bac}" />
@@ -121,12 +123,4 @@
 	</object>
 	<object class="MixerBusFader" id="{fee6a781-bd46-4046-91dd-6f8594829a7a}" />
 	<object class="MixerBusFader" id="{84a0b795-6fa8-48f7-a5fe-123f4117d5c3}" />
-	<object class="ProxyEffect" id="{24a918fc-1207-4c41-b747-5fb3db23f07c}">
-		<property name="inputFormat">
-			<value>1</value>
-		</property>
-		<relationship name="preset">
-			<destination>{68df1098-670c-46f8-a962-50dbda897936}</destination>
-		</relationship>
-	</object>
 </objects>

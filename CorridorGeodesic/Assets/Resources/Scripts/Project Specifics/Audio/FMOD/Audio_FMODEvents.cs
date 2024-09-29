@@ -35,6 +35,13 @@ public class Audio_FMODEvents: MonoBehaviour
     public EventReference hover;
     public EventReference select;
 
+    [Header("Rift")]
+    public EventReference riftSpawned;
+    public EventReference riftKilled;
+    public EventReference riftCollapsing;
+    public EventReference riftExpanding;
+    public EventReference riftIdle;
+
     //=-----------------=
     // Private Variables
     //=-----------------=

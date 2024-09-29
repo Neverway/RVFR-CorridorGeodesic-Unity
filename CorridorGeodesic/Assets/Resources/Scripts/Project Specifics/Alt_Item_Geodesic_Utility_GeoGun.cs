@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 {
@@ -34,7 +35,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private AudioClip projectileTravel, projectileFire;
+    //[SerializeField] private AudioClip projectileTravel, projectileFire;
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private Transform centerViewTransform;
     [SerializeField] private GameObject debugObject;
@@ -43,7 +44,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
     [SerializeField] private Rift_Audio riftAudioPrefab;
-    private Rift_Audio[] riftAudioList = new Rift_Audio[2];
+    //private Rift_Audio[] riftAudioList = new Rift_Audio[2];
+    private Rift_Audio activeRiftAudio;
     [SerializeField] private float projectileForce;
     [SerializeField] private CrushDetector crushDetector;
 
@@ -91,7 +93,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     public static RiftState previousState = RiftState.None;
     public static RiftState currentState = RiftState.None;
 
-    public static UnityEvent onStateChanged = new UnityEvent ();
+    public delegate void StateChanged();
+    public static event StateChanged OnStateChanged;
+    //public static UnityEvent onStateChanged = new UnityEvent ();
 
     //=-----------------=
     // Mono Functions
@@ -101,15 +105,17 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         meshSlicers = FindObjectsByType<Mesh_Slicable> (FindObjectsSortMode.None);
 
         CreateCutPreviews ();
-        audioSource = GetComponent<AudioSource_PitchVarienceModulator> ();
+        //audioSource = GetComponent<AudioSource_PitchVarienceModulator> ();
 
         crushDetector.onCrushed.AddListener (() => StartCoroutine (InterruptRiftCollapse (0.1f)));
 
-        for (int i = 0; i < 2; i++)
-        {
-            riftAudioList[i] = Instantiate (riftAudioPrefab);
-            riftAudioList[i].OnSetup (i == 0);
-        }
+        //for (int i = 0; i < 2; i++)
+        //{
+        //    riftAudioList[i] = Instantiate (riftAudioPrefab);
+        //    riftAudioList[i].OnSetup (i == 0);
+        //}
+
+        activeRiftAudio = Instantiate (riftAudioPrefab);
     }
 
     //Used for stopping rift collapse when getting crushed
@@ -174,10 +180,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     public void OnDestroy ()
     {
-        foreach (var audio in riftAudioList)
-        {
-            Destroy (audio);
-        }
+        Destroy(activeRiftAudio);
+        //foreach (var audio in riftAudioList)
+        //{
+        //    Destroy (audio);
+        //}
     }
 
     public void FixedUpdate ()
@@ -256,6 +263,49 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 UpdateState (RiftState.Idle);
             }
         }
+    }
+    //Added by Errynei to get closed rift previews to work right
+    private void LateUpdate()
+    {
+        if (currentState == RiftState.Closed)
+        {
+            SetClosedPreview();
+        }
+        else if(deployedInfinityMarkers.Count > 1) //Check if there is any markers deployed
+        {
+            float offset = 0.25f;
+            Vector3 markerPos1 = deployedInfinityMarkers[0].transform.position;
+            Vector3 markerPos2 = deployedInfinityMarkers[1].transform.position;
+            float markerDistance = Vector3.Distance(markerPos1, markerPos2);
+            if (markerDistance < offset * 2)
+            {
+                offset = markerDistance / 2;
+            }
+
+            UpdateRiftOffset(offset);
+        }
+    }
+
+    //Added by Errynei to get closed rift previews to work right
+    private void SetClosedPreview()
+    {
+        Transform player = Camera.main.transform;
+        float distanceToPlane0 = Vector3.Distance(player.position, cutPreviews[0].transform.GetChild(0).position);
+        float distanceToPlane1 = Vector3.Distance(player.position, cutPreviews[1].transform.GetChild(0).position);
+        bool plane0isClosest = distanceToPlane0 < distanceToPlane1;
+        cutPreviews[0].SetActive(plane0isClosest);
+        cutPreviews[1].SetActive(!plane0isClosest);
+
+        UpdateRiftOffset(0.05f);
+    }
+
+    //Added by Errynei to get closed rift previews to work right
+    private void UpdateRiftOffset(float offset)
+    {
+        Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * offset;
+        Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * offset;
+        cutPreviews[0].transform.GetChild(0).position = pos1;
+        cutPreviews[1].transform.GetChild(0).position = pos2;
     }
 
     private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work, we need to re-activate things that were trapped inside of it.
@@ -371,7 +421,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             if (obj.space == CorGeo_ActorData.Space.B)
             {
 
-                if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
+                if (obj.TryGetComponent<Rigidbody> (out var objRigidBody) && obj.isHeld == false)
                 {
                     objRigidBody.MovePosition (obj.transform.position + moveInB);
                 }
@@ -391,7 +441,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 Vector3 move = riftNormal * (newDistance - oldDistance);
                 if (move.x != float.NaN)
                 {
-                    if (obj.TryGetComponent<Rigidbody> (out var objRigidBody))
+                    if (obj.TryGetComponent<Rigidbody> (out var objRigidBody) && obj.isHeld == false)
                     {
                         objRigidBody.MovePosition (obj.transform.position + move);
                     }
@@ -422,10 +472,12 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 }
                 deployedRift.transform.GetChild (i).gameObject.SetActive (false);
             }
-            foreach (var plane in cutPreviews)
-            {
-                plane.SetActive (false);
-            }
+
+            SetClosedPreview();
+            //foreach (var plane in cutPreviews)
+            //{
+            //    plane.SetActive (false);
+            //}
         }
         else
         {
@@ -459,14 +511,12 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         currentState = _newState;
 
-        onStateChanged?.Invoke ();
-        Debug.Log ("RiftState: " + currentState);
+        OnStateChanged?.Invoke();
+        Debug.Log("RiftState: " + currentState);
     }
 
     private void DeployRiftAndPreview ()
     {
-        UpdateState (RiftState.Preview);
-
         Vector3 markerPos1 = deployedInfinityMarkers[0].transform.position;
         Vector3 markerPos2 = deployedInfinityMarkers[1].transform.position;
         float markerDistance = Vector3.Distance (markerPos1, markerPos2);
@@ -540,6 +590,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             g.transform.localScale = Vector3.zero;
             g.transform.DOScale (1f, 10f);
         }
+
+        UpdateState(RiftState.Preview);
     }
 
 
@@ -671,17 +723,24 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
             float oldDistance = scaledRiftWidth * percent;
             float newDistance = riftWidth * percent;
-            _actor.transform.position += riftNormal * (newDistance - oldDistance);
+            if (_actor.isHeld == false)
+            {
+                _actor.transform.position += riftNormal * (newDistance - oldDistance);
+            }
             return;
         }
 
         if (_actor.space != CorGeo_ActorData.Space.Null && Alt_Item_Geodesic_Utility_GeoGun.planeA.GetDistanceToPoint (_actor.transform.position) > 0)
         {
             if (!Alt_Item_Geodesic_Utility_GeoGun.deployedRift) return;
-            //move actor away from collapse direction scaled by the rift timer's progress
-            _actor.transform.position += Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform.forward *
-                                    Alt_Item_Geodesic_Utility_GeoGun.riftWidth *
-                                    (Alt_Item_Geodesic_Utility_GeoGun.lerpAmount);
+
+            if (_actor.isHeld == false)
+            {
+                //move actor away from collapse direction scaled by the rift timer's progress
+                _actor.transform.position += Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform.forward *
+                                        Alt_Item_Geodesic_Utility_GeoGun.riftWidth *
+                                        (Alt_Item_Geodesic_Utility_GeoGun.lerpAmount);
+            }
         }
     }
 
