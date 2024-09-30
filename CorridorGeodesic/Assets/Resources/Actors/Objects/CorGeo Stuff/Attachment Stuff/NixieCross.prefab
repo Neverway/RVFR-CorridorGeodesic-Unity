@@ -1681,6 +1681,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2851006841016194534}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 55990a22a7fac7a4ca558e0da272f73f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5075551635852816902}
   m_SourcePrefab: {fileID: 100100000, guid: 55990a22a7fac7a4ca558e0da272f73f, type: 3}
 --- !u!1 &1593285613858167579 stripped
 GameObject:
@@ -1708,8 +1712,6 @@ MonoBehaviour:
     m_Bits: 1
   allowExpandingRift: 0
   previousPlanePosition: {x: 0, y: 0, z: 0}
-  projectileTravel: {fileID: 8300000, guid: 842cbfc4aa8f9f5d787c00272fa06c2d, type: 3}
-  projectileFire: {fileID: 8300000, guid: 5a6c2d4583547396f922a70ab49fd3c7, type: 3}
   barrelTransform: {fileID: 4015725417602206536}
   centerViewTransform: {fileID: 0}
   debugObject: {fileID: 0}
@@ -1858,6 +1860,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5075551635852816902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593285613858167579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1db0e900330dcb04cad200a7f0547c58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  geoGun: {fileID: 2254121618581813435}
+  riftPreview: {fileID: 2100000, guid: eb95027108e3ad8408119ff3d3fefc82, type: 2}
+  defaultEmisStrength: 6
+  collapseExpandEmisStrength: 9
 --- !u!4 &2114348208941547937 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 55990a22a7fac7a4ca558e0da272f73f,
