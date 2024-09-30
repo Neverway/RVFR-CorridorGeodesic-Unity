@@ -16,7 +16,7 @@ public class Prop_Respawner : LogicComponent
     //=-----------------=
 
     [SerializeField] public GameObject prefabToSpawn;
-    protected GameObject spawnedObject;
+    public GameObject spawnedObject { get; protected set; }
     [LogicComponentHandle] public LogicComponent respawnProp;
     private bool previousPowered = false;
 

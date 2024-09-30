@@ -19,6 +19,10 @@ public class Graphics_LightEnableAnimation : MonoBehaviour
         timer = Random.Range(-1.8f, 0f);
     }
 
+    public void OnValidate()
+    {
+        lightComponent = GetComponent<Light>();
+    }
     // Update is called once per frame
     void Update()
     {

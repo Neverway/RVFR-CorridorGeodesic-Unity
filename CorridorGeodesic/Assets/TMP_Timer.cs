@@ -36,7 +36,6 @@ public class TMP_Timer : MonoBehaviour
     {
         text = GetComponent<TMP_Text>();
         stopwatch = FindObjectOfType<Stopwatch>();
-        isRunInvalid = false;
     }
 
     private void Update()
@@ -62,6 +61,7 @@ public class TMP_Timer : MonoBehaviour
     //=-----------------=
     public void StartTimer()
     {
+        isRunInvalid = false;
         stopwatch.ResetTimer();
         stopwatch.StartTimer();
     }
