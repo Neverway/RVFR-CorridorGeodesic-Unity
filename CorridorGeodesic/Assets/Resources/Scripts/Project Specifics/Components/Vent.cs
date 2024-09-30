@@ -112,7 +112,6 @@ public class Vent : LogicComponent
             return;
         }
 
-
         isPowered = inputSignal.isPowered && !isBeingSliced.isPowered;
 
         if (isPowered)

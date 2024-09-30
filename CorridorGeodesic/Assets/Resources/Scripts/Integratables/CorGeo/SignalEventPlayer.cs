@@ -53,6 +53,9 @@ public class SignalEventPlayer : LogicComponent
     {
         base.SourcePowerStateChanged(powered);
 
+        if (isPowered == powered)
+            return;
+
         isPowered = powered;
 
         if (isPowered)

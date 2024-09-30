@@ -30,12 +30,13 @@ public class Elevator : LogicComponent
     {
         get { return _currentState; }
         set 
-        { 
+        {
             _currentState = value;
             SwitchState();
         }
     }
     [SerializeField] private ElevatorState startingState;
+    private ElevatorState previousState;
 
     private EventInstance moveInstance;
 
@@ -117,33 +118,41 @@ public class Elevator : LogicComponent
             default:
                 break;
         }
+
+        previousState = currentState;
     }
     private void IdleState()
     {
         StopAllCoroutines();
 
-        moveInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-
         bool state = isPowered ? isPowered : forceOpenSignal.isPowered;
-        animator.SetBool("Powered", state);
 
-        if (state)
+        if (previousState != ElevatorState.Idle)
         {
-            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorOpen, transform.position + Vector3.up * 2);
-            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorReady, transform.position + Vector3.up * 2);
-        }  
-        else
-            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorClose, transform.position + Vector3.up * 2);
+            moveInstance.stop(STOP_MODE.ALLOWFADEOUT);
+            if (state)
+            {
+                Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorOpen, transform.position + Vector3.up * 2);
+                Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorReady, transform.position + Vector3.up * 2);
+            }
+            else
+                Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorClose, transform.position + Vector3.up * 2);
+        }
+
+        animator.SetBool("Powered", state);
     }
     private void MovingState()
     {
         StopAllCoroutines();
 
-        moveInstance.start();
+        if(previousState != ElevatorState.Moving)
+        {
+            moveInstance.start();
+            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorClose, transform.position + Vector3.up * 2);
+        }  
 
         animator.SetBool("Powered", false);
-        Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorClose, transform.position + Vector3.up * 2);
-
+        
         StartCoroutine(MoveElevator());
     }
     private bool GetStopSignalPowerState()

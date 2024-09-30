@@ -59,6 +59,9 @@ public class Door : LogicComponent
     {
         base.SourcePowerStateChanged(powered);
 
+        if (isPowered == powered)
+            return;
+
         isPowered = powered;
 
         if (isPowered)

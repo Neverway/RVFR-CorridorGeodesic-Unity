@@ -78,8 +78,12 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{cbf80f76-098e-4807-812e-15d500a4b871}">
+		<property name="volume">
+			<value>-1.5</value>
+		</property>
 		<relationship name="modulators">
 			<destination>{e373f40d-bfc5-4ff0-9c30-688723f5b671}</destination>
+			<destination>{deed15a4-ff85-4008-b3df-73bff4173ab5}</destination>
 		</relationship>
 		<relationship name="effectChain">
 			<destination>{44c0f6e6-4adc-4245-ae44-d2a767900795}</destination>
@@ -138,7 +142,24 @@
 			<value>pitch</value>
 		</property>
 		<property name="amount">
-			<value>4.16666698</value>
+			<value>1</value>
+		</property>
+	</object>
+	<object class="ADSRModulator" id="{deed15a4-ff85-4008-b3df-73bff4173ab5}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>volume</value>
+		</property>
+		<property name="initialValue">
+			<value>-80</value>
+		</property>
+		<property name="attackTime">
+			<value>0</value>
+		</property>
+		<property name="releaseShape">
+			<value>0.131500468</value>
+		</property>
+		<property name="finalValue">
+			<value>-80</value>
 		</property>
 	</object>
 	<object class="MixerBusEffectChain" id="{44c0f6e6-4adc-4245-ae44-d2a767900795}">
@@ -158,6 +179,9 @@
 	<object class="MixerBusFader" id="{9c77bb7b-d266-482e-a292-d862ed97510f}" />
 	<object class="SpatialiserEffect" id="{576ede37-a339-4e05-95a1-a8752dd5b521}">
 		<property name="distanceRolloffType">
+			<value>2</value>
+		</property>
+		<property name="minimumDistance">
 			<value>2</value>
 		</property>
 		<property name="maximumDistance">
