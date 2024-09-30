@@ -13,16 +13,24 @@ public class TEMPLevelSelectDev : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
+            //Clear checkpoints
+            Checkpoint.ClearCheckpoints();
+            //Go to previous level
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex-1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
+            //Invalidate speedrun timer if skipping levels
             try
             {
-                TMP_Timer a = FindObjectOfType<TMP_Timer>();
-                a.InvalidateTimer();
+                Stopwatch timer = FindObjectOfType<Stopwatch>();
+                timer.InvalidateTimer();
             }
             catch { }
+
+            //Clear checkpoints
+            Checkpoint.ClearCheckpoints();
+            //Go to next level
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
         }
     }

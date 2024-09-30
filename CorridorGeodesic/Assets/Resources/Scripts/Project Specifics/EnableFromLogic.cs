@@ -50,6 +50,8 @@ public class EnableFromLogic : LogicComponent
     //=-----------------=
     public override void SourcePowerStateChanged(bool powered)
     {
+        base.SourcePowerStateChanged(powered);
+
         isPowered = powered;
 
         foreach(Transform t in objectsToEnableWhenActive)

@@ -246,8 +246,8 @@ public class PlayerController_FirstPersonShooter : PawnController
             {
                 try
                 {
-                    TMP_Timer a = FindObjectOfType<TMP_Timer>();
-                    a.InvalidateTimer();
+                    Stopwatch timer = FindObjectOfType<Stopwatch>();
+                    timer.InvalidateTimer();
                 }
                 catch { }
             }

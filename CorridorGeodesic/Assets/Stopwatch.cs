@@ -5,8 +5,10 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class Stopwatch : MonoBehaviour
@@ -16,6 +18,8 @@ public class Stopwatch : MonoBehaviour
     //=-----------------=
     public System.Diagnostics.Stopwatch timer;
 
+    [DebugReadOnly] public bool isInvalid = false;
+    [DebugReadOnly] public double timeElapsed;
 
     //=-----------------=
     // Private Variables
@@ -37,7 +41,7 @@ public class Stopwatch : MonoBehaviour
 
     private void Update()
     {
-    
+        timeElapsed = timer.Elapsed.TotalSeconds;
     }
 
     //=-----------------=
@@ -50,6 +54,7 @@ public class Stopwatch : MonoBehaviour
     //=-----------------=
     public void StartTimer()
     {
+        isInvalid = false;
         timer.Start();
     }
     public void StopTimer()
@@ -59,5 +64,9 @@ public class Stopwatch : MonoBehaviour
     public void ResetTimer()
     {
         timer.Restart();
+    }
+    public void InvalidateTimer()
+    {
+        isInvalid = true;
     }
 }
