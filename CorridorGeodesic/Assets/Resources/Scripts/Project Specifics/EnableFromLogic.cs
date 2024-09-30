@@ -13,7 +13,7 @@ public class EnableFromLogic : LogicComponent
     public Transform[] objectsToDisableWhenActive;
     public Component[] componentsToEnableWhenActive;
     public Component[] componentsToDisableWhenActive;
-
+    public bool alwaysCheckToEnable = false;
     //=-----------------=
     // Private Variables
     //=-----------------=
@@ -38,12 +38,20 @@ public class EnableFromLogic : LogicComponent
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    public void LateUpdate()
+    {
+        if (alwaysCheckToEnable)
+            SourcePowerStateChanged(isPowered);
+    }
+
 
     //=-----------------=
     // External Functions
     //=-----------------=
     public override void SourcePowerStateChanged(bool powered)
     {
+        base.SourcePowerStateChanged(powered);
+
         isPowered = powered;
 
         foreach(Transform t in objectsToEnableWhenActive)

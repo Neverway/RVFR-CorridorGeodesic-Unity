@@ -17,7 +17,6 @@ public class TMP_Timer : MonoBehaviour
     //=-----------------=
     private TMP_Text text;
 
-
     //=-----------------=
     // Private Variables
     //=-----------------=
@@ -42,7 +41,7 @@ public class TMP_Timer : MonoBehaviour
     {
         if (stopwatch && text)
         {
-            text.text = $"{stopwatch.timer.Elapsed}";
+            text.text = $"{stopwatch.timer.Elapsed}" + (stopwatch.isInvalid ? "?" : "!");
         }
         else
         {

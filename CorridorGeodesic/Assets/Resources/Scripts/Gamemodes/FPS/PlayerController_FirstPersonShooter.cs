@@ -28,7 +28,7 @@ public class PlayerController_FirstPersonShooter : PawnController
     [SerializeField] public float throwForce = 150;
     [SerializeField] public float coyoteTime = 0.2f;
     [SerializeField] public float jumpInputBuffer = 0.2f;
-
+    [SerializeField] public bool allowJumpCheat = true;
     //=-----------------=
     // Private Variables
     //=-----------------=
@@ -237,11 +237,20 @@ public class PlayerController_FirstPersonShooter : PawnController
     public bool conditionCheck;
     private void UpdateJumping(Pawn _pawn)
     {
-        if (Input.GetKeyDown(KeyCode.J) && 
+        if (allowJumpCheat && Input.GetKeyDown(KeyCode.J) && 
             Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) &&
             Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
         {
             doJumpCheat = !doJumpCheat;
+            if (doJumpCheat)
+            {
+                try
+                {
+                    Stopwatch timer = FindObjectOfType<Stopwatch>();
+                    timer.InvalidateTimer();
+                }
+                catch { }
+            }
         }    
 
         if (fpsActions.Jump.WasPressedThisFrame())
