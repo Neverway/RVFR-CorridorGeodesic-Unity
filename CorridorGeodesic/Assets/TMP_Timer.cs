@@ -16,7 +16,7 @@ public class TMP_Timer : MonoBehaviour
     // Public Variables
     //=-----------------=
     private TMP_Text text;
-
+    private bool isRunInvalid = false;
 
     //=-----------------=
     // Private Variables
@@ -36,13 +36,14 @@ public class TMP_Timer : MonoBehaviour
     {
         text = GetComponent<TMP_Text>();
         stopwatch = FindObjectOfType<Stopwatch>();
+        isRunInvalid = false;
     }
 
     private void Update()
     {
         if (stopwatch && text)
         {
-            text.text = $"{stopwatch.timer.Elapsed}";
+            text.text = $"{stopwatch.timer.Elapsed}" + (isRunInvalid ? " *?" : "!");
         }
         else
         {
@@ -67,5 +68,9 @@ public class TMP_Timer : MonoBehaviour
     public void StopTimer()
     {
         stopwatch.StopTimer();
+    }
+    public void InvalidateTimer()
+    {
+        isRunInvalid = true;
     }
 }

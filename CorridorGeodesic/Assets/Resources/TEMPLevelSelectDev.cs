@@ -16,6 +16,12 @@ public class TEMPLevelSelectDev : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
+            try
+            {
+                TMP_Timer a = FindObjectOfType<TMP_Timer>();
+                a.InvalidateTimer();
+            }
+            catch { }
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
         }
     }
