@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EffectPreset" id="{0ddec207-baaa-44b8-b6db-433623d0fa12}">
+		<property name="name">
+			<value>ElevatorAttenuation</value>
+		</property>
+		<relationship name="folder">
+			<destination>{159a9375-05d2-4879-b852-110d9863d275}</destination>
+		</relationship>
+		<relationship name="effect">
+			<destination>{ac926d08-d6c9-4217-a1ae-d74501eb5805}</destination>
+		</relationship>
+	</object>
+	<object class="SpatialiserEffect" id="{ac926d08-d6c9-4217-a1ae-d74501eb5805}">
+		<property name="distanceRolloffType">
+			<value>2</value>
+		</property>
+		<property name="minimumDistance">
+			<value>4</value>
+		</property>
+		<property name="maximumDistance">
+			<value>500</value>
+		</property>
+		<property name="overrideRange">
+			<value>true</value>
+		</property>
+		<property name="LFEUpmixEnabled">
+			<value>true</value>
+		</property>
+	</object>
+</objects>

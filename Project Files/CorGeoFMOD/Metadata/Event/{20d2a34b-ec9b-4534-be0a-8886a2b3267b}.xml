@@ -75,6 +75,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{381227b0-756d-4c37-8017-e796fd14da0c}">
+		<property name="volume">
+			<value>-5</value>
+		</property>
 		<relationship name="modulators">
 			<destination>{d6d16e3f-9e92-4290-8e45-389549e76156}</destination>
 		</relationship>
@@ -110,7 +113,7 @@
 	<object class="MixerBusEffectChain" id="{35990b72-d746-4bd6-b5ec-3b3855e88347}">
 		<relationship name="effects">
 			<destination>{65933b3a-281e-4cee-b32b-abd59215c3b3}</destination>
-			<destination>{8699b4b4-1651-421a-9b46-0126b4e0e529}</destination>
+			<destination>{c70c3c71-f768-4552-aa0c-6466b29bd76b}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{8c8163c6-ec13-4ed8-abb1-c82953ed94aa}" />
@@ -121,18 +124,12 @@
 	</object>
 	<object class="MixerBusFader" id="{00dc970b-8a1a-4689-aedc-439025275fea}" />
 	<object class="MixerBusFader" id="{65933b3a-281e-4cee-b32b-abd59215c3b3}" />
-	<object class="SpatialiserEffect" id="{8699b4b4-1651-421a-9b46-0126b4e0e529}">
-		<property name="distanceRolloffType">
-			<value>2</value>
+	<object class="ProxyEffect" id="{c70c3c71-f768-4552-aa0c-6466b29bd76b}">
+		<property name="inputFormat">
+			<value>0</value>
 		</property>
-		<property name="maximumDistance">
-			<value>500</value>
-		</property>
-		<property name="overrideRange">
-			<value>true</value>
-		</property>
-		<property name="LFEUpmixEnabled">
-			<value>true</value>
-		</property>
+		<relationship name="preset">
+			<destination>{0ddec207-baaa-44b8-b6db-433623d0fa12}</destination>
+		</relationship>
 	</object>
 </objects>

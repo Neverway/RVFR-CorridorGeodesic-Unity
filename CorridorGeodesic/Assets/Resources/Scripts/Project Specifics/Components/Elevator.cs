@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using FMOD.Studio;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +37,8 @@ public class Elevator : LogicComponent
     }
     [SerializeField] private ElevatorState startingState;
 
+    private EventInstance moveInstance;
+
     //=-----------------=
     // Reference Variables
     //=-----------------=
@@ -51,19 +54,26 @@ public class Elevator : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    public override void Awake()
+    private void Start()
     {
-        base.Awake();
-
         targetIndex = GetStartingTargetIndex();
 
         currentState = startingState;
-    }
 
+        moveInstance = Audio_FMODAudioManager.CreateInstance(Audio_FMODEvents.Instance.elevatorMove);
+    }
     public override void OnEnable ()
     {
         base.OnEnable ();
-        SourcePowerStateChanged (isPowered);
+        //SourcePowerStateChanged (isPowered);
+    }
+    private new void OnDestroy()
+    {
+        moveInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+    private void Update()
+    {
+        moveInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(transform.position + Vector3.up));
     }
 
     //=-----------------=
@@ -111,12 +121,29 @@ public class Elevator : LogicComponent
     private void IdleState()
     {
         StopAllCoroutines();
-        animator.SetBool("Powered", isPowered ? isPowered : forceOpenSignal.isPowered);
+
+        moveInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+
+        bool state = isPowered ? isPowered : forceOpenSignal.isPowered;
+        animator.SetBool("Powered", state);
+
+        if (state)
+        {
+            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorOpen, transform.position + Vector3.up * 2);
+            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorReady, transform.position + Vector3.up * 2);
+        }  
+        else
+            Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorClose, transform.position + Vector3.up * 2);
     }
     private void MovingState()
     {
         StopAllCoroutines();
+
+        moveInstance.start();
+
         animator.SetBool("Powered", false);
+        Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.elevatorClose, transform.position + Vector3.up * 2);
+
         StartCoroutine(MoveElevator());
     }
     private bool GetStopSignalPowerState()

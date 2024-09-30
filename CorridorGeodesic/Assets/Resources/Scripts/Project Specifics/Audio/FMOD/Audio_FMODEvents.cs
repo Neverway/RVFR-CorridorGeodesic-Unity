@@ -24,7 +24,7 @@ public class Audio_FMODEvents: MonoBehaviour
     public EventReference footstepsConcrete;
     public EventReference footstepsMetal;
     public EventReference footstepsGlass;
-    public EventReference footstepsPlatic;
+    public EventReference footstepsPlastic;
 
     [Header("Weapons")]
     public EventReference nixieCrossShoot;
@@ -41,6 +41,12 @@ public class Audio_FMODEvents: MonoBehaviour
     public EventReference riftCollapsing;
     public EventReference riftExpanding;
     public EventReference riftIdle;
+
+    [Header("Elevator")]
+    public EventReference elevatorOpen;
+    public EventReference elevatorClose;
+    public EventReference elevatorReady;
+    public EventReference elevatorMove;
 
     //=-----------------=
     // Private Variables

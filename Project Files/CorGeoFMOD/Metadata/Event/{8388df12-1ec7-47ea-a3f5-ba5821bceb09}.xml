@@ -90,6 +90,7 @@
 	<object class="EventMixerMaster" id="{0fc3279b-61c6-44f9-b7e6-17a8bb2c0210}">
 		<relationship name="modulators">
 			<destination>{3f49a05f-988c-42d1-a59c-8e5af87acfea}</destination>
+			<destination>{a9e07fa7-de5f-4c1f-8389-5e0f5e3880df}</destination>
 		</relationship>
 		<relationship name="effectChain">
 			<destination>{6a09524b-9edf-4629-89bb-02319ccc6ea4}</destination>
@@ -169,14 +170,26 @@
 		<property name="nameOfPropertyBeingModulated">
 			<value>pitch</value>
 		</property>
-		<property name="amount">
-			<value>4.16666698</value>
+	</object>
+	<object class="ADSRModulator" id="{a9e07fa7-de5f-4c1f-8389-5e0f5e3880df}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>volume</value>
+		</property>
+		<property name="initialValue">
+			<value>-80</value>
+		</property>
+		<property name="attackTime">
+			<value>260</value>
+		</property>
+		<property name="finalValue">
+			<value>-80</value>
 		</property>
 	</object>
 	<object class="MixerBusEffectChain" id="{6a09524b-9edf-4629-89bb-02319ccc6ea4}">
 		<relationship name="effects">
 			<destination>{60a39d52-65b0-41c3-b4c7-620a6514c6be}</destination>
-			<destination>{d6acecbc-ec46-4d51-bbc7-e3efec5da749}</destination>
+			<destination>{94594219-c852-40de-bc0e-3318f3058516}</destination>
+			<destination>{ee8d97c1-a96c-43d0-bc9c-2bb690d75dd0}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{f4961e67-59d3-4631-a4c6-8cb7bb9a7508}" />
@@ -195,18 +208,20 @@
 	</object>
 	<object class="MixerBusPanner" id="{0017559c-0aa3-4b49-93c8-b2871cda159c}" />
 	<object class="MixerBusFader" id="{60a39d52-65b0-41c3-b4c7-620a6514c6be}" />
-	<object class="SpatialiserEffect" id="{d6acecbc-ec46-4d51-bbc7-e3efec5da749}">
-		<property name="distanceRolloffType">
-			<value>2</value>
+	<object class="ProxyEffect" id="{94594219-c852-40de-bc0e-3318f3058516}">
+		<property name="inputFormat">
+			<value>1</value>
 		</property>
-		<property name="maximumDistance">
-			<value>500</value>
+		<relationship name="preset">
+			<destination>{0ddec207-baaa-44b8-b6db-433623d0fa12}</destination>
+		</relationship>
+	</object>
+	<object class="ThreeEQEffect" id="{ee8d97c1-a96c-43d0-bc9c-2bb690d75dd0}">
+		<property name="midGain">
+			<value>-6</value>
 		</property>
-		<property name="overrideRange">
-			<value>true</value>
-		</property>
-		<property name="LFEUpmixEnabled">
-			<value>true</value>
+		<property name="highGain">
+			<value>-10</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{30fae1ef-059a-4b87-bc50-895b3b672c82}" />

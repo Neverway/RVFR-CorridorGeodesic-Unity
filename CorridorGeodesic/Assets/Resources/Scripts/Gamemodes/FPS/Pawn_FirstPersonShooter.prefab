@@ -83,6 +83,53 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &1898546504116624479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7762800520211475664}
+  - component: {fileID: 8108330477585671543}
+  m_Layer: 9
+  m_Name: FootstepAudio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7762800520211475664
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898546504116624479}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7443549735799978621}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8108330477585671543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898546504116624479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1111102742f2d74a8be7c0a1819df85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 3406840
 --- !u!1 &1937237048552195963
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,6 +1090,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 28803236869342705}
+    - targetCorrespondingSourceObject: {fileID: 2340826424920119964, guid: ff3469225baab858c9ebc9e25666dba4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7762800520211475664}
     - targetCorrespondingSourceObject: {fileID: 7857472642894048, guid: ff3469225baab858c9ebc9e25666dba4,
         type: 3}
       insertIndex: 0
@@ -1176,6 +1227,7 @@ MonoBehaviour:
   dynamic: 1
   crushInNullSpace: 0
   isParentedIgnoreOffsets: 0
+  isHeld: 0
   space: 0
 --- !u!114 &8635954440880201166
 MonoBehaviour:
