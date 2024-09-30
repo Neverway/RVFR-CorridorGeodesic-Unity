@@ -40,6 +40,15 @@ public class TwoCubesSoftlockCheck : LogicComponent
             //if player is in first room, things are finnnnee
             if (!IsInSecondRoom(player.transform))
             {
+                //unless both cubes are in the other room, then things arent so finnnnee
+                if (IsInSecondRoom(physCubeSpawner.spawnedObject.transform)
+                && IsInSecondRoom(slipCubeSpawner.spawnedObject.transform))
+                {
+                    isPowered = true;
+                    physCubeSpawner.DestroySpawnedObject();
+                    return;
+                }
+
                 isPowered = false;
                 timer = timeForCubeToSlideIntoLava;
                 return;
@@ -51,7 +60,7 @@ public class TwoCubesSoftlockCheck : LogicComponent
                 timer = timeForCubeToSlideIntoLava;
                 return;
             }
-            //if both cubes are in 2nd room with player, things might be finnnnee?
+            //if both cubes are in 2nd room with player, things are finnnnnee
             if (IsInSecondRoom(physCubeSpawner.spawnedObject.transform)
                 && IsInSecondRoom(slipCubeSpawner.spawnedObject.transform))
             {

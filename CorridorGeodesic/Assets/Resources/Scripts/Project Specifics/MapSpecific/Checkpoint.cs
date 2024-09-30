@@ -31,10 +31,9 @@ public class Checkpoint : LogicComponent
         yield return null;
         yield return null; //wait 3 frames to make extra sure I guess?
 
-        if (AmIThisCheckpoint(lastCheckpointName))
+        if (AmIThisCheckpoint(lastCheckpointName) && !clearsCheckpointsInstead)
         {
             FindObjectOfType<Pawn>().transform.position = transform.position;
-            Debug.Log("ELLO Did this work?");
         }
     }
 
