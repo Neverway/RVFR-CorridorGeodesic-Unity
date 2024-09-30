@@ -186,9 +186,18 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Interact
         if (fpsActions.Interact.WasPressedThisFrame())
         {
-            var interaction = Instantiate(interactionVolume, viewCamera.transform);
-            interaction.transform.GetChild(0).GetComponent<Volume_TriggerInteraction>().targetPawn = _pawn;
-            Destroy(interaction, 0.1f);
+            if (_pawn.physObjectAttachmentPoint.heldObject != null
+                && _pawn.physObjectAttachmentPoint.heldObject.TryGetComponent<Object_Grabbable> (out var grabbable)
+                )
+            {
+                grabbable.Drop ();
+            }
+            else //If player wasn't holding anything, then spawn an interactionVolume in front of the camera for a frame.
+            {
+                var interaction = Instantiate (interactionVolume, viewCamera.transform);
+                interaction.transform.GetChild (0).GetComponent<Volume_TriggerInteraction> ().targetPawn = _pawn;
+                Destroy (interaction, 0.1f);
+            }
         }
     }
     
