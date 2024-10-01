@@ -51,28 +51,32 @@ public class Door : LogicComponent
     //=-----------------=
     public void Update()
     {
-        //if (previousPowered != )
-        //{
-        //    StartCoroutine();
-        //}
+        if (previousPowered != isPowered)
+        {
+            powerCheckRoutine = StartCoroutine(WaitToChangePowerState());
+        }
+        else
+        {
+            if (powerCheckRoutine != null)
+                StopCoroutine(powerCheckRoutine);
+        }
     }
-    //public IEnumerator WaitToChangePowerState()
-    //{
-    //
-    //
-    //    if (isPowered)
-    //        onPowered?.Invoke();
-    //    else
-    //        onUnpowered?.Invoke();
-    //}
+    public IEnumerator WaitToChangePowerState()
+    {
+        yield return null;
+        yield return null;
+        yield return null;
+
+        if (isPowered)
+            onPowered?.Invoke();
+        else
+            onUnpowered?.Invoke();
+
+        previousPowered = isPowered;
+    }
     //=-----------------=
     // External Functions
     //=-----------------=
-    //public override void AutoSubscribe()
-    //{
-    //    subscribeLogicComponents.Add(inputSignal);
-    //    base.AutoSubscribe();
-    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);
