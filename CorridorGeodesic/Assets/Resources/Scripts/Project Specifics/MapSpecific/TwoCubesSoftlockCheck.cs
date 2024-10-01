@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class TwoCubesSoftlockCheck : LogicComponent
 {
-    [LogicComponentHandle] public LogicComponent firstRoomButton;
-
     public float timeForCubeToSlideIntoLava = 5f;
+
+
+    [LogicComponentHandle] public LogicComponent firstRoomButton;
+    [LogicComponentHandle] public LogicComponent isPlayerInExtensionOfSecondRoom;
+
 
     public Prop_Respawner physCubeSpawner;
     public Prop_Respawner slipCubeSpawner;
@@ -38,7 +41,7 @@ public class TwoCubesSoftlockCheck : LogicComponent
         if (physCubeSpawner.spawnedObject != null && slipCubeSpawner.spawnedObject != null)
         {
             //if player is in first room, things are finnnnee
-            if (!IsInSecondRoom(player.transform))
+            if (!IsInSecondRoom(player.transform) && !isPlayerInExtensionOfSecondRoom.isPowered)
             {
                 //unless both cubes are in the other room, then things arent so finnnnee
                 if (IsInSecondRoom(physCubeSpawner.spawnedObject.transform)
