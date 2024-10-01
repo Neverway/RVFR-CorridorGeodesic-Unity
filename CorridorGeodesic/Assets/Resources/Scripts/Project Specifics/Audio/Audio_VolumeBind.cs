@@ -45,6 +45,14 @@ public class Audio_VolumeBind: MonoBehaviour
             return;
 
         correctedBounds = meshBounds;
+
+        Vector3 trueSize = new Vector3(
+            correctedBounds.size.x * meshFilter.transform.localScale.x,
+            correctedBounds.size.y * meshFilter.transform.localScale.y,
+            correctedBounds.size.z * meshFilter.transform.localScale.z);
+
+        correctedBounds.size = trueSize;
+
         correctedBounds.center += meshFilter.transform.position;
 
         if (!correctedBounds.Contains(Camera.main.transform.position))
