@@ -159,11 +159,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 0
+  animator: {fileID: 0}
   objectsToEnableWhenActive:
   - {fileID: 2461461370353916583}
   objectsToDisableWhenActive: []
   componentsToEnableWhenActive: []
   componentsToDisableWhenActive: []
+  alwaysCheckToEnable: 0
   inputSignal: {fileID: 6796143814276325688}
   onPowered:
     m_PersistentCalls:
@@ -951,7 +953,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507a0936ec3f140548fdeda4053ddd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPowered: 0
+  _isPowered: 1
+  animator: {fileID: 0}
   fizzlerObject: {fileID: 7773697804311383685}
   fizzleBulbsTrigger: {fileID: 6796143814276325688}
   disableFizzler: {fileID: 0}
@@ -1096,6 +1099,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 0
+  animator: {fileID: 0}
   owningTeam: 
   affectsOwnTeam: 0
   ignoreHeldObjects: 1
