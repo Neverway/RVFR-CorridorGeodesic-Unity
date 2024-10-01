@@ -14,8 +14,6 @@ GameObject:
   - component: {fileID: 487768633793523850}
   - component: {fileID: 7707290708619618782}
   - component: {fileID: 3408862803075403484}
-  - component: {fileID: 3622640626294248549}
-  - component: {fileID: 2531408152708616024}
   m_Layer: 3
   m_Name: Volume3DTriggerEvent
   m_TagString: Untagged
@@ -138,6 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 0
+  animator: {fileID: 0}
   owningTeam: 
   affectsOwnTeam: 0
   ignoreHeldObjects: 0
@@ -175,18 +174,6 @@ MonoBehaviour:
           m_StringArgument: Press
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 3622640626294248549}
-        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Press
-          m_BoolArgument: 1
-        m_CallState: 2
   onUnoccupied:
     m_PersistentCalls:
       m_Calls:
@@ -214,81 +201,7 @@ MonoBehaviour:
           m_StringArgument: Release
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2531408152708616024}
-        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Release
-          m_BoolArgument: 0
-        m_CallState: 2
   hasBeenTriggered: 1
---- !u!114 &3622640626294248549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3397088360405504864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1369429199
-      Data2: 1266933166
-      Data3: 814966693
-      Data4: -2074894290
-    Path: event:/SFX/Components/FloorButtonOn
-  Event: 
-  PlayEvent: 0
-  StopEvent: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
---- !u!114 &2531408152708616024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3397088360405504864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 2103947958
-      Data2: 1233358717
-      Data3: -1315997555
-      Data4: 1272214290
-    Path: event:/SFX/Components/FloorButtonOff
-  Event: 
-  PlayEvent: 0
-  StopEvent: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &5479940119052153901
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,8 +332,48 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1067403595379648601}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8352115548311311394}
   m_SourcePrefab: {fileID: 100100000, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
+--- !u!1 &7585677182710121538 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4497799313178809538}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8352115548311311394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7585677182710121538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac4b96a8faa061843ba496a252d79e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPowered: 0
+  animator: {fileID: 0}
+  inputSignal: {fileID: 3408862803075403484}
+  audioTransform: {fileID: 0}
+  onPoweredAudio:
+    Guid:
+      Data1: 1369429199
+      Data2: 1266933166
+      Data3: 814966693
+      Data4: -2074894290
+    Path: event:/SFX/Components/FloorButtonOn
+  onUnPoweredAudio:
+    Guid:
+      Data1: 2103947958
+      Data2: 1233358717
+      Data3: -1315997555
+      Data4: 1272214290
+    Path: event:/SFX/Components/FloorButtonOff
 --- !u!4 &7949558051162055028 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,

@@ -325,42 +325,42 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.920294
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -44.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 38.91
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99252504
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.12204116
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0000009613354
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000011820606
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -14.02
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
         type: 3}
@@ -447,6 +447,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1411689190526569722}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d32678c2dbafd0b4197482c35e105db7,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4591339739027861875}
   m_SourcePrefab: {fileID: 100100000, guid: d32678c2dbafd0b4197482c35e105db7, type: 3}
 --- !u!1 &3918915656194943703 stripped
 GameObject:
@@ -565,6 +569,36 @@ MonoBehaviour:
   isParentedIgnoreOffsets: 0
   isHeld: 0
   space: 0
+--- !u!114 &4591339739027861875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3918915656194943703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac4b96a8faa061843ba496a252d79e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPowered: 0
+  animator: {fileID: 0}
+  inputSignal: {fileID: 5448296422962118817}
+  audioTransform: {fileID: 4407081929141596269}
+  onPoweredAudio:
+    Guid:
+      Data1: 1369429199
+      Data2: 1266933166
+      Data3: 814966693
+      Data4: -2074894290
+    Path: event:/SFX/Components/FloorButtonOn
+  onUnPoweredAudio:
+    Guid:
+      Data1: 2103947958
+      Data2: 1233358717
+      Data3: -1315997555
+      Data4: 1272214290
+    Path: event:/SFX/Components/FloorButtonOff
 --- !u!4 &4407081929141596269 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d32678c2dbafd0b4197482c35e105db7,
