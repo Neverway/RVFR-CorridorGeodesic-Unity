@@ -19,6 +19,7 @@ public class lag : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
+    [SerializeField, Range(0, 100)] private int lagAmount = 100;
 
 
     //=-----------------=
@@ -31,7 +32,7 @@ public class lag : MonoBehaviour
     //=-----------------=
     private void Update()
     {
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < lagAmount * 10; i++)
         {
             sigma *= Mathf.Lerp(sigma, i, sigma/10f);
             sigma /= 2.1452f;
