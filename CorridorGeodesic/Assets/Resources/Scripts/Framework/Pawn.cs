@@ -50,6 +50,7 @@ public class Pawn : MonoBehaviour
     public Quaternion faceDirection; // Imported from old system
     public RaycastHit slopeHit;
     public Pawn_AttachmentPoint physObjectAttachmentPoint;
+    [SerializeField] private LayerMask groundDetectionLayerMask;
 
 
     //=-----------------=
@@ -194,9 +195,10 @@ public class Pawn : MonoBehaviour
     /// <returns></returns>
     public bool IsGroundSteep3D ()
     {
-        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
+        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f, groundDetectionLayerMask))
         {
-            return Vector3.Angle (slopeHit.normal, Vector3.up) > currentState.steepSlopeAngle;
+            float angle = Vector3.Angle (slopeHit.normal, Vector3.up);
+            return angle > currentState.steepSlopeAngle;
         }
         return false;
     }
