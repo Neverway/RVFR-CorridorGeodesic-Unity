@@ -33,6 +33,8 @@ public class Door : LogicComponent
     private UnityEvent onPowered;
     private UnityEvent onUnpowered;
 
+    private bool previousPowered;
+    private Coroutine powerCheckRoutine;
 
     //=-----------------=
     // Mono Functions
@@ -41,12 +43,28 @@ public class Door : LogicComponent
     {
         base.OnEnable();
         SourcePowerStateChanged(isPowered);
+        previousPowered = isPowered;
     }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
+    public void Update()
+    {
+        //if (previousPowered != )
+        //{
+        //    StartCoroutine();
+        //}
+    }
+    //public IEnumerator WaitToChangePowerState()
+    //{
+    //
+    //
+    //    if (isPowered)
+    //        onPowered?.Invoke();
+    //    else
+    //        onUnpowered?.Invoke();
+    //}
     //=-----------------=
     // External Functions
     //=-----------------=
@@ -60,11 +78,6 @@ public class Door : LogicComponent
         base.SourcePowerStateChanged(powered);
 
         isPowered = powered;
-
-        if (powered)
-            onPowered?.Invoke();
-        else
-            onUnpowered?.Invoke();
 
         animator.SetBool("Powered", isPowered);
     }
