@@ -28,12 +28,12 @@ public class Vent : LogicComponent
     //=-----------------=
     // Reference Variables
     //=-----------------='
-    [Header("References")]
-    [SerializeField] private Animator animator;
+    //[Header("References")]
+    //[SerializeField] private Animator animator;
     //[SerializeField] private Material poweredMaterial, unpoweredMaterial;
     //[SerializeField] private GameObject indicatorMesh;
-    private UnityEvent onPowered;
-    private UnityEvent onUnpowered;
+    //private UnityEvent onPowered;
+    //private UnityEvent onUnpowered;
 
     //private float storedAirMagnitude;
 
@@ -114,10 +114,10 @@ public class Vent : LogicComponent
 
         isPowered = inputSignal.isPowered && !isBeingSliced.isPowered;
 
-        if (isPowered)
-            onPowered?.Invoke();
-        else
-            onUnpowered?.Invoke();
+        //if (isPowered)
+        //    onPowered?.Invoke();
+        //else
+        //    onUnpowered?.Invoke();
 
         SetBladesAnimation(isPowered);
     }

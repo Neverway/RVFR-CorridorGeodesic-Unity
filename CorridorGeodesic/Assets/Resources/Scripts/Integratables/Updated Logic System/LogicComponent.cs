@@ -32,8 +32,10 @@ public abstract class LogicComponent : MonoBehaviour
             {
                 _isPowered = value;
 
-                OnPowerStateChanged?.Invoke(_isPowered);
-                LocalPowerStateChanged(_isPowered);
+                if(correctPowerState != null)
+                    StopCoroutine(correctPowerState);
+                if(gameObject.activeSelf)
+                    correctPowerState = StartCoroutine(CorrectPowerState());
             }
         }
     }
@@ -42,11 +44,12 @@ public abstract class LogicComponent : MonoBehaviour
     // Private Variables
     //=-----------------=
     private List<LogicComponent> subscribeLogicComponents = new List<LogicComponent>();
+    private Coroutine correctPowerState;
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
-
+    [SerializeField] protected Animator animator;
 
     //=-----------------=
     // Mono Functions
@@ -64,6 +67,9 @@ public abstract class LogicComponent : MonoBehaviour
         }
 
         Subscribe();
+
+        if(animator)
+            animator.SetBool("StartState", _isPowered);
 
         //AutoSubscribe();
     }
@@ -144,6 +150,15 @@ public abstract class LogicComponent : MonoBehaviour
     //{
     //    Subscribe();
     //}
+    IEnumerator CorrectPowerState()
+    {
+        yield return null;
+        yield return null;
+        yield return null;
+
+        OnPowerStateChanged?.Invoke(_isPowered);
+        LocalPowerStateChanged(_isPowered);
+    }
     public virtual void SourcePowerStateChanged(bool powered)
     {
 

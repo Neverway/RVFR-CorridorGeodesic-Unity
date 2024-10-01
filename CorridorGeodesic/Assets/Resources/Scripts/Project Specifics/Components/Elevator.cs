@@ -48,7 +48,7 @@ public class Elevator : LogicComponent
     [SerializeField, LogicComponentHandle] private LogicComponent stopSignal;
     [SerializeField, LogicComponentHandle] private LogicComponent forceOpenSignal;
     [SerializeField] private List<Transform> elevatorTargets = new List<Transform>();
-    [SerializeField] private Animator animator;
+    //[SerializeField] private Animator animator;
     [SerializeField] private GameObject doorOpenTrigger;
 
 

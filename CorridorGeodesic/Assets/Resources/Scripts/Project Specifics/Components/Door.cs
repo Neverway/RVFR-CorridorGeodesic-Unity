@@ -26,15 +26,15 @@ public class Door : LogicComponent
     //=-----------------=
     // Reference Variables
     //=-----------------='
-    [Header("References")]
-    [SerializeField] private Animator animator;
+    //[Header("References")]
+    //[SerializeField] private Animator animator;
     //[SerializeField] private Material poweredMaterial, unpoweredMaterial;
     //[SerializeField] private GameObject indicatorMesh;
-    private UnityEvent onPowered;
-    private UnityEvent onUnpowered;
+    //private UnityEvent onPowered;
+    //private UnityEvent onUnpowered;
 
-    private bool previousPowered;
-    private Coroutine powerCheckRoutine;
+    //private bool previousPowered;
+    //private Coroutine powerCheckRoutine;
 
     //=-----------------=
     // Mono Functions
@@ -43,37 +43,37 @@ public class Door : LogicComponent
     {
         base.OnEnable();
         SourcePowerStateChanged(isPowered);
-        previousPowered = isPowered;
+        //previousPowered = isPowered;
     }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    public void Update()
-    {
-        if (previousPowered != isPowered)
-        {
-            powerCheckRoutine = StartCoroutine(WaitToChangePowerState());
-        }
-        else
-        {
-            if (powerCheckRoutine != null)
-                StopCoroutine(powerCheckRoutine);
-        }
-    }
-    public IEnumerator WaitToChangePowerState()
-    {
-        yield return null;
-        yield return null;
-        yield return null;
+    //public void Update()
+    //{
+    //    if (previousPowered != isPowered)
+    //    {
+    //        powerCheckRoutine = StartCoroutine(WaitToChangePowerState());
+    //    }
+    //    else
+    //    {
+    //        if (powerCheckRoutine != null)
+    //            StopCoroutine(powerCheckRoutine);
+    //    }
+    //}
+    //public IEnumerator WaitToChangePowerState()
+    //{
+    //    yield return null;
+    //    yield return null;
+    //    yield return null;
 
-        if (isPowered)
-            onPowered?.Invoke();
-        else
-            onUnpowered?.Invoke();
+    //    if (isPowered)
+    //        onPowered?.Invoke();
+    //    else
+    //        onUnpowered?.Invoke();
 
-        previousPowered = isPowered;
-    }
+    //    previousPowered = isPowered;
+    //}
     //=-----------------=
     // External Functions
     //=-----------------=
