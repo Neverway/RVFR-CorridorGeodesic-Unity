@@ -1,17 +1,19 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Used by the levelManager to collect the ids for saving actors so they
-// can be loaded from the level file
-// Notes:
+// Purpose: Used by the levelManager to collect the IDs for saving actors in the level editor, so they
+//  can be loaded from the level file
+// Notes: 
 //
 //=============================================================================
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
+/// <summary>
+/// Used by the levelManager to collect the IDs for saving actors in the level editor, so they can be loaded from the level file
+/// </summary>
 public class ActorData : MonoBehaviour
 {
     //=-----------------=
@@ -56,7 +58,10 @@ public class ActorData : MonoBehaviour
             foreach (var scriptData in scriptDataList)
             {
                 // Check if the target script or its exposed variables are not assigned
-                if (scriptData.targetScript == null || scriptData.exposedVariables == null) continue;
+                if (scriptData.targetScript == null || scriptData.exposedVariables == null)
+                {
+                    continue;
+                }
 
                 // Check if the exposed variables of the current script data contain the name of the current variable data
                 if (scriptData.exposedVariables.Contains(_variableName))
@@ -75,10 +80,16 @@ public class ActorData : MonoBehaviour
         FieldInfo field = scriptType.GetField(_variableName);
 
         // If we can't find the variable, we can't change it, so we stop here.
-        if (field == null) return;
+        if (field == null)
+        {
+            return;
+        }
 
         // If the new value we want to give to the variable is empty and the variable is not a string, we don't do anything.
-        if (_value == "" && field.FieldType != typeof(string)) return;
+        if (_value == "" && field.FieldType != typeof(string))
+        {
+            return;
+        }
 
         // We convert the new value to match the type of the variable we're changing.
         object convertedValue = Convert.ChangeType(_value, field.FieldType);
@@ -95,6 +106,7 @@ public class ActorData : MonoBehaviour
     {
         
     }
+    
     /// <summary>
     /// Looks at the variables we can see in our game objects and creates a list of information about them.
     /// </summary>
@@ -104,7 +116,6 @@ public class ActorData : MonoBehaviour
         if (scriptDataList == null)
         {
             return;
-            
         }
         
         // We prepare a list to hold information about the variables we find.

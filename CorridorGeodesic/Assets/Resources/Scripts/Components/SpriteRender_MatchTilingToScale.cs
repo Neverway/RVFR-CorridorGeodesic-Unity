@@ -1,14 +1,16 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: If an object or volume has a sprite renderer as part of it, this
+//  will tile the sprite renderer according to the objects scale
 // Notes:
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// If an object or volume has a sprite renderer as part of it, this will tile the sprite renderer according to the objects scale
+/// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
 public class SpriteRender_MatchTilingToScale : MonoBehaviour
 {

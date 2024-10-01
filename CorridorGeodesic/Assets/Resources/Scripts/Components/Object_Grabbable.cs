@@ -1,16 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Allows a player to hold this physics object
 // Notes:
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+/// <summary>
+/// Allows a player to hold this physics object
+/// </summary>
 public class Object_Grabbable : MonoBehaviour
 {
     //=-----------------=
@@ -21,7 +20,7 @@ public class Object_Grabbable : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    public bool isHeld;
+    [HideInInspector] public bool isHeld;
     private bool is2D;
     private bool wasGravityEnabled;
 
@@ -29,12 +28,13 @@ public class Object_Grabbable : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    public Pawn targetPawn;
-    public Vector3 lastFaceDirection;
+    [HideInInspector] public Pawn targetPawn;
+    [HideInInspector] public Vector3 lastFaceDirection;
     private Volume_TriggerInteractable interactableTrigger;
     private Rigidbody propRigidbody;
     private CorGeo_ActorData corGeoActorData;
-    [SerializeField] private LayerMask layerMask;
+    [Tooltip("The layers to check in the raycast to keep this object from being pushed through walls when held")]
+    [SerializeField] private LayerMask collisionCheckLayer;
 
 
     //=-----------------=
@@ -68,7 +68,7 @@ public class Object_Grabbable : MonoBehaviour
             var direction = targetPawn.physObjectAttachmentPoint.transform.position - gameObject.transform.position;
             var distance = Vector3.Distance(targetPawn.physObjectAttachmentPoint.transform.position, gameObject.transform.position);
             Vector3 targetPosition;
-            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance, layerMask))
+            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance, collisionCheckLayer))
             {
 
                 targetPosition = (hit.point - (direction.normalized * 0.5f));
@@ -168,7 +168,7 @@ public class Object_Grabbable : MonoBehaviour
         }
     }
     
-    public Vector2 Get2DFaceDirectionFromQuaternion(Quaternion _rotation, int _zRotationOffset)
+    private Vector2 Get2DFaceDirectionFromQuaternion(Quaternion _rotation, int _zRotationOffset)
     {
         // Extract the z-axis rotation from the Quaternion
         float angle = _rotation.eulerAngles.z - _zRotationOffset;
@@ -190,6 +190,9 @@ public class Object_Grabbable : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    /// <summary>
+    /// Drop the object if it's being held, or pickup the object if it was not
+    /// </summary>
     public void ToggleHeld()
     {
         isHeld = !isHeld;
@@ -203,17 +206,17 @@ public class Object_Grabbable : MonoBehaviour
         {
             propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
             targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
-
         }
     }
 
-    public void Drop ()
+    /// <summary>
+    /// Drop the physics object from the players grasp
+    /// </summary>
+    public void Drop()
     {
-        if (isHeld)
-        {
-            propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
-            targetPawn.physObjectAttachmentPoint.heldObject = null;
-            ToggleHeld ();
-        }
+        if (!isHeld) return;
+        propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
+        targetPawn.physObjectAttachmentPoint.heldObject = null;
+        ToggleHeld();
     }
 }

@@ -1,7 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
 // Purpose: Plays sound effects when hovering or selecting a UI button
-// Notes:
+// Notes: Requires FMOD events for "hover" and "select"
 //
 //=============================================================================
 
@@ -13,7 +13,7 @@ using UnityEngine.UI;
 /// Plays sound effects when hovering or selecting a UI button
 /// </summary>
 [RequireComponent(typeof(Button))]
-public class Button_Sounds : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler
+public class Button_SoundsFMOD : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler
 {
     //=-----------------=
     // Public Variables

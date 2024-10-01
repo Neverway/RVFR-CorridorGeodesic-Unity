@@ -1,23 +1,22 @@
-//======== Neverway 2023 Project Script | Written by Arthur Aka Liz ===========
+//===================== (Neverway 2024) Written by Liz M. =====================
 // 
-// Type: 
-// Purpose: 
-// Applied to: 
+// Purpose: Show the velocity of a target object in a text element
+// Notes: 
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UI_Text_Speedometer : MonoBehaviour
+/// <summary>
+/// Show the velocity of a target object in a text element
+/// </summary>
+public class Text_ObjectSpeedometer : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [SerializeField] private bool UseLocalPlayer;
+    [SerializeField] private bool targetLocalPlayer;
 
 
     //=-----------------=
@@ -44,7 +43,7 @@ public class UI_Text_Speedometer : MonoBehaviour
 
     private void Update()
     {
-        if (UseLocalPlayer && !entityRigidbody)
+        if (targetLocalPlayer && !entityRigidbody)
         {
             gameInstance = FindObjectOfType<GameInstance>();
             if (gameInstance.localPlayerCharacter.GetComponent<Rigidbody>()) entityRigidbody = gameInstance.localPlayerCharacter.GetComponent<Rigidbody>();

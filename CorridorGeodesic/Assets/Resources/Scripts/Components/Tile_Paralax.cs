@@ -1,13 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Simulate parallax scrolling on a tilemap for use with orthographic cameras.
-// Notes: This script adjusts the scale and position of the tilemap based on the camera's movement.
+// Purpose: Simulate parallax scrolling on a tilemap for use with orthographic cameras
+// Notes: This script adjusts the scale and position of the tilemap based on the camera's movement
 //
 //=============================================================================
 
-
 using UnityEngine;
 
+/// <summary>
+/// Simulate parallax scrolling on a tilemap for use with orthographic cameras
+/// </summary>
 public class Tile_Paralax : MonoBehaviour
 {
     //=-----------------=

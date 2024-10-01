@@ -1,13 +1,16 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Updates a TextMeshPro text component with the current project version.
-// Notes: This script assumes TextMeshPro is used for displaying text.
+// Purpose: Updates a TextMeshPro text component with the current project version
+// Notes: This script assumes TextMeshPro is used for displaying text
 //
 //=============================================================================
 
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Updates a TextMeshPro text component with the current project version
+/// </summary>
 public class Text_ProjectVersion : MonoBehaviour
 {
     //=-----------------=

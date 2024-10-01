@@ -1,14 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Always keeps this object the same size regardless of if it's parent changes scale
 // Notes:
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Always keeps this object the same size regardless of if it's parent changes scale
+/// </summary>
 public class Object_KeepWorldScale : MonoBehaviour
 {
     //=-----------------=
@@ -30,13 +31,13 @@ public class Object_KeepWorldScale : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    void Start()
+    private void Start()
     {
         // Record the initial scale of the sprite
         initialScale = transform.localScale;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         // Get the parent's scale
         Vector3 parentScale = transform.parent.localScale;

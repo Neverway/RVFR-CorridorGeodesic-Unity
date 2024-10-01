@@ -1,9 +1,7 @@
-//======== Neverway 2023 Project Script | Written by Arthur Aka Liz ===========
+//===================== (Neverway 2024) Written by Liz M. =====================
 // 
-// Type: Component
-// Purpose: Output the frames per second to a TMP_Text component, this is used
-//	for displaying the FPS counter value when selected in the options menu
-// Applied to: The FPS counter UI element
+// Purpose: Displays the FPS counter value when selected in the options menu
+// Notes: Applied to the FPS counter UI element
 //
 //=============================================================================
 
@@ -11,6 +9,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Displays the FPS counter value when selected in the options menu
+/// </summary>
 [RequireComponent(typeof(TMP_Text))]
 public class UI_Text_FPS : MonoBehaviour
 {

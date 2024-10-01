@@ -9,6 +9,9 @@ using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Modulates the pitch variance of an audio source and provides options to play sounds with varying pitches.
+/// </summary>
 [RequireComponent(typeof(AudioSource))]
 public class AudioSource_PitchVarienceModulator : MonoBehaviour
 {
@@ -56,7 +59,6 @@ public class AudioSource_PitchVarienceModulator : MonoBehaviour
     /// Plays the sound after a specified delay.
     /// </summary>
     /// <param name="_delay">The delay before playing the sound.</param>
-    /// <returns>An IEnumerator for coroutine purposes.</returns>
     public IEnumerator PlaySound(float _delay)
     {
         yield return new WaitForSeconds(_delay);
@@ -67,11 +69,13 @@ public class AudioSource_PitchVarienceModulator : MonoBehaviour
     /// Plays a specific audio clip with a randomized pitch within the defined range.
     /// </summary>
     /// <param name="_audioClip">The audio clip to play.</param>
+    /// <param name="_isOneShot">If true, multiple sound effects can be emmited from one source</param>
     public void PlaySound(AudioClip _audioClip, bool _isOneShot = true)
     {
         audioSource.clip = _audioClip;
         SetAndPlayRandomPitch(_audioClip, _isOneShot);
     }
+    
     public void PlaySound()
     {
         SetAndPlayRandomPitch(null, false);

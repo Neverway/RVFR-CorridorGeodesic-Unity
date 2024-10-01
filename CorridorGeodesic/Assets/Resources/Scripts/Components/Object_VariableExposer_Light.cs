@@ -1,17 +1,17 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Exposes variables to control a Light component's properties.
+// Purpose: Exposes variables to control a Light component's properties in the level editor
 // Notes: This script requires a Light component attached to the same GameObject.
+// Added variable for spot angle and improved performance by only updating
+// and grabbing the light when needed -Soulex
 //
 //=============================================================================
 
-///===== (Neverway 2024) Changes by Andre B. =====
-/// Added variable for spot angle
-/// Improved performance by only updating and grabbing the light when needed, rather than every frame
-///===============================================
-
 using UnityEngine;
 
+/// <summary>
+/// Exposes variables to control a Light component's properties in the level editor
+/// </summary>
 [RequireComponent(typeof(Light))]
 public class Object_VariableExposer_Light : MonoBehaviour
 {

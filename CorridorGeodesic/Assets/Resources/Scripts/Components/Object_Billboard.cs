@@ -1,18 +1,22 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Always make a gameobject face the camera 
+// Purpose: Always make a gameObject face the camera 
 // Notes: (usually used for 2D objects like sprites to make them appear 3D)
 //
 //=============================================================================
 
 using UnityEngine;
 
+/// <summary>
+/// Always make a gameObject face the camera 
+/// </summary>
 public class Object_Billboard : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [SerializeField] private float updateRate = 1;
+    [Tooltip("How many seconds between updating this object to face the camera")]
+    [SerializeField] private float updateRate = 0.25f;
 
 
     //=-----------------=

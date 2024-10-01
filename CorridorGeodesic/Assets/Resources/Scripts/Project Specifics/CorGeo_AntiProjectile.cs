@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Attach this to a gameobject to make markers not be able to be placed on this
+// Purpose: Attach this to a gameObject to make markers not be able to be placed on this
 // Notes:
 //
 //=============================================================================

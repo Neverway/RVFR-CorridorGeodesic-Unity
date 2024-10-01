@@ -1,12 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Exposes variables to control a GameObject's Transform properties.
+// Purpose: Exposes variables to control a GameObject's Transform properties in the level editor
 // Notes: This script allows manipulation of scale and position offsets.
 //
 //=============================================================================
 
 using UnityEngine;
 
+/// <summary>
+/// Exposes variables to control a GameObject's Transform properties in the level editor
+/// </summary>
 public class Object_VariableExposer_Transform : MonoBehaviour
 {
     //=-----------------=

@@ -6,12 +6,14 @@
 //=============================================================================
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Provide functionality to selector style buttons
+/// </summary>
 public class Button_Selector : MonoBehaviour
 {
     //=-----------------=
@@ -29,7 +31,7 @@ public class Button_Selector : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    public event Action onValueChanged;
+    public event Action OnValueChanged;
     [SerializeField] private Button left, right;
     [SerializeField] private GameObject indicator, indicatorSelected, indicatorRoot;
     [SerializeField] private TMP_Text text;
@@ -41,9 +43,10 @@ public class Button_Selector : MonoBehaviour
     //=-----------------=
     private void Start()
     {
+        // Add UI Button event listeners
         left.onClick.AddListener(delegate
         {
-            onValueChanged?.Invoke();
+            OnValueChanged?.Invoke();
             if (currentIndex - 1 >= 0)
             {
                 currentIndex--;
@@ -51,7 +54,7 @@ public class Button_Selector : MonoBehaviour
         });
         right.onClick.AddListener(delegate
         {
-            onValueChanged?.Invoke();
+            OnValueChanged?.Invoke();
             if (currentIndex + 1 <= selectorOptions.Count-1)
             {
                 currentIndex++;

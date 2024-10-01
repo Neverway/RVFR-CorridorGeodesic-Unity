@@ -1,7 +1,7 @@
-//======== Neverway 2023 Project Script | Written by Arthur Aka Liz ===========
+//===================== (Neverway 2024) Written by Liz M. =====================
 // 
-// Type: Component
 // Purpose: Output the value of a slider to a TMP_Text component
+// Notes: 
 //
 //=============================================================================
 
@@ -9,6 +9,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Output the value of a slider to a TMP_Text component
+/// </summary>
 [RequireComponent(typeof(TMP_Text))]
 public class UI_Text_SliderValue : MonoBehaviour
 {

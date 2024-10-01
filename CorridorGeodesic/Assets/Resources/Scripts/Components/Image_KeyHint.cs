@@ -1,16 +1,16 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Display the image for the button for the corresponding action based on the current input device type
+// Purpose: Display a keyhint for a target action of a target input device
 // Notes:
 //
 //=============================================================================
 
-using System;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
+/// <summary>
+/// Display a keyhint for a target action of a target input device
+/// </summary>
 [RequireComponent(typeof(Image))]
 public class Image_KeyHint : MonoBehaviour
 {
@@ -19,8 +19,15 @@ public class Image_KeyHint : MonoBehaviour
     //=-----------------=
     public string targetActionMap;
     public string targetAction;
-    [Header("0 - Display button for current input device, 1 - Keyboard, 2 - Controller, 3 - Motion Controller (VR)")]
-    [Range(0,2)] public int targetInputDevice;
+    public TargetInputDevice targetInputDevice;
+    public enum TargetInputDevice
+    {
+        Current,
+        Keyboard,
+        Controller,
+        MotionController,
+    }
+
 
     //=-----------------=
     // Private Variables
@@ -109,13 +116,16 @@ public class Image_KeyHint : MonoBehaviour
             string[] splitBinding = binding.path.Split("/");
             var bindingKey = splitBinding[1];
 
-            if (controlScheme == "Keyboard&Mouse" && targetInputDevice == 1 || controlScheme == "Keyboard&Mouse" && targetInputDevice == 0 && applicationKeybinds.currentDeviceID == 1 )
+            switch (controlScheme)
             {
-                hintImage.sprite = applicationKeybinds.GetKeybindImage(1, bindingKey);
-            }
-            else if (controlScheme == "Gamepad" && targetInputDevice == 2 || controlScheme == "Gamepad" && targetInputDevice == 0 && applicationKeybinds.currentDeviceID == 2 )
-            {
-                hintImage.sprite = applicationKeybinds.GetKeybindImage(2, bindingKey);
+                case "Keyboard&Mouse" when targetInputDevice == TargetInputDevice.Keyboard:
+                case "Keyboard&Mouse" when targetInputDevice == TargetInputDevice.Current && applicationKeybinds.currentDeviceID == 1:
+                    hintImage.sprite = applicationKeybinds.GetKeybindImage(1, bindingKey);
+                    break;
+                case "Gamepad" when targetInputDevice == TargetInputDevice.Controller:
+                case "Gamepad" when targetInputDevice == TargetInputDevice.Current && applicationKeybinds.currentDeviceID == 2:
+                    hintImage.sprite = applicationKeybinds.GetKeybindImage(2, bindingKey);
+                    break;
             }
         }
 
