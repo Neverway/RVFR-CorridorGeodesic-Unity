@@ -346,7 +346,7 @@ public class PlayerController_FirstPersonShooter : PawnController
 
             if (_pawn.IsGrounded3D() && Mathf.Abs(moveDirection.x) < 0.2f && Mathf.Abs(moveDirection.z) < 0.2f)
             {
-                //if player isn't moving (beyond a dead zone), we add some friction on the ground.
+                // if player isn't moving (beyond a dead zone), we add some friction on the ground.
                 horizonalVelocity *= 0.8f;
             }
 
@@ -385,8 +385,6 @@ public class PlayerController_FirstPersonShooter : PawnController
 
     private void OnDeath(Pawn _pawn)
     {
-        var rotation = viewCamera.transform.localPosition;
-        
         // Drop held props
         if (_pawn.physObjectAttachmentPoint.heldObject)
         {
