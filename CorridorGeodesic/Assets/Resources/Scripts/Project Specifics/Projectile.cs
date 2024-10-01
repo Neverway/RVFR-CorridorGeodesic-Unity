@@ -53,6 +53,7 @@ public class Projectile : MonoBehaviour
         if (disabled)
             return;
 
+        moveVector = transform.forward * moveSpeed * Time.deltaTime;
         if (!CollisionLogic ())
             MoveLogic ();
     }
@@ -72,12 +73,11 @@ public class Projectile : MonoBehaviour
     //=-----------------=
     public virtual void MoveLogic ()
     {
-        moveVector = transform.forward * moveSpeed * Time.deltaTime;
         transform.position += moveVector;
     }
     public virtual bool CollisionLogic ()
     {
-        if (Physics.Raycast (transform.position, transform.forward * moveSpeed * Time.deltaTime, out RaycastHit hit, moveVector.magnitude + radius + 1f, layerMask))
+        if (Physics.Raycast (transform.position, transform.forward, out RaycastHit hit, moveVector.magnitude + radius, layerMask))
         {
             OnCollision (hit);
             return true;
