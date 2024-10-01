@@ -197,6 +197,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7538785840136734234}
+    - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2248967520267805537}
   m_SourcePrefab: {fileID: 100100000, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
 --- !u!4 &5940627414859672511 stripped
 Transform:
@@ -218,7 +222,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6153716924502838921}
   serializedVersion: 4
-  m_Mass: 15
+  m_Mass: 12
   m_Drag: 0
   m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -271,11 +275,11 @@ MonoBehaviour:
   repeatDelay: 0.2
   impactSound:
     Guid:
-      Data1: 1784229098
-      Data2: 1236084974
-      Data3: 197885845
-      Data4: 1037337918
-    Path: event:/SFX/Physics/MetalImpact
+      Data1: 2102582212
+      Data2: 1161757476
+      Data3: -1614500943
+      Data4: 2117759777
+    Path: event:/SFX/Framework/Select
 --- !u!65 &7538785840136734234
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -297,6 +301,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.75, z: 0.75}
   m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &2248967520267805537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6153716924502838921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed1df3500ebdb29438b4c44d2de7c3a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  force: 200
 --- !u!1001 &6045859626693253384
 PrefabInstance:
   m_ObjectHideFlags: 0
