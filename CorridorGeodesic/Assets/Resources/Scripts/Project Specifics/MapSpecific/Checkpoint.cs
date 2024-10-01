@@ -59,7 +59,7 @@ public class Checkpoint : LogicComponent
             }
 
             lastCheckpointName = uniqueCheckpointName;
-            Debug.Log("Set Checkpoint to: " + uniqueCheckpointName);
+            //Debug.Log("Set Checkpoint to: " + uniqueCheckpointName);
         }
 
         isPowered = AmIThisCheckpoint(lastCheckpointName);
@@ -74,6 +74,6 @@ public class Checkpoint : LogicComponent
     public static void ClearCheckpoints()
     {
         lastCheckpointName = null;
-        Debug.Log("Clearing checkpoints");
+        //Debug.Log("Clearing checkpoints");
     }
 }

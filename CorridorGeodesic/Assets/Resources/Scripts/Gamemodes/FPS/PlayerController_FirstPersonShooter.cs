@@ -8,16 +8,7 @@
 //
 //=============================================================================
 
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using Quaternion = UnityEngine.Quaternion;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 [CreateAssetMenu(fileName="PlayerController_FirstPersonShooter", menuName="Neverway/ScriptableObjects/Pawns & Gamemodes/Controllers/PlayerController_FirstPersonShooter")]
 public class PlayerController_FirstPersonShooter : PawnController
@@ -29,11 +20,20 @@ public class PlayerController_FirstPersonShooter : PawnController
     [SerializeField] public float coyoteTime = 0.2f;
     [SerializeField] public float jumpInputBuffer = 0.2f;
     [SerializeField] public bool allowJumpCheat = true;
+    
     //=-----------------=
     // Private Variables
     //=-----------------=
     private Vector3 moveDirection;
     private Vector3 slopMoveDirection;
+    
+    // Input buffering for jumping
+    private float timeLastCouldJump = -1f;
+    private float timeLastInputJump = -1f;
+    private float timeLastJumped = -1f;
+    private bool ignoreGroundCheckToAvoidDoubleJump = false;
+    private bool doJumpCheat = false;
+    
     [HideInInspector] public float yRotation;
     [HideInInspector] public float xRotation;
 
@@ -42,9 +42,10 @@ public class PlayerController_FirstPersonShooter : PawnController
     // Reference Variables
     //=-----------------=
     private GameInstance gameInstance;
-    private InputActions.FirstPersonShooterActions fpsActions;
     private Rigidbody rigidbody;
     private Camera viewCamera;
+    private InputActions.FirstPersonShooterActions fpsActions;
+    [Tooltip("When the player presses the interact action this volume prefab is created and used similar to a raycast for detecting interactions")]
     [SerializeField] private GameObject interactionVolume;
 
 
@@ -69,13 +70,12 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Subscribe to events
         _pawn.OnPawnDeath += () => { OnDeath(_pawn); };
 
-        //Turn off jump cheat
+        // Turn off jump cheat
         doJumpCheat = false;
     }
     
     public override void PawnUpdate(Pawn _pawn)
     {
-        
         // Check for pause input and set cursor locking accordingly
         UpdatePauseMenu(_pawn);
         if (_pawn.isPaused) return;
@@ -236,14 +236,6 @@ public class PlayerController_FirstPersonShooter : PawnController
         _pawn.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
-    private float timeLastCouldJump = -1f;
-    private float timeLastInputJump = -1f;
-    private float timeLastJumped = -1f;
-    private bool ignoreGroundCheckToAvoidDoubleJump = false;
-
-    private bool doJumpCheat = false;
-    public bool inputCheck;
-    public bool conditionCheck;
     private void UpdateJumping(Pawn _pawn)
     {
         if (allowJumpCheat && Input.GetKeyDown(KeyCode.J) && 
@@ -278,9 +270,6 @@ public class PlayerController_FirstPersonShooter : PawnController
         {
             ignoreGroundCheckToAvoidDoubleJump = false;
         }
-
-        inputCheck = jumpInputValid;
-        conditionCheck = jumpConditionValid;
 
         if (doJumpCheat)
             jumpConditionValid = true;
