@@ -42,13 +42,9 @@ public class Logic_Not : LogicComponent
     //    if (input)
     //        input.OnPowerStateChanged -= SourcePowerStateChanged;
     //}
-    public override void Awake()
+    public void Update()
     {
-        base.Awake();
-        if (!inputSignal)
-        {
-            isPowered = true;
-        }
+        isPowered = !(inputSignal != null && inputSignal.isPowered);
     }
 
     //=-----------------=

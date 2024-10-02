@@ -25,7 +25,7 @@ public class CanvasForceGetActiveCamera : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private Canvas canvas;
-
+    private CameraManager cameraManager;
 
     //=-----------------=
     // Mono Functions
@@ -37,7 +37,17 @@ public class CanvasForceGetActiveCamera : MonoBehaviour
 
     private void Update()
     {
-        canvas.worldCamera = FindObjectOfType<CameraManager>().GetActiveRenderingCamera();
+        if (canvas == null)
+        {
+            cameraManager = FindObjectOfType<CameraManager>(); 
+            if (canvas == null)
+            {
+                Debug.LogWarning("Could not find " + nameof(CameraManager) + " to update canvas.worldCamera");
+                return;
+            }
+        }
+
+        canvas.worldCamera = cameraManager.GetActiveRenderingCamera();
     }
 
     //=-----------------=

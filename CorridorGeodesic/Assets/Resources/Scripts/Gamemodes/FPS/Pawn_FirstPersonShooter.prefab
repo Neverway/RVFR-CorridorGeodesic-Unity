@@ -498,18 +498,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64f7175221f42d94eb140fa78f5f824c, type: 3}
---- !u!1 &1347185802980064415 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1593285613858167579, guid: 64f7175221f42d94eb140fa78f5f824c,
-    type: 3}
-  m_PrefabInstance: {fileID: 337302178690688900}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1871803051323631141 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2114348208941547937, guid: 64f7175221f42d94eb140fa78f5f824c,
     type: 3}
   m_PrefabInstance: {fileID: 337302178690688900}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2010409870008393535 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2254121618581813435, guid: 64f7175221f42d94eb140fa78f5f824c,
+    type: 3}
+  m_PrefabInstance: {fileID: 337302178690688900}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0355bf3c2fd804f7ca404dab47fa7230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1980178644568556937
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1507,7 +1513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8acd9a0c545783b17bdca2caf98fc902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  geoGun: {fileID: 1347185802980064415}
+  geoGun: {fileID: 2010409870008393535}
 --- !u!114 &5583646988449171408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1525,7 +1531,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  crushDamageAmount: 40
+  crushDamageAmount: 20
 --- !u!114 &-7458870496314363835
 MonoBehaviour:
   m_ObjectHideFlags: 0

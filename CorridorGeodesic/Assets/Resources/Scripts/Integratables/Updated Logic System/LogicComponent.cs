@@ -34,7 +34,7 @@ public abstract class LogicComponent : MonoBehaviour
 
                 if(correctPowerState != null)
                     StopCoroutine(correctPowerState);
-                if(gameObject.activeSelf)
+                if(gameObject.activeInHierarchy)
                     correctPowerState = StartCoroutine(CorrectPowerState());
             }
         }

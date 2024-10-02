@@ -52,7 +52,6 @@ public class Pawn : MonoBehaviour
     public Pawn_AttachmentPoint physObjectAttachmentPoint;
     [SerializeField] private LayerMask groundDetectionLayerMask;
 
-
     //=-----------------=
     // Mono Functions
     //=-----------------=
@@ -64,19 +63,19 @@ public class Pawn : MonoBehaviour
 
     private void Update ()
     {
-        // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
-        if (FindObjectOfType<GameInstance> ())
+        if (gameInstance == null)
         {
-            if (FindObjectOfType<GameInstance> ().PlayerControllerClasses.Contains (currentController))
+            gameInstance = FindObjectOfType<GameInstance>();
+            if (gameInstance == null)
             {
-                isPossessed = true;
-            }
-            else
-            {
-                isPossessed = false;
+                Debug.LogWarning("Pawn could not find any active GameInstance");
+                return;
             }
         }
-        gameInstance = FindObjectOfType<GameInstance> ();
+
+        // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
+        isPossessed = gameInstance.PlayerControllerClasses.Contains (currentController);
+
         CheckCameraState ();
         if (isDead) return;
         currentController.PawnUpdate (this);
