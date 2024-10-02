@@ -9,13 +9,15 @@ struct TriplanarUV
 
 	float3 weights;
 };
-
 struct UVMod
 {
 	float2 uvScale;
 	float2 uvOffset;
 };
-
+inline half luminance(half3 color)
+{
+	return dot(color, half3(0.2126, 0.7152, 0.0722));
+}
 inline half GetDepth(float4 screenPos, float strength)
 {
 	half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(screenPos)));

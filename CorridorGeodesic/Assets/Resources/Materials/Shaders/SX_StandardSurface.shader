@@ -28,6 +28,8 @@ Shader "Soulex/SX_Standard Surface"
 
         _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
+
+        _DetailTex ("Detail Map", 2D) = "black" {}
     }
     SubShader
     {
@@ -40,12 +42,14 @@ Shader "Soulex/SX_Standard Surface"
 
         #pragma surface surf Standard addshadow
         #include "UnityStandardUtils.cginc"
+        #include "SX_Helpers.cginc"
 
         #pragma target 3.0
 
         struct Input
         {
             float2 uv_MainTex;
+            float2 uv_DetailTex;
             float3 viewDir;
         };
 
@@ -53,6 +57,7 @@ Shader "Soulex/SX_Standard Surface"
         half _NormalPower;
 
         sampler2D _MainTex;
+        sampler2D _DetailTex;
 
         float _Roughness;
         sampler2D _RoughnessMap;
@@ -83,8 +88,10 @@ Shader "Soulex/SX_Standard Surface"
             uv += parallaxOffset;
 
             fixed4 col = tex2D(_MainTex, uv) * _Color;
+            half4 detailCol = tex2D(_DetailTex, IN.uv_DetailTex) * col;
+            half detailMask = luminance(detailCol.rgb);
 
-            o.Albedo = col.rgb;
+            o.Albedo = lerp(col.rgb, detailCol, detailMask);
 
             o.Normal = UnpackScaleNormal(tex2D(_Normal, uv), _NormalPower);
 

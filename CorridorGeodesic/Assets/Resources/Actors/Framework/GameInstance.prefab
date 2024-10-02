@@ -30,6 +30,7 @@ GameObject:
   - component: {fileID: 7094113738341467646}
   - component: {fileID: 4080391082666838806}
   - component: {fileID: 7914969475861056359}
+  - component: {fileID: 543500971442332002}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -551,18 +552,16 @@ MonoBehaviour:
     keybindSprite: {fileID: 21300000, guid: e162deb7abfb2438a9977803de8f437d, type: 3}
   - keybindID: backSlash
     keybindSprite: {fileID: 21300000, guid: e162deb7abfb2438a9977803de8f437d, type: 3}
-  - keybindID: backQuote
-    keybindSprite: {fileID: 21300000, guid: ab770e8ca1af3b74c8e865769deee88d, type: 3}
-  - keybindID: escape
-    keybindSprite: {fileID: 21300000, guid: f4f8a5bf53891ca2d83d0fd3e1ed5254, type: 3}
+  - keybindID: Delta
+    keybindSprite: {fileID: 21300000, guid: fffccea5acecbf8ff923edd2a21fcc76, type: 3}
   - keybindID: leftButton
     keybindSprite: {fileID: 21300000, guid: 9e9f807e9abab95feaaafc6fb25cf2ca, type: 3}
   - keybindID: rightButton
     keybindSprite: {fileID: 21300000, guid: 91823543c83b4f42fae6465007f94225, type: 3}
-  - keybindID: middleButton
-    keybindSprite: {fileID: 21300000, guid: 6f6a84c053286a42590c1bfa55e456d7, type: 3}
-  - keybindID: delta
-    keybindSprite: {fileID: 21300000, guid: dc66a9ff162c37e769cc24851b70bee2, type: 3}
+  - keybindID: shift
+    keybindSprite: {fileID: 21300000, guid: 7c89294ecabd3402a913a8d7c6edbde4, type: 3}
+  - keybindID: ctrl
+    keybindSprite: {fileID: 21300000, guid: b571c0032916afc2e8ad7eec55e3c3f5, type: 3}
   controllerList:
   - keybindID: buttonNorth
     keybindSprite: {fileID: 21300000, guid: 1c1753620a1d0d642a2b44519d6faa3e, type: 3}
@@ -980,6 +979,13 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  liquidSplatter:
+    Guid:
+      Data1: 32003118
+      Data2: 1128033534
+      Data3: -1820878173
+      Data4: -1862444069
+    Path: event:/SFX/Physics/LiquidSplat
   nixieCrossShoot:
     Guid:
       Data1: -447259784
@@ -1147,6 +1153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ff1846f39c94e86841714d888ada7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInvalid: 0
+  timeElapsed: 0
 --- !u!114 &7914969475861056359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1161,3 +1169,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   disabledObjects: []
   enabledObjects: []
+--- !u!114 &543500971442332002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53126d58631fdce4fb40e33be4733208, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDecalAmount: 250

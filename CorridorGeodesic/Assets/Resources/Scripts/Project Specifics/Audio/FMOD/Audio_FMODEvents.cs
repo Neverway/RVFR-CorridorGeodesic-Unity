@@ -25,6 +25,7 @@ public class Audio_FMODEvents: MonoBehaviour
     public EventReference footstepsMetal;
     public EventReference footstepsGlass;
     public EventReference footstepsPlastic;
+    public EventReference liquidSplatter;
 
     [Header("Weapons")]
     public EventReference nixieCrossShoot;
