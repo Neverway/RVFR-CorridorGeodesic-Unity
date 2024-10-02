@@ -16,7 +16,7 @@ public class SX_UnityHelpers
         return new Vector3Int(Mathf.FloorToInt(input.x / unitSize), Mathf.FloorToInt(input.y / unitSize), Mathf.FloorToInt(input.z / unitSize));
     }
 }
-public struct SpatialHash<T>
+public struct SpatialHash<T> where T : class
 {
     public T hashedObject;
     public Vector3Int hash;
@@ -35,7 +35,7 @@ public struct SpatialHash<T>
         this.hashedObject = hashedObject;
     }
 }
-public struct SpatialHashMap<T>
+public struct SpatialHashMap<T> where T : class
 {
     public List<SpatialHash<T>> hashMap;
     public int unitSize;
@@ -48,12 +48,14 @@ public struct SpatialHashMap<T>
     public void AddToSpatialHash(T hashedObject, Vector3 position)
     {
         Vector3Int hash = SX_UnityHelpers.CreateHash(position, unitSize);
-        SpatialHash<T> spatialHash = hashMap.Find(h=>h.hash == hash);
 
-        if (spatialHash.Equals(null))
+        if (!hashMap.Exists(h => h.hash == hash))
             hashMap.Add(new SpatialHash<T>(hash, hashedObject));
         else
+        {
+            SpatialHash<T> spatialHash = hashMap.Find(h => h.hash == hash);
             spatialHash.SetHashedObject(hashedObject);
+        }
     }
     public T GetFromSpatialHash(Vector3 position)
     {
@@ -61,7 +63,7 @@ public struct SpatialHashMap<T>
         SpatialHash<T> spatialHash = hashMap.Find(h => h.hash == hash);
 
         if (spatialHash.Equals(null))
-            return default;
+            return null;
         else
             return spatialHash.hashedObject;
     }

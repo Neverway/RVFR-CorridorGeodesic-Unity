@@ -37,10 +37,15 @@ public class OilManager : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
+        //if (oilHashMap.Equals(null) || oilHashMap.hashMap.Equals(null))
+        //    return;
+
+        print(oilHashMap.hashMap.Count);
+
         for (int i = 0; i < oilHashMap.hashMap.Count; i++)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(oilHashMap.hashMap[i].hash, Vector3.one);
+            Gizmos.DrawWireCube(oilHashMap.hashMap[i].hash + Vector3.one * 0.5f, Vector3.one);
         }
     }
 
@@ -55,7 +60,7 @@ public class OilManager : MonoBehaviour
     public void AddOilSplatter(Transform splatter)
     {
         OilVoxel oilVoxel = oilHashMap.GetFromSpatialHash(splatter.position);
-        if (oilVoxel.Equals(default))
+        if (oilVoxel == null)
         {
             OilVoxel voxel = new OilVoxel();
             voxel.associatedSplatters.Add(splatter);
