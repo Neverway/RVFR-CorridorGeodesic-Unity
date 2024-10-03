@@ -79,20 +79,24 @@ public class Graphics_ParticleDecalSplatter : MonoBehaviour
     //=-----------------=
     private void OnWorldCollision(RaycastHit hit)
     {
-        if (hit.transform.TryGetComponent(out Multi_Oilable oilable))
+        if (hit.transform.TryGetComponent(out Phys_Oilable oilable))
             CollidedWithOilable(oilable);
         else
             CollidedWithSurface(hit);
 
         Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.liquidSplatter, hit.point);
     }
-    void CollidedWithOilable(Multi_Oilable oilable)
+    void CollidedWithOilable(Phys_Oilable oilable)
     {
         oilable.AddOil(0.2f);
     }
     void CollidedWithSurface(RaycastHit hit)
     {
-        GameObject newDecal = Tool_ObjectPool.Instance.AddToDecalPool(splatterDecal, hit.point + hit.normal * 0.01f, Quaternion.identity);
+        OilManager.Instance.ResetLifeTimeOfOilVoxel(hit.point);
+        if (!OilManager.Instance.DecalValid(hit.point))
+            return;
+
+        GameObject newDecal = Tool_ObjectPool.Instance.GetPooledObject(splatterDecal, hit.point + hit.normal * 0.01f, Quaternion.identity);
 
         newDecal.transform.up = hit.normal;
         newDecal.transform.Rotate(Vector3.up, Random.Range(-360, 360), Space.Self);

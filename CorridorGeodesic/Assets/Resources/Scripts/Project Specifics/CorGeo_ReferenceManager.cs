@@ -13,6 +13,9 @@ public class CorGeo_ReferenceManager : MonoBehaviour
     [HideInInspector] public LayerMask playerIgnoreMask;
     [HideInInspector] public LayerMask playerProjectileIgnoreMask;
 
+    [Header("Prefabs")]
+    public GameObject flameParticles;
+
     private void Awake()
     {
         Instance = this;

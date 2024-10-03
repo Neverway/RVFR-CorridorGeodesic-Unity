@@ -7,25 +7,26 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SX_UnityHelpers
 {
-    public static Vector3Int CreateHash(Vector3 input, int unitSize)
+    public static Vector3 CreateHash(Vector3 input, float unitSize)
     {
-        return new Vector3Int(Mathf.FloorToInt(input.x / unitSize), Mathf.FloorToInt(input.y / unitSize), Mathf.FloorToInt(input.z / unitSize));
+        return new Vector3(Mathf.FloorToInt(input.x / unitSize), Mathf.FloorToInt(input.y / unitSize), Mathf.FloorToInt(input.z / unitSize));
     }
 }
-public struct SpatialHash<T> where T : class
+public struct SpatialHash<T>
 {
     public T hashedObject;
-    public Vector3Int hash;
-    public SpatialHash(Vector3 input, int unitSize, T hashedObject)
+    public Vector3 hash;
+    public SpatialHash(Vector3 input, float unitSize, T hashedObject)
     {
         hash = SX_UnityHelpers.CreateHash(input, unitSize);
         this.hashedObject = hashedObject;
     }
-    public SpatialHash(Vector3Int hash, T hashedObject)
+    public SpatialHash(Vector3 hash, T hashedObject)
     {
         this.hash = hash;
         this.hashedObject = hashedObject;
@@ -35,36 +36,63 @@ public struct SpatialHash<T> where T : class
         this.hashedObject = hashedObject;
     }
 }
-public struct SpatialHashMap<T> where T : class
+public struct SpatialHashMap<T>
 {
-    public List<SpatialHash<T>> hashMap;
-    public int unitSize;
+    public int Count => HashMap.Count;
 
-    public SpatialHashMap(int unitSize)
+    public List<SpatialHash<T>> HashMap;
+    public float UnitSize;
+
+    public SpatialHashMap(float unitSize)
     {
-        this.unitSize = unitSize;
-        hashMap = new List<SpatialHash<T>>();
+        this.UnitSize = unitSize;
+        HashMap = new List<SpatialHash<T>>();
     }
-    public void AddToSpatialHash(T hashedObject, Vector3 position)
+    public void AddToSpatialHash(T hashedObject, Vector3 position, bool autoGenerateHash = true)
     {
-        Vector3Int hash = SX_UnityHelpers.CreateHash(position, unitSize);
+        Vector3 hash = position;
 
-        if (!hashMap.Exists(h => h.hash == hash))
-            hashMap.Add(new SpatialHash<T>(hash, hashedObject));
+        if (autoGenerateHash)
+            hash = SX_UnityHelpers.CreateHash(position, UnitSize);
+
+        if (!HashMap.Exists(h => h.hash == hash))
+            HashMap.Add(new SpatialHash<T>(hash, hashedObject));
         else
         {
-            SpatialHash<T> spatialHash = hashMap.Find(h => h.hash == hash);
+            SpatialHash<T> spatialHash = HashMap.Find(h => h.hash == hash);
             spatialHash.SetHashedObject(hashedObject);
         }
     }
-    public T GetFromSpatialHash(Vector3 position)
+    public bool TryGetFromSpatialHash(Vector3 position, out T hashedObject)
     {
-        Vector3Int hash = SX_UnityHelpers.CreateHash(position, unitSize);
-        SpatialHash<T> spatialHash = hashMap.Find(h => h.hash == hash);
+        Vector3 hash = SX_UnityHelpers.CreateHash(position, UnitSize);
+
+        if(!HashMap.Exists(h=>h.hash == hash))
+        {
+            hashedObject = default;
+            return false;
+        }
+
+        SpatialHash<T> spatialHash = HashMap.Find(h => h.hash == hash);
 
         if (spatialHash.Equals(null))
-            return null;
+        {
+            hashedObject = default;
+            return false;
+        }
         else
-            return spatialHash.hashedObject;
+        {
+            hashedObject = spatialHash.hashedObject;
+            return true;
+        }
+    }
+    public Vector3 GetHashFromHashedObject(T hashedObject)
+    {
+        return HashMap.First(h=>h.hashedObject.Equals(hashedObject)).hash;
+    }
+    public void RemoveFromHashedObject(T hashedObject)
+    {
+        if(HashMap.Exists(h=>h.hashedObject.Equals(hashedObject)))
+            HashMap.Remove(HashMap.First(h=>h.hashedObject.Equals(hashedObject)));
     }
 }
