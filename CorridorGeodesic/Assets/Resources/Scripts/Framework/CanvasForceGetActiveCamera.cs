@@ -37,10 +37,10 @@ public class CanvasForceGetActiveCamera : MonoBehaviour
 
     private void Update()
     {
-        if (canvas == null)
+        if (cameraManager == null)
         {
             cameraManager = FindObjectOfType<CameraManager>(); 
-            if (canvas == null)
+            if (cameraManager == null)
             {
                 Debug.LogWarning("Could not find " + nameof(CameraManager) + " to update canvas.worldCamera");
                 return;

@@ -171,7 +171,10 @@ public class Pawn : MonoBehaviour
 
         //return hit.distance < 1.5f;
 
-        return Physics.CheckSphere (transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, currentState.groundMask);
+        return Physics.CheckSphere (transform.position - currentState.groundCheckOffset, 
+            currentState.groundCheckRadius, 
+            currentState.groundMask, 
+            QueryTriggerInteraction.Ignore);
     }
     private void OnDrawGizmos ()
     {
@@ -180,7 +183,8 @@ public class Pawn : MonoBehaviour
 
     public bool IsGroundSloped3D ()
     {
-        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
+        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f, 
+            currentState.groundMask, QueryTriggerInteraction.Ignore))
         {
             return slopeHit.normal != Vector3.up;
         }
@@ -194,7 +198,8 @@ public class Pawn : MonoBehaviour
     /// <returns></returns>
     public bool IsGroundSteep3D ()
     {
-        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f, groundDetectionLayerMask))
+        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f, 
+            groundDetectionLayerMask, QueryTriggerInteraction.Ignore))
         {
             float angle = Vector3.Angle (slopeHit.normal, Vector3.up);
             return angle > currentState.steepSlopeAngle;

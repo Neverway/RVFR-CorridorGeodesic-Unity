@@ -402,7 +402,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Remove the HUD
         Destroy(GameInstance.GetWidget("WB_HUD"));
         // Add the respawn HUD
-        FindObjectOfType<GameInstance>().UI_ShowDeathScreen();
+        gameInstance.UI_ShowDeathScreen();
         
         // Play the death animation
         _pawn.GetComponent<Animator>().Play("Death");
