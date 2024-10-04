@@ -13,6 +13,15 @@ public class TEMPLevelSelectDev : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
+            //Invalidate speedrun timer if skipping levels
+            try
+            {
+                Stopwatch timer = FindObjectOfType<Stopwatch>();
+                if (!timer.timer.IsRunning)
+                    timer.InvalidateTimer();
+            }
+            catch { }
+
             //Clear checkpoints
             Checkpoint.ClearCheckpoints();
             //Go to previous level

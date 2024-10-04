@@ -284,6 +284,8 @@ public class PlayerController_FirstPersonShooter : PawnController
 
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
             rigidbody.AddForce(Vector3.up * _pawn.currentState.jumpForce, ForceMode.Impulse);
+
+            EndOfDemoStatsTracker.instance.AddJumpCount();
         }
     }
     

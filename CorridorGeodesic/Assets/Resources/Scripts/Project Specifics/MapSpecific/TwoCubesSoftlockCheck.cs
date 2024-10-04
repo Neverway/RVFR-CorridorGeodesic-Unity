@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class TwoCubesSoftlockCheck : LogicComponent
 {
-    public float timeForCubeToSlideIntoLava = 5f;
-
+    public float timeForCubeToSlideIntoLava = 0.5f;
 
     [LogicComponentHandle] public LogicComponent firstRoomButton;
     [LogicComponentHandle] public LogicComponent isPlayerInExtensionOfSecondRoom;
     [LogicComponentHandle] public LogicComponent playerAtEndCheck;
     [LogicComponentHandle] public LogicComponent physPropAtEndCheck;
+    [LogicComponentHandle] public LogicComponent slipCubeStuckInDeploymentArea;
 
     public Prop_Respawner physCubeSpawner;
     public Prop_Respawner slipCubeSpawner;
@@ -35,12 +35,19 @@ public class TwoCubesSoftlockCheck : LogicComponent
         CheckForSoftlock();
         if (wasPowered && !isPowered && !IsInSecondRoom(player.transform)) 
         {
-            physCubeSpawner.DestroySpawnedObject();
+            if (slipCubeSpawner.spawnedObject == null || IsInSecondRoom(slipCubeSpawner.spawnedObject.transform))
+            {
+                if (IsInSecondRoom(physCubeSpawner.spawnedObject.transform))
+                    physCubeSpawner.DestroySpawnedObject();
+            }
         }
     }
 
     public void CheckForSoftlock()
     {
+        if (Alt_Item_Geodesic_Utility_GeoGun.currentState != RiftState.None)
+            return;
+
         if (waitAFrame)
         {
             waitAFrame = false;
@@ -66,6 +73,14 @@ public class TwoCubesSoftlockCheck : LogicComponent
                 return;
             }
 
+            //If player is in second room, with no access to the first room
+            //and the slipcube is stuck in the deployment area, then the player is stuck
+            if (slipCubeStuckInDeploymentArea.isPowered && !firstRoomButton.isPowered && IsInSecondRoom(player.transform))
+            {
+                isPowered = true;
+                return;
+            }
+
             //if player is in first room, things are finnnnee
             if (!IsInSecondRoom(player.transform) && !isPlayerInExtensionOfSecondRoom.isPowered)
             {
@@ -74,6 +89,7 @@ public class TwoCubesSoftlockCheck : LogicComponent
                 && IsInSecondRoom(slipCubeSpawner.spawnedObject.transform))
                 {
                     isPowered = true;
+                    waitAFrame = true;
                     physCubeSpawner.DestroySpawnedObject();
                     return;
                 }

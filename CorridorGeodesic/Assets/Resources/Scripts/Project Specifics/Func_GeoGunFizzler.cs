@@ -60,10 +60,10 @@ public class Func_GeoGunFizzler : LogicComponent
 
         isPowered = disableFizzler == null || !disableFizzler.isPowered;
 
-        //if (isPowered && fizzleBulbsTrigger.isPowered)
-        //{
+        if (isPowered && fizzleBulbsTrigger.isPowered)
+        {
             ClearGeoGunRifts();
-        //}
-        //fizzlerObject.gameObject.SetActive(isPowered);
+        }
+        fizzlerObject.gameObject.SetActive(isPowered);
     }
 }
