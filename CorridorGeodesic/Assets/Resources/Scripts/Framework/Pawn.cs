@@ -157,6 +157,8 @@ public class Pawn : MonoBehaviour
         currentState.autoRegenHealth = defaultState.autoRegenHealth;
         currentState.healthRegenPerSecond = defaultState.healthRegenPerSecond;
         currentState.healthRegenDelay = defaultState.healthRegenDelay;
+        currentState.fallDamage = defaultState.fallDamage;
+        currentState.fallDamageVelocity = defaultState.fallDamageVelocity;
     }
     // ------------------------------------------------------------------
 
