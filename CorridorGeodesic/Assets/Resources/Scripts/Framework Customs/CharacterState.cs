@@ -54,4 +54,8 @@ public class CharacterState
     public bool autoRegenHealth;
     public float healthRegenPerSecond;
     public float healthRegenDelay;
+    [Tooltip("Amount of damage taken from falling.")]
+    public float fallDamage;
+    [Tooltip ("Rigidbody Y velocity required to take fall damage.")]
+    public float fallDamageVelocity;
 }
