@@ -41,10 +41,12 @@ public class Pawn_FallDamage : MonoBehaviour
         {
            if (Vector3.Angle(contact.normal, Vector3.up) < pawn.currentState.steepSlopeAngle)
             {
-                if (collision.relativeVelocity.y > pawn.currentState.fallDamageVelocity)
+                if (collision.relativeVelocity.y > pawn.currentState.minFallDamageVelocity)
                 {
-                    Debug.Log ("!Fall Damage!");
-                    pawn.ModifyHealth(-pawn.currentState.fallDamage);
+                    float percent = (collision.relativeVelocity.y - pawn.currentState.minFallDamageVelocity) / (pawn.currentState.fallDamageVelocity - pawn.currentState.minFallDamageVelocity);
+                    float totalDamage = pawn.currentState.minFallDamage + ((pawn.currentState.fallDamage - pawn.currentState.minFallDamage) * percent);
+                    Debug.Log ("Fall Damage " + totalDamage + "(" + percent + "%)");
+                    pawn.ModifyHealth(-totalDamage);
                 }
             }
         }

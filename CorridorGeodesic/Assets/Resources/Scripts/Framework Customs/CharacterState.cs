@@ -56,6 +56,10 @@ public class CharacterState
     public float healthRegenDelay;
     [Tooltip("Amount of damage taken from falling.")]
     public float fallDamage;
-    [Tooltip ("Rigidbody Y velocity required to take fall damage.")]
+    [Tooltip ("Amount of damage taken from falling minimum distance.")]
+    public float minFallDamage;
+    [Tooltip ("Rigidbody Y velocity required for max fall damage.")]
     public float fallDamageVelocity;
+    [Tooltip ("Rigidbody Y velocity required for minimum fall damage.")]
+    public float minFallDamageVelocity;
 }
