@@ -47,7 +47,9 @@ public class CharacterData : Actor
     [Tooltip("Delay after taking damage before health regens.")]
     public float healthRegenDelay;
     public float fallDamage;
+    public float minFallDamage;
     public float fallDamageVelocity;
+    public float minFallDamageVelocity;
 }
 
 [Serializable]
