@@ -58,6 +58,7 @@ public class AnimatedRespawner : Prop_Respawner
         anim.SetBool ("Powered", true);
         GameObject animObject = Instantiate (animatedObject, animEndPos);
         animObject.transform.position = animStartPos.position;
+        animObject.transform.rotation = animEndPos.transform.rotation;
         animObject.transform.DOLocalMove (Vector3.zero, animDuration).SetEase (animEaseCurve)
             .OnComplete (() => {
                 Destroy (animObject);

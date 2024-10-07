@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5000e735fae5780ca83de500cffc0e12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateRate: 1
 --- !u!95 &2396191649429294172
 Animator:
   serializedVersion: 5
@@ -225,6 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 0
+  animator: {fileID: 0}
   owningTeam: 
   affectsOwnTeam: 0
   ignoreHeldObjects: 1
@@ -236,6 +238,7 @@ MonoBehaviour:
   hideIndicator: 0
   useTalkIndicator: 0
   requireActivatingActorInside: 1
+  secondsToStayPowered: 0
   onInteract:
     m_PersistentCalls:
       m_Calls: []

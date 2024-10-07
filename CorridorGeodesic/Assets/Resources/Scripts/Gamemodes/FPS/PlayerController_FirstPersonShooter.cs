@@ -284,6 +284,8 @@ public class PlayerController_FirstPersonShooter : PawnController
 
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
             rigidbody.AddForce(Vector3.up * _pawn.currentState.jumpForce, ForceMode.Impulse);
+
+            EndOfDemoStatsTracker.instance.AddJumpCount();
         }
     }
     
@@ -402,7 +404,7 @@ public class PlayerController_FirstPersonShooter : PawnController
         // Remove the HUD
         Destroy(GameInstance.GetWidget("WB_HUD"));
         // Add the respawn HUD
-        FindObjectOfType<GameInstance>().UI_ShowDeathScreen();
+        gameInstance.UI_ShowDeathScreen();
         
         // Play the death animation
         _pawn.GetComponent<Animator>().Play("Death");

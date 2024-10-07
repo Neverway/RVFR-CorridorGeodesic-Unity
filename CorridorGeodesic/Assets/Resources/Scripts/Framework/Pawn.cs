@@ -52,7 +52,6 @@ public class Pawn : MonoBehaviour
     public Pawn_AttachmentPoint physObjectAttachmentPoint;
     [SerializeField] private LayerMask groundDetectionLayerMask;
 
-
     //=-----------------=
     // Mono Functions
     //=-----------------=
@@ -64,19 +63,19 @@ public class Pawn : MonoBehaviour
 
     private void Update ()
     {
-        // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
-        if (FindObjectOfType<GameInstance> ())
+        if (gameInstance == null)
         {
-            if (FindObjectOfType<GameInstance> ().PlayerControllerClasses.Contains (currentController))
+            gameInstance = FindObjectOfType<GameInstance>();
+            if (gameInstance == null)
             {
-                isPossessed = true;
-            }
-            else
-            {
-                isPossessed = false;
+                Debug.LogWarning("Pawn could not find any active GameInstance");
+                return;
             }
         }
-        gameInstance = FindObjectOfType<GameInstance> ();
+
+        // Quick slapped together check to figure out if a pawn is a player (since volumes look for isPossesed to determin player)
+        isPossessed = gameInstance.PlayerControllerClasses.Contains (currentController);
+
         CheckCameraState ();
         if (isDead) return;
         currentController.PawnUpdate (this);
@@ -158,6 +157,10 @@ public class Pawn : MonoBehaviour
         currentState.autoRegenHealth = defaultState.autoRegenHealth;
         currentState.healthRegenPerSecond = defaultState.healthRegenPerSecond;
         currentState.healthRegenDelay = defaultState.healthRegenDelay;
+        currentState.fallDamage = defaultState.fallDamage;
+        currentState.minFallDamage = defaultState.minFallDamage;
+        currentState.fallDamageVelocity = defaultState.fallDamageVelocity;
+        currentState.minFallDamageVelocity = defaultState.minFallDamageVelocity;
     }
     // ------------------------------------------------------------------
 
@@ -172,7 +175,10 @@ public class Pawn : MonoBehaviour
 
         //return hit.distance < 1.5f;
 
-        return Physics.CheckSphere (transform.position - currentState.groundCheckOffset, currentState.groundCheckRadius, currentState.groundMask);
+        return Physics.CheckSphere (transform.position - currentState.groundCheckOffset, 
+            currentState.groundCheckRadius, 
+            currentState.groundMask, 
+            QueryTriggerInteraction.Ignore);
     }
     private void OnDrawGizmos ()
     {
@@ -181,7 +187,8 @@ public class Pawn : MonoBehaviour
 
     public bool IsGroundSloped3D ()
     {
-        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f))
+        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f, 
+            currentState.groundMask, QueryTriggerInteraction.Ignore))
         {
             return slopeHit.normal != Vector3.up;
         }
@@ -195,7 +202,8 @@ public class Pawn : MonoBehaviour
     /// <returns></returns>
     public bool IsGroundSteep3D ()
     {
-        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f, groundDetectionLayerMask))
+        if (Physics.Raycast (transform.position, Vector3.down, out slopeHit, currentState.groundCheckOffset.y + 0.5f, 
+            groundDetectionLayerMask, QueryTriggerInteraction.Ignore))
         {
             float angle = Vector3.Angle (slopeHit.normal, Vector3.up);
             return angle > currentState.steepSlopeAngle;

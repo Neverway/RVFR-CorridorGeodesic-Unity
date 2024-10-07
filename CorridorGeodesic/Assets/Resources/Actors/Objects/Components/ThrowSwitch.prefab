@@ -71,15 +71,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4560970431837730802, guid: 5d480af746635c0ae8dafcf97d19cafb,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5804206260029501136}
   m_SourcePrefab: {fileID: 100100000, guid: 5d480af746635c0ae8dafcf97d19cafb, type: 3}
+--- !u!1 &3308449732543517838 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4560970431837730802, guid: 5d480af746635c0ae8dafcf97d19cafb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1342683956985815932}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5804206260029501136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3308449732543517838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3843213981991094998 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2880048872777165226, guid: 5d480af746635c0ae8dafcf97d19cafb,
     type: 3}
   m_PrefabInstance: {fileID: 1342683956985815932}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 3308449732543517838}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa8f618334624884f87f91e81b547362, type: 3}
@@ -99,6 +121,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4407081929141596269}
     m_Modifications:
+    - target: {fileID: 6376975871621139151, guid: c0d1c07e0f9e2935db0265879b1f8518,
+        type: 3}
+      propertyPath: secondsToStayPowered
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6376975871621139151, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}
       propertyPath: onInteract.m_PersistentCalls.m_Calls.Array.size
@@ -136,18 +163,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8237108701098330144, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.61825675
+      objectReference: {fileID: 0}
+    - target: {fileID: 8237108701098330144, guid: c0d1c07e0f9e2935db0265879b1f8518,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.2
+      value: -0.053
       objectReference: {fileID: 0}
     - target: {fileID: 8237108701098330144, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.064
+      value: -0.024
       objectReference: {fileID: 0}
     - target: {fileID: 8237108701098330144, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8767485977656216626, guid: c0d1c07e0f9e2935db0265879b1f8518,
         type: 3}

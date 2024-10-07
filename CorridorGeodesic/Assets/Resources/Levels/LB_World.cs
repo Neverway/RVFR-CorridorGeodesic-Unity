@@ -27,7 +27,7 @@ public class LB_World : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private GameInstance gameInstance;
-
+    private Pawn_WeaponInventory weaponInventory;
 
     //=-----------------=
     // Mono Functions
@@ -36,37 +36,30 @@ public class LB_World : MonoBehaviour
     {
         gameInstance = FindObjectOfType<GameInstance>();
         gameInstance.UI_ShowHUD();
-        if (shouldHaveGeoGun)
-        {
-            if (FindObjectOfType<Pawn_WeaponInventory>())
-            {
-                FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
-            }
-        }
-        if (shouldHaveUpgradedGeoGund)
-        {
-            if (FindObjectOfType<Pawn_WeaponInventory>())
-            {
-                FindObjectOfType<Pawn_WeaponInventory>().UpgradeGeoGun();
-            }
-        }
+        UpdateGeoGunUpgrade();
     }
     private void Update()
     {
+        UpdateGeoGunUpgrade();
+    }
+
+    public void UpdateGeoGunUpgrade()
+    {
+        if (weaponInventory == null)
+        {
+            weaponInventory = FindObjectOfType<Pawn_WeaponInventory>();
+            if (weaponInventory == null)
+            {
+                Debug.LogWarning("Could not find " + nameof(Pawn_WeaponInventory) + " to update geogun");
+                return;
+            }
+        }
+
         if (shouldHaveGeoGun)
-        {
-            if (FindObjectOfType<Pawn_WeaponInventory>())
-            {
-                FindObjectOfType<Pawn_WeaponInventory>().GiveGeoGun();
-            }
-        }
+            weaponInventory.GiveGeoGun();
+
         if (shouldHaveUpgradedGeoGund)
-        {
-            if (FindObjectOfType<Pawn_WeaponInventory>())
-            {
-                FindObjectOfType<Pawn_WeaponInventory>().UpgradeGeoGun();
-            }
-        }
+            weaponInventory.UpgradeGeoGun();
     }
     
 

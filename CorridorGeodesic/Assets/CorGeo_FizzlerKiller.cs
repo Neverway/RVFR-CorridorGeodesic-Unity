@@ -35,10 +35,12 @@ public class CorGeo_FizzlerKiller : Volume
     private new void OnTriggerEnter(Collider _other)
     {
         base.OnTriggerEnter(_other); // Call the base class method
-        if (_other.TryGetComponent<ActorData> (out ActorData actor))
+        if (_other.TryGetComponent (out ActorData actor))
         {
-            if (actor.actorId == buddyID)
+            LemonBuddyDestroyedTracker buddy = actor.GetComponentInChildren<LemonBuddyDestroyedTracker>();
+            if (buddy != null)
             {
+                buddy.OnBuddyDestroyed();
                 Instantiate(fizzleParty, actor.transform.position, actor.transform.rotation, null);
                 Destroy(actor.gameObject);
             }

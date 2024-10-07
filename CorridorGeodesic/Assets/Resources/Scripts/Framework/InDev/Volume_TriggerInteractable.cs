@@ -24,6 +24,8 @@ public class Volume_TriggerInteractable : Volume
     public bool useTalkIndicator;
     [Tooltip("If enabled, then the actor who created the interaction volume must also be inside this trigger")]
     public bool requireActivatingActorInside = true;
+    [Tooltip("How many seconds to remain powered when pressing interact")]
+    public float secondsToStayPowered = 0.2f;
 
     [Header("Signal Events")]
     //[Tooltip("When this trigger is powered, this event will be fired (this is used to trigger things that don't use our signal system)")]
@@ -134,7 +136,8 @@ public class Volume_TriggerInteractable : Volume
     IEnumerator WaitUnpower()
     {
         isPowered = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return null;
+        yield return new WaitForSeconds(secondsToStayPowered);
         isPowered = false;
     }
 

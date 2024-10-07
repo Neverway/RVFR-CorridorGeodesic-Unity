@@ -116,6 +116,7 @@ public class Projectile_Vacumm : Projectile
 
             Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin, transform.position);
             disabled = true;
+            EndOfDemoStatsTracker.instance.AddBulbCount(); //This is also called in Attach(). Just make sure this isnt called twice if this code is changed
         }
         else
         {
@@ -128,6 +129,7 @@ public class Projectile_Vacumm : Projectile
         transform.DORotateQuaternion(Quaternion.LookRotation(pointingDirection), 0.08f);
         Audio_FMODAudioManager.PlayOneShot(Audio_FMODEvents.Instance.nixieTubePin, transform.position);
         disabled = true;
+        EndOfDemoStatsTracker.instance.AddBulbCount();
     }
     public void KillProjectile (bool removeProjectileFromList = true)
     {

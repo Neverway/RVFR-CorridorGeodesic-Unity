@@ -24,8 +24,7 @@ public class Pawn_WeaponInventory : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private GameObject geoGun;
-
+    [SerializeField] private Alt_Item_Geodesic_Utility_GeoGun geoGun;
 
     //=-----------------=
     // Mono Functions
@@ -44,27 +43,26 @@ public class Pawn_WeaponInventory : MonoBehaviour
     // Internal Functions
     //=-----------------=
 
-
     //=-----------------=
     // External Functions
     //=-----------------=
     public void GiveGeoGun()
     {
-        geoGun.SetActive(true);
+        geoGun.gameObject.SetActive(true);
     }
     
     public void TakeGeoGun()
     {
-        geoGun.SetActive(false);
+        geoGun.gameObject.SetActive(false);
     }
     
     public void UpgradeGeoGun()
     {
-        geoGun.GetComponent<Alt_Item_Geodesic_Utility_GeoGun>().allowExpandingRift = true;
+        geoGun.allowExpandingRift = true;
     }
     
     public void ClearGeoGunRifts()
     {
-        geoGun.GetComponent<Alt_Item_Geodesic_Utility_GeoGun>().StartRecallInfinityMarkers ();
+        geoGun.StartRecallInfinityMarkers();
     }
 }

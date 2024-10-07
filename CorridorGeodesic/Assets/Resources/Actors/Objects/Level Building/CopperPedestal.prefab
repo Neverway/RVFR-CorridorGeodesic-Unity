@@ -53,6 +53,7 @@ MonoBehaviour:
   dynamic: 0
   crushInNullSpace: 1
   isParentedIgnoreOffsets: 0
+  isHeld: 0
   space: 0
 --- !u!1 &481068875847306532
 GameObject:
@@ -1348,6 +1349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isReflective: 0
+  partsReference: {fileID: 0}
 --- !u!1 &5692449895560613279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,6 +1362,7 @@ GameObject:
   - component: {fileID: 8252368882562089852}
   - component: {fileID: 4217694408734163723}
   - component: {fileID: 3127974005319696378}
+  - component: {fileID: 7749048179926986860}
   m_Layer: 0
   m_Name: PedestalSnap
   m_TagString: Untagged
@@ -1429,3 +1432,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7749048179926986860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5692449895560613279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9328f886ac63731bba9d85776baa2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeInNullSpace: 0
+  destroyedInKillTrigger: 1
+  debugLogData: 0
+  homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
+  dynamic: 0
+  crushInNullSpace: 1
+  isParentedIgnoreOffsets: 0
+  isHeld: 0
+  space: 0

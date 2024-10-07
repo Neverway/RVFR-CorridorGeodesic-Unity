@@ -49,8 +49,6 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
 
         if (firstBulb == null)
             firstBulb = this;
-        else
-            connectingLine = Instantiate(connectingLineEffect).GetComponent<LineRenderer>();
     }
 
     public void OnDestroy()
@@ -70,6 +68,14 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
 
     public void Update()
     {
+        if (connectingLine == null && firstBulb != null && this != firstBulb)
+        {
+            if (firstBulb.self.pinned && self.pinned)
+            {
+                connectingLine = Instantiate(connectingLineEffect).GetComponent<LineRenderer>();
+            }
+        }
+
         bulbTrailToDisable.enabled = !self.pinned;
 
         if (connectingLine != null && bulbGlowEffect && firstBulb && firstBulb.bulbGlowEffect)

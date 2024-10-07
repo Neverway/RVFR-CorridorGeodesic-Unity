@@ -24,6 +24,7 @@ public class Vent : LogicComponent
     //=-----------------=
     [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
     [SerializeField, LogicComponentHandle] private LogicComponent isBeingSliced;
+    [SerializeField] private TeslaConductor conductor;
 
     //=-----------------=
     // Reference Variables
@@ -61,6 +62,11 @@ public class Vent : LogicComponent
     [ExecuteAlways]
     protected void Update()
     {
+        if (conductor != null)
+        {
+            isPowered = conductor.IsTeslaPowered();
+        }
+
         airCurrent.gameObject.SetActive(isPowered && ventObject.gameObject.activeInHierarchy);
         sparks.gameObject.SetActive(isBeingSliced.isPowered);
 
