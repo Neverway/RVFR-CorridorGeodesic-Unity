@@ -29,7 +29,7 @@ public class OilManager : MonoBehaviour
     // Private Variables
     //=-----------------=
     private SpatialHashMap<OilVoxel> oilHashMap;
-    private SpatialHashMap<bool> decalHashMap;
+    public SpatialHashMap<bool> decalHashMap;
 
     private List<Vector3> flameStartPositions = new List<Vector3>();
     [SerializeField] private List<OilVoxel> burningVoxels = new List<OilVoxel>();
@@ -60,8 +60,8 @@ public class OilManager : MonoBehaviour
         Gizmos.color = Color.green;
         for (int i = 0; i < oilHashMap.Count; i++)
         {
-            Vector3 position = (oilHashMap.HashMap[i].hash + Vector3.one * 0.5f) * oilHashMap.UnitSize;
-            if (oilHashMap.HashMap[i].hashedObject.burning)
+            Vector3 position = (oilHashMap.HashMap.ElementAt(i).Key + Vector3.one * 0.5f) * oilHashMap.UnitSize;
+            if (oilHashMap.HashMap.ElementAt(i).Value.burning)
                 Gizmos.DrawCube(position, Vector3.one * oilHashMap.UnitSize);
             else
                 Gizmos.DrawWireCube(position, Vector3.one * oilHashMap.UnitSize);
@@ -73,7 +73,8 @@ public class OilManager : MonoBehaviour
         Gizmos.color = Color.yellow;
         for (int i = 0; i < decalHashMap.Count; i++)
         {
-            Gizmos.DrawWireCube((decalHashMap.HashMap[i].hash + Vector3.one * 0.5f) * decalHashMap.UnitSize, Vector3.one * decalHashMap.UnitSize);
+            Gizmos.DrawWireCube((decalHashMap.HashMap.ElementAt(i).Key + Vector3.one * 0.5f) * decalHashMap.UnitSize, 
+                Vector3.one * decalHashMap.UnitSize);
         }
 
         if (flameStartPositions == null || flameStartPositions.Count <= 0)
@@ -91,30 +92,28 @@ public class OilManager : MonoBehaviour
     //=-----------------=
     IEnumerator BurnTick()
     {
-        List<SpatialHash<OilVoxel>> voxelsToRemove = new List<SpatialHash<OilVoxel>>();
-        //List<OilVoxel> voxelsToCheck = new List<OilVoxel>();
+        List<OilVoxel> voxelsToRemove = new List<OilVoxel>();
         while (true)
         {
             if (oilHashMap.Count <= 0 || burningVoxels.Count <= 0)
                 yield return null;
 
-            oilHashMap.HashMap.ForEach(o =>
+            oilHashMap.HashMap.Values.ToList().ForEach(v =>
             {
-                if (o.hashedObject.lifetime <= 0)
+                if (v.lifetime <= 0)
                 {
-                    voxelsToRemove.Add(o);
-                    o.hashedObject.DeInitialize();
+                    voxelsToRemove.Add(v);
+                    v.DeInitialize();
                 }
-                else if(o.hashedObject.burning)
+                else if(v.burning)
                 {
-                    o.hashedObject.Burn();
-                    StartFlame(o.hashedObject.hash);
+                    v.Burn();
                 }
             });
 
             for (int i = 0; i < voxelsToRemove.Count; i++)
             {
-                oilHashMap.HashMap.Remove(voxelsToRemove[i]);
+                oilHashMap.RemoveFromHashedObject(voxelsToRemove[i]);
             }
 
             yield return new WaitForSeconds(0.05f);
@@ -169,7 +168,8 @@ public class OilManager : MonoBehaviour
 
                     Vector3 checkPosition = hashCenter + offset;
 
-                    return oilHashMap.TryGetFromSpatialHash(checkPosition, out OilVoxel voxel) && voxel.burning;
+                    if (oilHashMap.TryGetFromSpatialHash(checkPosition, out OilVoxel voxel) && voxel.burning)
+                        return true;
                 }
             }
         }
@@ -217,15 +217,15 @@ public class OilManager : MonoBehaviour
             voxel.associatedSplatters.Add(splatter);
 
             oilHashMap.AddToSpatialHash(voxel, voxel.hash, false);
+
+            voxel.Update();
         }
         else
         {
-            oilVoxel.associatedSplatters.Add(splatter);
+            oilVoxel.AddSplatter(splatter);
             oilVoxel.ResetLifetime();
-            //OilManager.Instance.StartFlame(oilVoxel.hash);
+            oilVoxel.Update();
         }
-
-        //oilHashUpdated = true;
     }
     public void ResetLifeTimeOfOilVoxel(Vector3 position)
     {
@@ -240,22 +240,19 @@ public class OilManager : MonoBehaviour
 public class OilVoxel
 {
     public Vector3 hash;
+    public List<Vector3> DecalHashes = new List<Vector3>();
 
     public List<Transform> associatedSplatters = new List<Transform>();
     public Transform flame;
-    public float lifetime = 1;
 
+    public float lifetime = 1;
     private float startScale = 2;
 
     public bool _burning = false;
     public OilVoxel(Vector3 hash)
     {
         this.hash = hash;
-        //if (OilManager.Instance.BurnAtPosition(hash))
-        //{
-        //    burning = true;
-        //    OilManager.Instance.AddToBurningVoxels(this);
-        //}
+        Update();
     }
     public bool burning
     {
@@ -266,9 +263,10 @@ public class OilVoxel
             {
                 OilManager.Instance.AddFlame(this);
                 OilManager.Instance.AddToBurningVoxels(this);
-                //OilManager.Instance.StartFlame(hash);
             }
             _burning = value;
+
+            Update();
         }
     }
     public void Burn()
@@ -284,9 +282,29 @@ public class OilVoxel
             s.localScale = scale * startScale;
         });
     }
+    public void Update()
+    {
+        if (burning)
+        {
+            OilManager.Instance.StartFlame(hash);
+        }
+        else if (OilManager.Instance.BurnAtPosition(hash))
+        {
+            burning = true;
+            OilManager.Instance.AddToBurningVoxels(this);
+        }
+    }
+    public void AddSplatter(Transform splatter)
+    {
+        associatedSplatters.Add(splatter);
+    }
     public void DeInitialize()
     {
-        associatedSplatters.ForEach(s=>s.gameObject.SetActive(false));
+        associatedSplatters.ForEach(s=> 
+        {
+            OilManager.Instance.decalHashMap.HashMap.Remove(CreateHash(s.position, OilManager.Instance.decalHashMap.UnitSize));
+            s.gameObject.SetActive(false);
+        });
         associatedSplatters.Clear();
     }
     public void ResetLifetime()

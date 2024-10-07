@@ -16,37 +16,47 @@ public class SX_UnityHelpers
     {
         return new Vector3(Mathf.FloorToInt(input.x / unitSize), Mathf.FloorToInt(input.y / unitSize), Mathf.FloorToInt(input.z / unitSize));
     }
-}
-public struct SpatialHash<T>
-{
-    public T hashedObject;
-    public Vector3 hash;
-    public SpatialHash(Vector3 input, float unitSize, T hashedObject)
+    public static Vector3 RiftToWorld(Vector3 position)
     {
-        hash = SX_UnityHelpers.CreateHash(input, unitSize);
-        this.hashedObject = hashedObject;
+        return position;
     }
-    public SpatialHash(Vector3 hash, T hashedObject)
+    public static Vector3 WorldToRift(Vector3 position)
     {
-        this.hash = hash;
-        this.hashedObject = hashedObject;
-    }
-    public void SetHashedObject(T hashedObject)
-    {
-        this.hashedObject = hashedObject;
+        return position;
     }
 }
+//public struct SpatialHash<T>
+//{
+//    public T hashedObject;
+//    public Vector3 hash;
+//    public SpatialHash(Vector3 input, float unitSize, T hashedObject)
+//    {
+//        hash = SX_UnityHelpers.CreateHash(input, unitSize);
+//        this.hashedObject = hashedObject;
+//    }
+//    public SpatialHash(Vector3 hash, T hashedObject)
+//    {
+//        this.hash = hash;
+//        this.hashedObject = hashedObject;
+//    }
+//    public void SetHashedObject(T hashedObject)
+//    {
+//        this.hashedObject = hashedObject;
+//    }
+//}
 public struct SpatialHashMap<T>
 {
     public int Count => HashMap.Count;
 
-    public List<SpatialHash<T>> HashMap;
+    //public List<SpatialHash<T>> HashMap;
+    public Dictionary<Vector3, T> HashMap;
     public float UnitSize;
 
     public SpatialHashMap(float unitSize)
     {
         this.UnitSize = unitSize;
-        HashMap = new List<SpatialHash<T>>();
+        //HashMap = new List<SpatialHash<T>>();
+        HashMap = new Dictionary<Vector3, T>();
     }
     public void AddToSpatialHash(T hashedObject, Vector3 position, bool autoGenerateHash = true)
     {
@@ -55,44 +65,63 @@ public struct SpatialHashMap<T>
         if (autoGenerateHash)
             hash = SX_UnityHelpers.CreateHash(position, UnitSize);
 
-        if (!HashMap.Exists(h => h.hash == hash))
-            HashMap.Add(new SpatialHash<T>(hash, hashedObject));
+        if (!HashMap.ContainsKey(hash))
+            HashMap.Add(hash, hashedObject);
         else
         {
-            SpatialHash<T> spatialHash = HashMap.Find(h => h.hash == hash);
-            spatialHash.SetHashedObject(hashedObject);
+            //SpatialHash<T> spatialHash = HashMap.Find(h => h.hash == hash);
+            //spatialHash.SetHashedObject(hashedObject);
+            HashMap[hash] = hashedObject;
         }
     }
     public bool TryGetFromSpatialHash(Vector3 position, out T hashedObject)
     {
         Vector3 hash = SX_UnityHelpers.CreateHash(position, UnitSize);
 
-        if(!HashMap.Exists(h=>h.hash == hash))
-        {
-            hashedObject = default;
-            return false;
-        }
-
-        SpatialHash<T> spatialHash = HashMap.Find(h => h.hash == hash);
-
-        if (spatialHash.Equals(null))
+        if(!HashMap.ContainsKey(hash))
         {
             hashedObject = default;
             return false;
         }
         else
         {
-            hashedObject = spatialHash.hashedObject;
+            hashedObject = HashMap[hash];
             return true;
         }
+
+        //SpatialHash<T> spatialHash = HashMap.Find(h => h.hash == hash);
+
+        //if (spatialHash.Equals(null))
+        //{
+        //    hashedObject = default;
+        //    return false;
+        //}
+        //else
+        //{
+        //    hashedObject = spatialHash.hashedObject;
+        //    return true;
+        //}
     }
-    public Vector3 GetHashFromHashedObject(T hashedObject)
+    public bool GetHashFromHashedObject(T hashedObject, out Vector3 hash)
     {
-        return HashMap.First(h=>h.hashedObject.Equals(hashedObject)).hash;
+        //return HashMap.First(h=>h.hashedObject.Equals(hashedObject)).hash;
+        if (HashMap.ContainsValue(hashedObject))
+        {
+            hash = HashMap.First(k => k.Value.Equals(hashedObject)).Key;
+            return true;
+        }
+        else
+        {
+            hash = default;
+            return false;
+        }
     }
     public void RemoveFromHashedObject(T hashedObject)
     {
-        if(HashMap.Exists(h=>h.hashedObject.Equals(hashedObject)))
-            HashMap.Remove(HashMap.First(h=>h.hashedObject.Equals(hashedObject)));
+        if (GetHashFromHashedObject(hashedObject, out Vector3 hash))
+            HashMap.Remove(hash);
+
+        //if(HashMap.Exists(h=>h.hashedObject.Equals(hashedObject)))
+        //    HashMap.Remove(HashMap.First(h=>h.hashedObject.Equals(hashedObject)));
     }
 }
