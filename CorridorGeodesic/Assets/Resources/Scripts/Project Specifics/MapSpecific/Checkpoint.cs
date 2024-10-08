@@ -8,11 +8,15 @@ public class Checkpoint : LogicComponent
     public bool clearsCheckpointsInstead = false;
     [Space]
     public string uniqueCheckpointName;
+    [Tooltip("A checkpoint of a lower rank than what checkpoint you have currently will not get powered. Unless -1, in which case it ignores ranks")]
+    public int checkpointRank = -1;
     [LogicComponentHandle] public LogicComponent triggerCheckpoint;
-    [DebugReadOnly, SerializeField] string DEBUG_lastCheckpoint;
 
+    [DebugReadOnly, SerializeField] string DEBUG_lastCheckpoint;
+    [DebugReadOnly, SerializeField] string DEBUG_lastRank;
 
     public static string lastCheckpointName;
+    public static int lastCheckpointRank = -1;
 
 
 #if UNITY_EDITOR
@@ -57,18 +61,38 @@ public class Checkpoint : LogicComponent
                 ClearCheckpoints();
                 return;
             }
-
-            lastCheckpointName = uniqueCheckpointName;
-            //Debug.Log("Set Checkpoint to: " + uniqueCheckpointName);
+            else if (AmIHigherRank())
+            {
+                SetCheckpoint();
+            }
         }
 
-        isPowered = AmIThisCheckpoint(lastCheckpointName);
 
+        isPowered = ShouldBePowered();
     }
 
     public bool AmIThisCheckpoint(string checkpoint)
     {
         return checkpoint != null && checkpoint == uniqueCheckpointName;
+    }
+    public bool AmIHigherRank()
+    {
+        return checkpointRank == -1 || checkpointRank > lastCheckpointRank;
+    }
+    public bool ShouldBePowered()
+    {
+        if (lastCheckpointRank == -1)
+        {
+            isPowered = AmIThisCheckpoint(lastCheckpointName);
+        }
+        
+
+    }
+
+    public void SetCheckpoint()
+    {
+        lastCheckpointName = uniqueCheckpointName;
+        lastCheckpointRank = checkpointRank;
     }
 
     public static void ClearCheckpoints()
@@ -76,4 +100,5 @@ public class Checkpoint : LogicComponent
         lastCheckpointName = null;
         //Debug.Log("Clearing checkpoints");
     }
+
 }
