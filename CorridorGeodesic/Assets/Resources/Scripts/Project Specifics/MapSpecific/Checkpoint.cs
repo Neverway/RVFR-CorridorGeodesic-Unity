@@ -12,14 +12,19 @@ public class Checkpoint : LogicComponent
     public int checkpointRank = -1;
     [LogicComponentHandle] public LogicComponent triggerCheckpoint;
 
-    [DebugReadOnly, SerializeField] string DEBUG_lastCheckpoint;
-    [DebugReadOnly, SerializeField] string DEBUG_lastRank;
-
     public static string lastCheckpointName;
     public static int lastCheckpointRank = -1;
 
 
 #if UNITY_EDITOR
+    [DebugReadOnly, SerializeField] string DEBUG_lastCheckpoint;
+    [DebugReadOnly, SerializeField] int DEBUG_lastRank;
+
+    public void Update()
+    {
+        DEBUG_lastCheckpoint = lastCheckpointName;
+        DEBUG_lastRank = lastCheckpointRank;
+    }
     public void OnValidate()
     {
         if (!Application.isPlaying)
@@ -41,10 +46,8 @@ public class Checkpoint : LogicComponent
         }
     }
 
-    public void Update()
-    {
-        DEBUG_lastCheckpoint = lastCheckpointName;
-    }
+
+    
     public override void OnEnable()
     {
         //Stopping OnEnable to trigger checkpoints
@@ -67,7 +70,6 @@ public class Checkpoint : LogicComponent
             }
         }
 
-
         isPowered = ShouldBePowered();
     }
 
@@ -77,16 +79,18 @@ public class Checkpoint : LogicComponent
     }
     public bool AmIHigherRank()
     {
-        return checkpointRank == -1 || checkpointRank > lastCheckpointRank;
+        return checkpointRank == -1 || checkpointRank >= lastCheckpointRank;
     }
     public bool ShouldBePowered()
     {
         if (lastCheckpointRank == -1)
         {
-            isPowered = AmIThisCheckpoint(lastCheckpointName);
+            return AmIThisCheckpoint(lastCheckpointName);
         }
-        
-
+        else
+        {
+            return AmIHigherRank();
+        }
     }
 
     public void SetCheckpoint()
