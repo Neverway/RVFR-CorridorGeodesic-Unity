@@ -14,22 +14,22 @@ Shader "Soulex/SX_Standard Toon"
 
         [NoScaleOffset] _MainTex ("Albedo", 2D) = "white" {}
 
-        _Roughness ("Roughness Power", Range(0.0, 1.0)) = 0.5
-        [NoScaleOffset] _RoughnessMap ("Roughness Map", 2D) = "white" {}
+        _Glossiness ("Roughness Power", Range(0.0, 1.0)) = 0.5
+        [NoScaleOffset] _SpecGlossMap ("Roughness Map", 2D) = "white" {}
 
         _Metallic ("Metallic Power", Range(0.0, 1.0)) = 0.0
-        [NoScaleOffset] _MetallicMap ("Metallic Map", 2D) = "white" {}
+        [NoScaleOffset] _MetallicGlossMap ("Metallic Map", 2D) = "white" {}
 
-        _NormalPower ("Normal Power", Range(0.0, 1.0)) = 1.0
-        [NoScaleOffset][Normal] _Normal ("Normal Map", 2D) = "bump" {}
+        _BumpScale ("Normal Power", Range(0.0, 1.0)) = 1.0
+        [NoScaleOffset][Normal] _BumpMap ("Normal Map", 2D) = "bump" {}
 
-        _HeightScale ("Height Scale", Range(0, 0.08)) = 0
-        [NoScaleOffset] _HeightMap ("Height Map", 2D) = "black" {}
+        _Parallax ("Height Scale", Range(0, 0.08)) = 0
+        [NoScaleOffset] _ParallaxMap ("Height Map", 2D) = "black" {}
 
-        [NoScaleOffset] _Occlusion ("Occlusion", 2D) = "white" {}
+        [NoScaleOffset] _OcclusionMap ("Occlusion", 2D) = "white" {}
 
         _EmissionColor ("Emission Color", Color) = (0, 0, 0, 0)
-        [NoScaleOffset] _EmissionTex ("Emission", 2D) = "white" {}
+        [NoScaleOffset] _EmissionMap ("Emission", 2D) = "white" {}
 
         _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
@@ -71,27 +71,27 @@ Shader "Soulex/SX_Standard Toon"
         };
 
         half _RampSmoothness;
-        half _NormalPower;
 
         float _AlphaClip;
 
         sampler2D _MainTex;
 
-        half _Roughness;
-        sampler2D _RoughnessMap;
+        half _Glossiness;
+        sampler2D _SpecGlossMap;
 
         half _Metallic;
-        sampler2D _MetallicMap;
+        sampler2D _MetallicGlossMap;
 
-        sampler2D _Normal;
+        half _BumpScale;
+        sampler2D _BumpMap;
 
-        half _HeightScale;
-        sampler2D _HeightMap;
+        half _Parallax;
+        sampler2D _ParallaxMap;
 
-        sampler2D _Occlusion;
+        sampler2D _OcclusionMap;
 
-        float4 _EmissionColor;
-        sampler2D _EmissionTex;
+        half4 _EmissionColor;
+        sampler2D _EmissionMap;
         
         float2 _Tiling;
         float2 _Offset;
@@ -201,7 +201,7 @@ Shader "Soulex/SX_Standard Toon"
         void surf (Input IN, inout SurfaceOutputToon o)
         {
             float2 uv = IN.uv_MainTex * _Tiling + _Offset;
-            float2 parallaxOffset = ParallaxOffset (tex2D(_HeightMap, uv).r, _HeightScale, IN.viewDir);
+            float2 parallaxOffset = ParallaxOffset (tex2D(_ParallaxMap, uv).r, _Parallax, IN.viewDir);
 
             uv += parallaxOffset;
 
@@ -212,15 +212,15 @@ Shader "Soulex/SX_Standard Toon"
 
             o.Albedo = col.rgb;
 
-            o.Normal = UnpackScaleNormal(tex2D(_Normal, uv), _NormalPower);
+            o.Normal = UnpackScaleNormal(tex2D(_BumpMap, uv), _BumpScale);
 
-            o.Metallic = tex2D(_MetallicMap, uv).r * _Metallic;
+            o.Metallic = tex2D(_MetallicGlossMap, uv).r * _Metallic;
 
-            o.Roughness = tex2D(_RoughnessMap, uv).r * _Roughness;
+            o.Roughness = tex2D(_SpecGlossMap, uv).r * _Glossiness;
 
-            o.Occlusion = tex2D(_Occlusion, uv).r;
+            o.Occlusion = tex2D(_OcclusionMap, uv).r;
 
-            o.Emission = tex2D(_EmissionTex, uv) * _EmissionColor;
+            o.Emission = tex2D(_EmissionMap, uv) * _EmissionColor;
 
             o.Alpha = col.a;
 

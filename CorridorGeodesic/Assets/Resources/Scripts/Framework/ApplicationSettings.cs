@@ -117,39 +117,39 @@ public class ApplicationSettings : MonoBehaviour
 
     private void CheckDynamicTextureFiltering()
     {
-        switch (currentSettingsData.textureQuality)
-        {
-            case 0:
-                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-                {
-                    texture.filterMode = FilterMode.Point;
-                }
-                break;
-            case 1:
-                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-                {
-                    texture.filterMode = FilterMode.Point;
-                }
-                break;
-            case 2:
-                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-                {
-                    texture.filterMode = FilterMode.Bilinear;
-                }
-                break;
-            case 3:
-                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-                {
-                    texture.filterMode = FilterMode.Bilinear;
-                }
-                break;
-            case 4:
-                foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-                {
-                    texture.filterMode = FilterMode.Trilinear;
-                }
-                break;
-        }
+        //switch (currentSettingsData.textureQuality)
+        //{
+        //    case 0:
+        //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+        //        {
+        //            texture.filterMode = FilterMode.Point;
+        //        }
+        //        break;
+        //    case 1:
+        //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+        //        {
+        //            texture.filterMode = FilterMode.Point;
+        //        }
+        //        break;
+        //    case 2:
+        //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+        //        {
+        //            texture.filterMode = FilterMode.Bilinear;
+        //        }
+        //        break;
+        //    case 3:
+        //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+        //        {
+        //            texture.filterMode = FilterMode.Bilinear;
+        //        }
+        //        break;
+        //    case 4:
+        //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
+        //        {
+        //            texture.filterMode = FilterMode.Trilinear;
+        //        }
+        //        break;
+        //}
     }
 
 
