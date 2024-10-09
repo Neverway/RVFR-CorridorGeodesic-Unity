@@ -10,11 +10,14 @@ public class Checkpoint : LogicComponent
     public string uniqueCheckpointName;
     [Tooltip("A checkpoint of a lower rank than what checkpoint you have currently will not get powered. Unless -1, in which case it ignores ranks")]
     public int checkpointRank = -1;
-    [LogicComponentHandle] public LogicComponent triggerCheckpoint;
+    [Tooltip("If true, checkpoint will become powered as soon as you activate it. Otherwise, only becomes powered upon death if checkpoint is at or lower than current checkpoint rank")]
+    public bool doPowerOnActivation = false;
 
+    [LogicComponentHandle] public LogicComponent triggerCheckpoint;
     public static string lastCheckpointName;
     public static int lastCheckpointRank = -1;
 
+    private bool hasInitialized = false;
 
 #if UNITY_EDITOR
     [DebugReadOnly, SerializeField] string DEBUG_lastCheckpoint;
@@ -44,6 +47,9 @@ public class Checkpoint : LogicComponent
         {
             FindObjectOfType<Pawn>().transform.position = transform.position;
         }
+
+        hasInitialized = true;
+        isPowered = ShouldBePowered();
     }
 
 
@@ -55,6 +61,9 @@ public class Checkpoint : LogicComponent
 
     public override void SourcePowerStateChanged(bool powered)
     {
+        if (!hasInitialized)
+            return;
+
         base.SourcePowerStateChanged(powered);
 
         if (triggerCheckpoint.isPowered)
@@ -69,8 +78,8 @@ public class Checkpoint : LogicComponent
                 SetCheckpoint();
             }
         }
-
-        isPowered = ShouldBePowered();
+        if (doPowerOnActivation)
+            isPowered = ShouldBePowered();
     }
 
     public bool AmIThisCheckpoint(string checkpoint)
@@ -79,7 +88,7 @@ public class Checkpoint : LogicComponent
     }
     public bool AmIHigherRank()
     {
-        return checkpointRank == -1 || checkpointRank >= lastCheckpointRank;
+        return checkpointRank == -1 || checkpointRank > lastCheckpointRank;
     }
     public bool ShouldBePowered()
     {
@@ -89,7 +98,7 @@ public class Checkpoint : LogicComponent
         }
         else
         {
-            return AmIHigherRank();
+            return !AmIHigherRank();
         }
     }
 
