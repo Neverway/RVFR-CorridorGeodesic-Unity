@@ -56,7 +56,8 @@ public class Vent : LogicComponent
     }
     protected void OnDisable()
     {
-        airCurrent.gameObject.SetActive(false);
+        if (airCurrent != null)
+            airCurrent.gameObject.SetActive(false);
     }
 
     [ExecuteAlways]

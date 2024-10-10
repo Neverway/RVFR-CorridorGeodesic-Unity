@@ -173,6 +173,89 @@ MonoBehaviour:
   onUnpowered:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &3045307575670986383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1082060480731363704}
+  - component: {fileID: 131290237763312093}
+  - component: {fileID: 4463276004112790495}
+  m_Layer: 0
+  m_Name: FizzlerGraphics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1082060480731363704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3045307575670986383}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.70710576, y: -0, z: -0, w: 0.7071078}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 1, z: 0.1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7773697804311383685}
+  m_LocalEulerAnglesHint: {x: 89.98, y: 0, z: 0}
+--- !u!33 &131290237763312093
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3045307575670986383}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &4463276004112790495
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3045307575670986383}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 8db4704d2702db1449165563d0ab29f1, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &3148553617956459256
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,13 +794,18 @@ PrefabInstance:
     - target: {fileID: 2577242482535789834, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2577242482535789834, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 8db4704d2702db1449165563d0ab29f1, type: 2}
+    - target: {fileID: 5695642544230017445, guid: 25ecce1d4d40796fc80bc4111abf4700,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 8333927859922366228, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -802,6 +890,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8333927859922366228, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1082060480731363704}
+    - targetCorrespondingSourceObject: {fileID: 8333927859922366228, guid: 25ecce1d4d40796fc80bc4111abf4700,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 2461461370353916583}
     - targetCorrespondingSourceObject: {fileID: 8333927859922366228, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
@@ -827,11 +919,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8412498579935070754, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 402995646136223112}
+      addedObject: {fileID: 2648865108115511152}
     - targetCorrespondingSourceObject: {fileID: 8412498579935070754, guid: 25ecce1d4d40796fc80bc4111abf4700,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2648865108115511152}
+      addedObject: {fileID: 1335865282103185218}
   m_SourcePrefab: {fileID: 100100000, guid: 25ecce1d4d40796fc80bc4111abf4700, type: 3}
 --- !u!33 &6287952496581085236 stripped
 MeshFilter:
@@ -929,18 +1021,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sliceList: []
---- !u!114 &402995646136223112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7851609439589346227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2648865108115511152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -958,6 +1038,32 @@ MonoBehaviour:
   fizzlerObject: {fileID: 7773697804311383685}
   fizzleBulbsTrigger: {fileID: 6796143814276325688}
   disableFizzler: {fileID: 0}
+--- !u!114 &1335865282103185218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7851609439589346227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d98c6989279cad8ca083dc2e7a7730a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPowered: 0
+  animator: {fileID: 0}
+  owningTeam: 
+  affectsOwnTeam: 0
+  ignoreHeldObjects: 1
+  pawnsInTrigger: []
+  propsInTrigger: []
+  targetEnt: {fileID: 0}
+  targetProp: {fileID: 0}
+  fizzleDust: {fileID: 7338686446746172535, guid: f4485c653c9d855d3a4cabe2c2b54395,
+    type: 3}
+  fizzleParty: {fileID: 6271697737164727327, guid: 25f39eade9d42c71488e518259f612d7,
+    type: 3}
+  buddyID: Phys_Buddy
 --- !u!1001 &4884907811851675964
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1051,6 +1157,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8043115851283503369, guid: a11c1e7e996b5f84490a77c3b536ad12,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8043115851283503369, guid: a11c1e7e996b5f84490a77c3b536ad12,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b855771b44de73043ad9484304869a1f, type: 2}
     m_RemovedComponents:
     - {fileID: -1811071841225460466, guid: a11c1e7e996b5f84490a77c3b536ad12, type: 3}
     - {fileID: 6013009254470721316, guid: a11c1e7e996b5f84490a77c3b536ad12, type: 3}
@@ -1176,6 +1292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onlyIfNecessaryForCorGeoActorDataOrMeshSliceable: 1
 --- !u!4 &8951033861699152427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4607982972365243159, guid: a11c1e7e996b5f84490a77c3b536ad12,

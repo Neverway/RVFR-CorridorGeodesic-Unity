@@ -22,6 +22,7 @@ public class Logic_Timer: LogicComponent
     //=-----------------=
     [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
     [SerializeField] private float timerDuration;
+    [SerializeField] private bool runTimerOnStart = true;
     [field:SerializeField] public UnityEvent onTimerStart { get; private set; } = new UnityEvent();
     [field:SerializeField] public UnityEvent onTimerEnd { get; private set; } = new UnityEvent();
 
@@ -54,6 +55,11 @@ public class Logic_Timer: LogicComponent
         yield return new WaitForSeconds(timerDuration);
         isPowered = false;
         onTimerEnd?.Invoke();
+    }
+    public override void OnEnable()
+    {
+        if (runTimerOnStart)
+            base.OnEnable();
     }
 
     //=-----------------=
