@@ -10,8 +10,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class Prop_Fizzler: MonoBehaviour
+public class EDITOR_FizzlerAutoResize : MonoBehaviour
 {
+#if UNITY_EDITOR
     //=-----------------=
     // Public Variables
     //=-----------------=
@@ -49,4 +50,6 @@ public class Prop_Fizzler: MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+
+#endif
 }

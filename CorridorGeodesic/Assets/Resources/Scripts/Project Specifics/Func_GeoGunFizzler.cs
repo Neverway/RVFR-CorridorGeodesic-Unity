@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,6 @@ public class Func_GeoGunFizzler : LogicComponent
     // Public Variables
     //=-----------------=
     public Transform fizzlerObject;
-
     //=-----------------=
     // Private Variables
     //=-----------------=
@@ -34,6 +34,19 @@ public class Func_GeoGunFizzler : LogicComponent
     {
         //Causes glitch if SourcePowerChanged is called on frame 1
     }
+    public void Update()
+    {
+        bool disabled = (disableFizzler != null && disableFizzler.isPowered);
+
+        fizzlerObject.gameObject.SetActive(!disabled);
+
+        if (!disabled && fizzleBulbsTrigger.isPowered)
+        {
+            ClearGeoGunRifts();
+        }
+
+        isPowered = !disabled;
+    }
 
     //=-----------------=
     // Internal Functions
@@ -49,21 +62,8 @@ public class Func_GeoGunFizzler : LogicComponent
         if(nixieCross)
             nixieCross.ClearGeoGunRifts();
     }
-    //public override void AutoSubscribe()
-    //{
-    //    subscribeLogicComponents.Add(inputSignal);
-    //    base.AutoSubscribe();
-    //}
     public override void SourcePowerStateChanged(bool powered)
     {
         base.SourcePowerStateChanged(powered);
-
-        isPowered = disableFizzler == null || !disableFizzler.isPowered;
-
-        //if (isPowered && fizzleBulbsTrigger.isPowered)
-        //{
-            ClearGeoGunRifts();
-        //}
-        //fizzlerObject.gameObject.SetActive(isPowered);
     }
 }
