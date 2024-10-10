@@ -5,46 +5,32 @@
 //
 //=============================================================================
 
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Func_GeoGunFizzler : LogicComponent
+public class Fizzler : LogicComponent
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public Transform fizzlerObject;
+    public Transform fizzlerObjectToDisable;
     //=-----------------=
     // Private Variables
     //=-----------------=
-    [SerializeField, LogicComponentHandle] private LogicComponent fizzleBulbsTrigger;
     [SerializeField, LogicComponentHandle] private LogicComponent disableFizzler;
+
+    private static Pawn_WeaponInventory geoGun;
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
 
-
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    public override void OnEnable()
-    {
-        //Causes glitch if SourcePowerChanged is called on frame 1
-    }
     public void Update()
     {
         bool disabled = (disableFizzler != null && disableFizzler.isPowered);
-
-        fizzlerObject.gameObject.SetActive(!disabled);
-
-        if (!disabled && fizzleBulbsTrigger.isPowered)
-        {
-            ClearGeoGunRifts();
-        }
-
+        fizzlerObjectToDisable.gameObject.SetActive(!disabled);
         isPowered = !disabled;
     }
 
@@ -56,14 +42,19 @@ public class Func_GeoGunFizzler : LogicComponent
     //=-----------------=
     // External Functions
     //=-----------------=
+
+    //Called by a UnityEvent
     public void ClearGeoGunRifts()
     {
-        Pawn_WeaponInventory nixieCross = FindObjectOfType<Pawn_WeaponInventory>();
-        if(nixieCross)
-            nixieCross.ClearGeoGunRifts();
-    }
-    public override void SourcePowerStateChanged(bool powered)
-    {
-        base.SourcePowerStateChanged(powered);
+        if (geoGun == null)
+        {
+            geoGun = FindObjectOfType<Pawn_WeaponInventory>();
+            if (geoGun == null)
+            {
+                Debug.LogError("Fizzler could not find geoGun for some reason? Cant clear rift");
+                return;
+            }
+        }
+        geoGun.ClearGeoGunRifts();
     }
 }

@@ -40,10 +40,9 @@ public class Mesh_Slicable : MonoBehaviour
     // Reference Variables
     //=-----------------=
     [Tooltip("Optional field for object that slices can be sent to.")]
-    [SerializeField] private SlicedPartsReference partsReference;
+    public SlicedPartsReference partsReference;
     private BzSliceableObject sliceableObject;
     private IBzMeshSlicer meshSlicer;
-
 
     //=-----------------=
     // Mono Functions

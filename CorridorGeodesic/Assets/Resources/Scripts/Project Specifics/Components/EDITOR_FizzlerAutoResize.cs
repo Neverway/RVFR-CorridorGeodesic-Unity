@@ -35,6 +35,9 @@ public class EDITOR_FizzlerAutoResize : MonoBehaviour
     //=-----------------=
     private void Update()
     {
+        if (Application.isPlaying)
+            return;
+
         if(fizzlerStart && fizzlerEnd && fizzler)
         {
             fizzler.position = (fizzlerStart.position + fizzlerEnd.position) * 0.5f;
@@ -50,6 +53,5 @@ public class EDITOR_FizzlerAutoResize : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-
 #endif
 }
