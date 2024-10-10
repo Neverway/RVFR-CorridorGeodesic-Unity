@@ -10,8 +10,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class Prop_Fizzler: MonoBehaviour
+public class EDITOR_FizzlerAutoResize : MonoBehaviour
 {
+#if UNITY_EDITOR
     //=-----------------=
     // Public Variables
     //=-----------------=
@@ -34,6 +35,9 @@ public class Prop_Fizzler: MonoBehaviour
     //=-----------------=
     private void Update()
     {
+        if (Application.isPlaying)
+            return;
+
         if(fizzlerStart && fizzlerEnd && fizzler)
         {
             fizzler.position = (fizzlerStart.position + fizzlerEnd.position) * 0.5f;
@@ -49,4 +53,5 @@ public class Prop_Fizzler: MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+#endif
 }

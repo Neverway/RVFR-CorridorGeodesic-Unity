@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CorGeo_FizzlerKiller : Volume
+public class CorGeo_FizzleObjectsVolume : Volume
 {
     //=-----------------=
     // Public Variables
