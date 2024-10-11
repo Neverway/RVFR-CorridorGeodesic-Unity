@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class ApplyForceOnBulbCollision : MonoBehaviour, BulbCollisionBehaviour
 {
     public float force;
@@ -11,6 +10,8 @@ public class ApplyForceOnBulbCollision : MonoBehaviour, BulbCollisionBehaviour
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
+        if (rigidbody == null)
+            Destroy(this);
     }
     public bool OnBulbCollision(Projectile_Vacumm bulb, RaycastHit hit)
     {

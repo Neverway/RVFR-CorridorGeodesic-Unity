@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3103470101175055742
 Transform:
   m_ObjectHideFlags: 0
@@ -123,7 +123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5650741858815552523
 Transform:
   m_ObjectHideFlags: 0
@@ -167,7 +167,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fc6679741cad0b8b2b9db6f882a09962, type: 2}
+  - {fileID: 2100000, guid: 148a2e64c71ed3b49949f94cc61f5ee8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -267,6 +267,7 @@ MonoBehaviour:
   dynamic: 0
   crushInNullSpace: 1
   isParentedIgnoreOffsets: 0
+  isHeld: 0
   space: 0
 --- !u!114 &4834380108111553924
 MonoBehaviour:
@@ -281,11 +282,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 0
+  animator: {fileID: 0}
   objectsToEnableWhenActive:
   - {fileID: 5650741858815552523}
   - {fileID: 5293431168510311890}
   objectsToDisableWhenActive:
   - {fileID: 3103470101175055742}
+  componentsToEnableWhenActive: []
+  componentsToDisableWhenActive: []
+  alwaysCheckToEnable: 0
   inputSignal: {fileID: 0}
   onPowered:
     m_PersistentCalls:
@@ -309,7 +314,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5293431168510311890
 Transform:
   m_ObjectHideFlags: 0

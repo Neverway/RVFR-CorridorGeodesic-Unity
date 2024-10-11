@@ -24,11 +24,11 @@ public class EDITOR_FizzlerAutoResize : MonoBehaviour
     [SerializeField] private Transform fizzlerStart;
     [SerializeField] private Transform fizzlerEnd;
     [SerializeField] private Transform fizzler;
+    [SerializeField] private float thickness = 0.025f;
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
-
 
     //=-----------------=
     // Mono Functions
@@ -41,7 +41,7 @@ public class EDITOR_FizzlerAutoResize : MonoBehaviour
         if(fizzlerStart && fizzlerEnd && fizzler)
         {
             fizzler.position = (fizzlerStart.position + fizzlerEnd.position) * 0.5f;
-            fizzler.localScale = new Vector3(Vector3.Distance(fizzlerStart.position, fizzlerEnd.position), 3.9f, 0.025f);
+            fizzler.localScale = new Vector3(Vector3.Distance(fizzlerStart.position, fizzlerEnd.position), 3.9f, thickness);
         }
     }
 
