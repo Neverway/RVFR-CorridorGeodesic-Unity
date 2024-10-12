@@ -12,7 +12,7 @@ public class EnableDisableSliceable : MonoBehaviour
     private List<MeshCollider> allPartsColliders;
     private List<MeshRenderer> allPartsRenderers;
 
-    public static int count;
+    [IsDomainReloaded] private static int count;
 
     public void Awake()
     {
@@ -28,6 +28,7 @@ public class EnableDisableSliceable : MonoBehaviour
         renderer = slicableThatIsNotSelf.GetComponent<MeshRenderer>();
         colldier = slicableThatIsNotSelf.GetComponent<MeshCollider>();
     }
+
     public void Update()
     {
         if (lastActive != whenThisObjectEnablesOrDisables.activeInHierarchy)
@@ -101,5 +102,12 @@ public class EnableDisableSliceable : MonoBehaviour
 
         colldier.enabled = active;
         renderer.enabled = active;
+    }
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        count = 0;
     }
 }

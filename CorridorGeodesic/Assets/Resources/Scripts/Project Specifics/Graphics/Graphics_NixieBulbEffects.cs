@@ -7,7 +7,7 @@ using Geogun = Alt_Item_Geodesic_Utility_GeoGun;
 
 public class Graphics_NixieBulbEffects : MonoBehaviour
 {
-    public static Graphics_NixieBulbEffects firstBulb;
+    [IsDomainReloaded] public static Graphics_NixieBulbEffects firstBulb;
 
     public Projectile_Vacumm self;
 
@@ -133,5 +133,12 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
 
         bulbGlowLight.intensity = startLightIntensity * actualFactor * actualFactor;
         bulbGlowEffect.localScale = Vector3.one * actualFactor;//* Mathf.Lerp(actualFactor, 1f, 0.5f);
+    }
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        firstBulb = null;
     }
 }

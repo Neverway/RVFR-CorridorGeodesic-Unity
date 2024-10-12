@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Fizzler : LogicComponent
@@ -18,7 +19,7 @@ public class Fizzler : LogicComponent
     //=-----------------=
     [SerializeField, LogicComponentHandle] private LogicComponent disableFizzler;
 
-    private static Pawn_WeaponInventory geoGun;
+    [IsDomainReloaded] private static Pawn_WeaponInventory geoGun;
 
     //=-----------------=
     // Reference Variables
@@ -56,5 +57,12 @@ public class Fizzler : LogicComponent
             }
         }
         geoGun.ClearGeoGunRifts();
+    }
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        geoGun = null;
     }
 }

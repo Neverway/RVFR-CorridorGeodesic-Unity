@@ -386,6 +386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onlyIfNecessaryForCorGeoActorDataOrMeshSliceable: 0
 --- !u!114 &7614493411566958606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,7 +426,6 @@ GameObject:
   - component: {fileID: 8430767795519027697}
   - component: {fileID: 1423881152161335598}
   - component: {fileID: 5896234656504656020}
-  - component: {fileID: 3686225071504658270}
   m_Layer: 0
   m_Name: Prop_SignNumber
   m_TagString: Untagged
@@ -1624,45 +1624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3686225071504658270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5662739157049849285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30e1e85659a68cc489a9a3eb2912fdfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  section: 1
-  floor: B
-  info: 
-  hazards: 0
-  symbolPairs:
-  - hazard: 1
-    symbol: {fileID: 21300000, guid: bdaa155d2d943fcf7bc5818aceb16032, type: 3}
-  - hazard: 16
-    symbol: {fileID: 21300000, guid: db4dfd4cb329ca3d2b628c21950c0bc4, type: 3}
-  - hazard: 2
-    symbol: {fileID: 21300000, guid: 52a695b7541028d16a917177395bdd46, type: 3}
-  - hazard: 32
-    symbol: {fileID: 21300000, guid: 8fada7fc746305411a3e72504ce8fe4c, type: 3}
-  - hazard: 8
-    symbol: {fileID: 21300000, guid: 91a9a046722057fb7b3ba3410724534f, type: 3}
-  - hazard: 4
-    symbol: {fileID: 21300000, guid: f63f564df8840e9dcb2a7f61c1cff0f9, type: 3}
-  screenText: {fileID: 5389041450563961149}
-  signs:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  onlyIfNecessaryForCorGeoActorDataOrMeshSliceable: 0
 --- !u!1001 &6982159100234140444
 PrefabInstance:
   m_ObjectHideFlags: 0

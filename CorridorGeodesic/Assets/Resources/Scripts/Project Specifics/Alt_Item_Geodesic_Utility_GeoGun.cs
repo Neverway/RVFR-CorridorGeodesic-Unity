@@ -51,17 +51,17 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [SerializeField] private Animator anims;
 
     public List<Projectile_Vacumm> deployedInfinityMarkers = new List<Projectile_Vacumm> ();
-    public static GameObject deployedRift;
+    [IsDomainReloaded] public static GameObject deployedRift;
     private Mesh_Slicable[] meshSlicers;
 
     //Statics for ALTMeshSlicer to use
-    public static Plane planeA;
-    public static Plane planeB;
-    public static List<GameObject> nullSlices;
-    public static GameObject planeBMeshes;
-    public static List<Mesh_Slicable> originalSliceableObjects = new List<Mesh_Slicable> ();
-    public static List<GameObject> slicedMeshes = new List<GameObject> ();
-    public static List<CorGeo_ActorData> CorGeo_ActorDatas = new List<CorGeo_ActorData> ();
+    [IsDomainReloaded] public static Plane planeA;
+    [IsDomainReloaded] public static Plane planeB;
+    [IsDomainReloaded] public static List<GameObject> nullSlices;
+    [IsDomainReloaded] public static GameObject planeBMeshes;
+    [IsDomainReloaded] public static List<Mesh_Slicable> originalSliceableObjects = new List<Mesh_Slicable> ();
+    [IsDomainReloaded] public static List<GameObject> slicedMeshes = new List<GameObject> ();
+    [IsDomainReloaded] public static List<CorGeo_ActorData> CorGeo_ActorDatas = new List<CorGeo_ActorData> ();
 
     //Object groups for resetting
 
@@ -70,9 +70,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private Vector3 planeBStartPos;
     private float riftTimer = 0f;
     private float maxRiftTimer;
-    public static float lerpAmount;
+    [IsDomainReloaded] public static float lerpAmount;
     [SerializeField] private float riftSecondsPerUnit = 1.8f;
-    public static float riftWidth;
+    [IsDomainReloaded] public static float riftWidth;
     private float minRiftTimer;
     private float maxRiftWidth = 50f;
 
@@ -80,7 +80,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     private bool isCutPreviewActive = false;
     private bool isCollapseStarted = false;
-    public static bool delayRiftCollapse = false;
+    [IsDomainReloaded] public static bool delayRiftCollapse = false;
     private bool forceTweenRift = false;
     private bool expandingRiftDueToCrush = false;
     private bool ignoreRiftInputAfterCrush = false;
@@ -91,11 +91,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private float timeMoveRiftButtonHeld = 0f;
     private float slowDistance = 1.5f;
 
-    public static RiftState previousState = RiftState.None;
-    public static RiftState currentState = RiftState.None;
+    [IsDomainReloaded] public static RiftState previousState = RiftState.None;
+    [IsDomainReloaded] public static RiftState currentState = RiftState.None;
 
     public delegate void StateChanged();
-    public static event StateChanged OnStateChanged;
+    [IsDomainReloaded] public static event StateChanged OnStateChanged;
     //public static UnityEvent onStateChanged = new UnityEvent ();
 
     //=-----------------=
@@ -1014,4 +1014,24 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //=-----------------=
     // External Functions
     //=-----------------=
+
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        deployedRift = null;
+        nullSlices = null;
+        planeBMeshes = null;
+        originalSliceableObjects = new List<Mesh_Slicable>();
+        slicedMeshes = new List<GameObject>();
+        CorGeo_ActorDatas = new List<CorGeo_ActorData>();
+        lerpAmount = 0;
+        riftWidth = 0;
+        delayRiftCollapse = false;
+        delayRiftCollapse = false;
+        previousState = RiftState.None;
+        currentState = RiftState.None;
+        OnStateChanged = null;
+    }
 }

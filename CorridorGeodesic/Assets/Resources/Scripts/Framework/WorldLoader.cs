@@ -20,7 +20,7 @@ public class WorldLoader : MonoBehaviour
     [SerializeField] public float minimumRequiredLoadTime = 1f;
     [SerializeField] private string loadingWorldID = "_Travel";
     public string streamingWorldID = "_Streaming";
-    public static event Action OnWorldLoaded;
+    [IsDomainReloaded] public static event Action OnWorldLoaded;
     public bool isLoading;
 
 
@@ -265,5 +265,12 @@ public class WorldLoader : MonoBehaviour
         }
 
         return false;
+    }
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        OnWorldLoaded = null;
     }
 }

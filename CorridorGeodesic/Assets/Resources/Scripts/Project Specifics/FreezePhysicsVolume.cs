@@ -8,7 +8,7 @@ public class FreezePhysicsVolume : Volume
     // Public Variables
     //=-----------------=
     public string tagToFreeze = "PhysProp";
-    public LogicComponent doFreezing;
+    [LogicComponentHandle] public LogicComponent doFreezing;
 
     //=-----------------=
     // Private Variables
@@ -42,12 +42,6 @@ public class FreezePhysicsVolume : Volume
             if (rb != null && rb.velocity.magnitude < 0.025f)
             {
                 rb.isKinematic = isPowered;
-
-                if (isPowered)
-                {
-                    rb.velocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero;
-                }
             }
         }
     }
@@ -58,17 +52,6 @@ public class FreezePhysicsVolume : Volume
             return;
 
         base.OnTriggerEnter(_other);
-    }
-    protected new void OnTriggerExit(Collider _other)
-    {
-        base.OnTriggerExit(_other);
-
-        // An Pawn has exited the trigger
-        if (_other.CompareTag(tagToFreeze))
-        {
-            Rigidbody rb = _other.GetComponent<Rigidbody>();
-            rb.isKinematic = false;
-        }
     }
     protected new void OnDisable()
     {

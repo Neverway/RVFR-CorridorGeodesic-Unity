@@ -38,7 +38,8 @@ public class TeslaConductor : MonoBehaviour, TeslaPowerSource
         if (!IsTransformInTeslaRange(powerSource.GetZapTargetTransform()))
         {
             powerSource = null;
-            StartCoroutine(DestroyLightning(lineEffect));
+            if (lineEffect != null)
+                StartCoroutine(DestroyLightning(lineEffect));
             return;
         }
 

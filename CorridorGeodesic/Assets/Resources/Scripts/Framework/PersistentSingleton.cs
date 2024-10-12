@@ -19,12 +19,12 @@ public class PersistentSingleton : MonoBehaviour
     //=-----------------=
     // Private Variables
     //=-----------------=
-    
-    
+
+
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private static GameObject instance;
+    [IsDomainReloaded] private static GameObject instance;
 
     //=-----------------=
     // Mono Functions
@@ -40,11 +40,6 @@ public class PersistentSingleton : MonoBehaviour
         instance = gameObject;
         DontDestroyOnLoad(instance);
     }
-    private void OnApplicationQuit()
-    {
-        instance = null;
-    }
-
     //=-----------------=
     // Internal Functions
     //=-----------------=
@@ -53,5 +48,13 @@ public class PersistentSingleton : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        instance = null;
+    }
 }
 
