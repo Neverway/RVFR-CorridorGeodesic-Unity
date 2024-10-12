@@ -27,7 +27,7 @@ public class GeolitePanel : LogicComponent
     private MeshCollider panelCollider;
     private MeshRenderer panelRenderer;
 
-    private static int count;
+    public static int count;
 
     public void Awake()
     {

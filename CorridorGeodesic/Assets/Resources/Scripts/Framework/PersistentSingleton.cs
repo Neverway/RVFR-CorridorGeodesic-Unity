@@ -26,7 +26,6 @@ public class PersistentSingleton : MonoBehaviour
     //=-----------------=
     private static GameObject instance;
 
-
     //=-----------------=
     // Mono Functions
     //=-----------------=
@@ -41,13 +40,16 @@ public class PersistentSingleton : MonoBehaviour
         instance = gameObject;
         DontDestroyOnLoad(instance);
     }
-    
-    
+    private void OnApplicationQuit()
+    {
+        instance = null;
+    }
+
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    
-    
+
+
     //=-----------------=
     // External Functions
     //=-----------------=

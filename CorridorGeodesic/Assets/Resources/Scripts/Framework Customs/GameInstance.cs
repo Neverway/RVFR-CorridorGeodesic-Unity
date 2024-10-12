@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Unity.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -42,7 +43,8 @@ public class GameInstance : MonoBehaviour
     {
         Instance = this;
     }
-    public void LateUpdate()
+
+    private void LateUpdate()
     {
         // If no player was found, enable a random pawns camera
         if (localPlayerCharacter == null)
@@ -60,7 +62,6 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
 
     //=-----------------=
     // Core External Functions

@@ -50,10 +50,12 @@ public class Rift_Audio : MonoBehaviour
     {
         Alt_Item_Geodesic_Utility_GeoGun.OnStateChanged += OnStateChanged;
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         Alt_Item_Geodesic_Utility_GeoGun.OnStateChanged -= OnStateChanged;
-
+    }
+    private void OnDestroy()
+    {
         riftIdleInstance.release();
         riftCollapseInstance.release();
         riftExpandInstance.release();

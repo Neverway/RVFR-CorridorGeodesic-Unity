@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class EnableDisableSliceable : MonoBehaviour
 {
@@ -14,7 +12,7 @@ public class EnableDisableSliceable : MonoBehaviour
     private List<MeshCollider> allPartsColliders;
     private List<MeshRenderer> allPartsRenderers;
 
-    private static int count;
+    public static int count;
 
     public void Awake()
     {
