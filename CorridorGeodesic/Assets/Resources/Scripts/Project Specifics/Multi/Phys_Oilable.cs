@@ -55,6 +55,9 @@ public class Phys_Oilable : MonoBehaviour
         {
             burning = true;
         }
+
+        if (burning)
+            OilManager.Instance.StartFlameSingle(transform.position);
     }
 
     //=-----------------=

@@ -106,20 +106,32 @@ Shader "Soulex/SX_SlicePreview"
 
                 half oneMinusDepth = 1 - depth;
 
-                UVMod distortionMod;
-                distortionMod.uvScale = _DistortionScale;
-                distortionMod.uvOffset = _Time.x * 0.2;
+                UVMod mod;
+                mod.uvScale = 0.25;
+                mod.uvOffset = 0;
 
-                TriplanarUV distortionUVs = GetTriplanarUVs(i.worldPos, i.normal, 1, distortionMod, _MainTex, _MainTex_ST);
+                //Distortion
+                TriplanarUV UVs = GetTriplanarUVs(i.worldPos, i.normal, 64, mod, _MainTex, _MainTex_ST);
 
-                half4 distortion = GetTriplanarTexture(_DistortionTex, distortionUVs, distortionMod) * _Distortion;
+                PixelizeTriplanarUV(UVs, 128);
 
-                float4 overlayCol = SampleTriplanarTexture(_MainTex, _MainTex, _MainTex_ST, i.worldPos, i.normal, 
-                _OverlayScale, (distortion - _Distortion * 0.5) * oneMinusDepth, 64) * depth;
+                mod.uvScale = _DistortionScale;
+                mod.uvOffset = _Time.x * 0.2;
 
-                float4 edgeCol = SampleTriplanarTexture(_EdgeTex, _MainTex, _MainTex_ST, i.worldPos, i.normal,
-                _EdgeScale, (distortion - _Distortion * 0.5) * oneMinusDepth, 64) * oneMinusDepth;
+                half4 distortion = GetTriplanarTexture(_DistortionTex, UVs, mod) * _Distortion;
 
+                //Color Setup
+                mod.uvOffset = (distortion - _Distortion * 0.5) * oneMinusDepth;
+
+                //Overlay Color
+                mod.uvScale = _OverlayScale;
+                float4 overlayCol = GetTriplanarTexture(_MainTex, UVs, mod) * depth;
+
+                //Edge Color
+                mod.uvScale = _EdgeScale;
+                float4 edgeCol = GetTriplanarTexture(_EdgeTex, UVs, mod) * oneMinusDepth;
+
+                //Combine Effects
                 half alpha = overlayCol.a + edgeCol.a;
 
                 half depthMask = pow(oneMinusDepth, 2);
