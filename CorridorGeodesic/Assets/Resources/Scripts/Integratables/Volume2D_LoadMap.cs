@@ -38,7 +38,7 @@ public class Volume2D_LoadMap : Volume
         if (_other.CompareTag("Pawn") && GetPlayerInTrigger())
         {
             exitOffset = new Vector3(exitOffsetX, exitOffsetY);
-            targetEnt.transform.position += exitOffset;
+            targetEntity.transform.position += exitOffset;
             FindObjectOfType<LevelManager>().LoadLevelFromMemory(levelID);
         }
     }
