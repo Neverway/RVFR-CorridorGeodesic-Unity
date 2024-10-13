@@ -69,7 +69,7 @@ public class Volume_TriggerInteractable : Volume
     private new void OnTriggerExit2D(Collider2D _other)
     {
         base.OnTriggerExit2D(_other); // Call the base class method
-        if (_other.CompareTag("Pawn")) if (targetEnt.isPossessed) targetEnt.isNearInteractable = false;
+        if (_other.CompareTag("Pawn")) if (targetEntity.isPossessed) targetEntity.isNearInteractable = false;
         SetInteractionIndicatorState();
     }
     
@@ -93,9 +93,9 @@ public class Volume_TriggerInteractable : Volume
 
         // Disable the indicator if the player left
         // (Shouldn't `SetInteractionIndicatorState();` already take care of this?? ~Liz)
-        if (_other.CompareTag("Pawn") && targetEnt.isPossessed)
+        if (_other.CompareTag("Pawn") && targetEntity.isPossessed)
         {
-            targetEnt.isNearInteractable = false;
+            targetEntity.isNearInteractable = false;
         }
     }
 
