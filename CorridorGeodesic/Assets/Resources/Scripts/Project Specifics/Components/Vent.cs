@@ -67,6 +67,11 @@ public class Vent : LogicComponent
         {
             isPowered = conductor.IsTeslaPowered();
         }
+        else
+        {
+            if (isPowered != inputSignal.isPowered)
+                SourcePowerStateChanged(inputSignal.isPowered);
+        }
 
         airCurrent.gameObject.SetActive(isPowered && ventObject.gameObject.activeInHierarchy);
         sparks.gameObject.SetActive(isBeingSliced.isPowered);

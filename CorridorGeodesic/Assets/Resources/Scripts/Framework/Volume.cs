@@ -41,6 +41,7 @@ public class Volume : LogicComponent
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    //todo: THIS DOESNT WORK WHEN VOLUME IS DISABLED, Try calling this on update somewhere else
     protected void Update()
     {
         //Validate the pawns that are inside the trigger (if there are any)
@@ -49,9 +50,15 @@ public class Volume : LogicComponent
             List<Pawn> toRemove = new List<Pawn>();
             for (int i = pawnsInTrigger.Count - 1; i >= 0; i--)
             {
-                //If object is null, or, if object is disabled and disabledObjectsExitVolume is checked...
-                if (pawnsInTrigger[i] == null || (disabledObjectsExitVolume && !pawnsInTrigger[i].gameObject.activeInHierarchy))
-                    //... Add this object to the list of objects to remove (may be null)
+                //If object is null, remove it now
+                if (pawnsInTrigger[i] == null)
+                {
+                    pawnsInTrigger.RemoveAt(i);
+                    OnObjectsInVolumeUpdated(VolumeUpdateType.PawnRemoved);
+                }
+                //If object is disabled, add it to list of objects to remove
+                if (!disabledObjectsExitVolume) continue;
+                if (!pawnsInTrigger[i].gameObject.activeInHierarchy)
                     toRemove.Add(pawnsInTrigger[i]);
             }
             //Remove the pawns in toRemove from the volume (may contain some null values)
@@ -65,9 +72,15 @@ public class Volume : LogicComponent
             List<GameObject> toRemove = new List<GameObject>();
             for (int i = propsInTrigger.Count - 1; i >= 0; i--)
             {
-                //If object is null, or, if object is disabled and disabledObjectsExitVolume is checked...
-                if (propsInTrigger[i] == null || (disabledObjectsExitVolume && !propsInTrigger[i].activeInHierarchy))
-                    //... Add this object to the list of objects to remove (may be null)
+                //If object is null, remove it now
+                if (propsInTrigger[i] == null)
+                {
+                    propsInTrigger.RemoveAt(i);
+                    OnObjectsInVolumeUpdated(VolumeUpdateType.PropRemoved);
+                }
+                //If object is disabled, add it to list of objects to remove
+                if (!disabledObjectsExitVolume) continue;
+                if (!propsInTrigger[i].activeInHierarchy)
                     toRemove.Add(propsInTrigger[i]);
             }
             //Remove the props in toRemove from the volume (may contain some null values)

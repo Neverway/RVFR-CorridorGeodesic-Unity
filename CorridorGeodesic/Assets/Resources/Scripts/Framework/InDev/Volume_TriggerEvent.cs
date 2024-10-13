@@ -153,9 +153,9 @@ public class Volume_TriggerEvent : Volume
     public override void OnDisable ()
     {
         base.OnDisable ();
-        onUnoccupied?.Invoke ();
         isPowered = false;
         if (resetsAutomatically) hasBeenTriggered = false;
+        onUnoccupied?.Invoke ();
     }
 
     new private void OnDestroy ()
