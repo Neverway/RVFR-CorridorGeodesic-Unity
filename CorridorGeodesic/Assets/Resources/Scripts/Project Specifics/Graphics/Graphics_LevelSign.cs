@@ -11,7 +11,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Graphics_LevelSign: MonoBehaviour
+public class Graphics_LevelSign : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -31,7 +31,7 @@ public class Graphics_LevelSign: MonoBehaviour
     // Reference Variables
     //=-----------------=
     [SerializeField] private TextMeshPro screenText;
-    [SerializeField] private SpriteRenderer[] signs;
+    [SerializeField] private SpriteRenderer[] signs = new SpriteRenderer[0];
 
     //=-----------------=
     // Mono Functions

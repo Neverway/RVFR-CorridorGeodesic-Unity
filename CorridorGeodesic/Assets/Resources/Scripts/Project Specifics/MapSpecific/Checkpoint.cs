@@ -14,8 +14,8 @@ public class Checkpoint : LogicComponent
     public bool doPowerOnActivation = false;
 
     [LogicComponentHandle] public LogicComponent triggerCheckpoint;
-    public static string lastCheckpointName;
-    public static int lastCheckpointRank = -1;
+    [IsDomainReloaded] public static string lastCheckpointName;
+    [IsDomainReloaded] public static int lastCheckpointRank = -1;
 
     private bool hasInitialized = false;
 
@@ -36,6 +36,8 @@ public class Checkpoint : LogicComponent
         }
     }
 #endif
+
+    
 
     public IEnumerator Start()
     {
@@ -111,7 +113,15 @@ public class Checkpoint : LogicComponent
     public static void ClearCheckpoints()
     {
         lastCheckpointName = null;
+        lastCheckpointRank = -1;
         //Debug.Log("Clearing checkpoints");
     }
 
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        ClearCheckpoints();
+    }
 }

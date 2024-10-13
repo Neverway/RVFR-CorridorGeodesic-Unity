@@ -1,8 +1,4 @@
-using JetBrains.Annotations;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GeolitePanel : LogicComponent
@@ -27,10 +23,11 @@ public class GeolitePanel : LogicComponent
     private MeshCollider panelCollider;
     private MeshRenderer panelRenderer;
 
-    private static int count;
+    [IsDomainReloaded] private static int count;
 
-    public void Awake()
+    public override void Awake()
     {
+        base.Awake();
         panel.gameObject.name = "GEOLITEPANEL" + count++;
 
         allPanelPartColliders = new List<MeshCollider>();
@@ -204,5 +201,12 @@ public class GeolitePanel : LogicComponent
                 return ActualLerpAmount != lastStableLerpAmount;
         }
         return false;
+    }
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        count = 0;
     }
 }
