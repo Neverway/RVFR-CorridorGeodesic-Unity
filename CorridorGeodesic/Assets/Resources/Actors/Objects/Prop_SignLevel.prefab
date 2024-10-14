@@ -156,7 +156,7 @@ Transform:
   m_GameObject: {fileID: 2874165821208296306}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 1, z: -24}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1350,6 +1350,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e1e85659a68cc489a9a3eb2912fdfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  section: 1
+  floor: B
+  info: 
   hazards: 0
   symbolPairs:
   - hazard: 1
@@ -1529,6 +1532,7 @@ MonoBehaviour:
   dynamic: 0
   crushInNullSpace: 1
   isParentedIgnoreOffsets: 0
+  isHeld: 0
   space: 0
 --- !u!1 &5399480886014286326
 GameObject:
@@ -1702,12 +1706,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: -0.07097244, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  _SortingLayer: 0
-  _SortingLayerID: 0
-  _SortingOrder: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 42476278209537342}
   m_maskType: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
 --- !u!1 &6191389173715075904
 GameObject:
   m_ObjectHideFlags: 0
@@ -2390,12 +2394,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  _SortingLayer: 0
-  _SortingLayerID: 0
-  _SortingOrder: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6776109089125402976}
   m_maskType: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
 --- !u!1 &8568226936834119752
 GameObject:
   m_ObjectHideFlags: 0
@@ -2693,11 +2697,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 0
+  animator: {fileID: 0}
   objectsToEnableWhenActive: []
   objectsToDisableWhenActive:
   - {fileID: 5284560604598416159}
   componentsToEnableWhenActive: []
   componentsToDisableWhenActive: []
+  alwaysCheckToEnable: 0
   inputSignal: {fileID: 3024850015371805325}
   onPowered:
     m_PersistentCalls:
