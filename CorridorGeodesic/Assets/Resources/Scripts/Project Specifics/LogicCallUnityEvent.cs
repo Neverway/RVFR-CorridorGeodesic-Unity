@@ -2,8 +2,6 @@ using UnityEngine.Events;
 
 public class LogicCallUnityEvent : LogicComponent
 {
-    public enum EventCallType { EveryFrameWhenPowered, OnSourceChanged, OnSourceChangedWhenPowered }
-
     public EventCallType eventCallType = EventCallType.OnSourceChangedWhenPowered;
     [LogicComponentHandle] public LogicComponent input;
     public UnityEvent unityEvent = new UnityEvent(); 

@@ -275,7 +275,7 @@ MonoBehaviour:
   fizzlerStart: {fileID: 4537515726800232603}
   fizzlerEnd: {fileID: 3852518753057911427}
   fizzler: {fileID: 512593155767348241}
-  thickness: 0.075
+  thickness: 0.05
 --- !u!1 &6212742610781980671
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,7 +680,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.00000029504295}
-  m_LocalScale: {x: 3.8, y: 3.9, z: 0.075}
+  m_LocalScale: {x: 3.8, y: 3.9, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8652827400902415201}
@@ -805,9 +805,10 @@ MonoBehaviour:
   owningTeam: 
   affectsOwnTeam: 0
   ignoreHeldObjects: 1
+  disabledObjectsExitVolume: 1
   pawnsInTrigger: []
   propsInTrigger: []
-  targetEnt: {fileID: 0}
+  targetEntity: {fileID: 0}
   targetProp: {fileID: 0}
   resetsAutomatically: 1
   checksOnlyForPlayer: 1
@@ -836,9 +837,10 @@ MonoBehaviour:
   owningTeam: 
   affectsOwnTeam: 0
   ignoreHeldObjects: 1
+  disabledObjectsExitVolume: 1
   pawnsInTrigger: []
   propsInTrigger: []
-  targetEnt: {fileID: 0}
+  targetEntity: {fileID: 0}
   targetProp: {fileID: 0}
   fizzleDust: {fileID: 7338686446746172535, guid: f4485c653c9d855d3a4cabe2c2b54395,
     type: 3}

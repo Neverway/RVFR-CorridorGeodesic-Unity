@@ -7,6 +7,7 @@ public enum MusicPlayType { Play, StopAllowFadeOut, StopImmediate }
 public enum CommonStateEnum { AddForce }
 public enum PlayerStateEnum { Idle, Walk, Jump, Airborne, CrouchIdle, CrouchWalk, WallSlide }
 public enum ElevatorState { Idle, Moving }
+public enum EventCallType { EveryFrameWhenPowered, OnSourceChanged, OnSourceChangedWhenPowered }
 [Flags] public enum Hazard { Blank = 1, Confined = 2, Explosive = 4, Fire = 8, Kinetic = 16, Lava = 32 }
 public enum SliceSpace
 {
