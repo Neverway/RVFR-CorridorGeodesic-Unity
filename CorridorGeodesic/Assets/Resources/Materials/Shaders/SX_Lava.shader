@@ -44,10 +44,10 @@ Shader "Unlit/SX_Lava"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
             #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
+            #include "SX_Helpers.cginc"
 
             struct appdata
             {
@@ -64,8 +64,6 @@ Shader "Unlit/SX_Lava"
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
-
-            uniform sampler2D _CameraDepthTexture;
 
             float4 _HotColor;
             float4 _ColdColor;
@@ -111,23 +109,27 @@ Shader "Unlit/SX_Lava"
                 float2 scrollUV = _Time.x * _ScrollSpeed;
 
                 float2 uvMain = i.worldPos.xz * _Scale;
-                float2 uvDistort = i.worldPos.xz * _DistScale + scrollUV;
+                float2 uvDistort = i.worldPos.xz * _DistScale;
 
-                float distort1 = tex2D(_DistortTex, uvDistort).r;
-                float distort2 = tex2D(_DistortTex, i.worldPos.xz * _DistScale + scrollUV * 0.5).g;
+                PixelizeUV(uvMain, 128);
+                PixelizeUV(uvDistort, 1280);
+
+                float distort1 = tex2D(_DistortTex, uvDistort + scrollUV).r;
+                float distort2 = tex2D(_DistortTex, uvDistort + scrollUV * 0.5).g;
 
                 float distort = saturate((distort1 + distort2) * 0.5);
 
-                uvMain += distort * _Distortion;
-
-                float col = tex2D(_MainTex, uvMain + scrollUV * 2);
+                float col = tex2D(_MainTex, uvMain + distort * _Distortion + scrollUV * 2).r;
 
                 col += distort;
 
                 float4 output = lerp(_ColdColor, _HotColor, col * _Offset) * _StrengthUnder;
 
-                half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos)));
-                half4 edgeLine = 1 - saturate(_Edge* (depth - i.scrPos.w));
+                //half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos)));
+                //half4 edgeLine = 1 - saturate(_Edge * (depth - i.scrPos.w));
+
+                half depth = GetDepth(i.scrPos, _Edge);
+                half4 edgeLine = 1 - depth;
 
                 //half4 fog = (depth - i.scrPos.w);
 

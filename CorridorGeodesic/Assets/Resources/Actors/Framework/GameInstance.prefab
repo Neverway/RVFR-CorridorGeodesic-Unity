@@ -32,6 +32,8 @@ GameObject:
   - component: {fileID: 7914969475861056359}
   - component: {fileID: 543500971442332002}
   - component: {fileID: 3332723307769600666}
+  - component: {fileID: 246071141861368921}
+  - component: {fileID: 1897448500087468385}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -922,7 +924,8 @@ MonoBehaviour:
   playerProjectileIgnoreMask:
     serializedVersion: 2
     m_Bits: 0
-  flameParticles: {fileID: 0}
+  flameParticles: {fileID: 1901245927194888, guid: bb98861c48ad2024ca93498c7dd93a6c,
+    type: 3}
 --- !u!114 &8253751922636525564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,3 +1206,30 @@ MonoBehaviour:
   jumps: 0
   bulbs: 0
   doTracking: 1
+--- !u!114 &246071141861368921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e6f34c532f4f0343b83fe38b0860e7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oilLifetime: 5
+  burningVoxels: []
+--- !u!114 &1897448500087468385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53126d58631fdce4fb40e33be4733208, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDecalAmount: 250
