@@ -693,18 +693,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2475764707079411600}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8172822758389047728 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5994322015025837600, guid: 25ecce1d4d40796fc80bc4111abf4700,
-    type: 3}
-  m_PrefabInstance: {fileID: 2475764707079411600}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90405973873d55970ae8bafff2bd491c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4497799313178809538
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -766,7 +754,7 @@ PrefabInstance:
     - target: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       propertyPath: m_Name
-      value: RipperPickup
+      value: Actor_GeoGunPedestal
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7825874910748701447, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
@@ -817,7 +805,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2651e68dea1b0f1238bb0de91e4b0332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSignal: {fileID: 8172822758389047728}
+  _isPowered: 0
+  animator: {fileID: 0}
+  inputSignal: {fileID: 0}
 --- !u!114 &7832389492536064310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1708,6 +1698,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2751136166400691349, guid: 64f7175221f42d94eb140fa78f5f824c,
+        type: 3}
+      propertyPath: geoGun
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5049322613815929327, guid: 64f7175221f42d94eb140fa78f5f824c,
         type: 3}
