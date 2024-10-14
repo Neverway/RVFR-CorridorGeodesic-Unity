@@ -1,4 +1,4 @@
-Shader "Unlit/SX_Lava"
+Shader "Soulex/Effects/Lava"
 {
     Properties
     {

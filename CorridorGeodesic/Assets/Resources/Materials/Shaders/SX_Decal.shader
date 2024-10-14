@@ -1,4 +1,4 @@
-Shader "Unlit/Decal"
+Shader "Soulex/Effects/Decal"
 {
     Properties
     {

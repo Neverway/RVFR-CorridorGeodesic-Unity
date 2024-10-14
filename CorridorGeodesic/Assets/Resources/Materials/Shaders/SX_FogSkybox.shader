@@ -1,4 +1,4 @@
-Shader "Soulex/SX_FogSkybox"
+Shader "Soulex/Effects/FogSkybox"
 {
     Properties
     {

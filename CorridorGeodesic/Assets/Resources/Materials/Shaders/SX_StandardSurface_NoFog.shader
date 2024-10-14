@@ -1,4 +1,4 @@
-Shader "Soulex/SX_Standard Surface No Fog"
+Shader "Soulex/Surface/Standard No Fog"
 {
     Properties
     {

@@ -1,6 +1,4 @@
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
-Shader "Soulex/SX_Standard Toon Oil"
+Shader "Soulex/Surface/Standard Toon Oil"
 {
     Properties
     {
@@ -59,7 +57,7 @@ Shader "Soulex/SX_Standard Toon Oil"
 
         CGPROGRAM
 
-        #pragma surface surf Ramp addshadow
+        #pragma surface surf Ramp fullforwardshadows addshadow
         #pragma multi_compile _SPECULARMODE_TRUEPBR _SPECULARMODE_STYLIZEDPBR
 
         #pragma target 3.0

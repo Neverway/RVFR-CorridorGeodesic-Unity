@@ -1,4 +1,4 @@
-Shader "Custom/SX_Triplanar"
+Shader "Soulex/Triplanar"
 {
     Properties
     {

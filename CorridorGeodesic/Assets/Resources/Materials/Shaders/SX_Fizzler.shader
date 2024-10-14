@@ -1,4 +1,4 @@
-Shader "Soulex/SX_Fizzler"
+Shader "Soulex/Effects/Fizzler"
 {
     Properties
     {

@@ -1,4 +1,4 @@
-Shader "Soulex/SX_Standard Surface"
+Shader "Soulex/Surface/Standard"
 {
     Properties
     {

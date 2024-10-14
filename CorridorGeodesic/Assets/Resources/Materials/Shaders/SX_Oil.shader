@@ -1,93 +1,60 @@
-Shader "Soulex/SX_Oil"
+Shader "Soulex/Effects/Oil"
 {
     Properties
     {
+        _Color ("Color", Vector) = (1, 1, 1, 1)
         [NoScaleOffset] _MainTex ("Mask", 2D) = "white" {}
+        [NoScaleOffset] _IrridesenceTex ("irridesence Tex", 2D) = "white" {}
         [NoScaleOffset] [Normal] _Normal ("Normal Map", 2D) = "bump" {}
-
-        //_Alpha ("Alpha", Range(0, 1)) = 1
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "LightMode"="ForwardAdd" }
-        LOD 100
+        Tags { "RenderType"="Opaque" "Queue"="Transparent" }
+        LOD 200
 
-        
-        BlendOp Max
-        Blend One OneMinusSrcAlpha
+        //BlendOp Max
+        Blend SrcAlpha OneMinusSrcAlpha
 
         ZWrite Off
 
-        Pass
+        //#include "SX_Helpers.cginc"
+
+        CGPROGRAM
+        #pragma surface surf Standard addshadow alpha:fade
+
+        #pragma target 3.0
+
+        sampler2D _MainTex;
+        sampler2D _IrridesenceTex;
+        sampler2D _Normal;
+
+        half4 _Color;
+
+        struct Input
         {
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma multi_compile_fog
-            #pragma multi_compile_fwdadd
+            float2 uv_MainTex;
+            float3 viewDir;
+            float3 worldNormal;
+        };
 
-            #include "UnityCG.cginc"
-            #include "Lighting.cginc"
-            #include "AutoLight.cginc"
-            #include "UnityShadowLibrary.cginc"
-            #include "SX_Helpers.cginc"
+        void surf (Input IN, inout SurfaceOutputStandard o)
+        {
+            fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 
-            struct appdata
-            {
-                float4 position : POSITION;
-                float2 uv : TEXCOORD0;
-                float3 normal : NORMAL;
-            };
+            //float3 normal = WorldNormalVector (IN, o.Normal);
 
-            struct v2f
-            {
-                float2 uv : TEXCOORD0;
-                //UNITY_FOG_COORDS(1)
-                //SHADOW_COORDS(1)
-                LIGHTING_COORDS(1, 3)
-                float4 position : SV_POSITION;
-                float3 normal : NORMAL;
-                float3 worldPos : TEXCOORD2;
-            };
+            half fresnel = saturate(1 - (dot(o.Normal, IN.viewDir)));
+            fresnel = pow(fresnel, 5);
 
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
+            o.Albedo = lerp(c.rgb, tex2D(_IrridesenceTex, fresnel).rgb, fresnel);
 
-            sampler2D _Normal;
+            o.Normal = UnpackNormal(tex2D(_Normal, IN.uv_MainTex));
 
-            //half _Alpha;
+            //o.Smoothness = 1;
 
-            v2f vert (appdata v)
-            {
-                v2f o;
-
-                o.position = UnityObjectToClipPos(v.position);
-
-                o.normal = UnityObjectToWorldNormal(v.normal);
-
-                o.worldPos = mul(unity_ObjectToWorld, v.position);
-
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-
-                TRANSFER_SHADOW(o);
-                //UNITY_TRANSFER_FOG(o,o.position);
-
-                return o;
-            }
-
-            fixed4 frag (v2f i) : SV_Target
-            {
-                fixed shadow = LIGHT_ATTENUATION(i);
-                fixed4 col = tex2D(_MainTex, i.uv);
-
-                //UNITY_APPLY_FOG(i.fogCoord, col);
-
-                col *= shadow;
-
-                return float4(shadow, shadow, shadow, shadow);
-            }
-            ENDCG
+            o.Alpha = c.a;
         }
+        ENDCG
     }
-    Fallback "VertexLit"
+    FallBack "Diffuse"
 }

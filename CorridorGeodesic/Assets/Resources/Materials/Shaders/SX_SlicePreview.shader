@@ -1,4 +1,4 @@
-Shader "Soulex/SX_SlicePreview"
+Shader "Soulex/Effects/SlicePreview"
 {
     Properties
     {

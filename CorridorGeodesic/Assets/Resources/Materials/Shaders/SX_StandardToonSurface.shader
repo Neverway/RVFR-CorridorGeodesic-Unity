@@ -1,6 +1,4 @@
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
-Shader "Soulex/SX_Standard Toon"
+Shader "Soulex/Surface/Standard Toon"
 {
     Properties
     {

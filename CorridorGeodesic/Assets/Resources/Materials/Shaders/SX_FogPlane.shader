@@ -1,4 +1,4 @@
-Shader "Unlit/FogPlane"
+Shader "Soulex/Effects/FogPlane"
 {
 	Properties
 	{
