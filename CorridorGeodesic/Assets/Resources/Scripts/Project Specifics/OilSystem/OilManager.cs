@@ -128,8 +128,6 @@ public class OilManager : MonoBehaviour
         Vector3 hashCenter = CreateHash(position, oilHashMap.UnitSize);
         Vector3 offset = Vector3.zero;
 
-        flameStartPositions.Clear();
-
         for (int x = -1; x <= 1; x++)
         {
             for (int y = -1; y <= 1; y++)
@@ -140,16 +138,18 @@ public class OilManager : MonoBehaviour
                     offset.y = y;
                     offset.z = z;
 
-                    Vector3 checkPosition = hashCenter + offset;
-                    flameStartPositions.Add(checkPosition);
-
-                    if(oilHashMap.TryGetFromSpatialHash(checkPosition, out OilVoxel voxel) && !burningVoxels.Contains(voxel))
+                    if(oilHashMap.TryGetFromSpatialHash(hashCenter + offset, out OilVoxel voxel) && !burningVoxels.Contains(voxel))
                     {
                         StartCoroutine(BurnDelay(voxel));
                     }
                 }
             }
         }
+    }
+    public void StartFlameSingle(Vector3 position)
+    {
+        if (oilHashMap.TryGetFromSpatialHash(position, out OilVoxel voxel) && !burningVoxels.Contains(voxel))
+            StartCoroutine(BurnDelay(voxel));
     }
     public bool BurnAtPosition(Vector3 position)
     {

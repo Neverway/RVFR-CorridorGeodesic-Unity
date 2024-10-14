@@ -5,10 +5,12 @@
 //
 //=============================================================================
 
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Mesh_Slicable))]
 public class SlicedPartsReference : MonoBehaviour
 {
     //=-----------------=
@@ -38,6 +40,9 @@ public class SlicedPartsReference : MonoBehaviour
             return originalMesh;
 } }
 
+    //public List<Mesh_Slicable> SlicedMeshesOnly => sliceList;
+    //public List<Mesh_Slicable> originalMeshOnly => originalMesh;
+
     //=-----------------=
     // Mono Functions
     //=-----------------=
@@ -45,7 +50,6 @@ public class SlicedPartsReference : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
 
     //=-----------------=
     // External Functions

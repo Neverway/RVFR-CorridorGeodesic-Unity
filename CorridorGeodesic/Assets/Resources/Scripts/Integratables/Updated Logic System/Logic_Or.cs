@@ -21,7 +21,7 @@ public class LogicOr : LogicComponent
     // Private Variables
     //=-----------------=
     [SerializeField, LogicComponentHandle] 
-    private List<LogicComponent> inputSignals = new List<LogicComponent>();
+    public List<LogicComponent> inputSignals = new List<LogicComponent>();
 
     //=-----------------=
     // Reference Variables

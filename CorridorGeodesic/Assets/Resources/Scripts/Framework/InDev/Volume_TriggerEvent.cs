@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using static Codice.Client.Common.EventTracking.TrackFeatureUseEvent.Features.DesktopGUI.Filters;
 
 public class Volume_TriggerEvent : Volume
 {
@@ -55,13 +56,15 @@ public class Volume_TriggerEvent : Volume
     //    if (resetSignal) Debug.DrawLine(transform.position, resetSignal.transform.position, new Color(1,0.5f,0,1));
     //}
 
+     /* Trigger enter/exit events
     private new void OnTriggerEnter2D(Collider2D _other)
     {
         base.OnTriggerEnter2D(_other); // Call the base class method
+
         if (!resetsAutomatically && hasBeenTriggered) return;
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
-            if (!targetEnt.isPossessed) return; 
+            if (!targetEntity.isPossessed) return; 
             onOccupied.Invoke();
             isPowered = true;
             hasBeenTriggered = true;
@@ -72,7 +75,6 @@ public class Volume_TriggerEvent : Volume
             isPowered = true;
             hasBeenTriggered = true;
         }
-        print(_other.name);
     }
 
     private new void OnTriggerExit2D(Collider2D _other)
@@ -80,7 +82,7 @@ public class Volume_TriggerEvent : Volume
         base.OnTriggerExit2D(_other); // Call the base class method
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
-            if (!targetEnt.isPossessed) return;
+            if (!targetEntity.isPossessed) return;
 
             onUnoccupied.Invoke();
             isPowered = false;
@@ -107,7 +109,7 @@ public class Volume_TriggerEvent : Volume
         if (!resetsAutomatically && hasBeenTriggered) return;
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
-            if (!targetEnt.isPossessed) return;
+            if (!targetEntity.isPossessed) return;
             if (!isPowered) //todo: quickfix
                 onOccupied.Invoke();
             isPowered = true;
@@ -134,7 +136,7 @@ public class Volume_TriggerEvent : Volume
 
         if (checksOnlyForPlayer && _other.CompareTag("Pawn"))
         {
-            if (!targetEnt.isPossessed) return;
+            if (!targetEntity.isPossessed) return;
             onUnoccupied.Invoke();
             isPowered = false;
             if (resetsAutomatically) hasBeenTriggered = false;
@@ -146,13 +148,14 @@ public class Volume_TriggerEvent : Volume
             if (resetsAutomatically) hasBeenTriggered = false;
         }
     }
+    // */
 
     public override void OnDisable ()
     {
         base.OnDisable ();
-        onUnoccupied?.Invoke ();
         isPowered = false;
         if (resetsAutomatically) hasBeenTriggered = false;
+        onUnoccupied?.Invoke ();
     }
 
     new private void OnDestroy ()
@@ -168,6 +171,70 @@ public class Volume_TriggerEvent : Volume
     {
         hasBeenTriggered = false;
     }
+
+    protected override bool AddPawnToVolume(Pawn pawn)
+    {
+        //todo: Add field for only checking for props
+        return base.AddPawnToVolume(pawn);
+    }
+    protected override bool RemovePawnFromVolume(Pawn pawn)
+    {
+        //todo: Add field for only checking for props
+        return base.RemovePawnFromVolume(pawn);
+    }
+    protected override bool AddPropToVolume(GameObject prop)
+    {
+        //ignore prop logic if only checking for player
+        if (checksOnlyForPlayer) 
+            return false;
+
+        return base.AddPropToVolume(prop);
+    }
+    protected override bool RemovePropFromVolume(GameObject prop)
+    {
+        //ignore prop logic if only checking for player
+        if (checksOnlyForPlayer)
+            return false;
+
+        return base.RemovePropFromVolume(prop);
+    }
+    protected override void OnObjectsInVolumeUpdated(VolumeUpdateType updateType)
+    {
+        base.OnObjectsInVolumeUpdated(updateType);
+
+        //if anything was added to volume
+        if ((updateType & VolumeUpdateType.AnythingAdded) != 0)
+            //And if has already been triggered
+            if (!resetsAutomatically && hasBeenTriggered)
+                return;
+
+        ValidatePowerState();
+    }
+    private void ValidatePowerState()
+    {
+        bool previouslyPowered = isPowered;
+
+        //if "checksOnlyForPlayer", then power this component if a pawn is in this trigger
+        if (checksOnlyForPlayer)
+            isPowered = pawnsInTrigger.Count > 0;
+        //otherwise, power this component if EITHER a pawn OR a prop is in this trigger
+        else
+            isPowered = pawnsInTrigger.Count > 0 || propsInTrigger.Count > 0;
+
+        //if went from not powered to powered 
+        if (!previouslyPowered && isPowered)
+        {
+            onOccupied?.Invoke();
+            hasBeenTriggered = true;
+        }
+        //if went from powered to not powered
+        else if (previouslyPowered && !isPowered)
+        {
+            onUnoccupied?.Invoke();
+            if (resetsAutomatically) hasBeenTriggered = false;
+        }
+    }
+
 
     //=-----------------=
     // External Functions

@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using static Alt_Item_Geodesic_Utility_GeoGun;
+using Geogun = Alt_Item_Geodesic_Utility_GeoGun;
 
 public class Graphics_NixieBulbEffects : MonoBehaviour
 {
-    public static Graphics_NixieBulbEffects firstBulb;
+    [IsDomainReloaded] public static Graphics_NixieBulbEffects firstBulb;
 
     public Projectile_Vacumm self;
 
@@ -35,6 +35,7 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
     private float previewBurstTimer;
     private TrailRenderer bulbTrailToDisable;
     private LineRenderer connectingLine;
+    private bool isQuitting = false;
 
     public void Awake()
     {
@@ -50,17 +51,24 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
         if (firstBulb == null)
             firstBulb = this;
     }
-
+    public void OnApplicationQuit()
+    {
+        isQuitting = true;
+    }
     public void OnDestroy()
     {
-        if (currentState != RiftState.None)
+        if (isQuitting)
+            return;
+
+        if (firstBulb == null)
+            firstBulb = null;
+
+        if (Geogun.currentState != RiftState.None)
         {
             GameObject obj = Instantiate(destroyBulbEffect);
             obj.transform.position = bulbGlowEffect.position;
         }
 
-        if (firstBulb == null)
-            firstBulb = null;
 
         if (connectingLine != null)
             Destroy(connectingLine.gameObject);
@@ -94,18 +102,18 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
             targetFactor = 0f;
             glowFactor = 0f;
         }
-        else if (currentState == RiftState.None)
+        else if (Geogun.currentState == RiftState.None)
         {
             hasDonePreviewBurst = false;
             previewBurstTimer = startPreviewTime;
             targetFactor = noRiftFactor;
         }
-        else if (!hasDonePreviewBurst && currentState == RiftState.Preview)
+        else if (!hasDonePreviewBurst && Geogun.currentState == RiftState.Preview)
         {
             hasDonePreviewBurst = true;
             glowFactor = startPreviewFactor;
         }
-        else if (currentState == RiftState.Collapsing || currentState == RiftState.Expanding)
+        else if (Geogun.currentState == RiftState.Collapsing || Geogun.currentState == RiftState.Expanding)
         {
             targetFactor = adjustRiftFactor;
         }
@@ -125,5 +133,12 @@ public class Graphics_NixieBulbEffects : MonoBehaviour
 
         bulbGlowLight.intensity = startLightIntensity * actualFactor * actualFactor;
         bulbGlowEffect.localScale = Vector3.one * actualFactor;//* Mathf.Lerp(actualFactor, 1f, 0.5f);
+    }
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        firstBulb = null;
     }
 }

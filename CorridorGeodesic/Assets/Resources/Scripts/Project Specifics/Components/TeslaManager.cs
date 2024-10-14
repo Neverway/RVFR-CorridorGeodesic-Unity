@@ -23,9 +23,9 @@ public class TeslaManager : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    public static LightningLine lightningLinePrefab;
-    public static List<TeslaSender> senders = new List<TeslaSender> ();
-    public static List<TeslaConductor> conductors = new List<TeslaConductor>();
+    [IsDomainReloaded] public static LightningLine lightningLinePrefab;
+    [IsDomainReloaded] public static List<TeslaSender> senders = new List<TeslaSender> ();
+    [IsDomainReloaded] public static List<TeslaConductor> conductors = new List<TeslaConductor>();
     public const float MIN_DISTANCE = 5f;
 
     //=-----------------=
@@ -39,7 +39,6 @@ public class TeslaManager : MonoBehaviour
         conductors.Clear ();
         InvokeRepeating ("CheckSenders", 0f, 0.2f);
     }
-
     //=-----------------=
     // Internal Functions
     //=-----------------=

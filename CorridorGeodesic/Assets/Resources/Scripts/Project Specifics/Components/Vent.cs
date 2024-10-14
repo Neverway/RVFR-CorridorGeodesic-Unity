@@ -56,7 +56,8 @@ public class Vent : LogicComponent
     }
     protected void OnDisable()
     {
-        airCurrent.gameObject.SetActive(false);
+        if (airCurrent != null)
+            airCurrent.gameObject.SetActive(false);
     }
 
     [ExecuteAlways]
@@ -65,6 +66,11 @@ public class Vent : LogicComponent
         if (conductor != null)
         {
             isPowered = conductor.IsTeslaPowered();
+        }
+        else
+        {
+            if (isPowered != inputSignal.isPowered)
+                SourcePowerStateChanged(inputSignal.isPowered);
         }
 
         airCurrent.gameObject.SetActive(isPowered && ventObject.gameObject.activeInHierarchy);

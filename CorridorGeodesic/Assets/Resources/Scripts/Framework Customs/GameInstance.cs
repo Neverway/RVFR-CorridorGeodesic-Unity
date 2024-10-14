@@ -6,10 +6,8 @@
 //
 //=============================================================================
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -19,7 +17,7 @@ public class GameInstance : MonoBehaviour
     // Public Variables
     //=-----------------=
     public GameMode defaultGamemode;
-    public static GameInstance Instance;
+    [IsDomainReloaded] public static GameInstance Instance;
 
 
     //=-----------------=
@@ -42,7 +40,8 @@ public class GameInstance : MonoBehaviour
     {
         Instance = this;
     }
-    public void LateUpdate()
+
+    private void LateUpdate()
     {
         // If no player was found, enable a random pawns camera
         if (localPlayerCharacter == null)
@@ -60,7 +59,6 @@ public class GameInstance : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-
 
     //=-----------------=
     // Core External Functions
@@ -242,5 +240,12 @@ public class GameInstance : MonoBehaviour
     public void UI_ShowDeathScreen()
     {
         AddWidget(UserInterfaceWidgets[7]);
+    }
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        Instance = null;
     }
 }

@@ -21,7 +21,7 @@ public class Game_LevelHelpers : MonoBehaviour
     // Private Variables
     //=-----------------=
     //private Vector3 relativePosition;
-    private static Dictionary<int, LevelTransitioner> levelLoadHandlers = new Dictionary<int, LevelTransitioner>();
+    [IsDomainReloaded] private static Dictionary<int, LevelTransitioner> levelLoadHandlers = new Dictionary<int, LevelTransitioner>();
 
     //=-----------------=
     // Reference Variables
@@ -37,10 +37,14 @@ public class Game_LevelHelpers : MonoBehaviour
     // Internal Functions
     //=-----------------=
 
-
     //=-----------------=
     // External Functions
     //=-----------------=
+    [RuntimeInitializeOnLoadMethod]
+    static void ReloadStaticFields()
+    {
+        levelLoadHandlers = new Dictionary<int, LevelTransitioner>();
+    }
     public static LevelTransitioner StoreObjectRelativePosition(int id, Transform saveTransform)
     {
         if (levelLoadHandlers.ContainsKey(id))

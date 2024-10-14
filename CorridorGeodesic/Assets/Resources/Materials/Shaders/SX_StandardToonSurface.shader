@@ -50,7 +50,7 @@ Shader "Soulex/SX_Standard Toon"
 
         CGPROGRAM
 
-        #pragma surface surf Ramp addshadow
+        #pragma surface surf Ramp fullforwardshadows addshadow
         #pragma multi_compile _SPECULARMODE_TRUEPBR _SPECULARMODE_STYLIZEDPBR
 
         #pragma target 3.0

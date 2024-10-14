@@ -20,9 +20,12 @@ public class Graphics_RiftPreviewEffects : MonoBehaviour
     {
         Alt_Item_Geodesic_Utility_GeoGun.OnStateChanged += OnStateChanged;
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         Alt_Item_Geodesic_Utility_GeoGun.OnStateChanged -= OnStateChanged;
+    }
+    private void OnDestroy()
+    {
         riftPreview.SetFloat("_EffectTime", 0);
         riftPreview.SetFloat("_SphereSize", 0);
         riftPreview.SetFloat("_EmissionStrength", defaultEmisStrength);

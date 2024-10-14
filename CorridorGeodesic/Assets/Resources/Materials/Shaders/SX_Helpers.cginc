@@ -1,5 +1,6 @@
 #include "SX_SGHelpers.cginc"
 sampler2D _CameraDepthTexture;
+float4 _CameraDepthTexture_TexelSize;
 
 struct TriplanarUV
 {
@@ -22,6 +23,10 @@ inline half GetDepth(float4 screenPos, float strength)
 {
 	half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(screenPos)));
 	return saturate(strength * (depth - screenPos.w));
+}
+inline half GetDepthUV(float2 uv)
+{
+	return LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv));
 }
 inline float GetDepthProjection(float2 screenPos)
 {
@@ -62,7 +67,6 @@ inline TriplanarUV GetTriplanarUVs(float3 worldPos, float3 normal, float sharpne
 
 	return uv;
 }
-
 inline TriplanarUV GetTriplanarUVs(float3 worldPos, float3 normal, float sharpness, UVMod mod, sampler2D _MainTex, float4 _MainTex_ST)
 {
 	TriplanarUV uv;
@@ -75,7 +79,6 @@ inline TriplanarUV GetTriplanarUVs(float3 worldPos, float3 normal, float sharpne
 
 	return uv;
 }
-
 inline float4 GetTriplanarTexture(sampler2D _Tex, TriplanarUV uv, UVMod frontMod, UVMod sideMod, UVMod topMod)
 {
 	float4 tex_front = tex2D(_Tex, uv.uv_front * frontMod.uvScale + frontMod.uvOffset) * uv.weights.z;
@@ -84,7 +87,6 @@ inline float4 GetTriplanarTexture(sampler2D _Tex, TriplanarUV uv, UVMod frontMod
 
 	return tex_front + tex_side + tex_top;
 }
-
 inline float4 GetTriplanarTexture(sampler2D _Tex, TriplanarUV uv, UVMod mod)
 {
 	float4 tex_front = tex2D(_Tex, uv.uv_front * mod.uvScale + mod.uvOffset) * uv.weights.z;
@@ -93,7 +95,6 @@ inline float4 GetTriplanarTexture(sampler2D _Tex, TriplanarUV uv, UVMod mod)
 
 	return tex_front + tex_side + tex_top;
 }
-
 inline float4 GetTriplanarTexture(sampler2D _Tex, TriplanarUV uv)
 {
 	float4 tex_front = tex2D(_Tex, uv.uv_front) * uv.weights.z;
@@ -111,4 +112,45 @@ inline float4 SampleTriplanarTexture(sampler2D _Tex, sampler2D _MainTex, float4 
 	TriplanarUV uv = GetTriplanarUVs(worldPos, normal, sharpness, _MainTex, _MainTex_ST);
 
 	return GetTriplanarTexture(_Tex, uv, mod);
+}
+float2 AlignWithGrabTexel(float2 uv) {
+	#if UNITY_UV_STARTS_AT_TOP
+		if (_CameraDepthTexture_TexelSize.y < 0) {
+			uv.y = 1 - uv.y;
+		}
+	#endif
+
+	return
+		(floor(uv * _CameraDepthTexture_TexelSize.zw) + 0.5) *
+		abs(_CameraDepthTexture_TexelSize.xy);
+}
+inline float3 GetRefracted(sampler2D _RefractionTex, float4 screenPos, float3 normal, half refractionStrength)
+{
+	float2 uvOffset = normal * refractionStrength;
+	uvOffset.y *= _CameraDepthTexture_TexelSize.z * abs(_CameraDepthTexture_TexelSize.y);
+
+	float2 uv = AlignWithGrabTexel((screenPos.xy + uvOffset) / screenPos.w);
+
+	half backgroundDepth = GetDepthUV(uv);
+	half surfaceDepth = UNITY_Z_0_FAR_FROM_CLIPSPACE(screenPos.z);
+
+	float depthDifference = backgroundDepth - surfaceDepth;
+
+	uvOffset *= saturate(depthDifference);
+	uv = AlignWithGrabTexel((screenPos.xy + uvOffset) / screenPos.w);
+	backgroundDepth = GetDepthUV(uv);
+
+	depthDifference = backgroundDepth - surfaceDepth;
+
+	return tex2D(_RefractionTex, uv).rgb;
+}
+inline void PixelizeUV(inout float2 uv, int texelSize)
+{
+	uv = floor(uv * texelSize) / texelSize;
+}
+inline void PixelizeTriplanarUV(inout TriplanarUV uv, int texelSize)
+{
+	PixelizeUV(uv.uv_front, texelSize);
+	PixelizeUV(uv.uv_side, texelSize);
+	PixelizeUV(uv.uv_top, texelSize);
 }

@@ -23,7 +23,6 @@ Shader "Soulex/SX_NullSpace"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
             #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
@@ -68,7 +67,7 @@ Shader "Soulex/SX_NullSpace"
                 return o;
             }
             float3 GetInternalProjectionUVs(float3 viewDir){
-                return reflect(viewDir * -1, float3(0, 0, 1));
+                return floor(reflect(viewDir * -1, float3(0, 0, 1)) * 64) / 64;
             }
             fixed4 frag (v2f i) : SV_Target
             {
@@ -79,11 +78,15 @@ Shader "Soulex/SX_NullSpace"
                 float2 screenUV = (i.screenPos / i.screenPos.w);
                 screenUV.y *= (_ScreenParams.y/_ScreenParams.x);
 
-                UVMod triplanarMod;
-                triplanarMod.uvScale = 0.1;
-                triplanarMod.uvOffset = timeUV;
+                PixelizeUV(screenUV, 256);
 
-                TriplanarUV UVs = GetTriplanarUVs(i.worldPos, i.normal, 1, triplanarMod, _MainTex, _MainTex_ST);
+                UVMod mod;
+                mod.uvScale = 0.25;
+                mod.uvOffset = 0;
+
+                TriplanarUV UVs = GetTriplanarUVs(i.worldPos, i.normal, 1, mod, _MainTex, _MainTex_ST);
+                
+                PixelizeTriplanarUV(UVs, 128);
 
                 //float2 uv_front = TRANSFORM_TEX(i.worldPos.xy, _MainTex) * 0.1 + timeUV;
                 //float2 uv_side = TRANSFORM_TEX(i.worldPos.zy, _MainTex) * 0.1 + timeUV;
@@ -95,11 +98,10 @@ Shader "Soulex/SX_NullSpace"
 
                 //float3 distort = distort_front * weights.z + distort_side * weights.x + distort_top * weights.y;
 
-                UVMod distortMod;
-                distortMod.uvScale = 0.25;
-                distortMod.uvOffset = 0;
+                mod.uvScale = 0.25;
+                mod.uvOffset = timeUV * 0.25;
 
-                float3 distort = GetTriplanarTexture(_DistortTex, UVs, distortMod, distortMod, distortMod).rgb;
+                float3 distort = GetTriplanarTexture(_DistortTex, UVs, mod).rgb;
 
                 UVMod colTop;
                 UVMod colSide;
