@@ -3,6 +3,10 @@ Shader "Soulex/Effects/Oil"
     Properties
     {
         _Color ("Color", Vector) = (1, 1, 1, 1)
+        [Enum(UnityEngine.Rendering.BlendOp)] _BlendOp ("Blend Operation", Float) = 0.0
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend", Float) = 1.0
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend", Float) = 0.0
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 2.0
         [NoScaleOffset] _MainTex ("Mask", 2D) = "white" {}
         [NoScaleOffset] _IrridesenceTex ("irridesence Tex", 2D) = "white" {}
         [NoScaleOffset] [Normal] _Normal ("Normal Map", 2D) = "bump" {}
@@ -12,10 +16,10 @@ Shader "Soulex/Effects/Oil"
         Tags { "RenderType"="Opaque" "Queue"="Transparent" }
         LOD 200
 
-        //BlendOp Max
-        Blend SrcAlpha OneMinusSrcAlpha
-
+        BlendOp [_BlendOp]
+        Blend [_SrcBlend] [_DstBlend]
         ZWrite Off
+        Cull [_Cull]
 
         //#include "SX_Helpers.cginc"
 

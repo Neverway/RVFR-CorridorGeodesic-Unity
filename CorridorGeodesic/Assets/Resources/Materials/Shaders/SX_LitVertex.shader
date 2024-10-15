@@ -23,9 +23,12 @@ Shader "Soulex/Particles/LitVertex"
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            fixed4 color = tex2D (_MainTex, IN.uv_MainTex) * IN.vertexColor;
-            o.Albedo = color.rgb;
+            fixed4 color = tex2D(_MainTex, IN.uv_MainTex) * IN.vertexColor;
+            o.Emission = color.rgb;
+            //o.Albedo = color.rgb;
             o.Alpha = color.a;
+
+            clip(o.Alpha - 0.5);
         }
         ENDCG
     }
