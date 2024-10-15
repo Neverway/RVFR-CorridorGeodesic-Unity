@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Graphics_Skybox: MonoBehaviour
+public class Graphics_CameraFollow: MonoBehaviour
 {
     //=-----------------=
     // Public Variables
