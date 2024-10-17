@@ -8,6 +8,7 @@ namespace Neverway.Framework.LogicValueSystem
     public abstract class LogicValue<T>
     {
         [SerializeField] protected T value;
+
         public LogicValue(T defaultValue) { value = defaultValue; }
         public virtual T Get() => value;
 
@@ -17,24 +18,28 @@ namespace Neverway.Framework.LogicValueSystem
     [Serializable]
     public class LogicInput<T> : LogicValue<T>
     {
-        [field: SerializeField] public ComponentFieldReference<LogicOutput<T>> source;
-        public bool IsLinkedToOutput => !source.IsUndefined;
+        [SerializeField] public ComponentFieldReference<LogicOutput<T>> sourceField;
+        public bool IsLinkedToOutput => !sourceField.IsUndefined;
         public LogicInput(T defaultValue) : base(defaultValue) { }
-
-        public override T Get() => IsLinkedToOutput ? source.Get().Get() : base.Get();
+        public override T Get() => IsLinkedToOutput ? sourceField.GetCached().Get() : base.Get();
+        public void CallOnSourceChanged(UnityAction action) => sourceField.GetCached().OnOutputChanged.AddListener(action);
     }
 
     [Serializable]
     public class LogicOutput<T> : LogicValue<T>
     {
-        public UnityEvent OnOutputChanged;
+        [SerializeField] public UnityEvent OnOutputChanged;
         public LogicOutput(T startingValue) : base(startingValue) { }
         public void Set(T newValue)
         {
             if (!value.Equals(newValue))
-                OnOutputChanged.Invoke();
-
-            value = newValue;
+            {
+                value = newValue;
+                OnOutputChanged?.Invoke();
+            }
+            else
+                value = newValue;
         }
+
     }
 }

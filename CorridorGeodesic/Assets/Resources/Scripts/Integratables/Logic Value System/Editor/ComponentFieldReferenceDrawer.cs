@@ -35,10 +35,13 @@ public class ComponentFieldReferenceDrawer : PropertyDrawer
 
 
         // ----- Draw Label, and indent -----
-        GUI_Label(position, label.text);
-        position = Indent(position);
-        position = AdvanceLine(position);
-
+        if (label.text != null && label.text != "")
+        {
+            GUI_Label(position, label.text);
+            position = Indent(position);
+            position = AdvanceLine(position);
+        }
+        
         //Draw box around body. 2 expected lines
         position = GUI_DrawBox(position, 2, 5f, 4);
 
@@ -53,7 +56,6 @@ public class ComponentFieldReferenceDrawer : PropertyDrawer
         GUI_SelectComponentField(halves[0]);
         GUI_SelectFieldDropdown(halves[1]);
         position = AdvanceLine(position);
-        
 
         //Finalize
         EditorGUI.EndProperty();
@@ -134,7 +136,7 @@ public class ComponentFieldReferenceDrawer : PropertyDrawer
             return;
         }
 
-        System.Type fieldReferenceType = fieldInfo.FieldType.GetGenericArguments()[0];
+        Type fieldReferenceType = fieldInfo.FieldType.GetGenericArguments()[0];
         Component selectedComponent = prop_targetComponent.objectReferenceValue as Component;
 
         string[] fieldNames = selectedComponent.GetType()
@@ -144,7 +146,7 @@ public class ComponentFieldReferenceDrawer : PropertyDrawer
 
         if (fieldNames.Length > 0)
         {
-            int selectedIndex = Mathf.Max(0, System.Array.IndexOf(fieldNames, prop_fieldName.stringValue));
+            int selectedIndex = Mathf.Max(0, Array.IndexOf(fieldNames, prop_fieldName.stringValue));
             selectedIndex = EditorGUI.Popup(position, selectedIndex, fieldNames);
 
             if (selectedIndex >= 0)

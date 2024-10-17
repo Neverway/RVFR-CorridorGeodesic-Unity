@@ -1,7 +1,6 @@
 using Neverway.Framework.LogicValueSystem;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Rendering.CameraUI;
 
 public class TEST_GetPowerFromLogicComponent : MonoBehaviour
 {

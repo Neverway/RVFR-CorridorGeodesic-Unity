@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IOnLogicInputChanged : MonoBehaviour
+public interface IOnLogicInputChanged
 {
-    // Start is called before the first frame update
-    void Start()
+    public void OnLogicInputChanged()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

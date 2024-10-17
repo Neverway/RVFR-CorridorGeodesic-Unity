@@ -22,6 +22,17 @@ public struct ComponentFieldReference<T>
     private T cachedValue;
     private bool hasCached;
     private FieldInfo _field;
+
+    public ComponentFieldReference(Component target, string field)
+    {
+        EDITOR_targetGameObject = target.gameObject;
+        targetComponent = target;
+        fieldName = field;
+        cachedValue = default;
+        hasCached = false;
+        _field = null;
+    }
+
     /// <summary>
     /// Cached <see cref="FieldInfo"/> of the referenced field
     /// </summary>
