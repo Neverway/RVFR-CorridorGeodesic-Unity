@@ -53,6 +53,6 @@ public class Graphics_SliceableObjectManager : MonoBehaviour
     }
     public void SliceObjects()
     {
-
+        sliceableObjects.ForEach(s => s.StartSlicing());
     }
 }
