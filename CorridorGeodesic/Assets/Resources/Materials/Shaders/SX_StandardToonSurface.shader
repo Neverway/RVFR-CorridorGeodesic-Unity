@@ -33,11 +33,11 @@ Shader "Soulex/Surface/Standard Toon"
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
 
         [Toggle] _UseSlice ("Use Slice", Float) = 0
-        [HideInInspector] _SliceCenterOne ("Slice Center One", Vector) = (0, 0, 0, 0)
-        [HideInInspector] _SliceCenterTwo ("Slice Center Two", Vector) = (0, 0, 0, 0)
+         _SliceCenterOne ("Slice Center One", Vector) = (0, 0, 0, 0)
+         _SliceCenterTwo ("Slice Center Two", Vector) = (0, 0, 0, 0)
 
-        [HideInInspector] _SliceNormalOne ("Slice Normal One", Vector) = (0, 0, 0, 0)
-        [HideInInspector] _SliceNormalTwo ("Slice Normal Two", Vector) = (0, 0, 0, 0)
+         _SliceNormalOne ("Slice Normal One", Vector) = (0, 0, 0, 0)
+         _SliceNormalTwo ("Slice Normal Two", Vector) = (0, 0, 0, 0)
     }
     SubShader
     {

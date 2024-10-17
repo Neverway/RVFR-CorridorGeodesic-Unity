@@ -22,6 +22,7 @@ public class Door : LogicComponent
     // Private Variables
     //=-----------------=
     [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
+    [SerializeField] private Graphics_SliceableObject[] sliceableObjects;
 
     //=-----------------=
     // Reference Variables
@@ -83,6 +84,10 @@ public class Door : LogicComponent
 
         isPowered = powered;
 
-        animator.SetBool("Powered", isPowered);
+        //todo: option to set animators on the sliceable
+        foreach (var sliceableObject in sliceableObjects)
+        {
+            sliceableObject.AnimatorSetBool (isPowered);
+        }
     }
 }

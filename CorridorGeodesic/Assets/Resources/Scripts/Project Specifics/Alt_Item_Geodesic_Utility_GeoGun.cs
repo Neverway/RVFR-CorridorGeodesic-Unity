@@ -57,6 +57,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //Statics for ALTMeshSlicer to use
     [IsDomainReloaded] public static Plane planeA;
     [IsDomainReloaded] public static Plane planeB;
+    [IsDomainReloaded] public static Vector3 planeAPos;
+    [IsDomainReloaded] public static Vector3 planeBPos;
     [IsDomainReloaded] public static List<GameObject> nullSlices;
     [IsDomainReloaded] public static GameObject planeBMeshes;
     [IsDomainReloaded] public static List<Mesh_Slicable> originalSliceableObjects = new List<Mesh_Slicable> ();
@@ -96,6 +98,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
     public delegate void StateChanged();
     [IsDomainReloaded] public static event StateChanged OnStateChanged;
+    public delegate void RiftCreated ();
+    [IsDomainReloaded] public static event RiftCreated OnRiftCreated;
     //public static UnityEvent onStateChanged = new UnityEvent ();
 
     //=-----------------=
@@ -349,7 +353,11 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 //Un-collapse things in the rift.
                 for (int i = 0; i < deployedRift.transform.childCount; i++)
                 {
-                    deployedRift.transform.GetChild (i).gameObject.SetActive (true);
+                    try
+                    {
+                        deployedRift.transform.GetChild (i).gameObject.SetActive (true); //todo: decide how to stop actors from enabling here, if they weren't before.
+                    }
+                    catch { }
                 }
                 foreach (var plane in cutPreviews)
                 {
@@ -416,6 +424,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         // Move meshes relative to planeB/B-Space
         planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
+        planeBPos = planeBMeshes.transform.position;
 
         // Move actors relative to planeB/B-Space
         Vector3 moveInB = cutPreviews[1].transform.position - previousPlanePosition;
@@ -516,6 +525,12 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         OnStateChanged?.Invoke();
         Debug.Log("RiftState: " + currentState);
+
+        if (currentState != RiftState.None && currentState != RiftState.Preview && previousState == RiftState.Preview)
+        {
+            OnRiftCreated?.Invoke ();
+            Debug.Log ("On rift created.");
+        }
     }
 
     private void DeployRiftAndPreview ()
@@ -567,8 +582,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         deployedRift.transform.position = pos1;
 
-        planeA = new Plane (riftNormal, pos1);
-        planeB = new Plane (-riftNormal, pos2);
+        planeAPos = pos1;
+        planeA = new Plane (riftNormal, planeAPos);
+        planeBPos = pos2;
+        planeB = new Plane (-riftNormal, planeBPos);
 
 
         // TODO make this neater tomorrow
@@ -681,6 +698,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             if (_gameObject) Destroy (_gameObject);
         }
         slicedMeshes.Clear ();
+        Graphics_SliceableObjectManager.Instance.CancelSlice ();
         foreach (Mesh_Slicable _gameObject in originalSliceableObjects)
         {
             if (_gameObject) _gameObject.GoHome ();
@@ -800,6 +818,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 nullSlices = new List<GameObject> ();
                 planeBMeshes = Instantiate (new GameObject ());
                 planeBMeshes.name = "planeBMeshes";
+                planeBMeshes.transform.position = planeBPos;
                 planeBStartPos = planeBMeshes.transform.position;
                 // Find all slice-able meshes
                 foreach (var sliceableMesh in meshSlicers)
@@ -829,6 +848,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                     minRiftTimer = -(maxRiftTimer * ((maxRiftWidth - riftWidth) / riftWidth));
                 }
                 previousPlanePosition = cutPreviews[1].transform.position;
+
+                //todo
             }
         }
     }
@@ -1033,5 +1054,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         previousState = RiftState.None;
         currentState = RiftState.None;
         OnStateChanged = null;
+        OnRiftCreated = null;
     }
 }

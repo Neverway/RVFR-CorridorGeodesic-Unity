@@ -33,6 +33,12 @@ public class Graphics_SliceableObjectManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        Alt_Item_Geodesic_Utility_GeoGun.OnRiftCreated += SliceObjects;
+    }
+
+    private void OnDestroy ()
+    {
+        Alt_Item_Geodesic_Utility_GeoGun.OnRiftCreated -= SliceObjects;
     }
 
     //=-----------------=
@@ -53,6 +59,17 @@ public class Graphics_SliceableObjectManager : MonoBehaviour
     }
     public void SliceObjects()
     {
+        foreach (var  obj in sliceableObjects)
+        {
+            obj.StartSlicing();
+        }
+    }
 
+    public void CancelSlice ()
+    {
+        foreach (var obj in sliceableObjects)
+        {
+            obj.StopSlicing();
+        }
     }
 }

@@ -21,14 +21,20 @@ public class Graphics_SliceableObject : MonoBehaviour
     //=-----------------=
     [SerializeField] private Renderer rend;
 
-    [SerializeField] private Graphics_SliceableObject childA;
-    [SerializeField] private Graphics_SliceableObject childB;
+    [SerializeField] private Graphics_SliceableObject child2;
+    [SerializeField] private Graphics_SliceableObject childNull;
 
     private List<Material> materials = new List<Material>();
 
-    private bool useSlice;
+    private bool useSlice = false;
 
-    private Plane[] planes;
+    private Plane[] planes = new Plane[2];
+
+    [SerializeField] private Animator animator;
+
+    public SliceSpace space = SliceSpace.Plane1;
+
+    int n = 0;
 
     //=-----------------=
     // Reference Variables
@@ -38,13 +44,18 @@ public class Graphics_SliceableObject : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Awake()
+    private IEnumerator Start()
     {
-        if (!childA && !childB)
-            Graphics_SliceableObjectManager.Instance.AddToList(this);
+        yield return new WaitUntil (()=>Graphics_SliceableObjectManager.Instance != null);
 
-        planes[0] = Alt_Item_Geodesic_Utility_GeoGun.planeA;
-        planes[1] = Alt_Item_Geodesic_Utility_GeoGun.planeB;
+        if (child2 && childNull)
+        {
+            child2.space = SliceSpace.Plane2;
+            childNull.space = SliceSpace.Null;
+            child2.gameObject.SetActive (false);
+            childNull.gameObject.SetActive (false);
+            Graphics_SliceableObjectManager.Instance.AddToList (this);
+        }
 
         for (int i = 0; i < rend.sharedMaterials.Length; i++)
         {
@@ -52,25 +63,67 @@ public class Graphics_SliceableObject : MonoBehaviour
         }
 
         rend.sharedMaterials = materials.ToArray();
+
+        foreach (Material mat in rend.materials)
+        {
+            mat.SetFloat ("_UseSlice", 0);
+        }
+
+        useSlice = false;
     }
     private void Update()
     {
-        if (useSlice && rend.sharedMaterials.Length > 0)
+        if (useSlice && rend.materials.Length > 0)
         {
-            foreach (Material mat in rend.sharedMaterials)
-            {
-                mat.SetVector("_SliceNormalOne", planes[0].normal * -1);
-                mat.SetVector("_SliceNormalTwo", planes[1].normal);
-
-                //mat.SetVector("_SliceCenterOne", );
-                //mat.SetVector("_SliceCenterTwo", );
-            }
+            SetMaterialPlanes ();
         }
     }
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
+
+    private void SetMaterialPlanes ()
+    {
+
+        Debug.Log ("Setting " + name);
+        switch (space)
+        {
+
+            case SliceSpace.Plane1:
+
+                foreach (Material mat in rend.materials)
+                {
+                    mat.SetVector ("_SliceNormalOne", Alt_Item_Geodesic_Utility_GeoGun.planeA.normal * -1);
+                    mat.SetVector ("_SliceNormalTwo", Alt_Item_Geodesic_Utility_GeoGun.planeB.normal);
+
+                    mat.SetVector ("_SliceCenterOne", Alt_Item_Geodesic_Utility_GeoGun.planeAPos);
+                    mat.SetVector ("_SliceCenterTwo", Alt_Item_Geodesic_Utility_GeoGun.planeBPos);
+                }
+                break;
+            case SliceSpace.Plane2:
+                foreach (Material mat in rend.materials)
+                {
+                    mat.SetVector ("_SliceNormalOne", Alt_Item_Geodesic_Utility_GeoGun.planeA.normal);
+                    mat.SetVector ("_SliceNormalTwo", Alt_Item_Geodesic_Utility_GeoGun.planeB.normal * -1);
+
+                    mat.SetVector ("_SliceCenterOne", Alt_Item_Geodesic_Utility_GeoGun.planeAPos);
+                    mat.SetVector ("_SliceCenterTwo", Alt_Item_Geodesic_Utility_GeoGun.planeBPos);
+                }
+                break;
+            case SliceSpace.Null:
+                foreach (Material mat in rend.materials)
+                {
+                    mat.SetVector ("_SliceNormalOne", planes[0].normal);
+                    mat.SetVector ("_SliceNormalTwo", planes[1].normal);
+
+                    mat.SetVector ("_SliceCenterOne", Alt_Item_Geodesic_Utility_GeoGun.planeAPos);
+                    mat.SetVector ("_SliceCenterTwo", Alt_Item_Geodesic_Utility_GeoGun.planeBPos);
+                }
+                break;
+        }
+                
+    }
 
 
     //=-----------------=
@@ -84,21 +137,38 @@ public class Graphics_SliceableObject : MonoBehaviour
     private void Slice()
     {
         useSlice = true;
-        if (rend.sharedMaterials.Length == 0)
+
+        if (rend.materials.Length == 0)
             return;
 
-        if (childA)
-            childA.gameObject.SetActive(true);
-        if (childB)
-            childB.gameObject.SetActive(true);
-
-        foreach (Material mat in rend.sharedMaterials)
+        foreach (Material mat in rend.materials)
         {
-            mat.SetFloat("_UseSlice", 1);
+            Debug.Log ("Set slice true " + name);
+            mat.SetFloat ("_UseSlice", 1);
+        }
+
+        planes[0] = Alt_Item_Geodesic_Utility_GeoGun.planeA;
+        planes[1] = Alt_Item_Geodesic_Utility_GeoGun.planeB;
+
+        //Activate child graphics objects,
+        //and parent them to their respective transforms.
+        if (child2)
+        {
+            child2.gameObject.SetActive(true);
+            child2.Slice ();
+            child2.transform.SetParent (Alt_Item_Geodesic_Utility_GeoGun.planeBMeshes.transform);
+        }
+        if (childNull)
+        {
+            childNull.gameObject.SetActive(true);
+            childNull.Slice ();
+            childNull.transform.SetParent (Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform);
         }
     }
     public void StopSlicing()
     {
+        Debug.Log ("Stop Slicing " + name);
+
         useSlice = false;
         if (rend.sharedMaterials.Length == 0)
             return;
@@ -108,9 +178,20 @@ public class Graphics_SliceableObject : MonoBehaviour
             mat.SetFloat("_UseSlice", 0);
         }
 
-        if (childA)
-            childA.gameObject.SetActive(false);
-        if (childB)
-            childB.gameObject.SetActive(false);
+        if (child2)
+        {
+            child2.transform.SetParent (null);
+            child2.gameObject.SetActive (false);
+        }
+        if (childNull)
+        {
+            childNull.transform.SetParent (null);
+            childNull.gameObject.SetActive(false);
+        }
+    }
+
+    public void AnimatorSetBool (bool isPowered)
+    {
+        animator.SetBool ("Powered", isPowered);
     }
 }
