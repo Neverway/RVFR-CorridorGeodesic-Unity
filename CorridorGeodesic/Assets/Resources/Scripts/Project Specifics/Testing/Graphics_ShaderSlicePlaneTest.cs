@@ -31,15 +31,7 @@ public class Graphics_ShaderSlicePlaneTest: MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Awake()
-    {
-        for (int i = 0; i < rend.sharedMaterials.Length; i++)
-        {
-            materials.Add(new Material(rend.sharedMaterials[i]));
-        }
-
-        rend.sharedMaterials = materials.ToArray();
-    }
+    
     private void Update()
     {
         if (rend.sharedMaterials.Length == 0)

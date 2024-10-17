@@ -1,4 +1,4 @@
-//===================== (Neverway 2024) Written by _____ =====================
+//===================== (Neverway 2024) Written by Andre Blunt =====================
 //
 // Purpose:
 // Notes:
@@ -8,18 +8,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Graphics_CameraFollow : MonoBehaviour
+public class Graphics_SliceableObjectManager : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-
+	public static Graphics_SliceableObjectManager Instance;
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-
+    private List<Graphics_SliceableObject> sliceableObjects = new List<Graphics_SliceableObject>();
 
     //=-----------------=
     // Reference Variables
@@ -29,10 +30,9 @@ public class Graphics_CameraFollow : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
-    private void Update()
+    private void Awake()
     {
-        if(Camera.main)
-            transform.position = Camera.main.transform.position;
+        Instance = this;
     }
 
     //=-----------------=
@@ -43,4 +43,16 @@ public class Graphics_CameraFollow : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
+    public void AddToList(Graphics_SliceableObject obj)
+    {
+        sliceableObjects.Add(obj);
+    }
+    public void ClearList()
+    {
+        sliceableObjects.Clear();
+    }
+    public void SliceObjects()
+    {
+
+    }
 }

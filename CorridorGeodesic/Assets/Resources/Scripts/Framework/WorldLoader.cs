@@ -237,6 +237,7 @@ public class WorldLoader : MonoBehaviour
         }
         if (isLoading) return;
         StartCoroutine(StreamLoad());
+        Graphics_SliceableObjectManager.Instance.ClearList();
         //StartCoroutine(LoadAsync());
         //StartCoroutine(StreamLoadDos());
     }
