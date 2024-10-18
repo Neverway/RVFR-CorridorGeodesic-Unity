@@ -10,7 +10,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Mesh_Slicable))]
 public class SlicedPartsReference : MonoBehaviour
 {
     //=-----------------=
@@ -38,7 +37,7 @@ public class SlicedPartsReference : MonoBehaviour
                 return sliceList;
             }
             return originalMesh;
-} }
+        } }
 
     //public List<Mesh_Slicable> SlicedMeshesOnly => sliceList;
     //public List<Mesh_Slicable> originalMeshOnly => originalMesh;
@@ -68,6 +67,25 @@ public class SlicedPartsReference : MonoBehaviour
     public void AddSlice (Mesh_Slicable slice)
     {
         sliceList.Add (slice);
+    }
+
+    public void SetLayer (string layerName)
+    {
+        int i = LayerMask.NameToLayer (layerName);
+        foreach (var mesh in  originalMesh)
+        {
+            if (mesh != null)
+            {
+                mesh.gameObject.layer = i;
+            }
+        }
+        foreach (var mesh in GetMeshes)
+        {
+            if (mesh != null)
+            {
+                mesh.gameObject.layer = i;
+            }
+        }
     }
 
 }

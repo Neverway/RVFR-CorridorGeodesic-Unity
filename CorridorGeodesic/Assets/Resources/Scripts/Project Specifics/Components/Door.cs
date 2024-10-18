@@ -23,6 +23,7 @@ public class Door : LogicComponent
     //=-----------------=
     [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
     [SerializeField] private Graphics_SliceableObject[] sliceableObjects;
+    [SerializeField] private SlicedPartsReference partsReference;
 
     //=-----------------=
     // Reference Variables
@@ -89,5 +90,7 @@ public class Door : LogicComponent
         {
             sliceableObject.AnimatorSetBool (isPowered);
         }
+
+        partsReference.SetLayer (isPowered ? "Ignore Player" : "Default");
     }
 }
