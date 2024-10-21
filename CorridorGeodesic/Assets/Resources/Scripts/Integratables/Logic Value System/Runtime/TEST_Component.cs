@@ -1,22 +1,21 @@
 using Neverway.Framework.LogicValueSystem;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class TEST_Component : MonoBehaviour
 {
-    [SerializeField] public EasyDrawerTestClass regularTest;
-    [SerializeField] public EasyDrawerTestClass[] arrayTest;
-    [SerializeField] public List<EasyDrawerTestClass> listTest;
-    
-    [Space]
+    public LogicInput<bool>[] inputs;
 
     public LogicInput<bool> inputA = new(false);
     public LogicInput<bool> inputB = new(false);
+    public LogicInput<bool> inputArray;
 
-    public LogicOutput<bool> output = new(false);
+    public LogicOutput<bool> output;
+
+    public Component otherFields;
+    [SerializeReference][Polymorphic] public BaseClass someField;
+    public string otherFields2;
+    public AnimationCurve evenMoreFields;
 
     public void Awake()
     {
@@ -26,14 +25,26 @@ public class TEST_Component : MonoBehaviour
 
     public void OnInputUpdate()
     {
-        output.Set(inputA.Get() && inputB.Get());
+        //output.Set(inputA.Get() && inputB.Get());
     }
 }
 [Serializable]
-public class EasyDrawerTestClass
+public class BaseClass
 {
     public string someStringField;
-    public Transform someTransform;
-    public ComponentFieldReference<bool> fieldReference;
-    public EasyDrawerTestClass waitASecond;
+}
+[Serializable]
+public class SomeClassA : BaseClass
+{
+    public int someFieldA;
+}
+[Serializable]
+public class SomeClassA2 : SomeClassA
+{
+    public int someFieldA2;
+}
+[Serializable]
+public class SomeClassB : BaseClass
+{
+    public AnimationCurve someFieldB;
 }

@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class DebugReadOnlyAttribute : PropertyAttribute
 {
@@ -12,19 +12,39 @@ public class DebugReadOnlyAttribute : PropertyAttribute
 [CustomPropertyDrawer(typeof(DebugReadOnlyAttribute))]
 public class DebugReadOnlyDrawer : PropertyDrawer
 {
-    public override float GetPropertyHeight(SerializedProperty property,
-                                            GUIContent label)
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        bool previouslyEnabled = GUI.enabled;
+        GUI.enabled = false;
+        EditorGUI.PropertyField(position, property, label, true);
+        GUI.enabled = previouslyEnabled;
+    }
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         return EditorGUI.GetPropertyHeight(property, label, true);
     }
+}
+#endif
 
-    public override void OnGUI(Rect position,
-                               SerializedProperty property,
-                               GUIContent label)
+public class BIGLABELAttribute : PropertyAttribute
+{
+
+}
+
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(BIGLABELAttribute))]
+public class BIGLABELDrawer : PropertyDrawer
+{
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        GUI.enabled = false;
+        int oldFontSize = EditorStyles.label.fontSize;
+        EditorStyles.label.fontSize = 30;
         EditorGUI.PropertyField(position, property, label, true);
-        GUI.enabled = true;
+        EditorStyles.label.fontSize = oldFontSize;
+    }
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+    {
+        return EditorGUI.GetPropertyHeight(property, label, true);
     }
 }
 #endif

@@ -5,8 +5,16 @@ using UnityEngine.Events;
 namespace Neverway.Framework.LogicValueSystem
 {
     [Serializable]
-    public abstract class LogicValue<T>
+    public abstract class LogicValueBase
     {
+
+    }
+    [Serializable]
+    public abstract class LogicValue<T> : LogicValueBase
+    {
+#if UNITY_EDITOR
+        public Transform EDITOR_handleTarget;
+#endif
         [SerializeField] protected T value;
 
         public LogicValue(T defaultValue) { value = defaultValue; }

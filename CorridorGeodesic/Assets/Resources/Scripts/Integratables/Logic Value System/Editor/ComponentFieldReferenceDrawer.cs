@@ -1,223 +1,94 @@
 //=-------- Script by Errynei ----------=//
 using System;
 using System.Linq;
-using System.Reflection;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 [CustomPropertyDrawer(typeof(ComponentFieldReference<>))]
-public class ComponentFieldReferenceDrawer : PropertyDrawer
+public class ComponentFieldReferenceDrawer : EasyDrawer
 {
-    public int propertyDrawerLines = 0;
-    public const float SPACING = 2f;
-    public float totalBoxSpacing = 0f;
+    public string targetGameObject = "EDITOR_targetGameObject";
+    public string targetComponent = "targetComponent";
+    public string fieldName = "fieldName";
+    public string hideTypeFilterText = "EDITOR_hideTypeFilterText";
 
-    public SerializedProperty prop_this;
-    public SerializedProperty prop_targetGameObject;
-    public SerializedProperty prop_targetComponent;
-    public SerializedProperty prop_fieldName;
+    public Component oldComponent;
 
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    public override DrawerObject OnGUIEasyDrawer(VerticalGroup contents)
     {
-        //Grab properties
-        prop_this = property;
-        prop_targetGameObject = property.FindPropertyRelative("EDITOR_targetGameObject");
-        prop_targetComponent = property.FindPropertyRelative("targetComponent");
-        prop_fieldName = property.FindPropertyRelative("fieldName");
+        HorizontalGroup line = new HorizontalGroup();
 
-        //Validate inputs
-        ValidateValues();
+        oldComponent = GetComponent;
 
-        //-------------------------- Draw Property ----------------------------
-        //Initialize
-        EditorGUI.BeginProperty(position, label, property);
-        position = StartLineCounting(position);
-
-
-        // ----- Draw Label, and indent -----
-        if (label.text != null && label.text != "")
+        if (HasComponent)
         {
-            GUI_Label(position, label.text);
-            position = Indent(position);
-            position = AdvanceLine(position);
-        }
-        
-        //Draw box around body. 2 expected lines
-        position = GUI_DrawBox(position, 2, 5f, 4);
-
-        // ----- Line 1 : Select gameObject | component dropdown -----
-        Rect[] halves = DivideRectHorizontally(position, 2);
-        GUI_SelectGameObject(halves[0]);
-        GUI_SelectComponentDropdown(halves[1]);
-        position = AdvanceLine(position);
-
-        // ----- Line 2: Select component | fieldName dropdown -----
-        halves = DivideRectHorizontally(position, 2);
-        GUI_SelectComponentField(halves[0]);
-        GUI_SelectFieldDropdown(halves[1]);
-        position = AdvanceLine(position);
-
-        //Finalize
-        EditorGUI.EndProperty();
-        EndLineCounting();
-        //---------------------------------------------------------------------
-    }
-
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        return LineCountToHeight(propertyDrawerLines) + totalBoxSpacing;
-    }
-
-    public Rect GUI_DrawBox(Rect position, int lines, float spacing, int boldness)
-    {
-        totalBoxSpacing += spacing * 2f;
-        Rect boxRect = position;
-        boxRect.height = LineCountToHeight(lines) + (spacing * 2f);
-        position.y += spacing;
-        position.x += spacing;
-        position.width -= spacing * 2f;
-
-        for(int i = 0; i < boldness; i++)
-            EditorGUI.HelpBox(boxRect, "", MessageType.None);
-
-        return position;
-    }
-    public void GUI_Label(Rect position, string label)
-    {
-        EditorGUI.LabelField(position, label);
-    }
-    public void GUI_SelectGameObject(Rect position)
-    {
-        EditorGUI.PropertyField(position, prop_targetGameObject, GUIContent.none);
-
-        if (prop_targetGameObject.objectReferenceValue == null)
-        {
-            prop_targetComponent.objectReferenceValue = null;
-            prop_fieldName.stringValue = "";
-        }
-    }
-    public void GUI_SelectComponentDropdown(Rect position)
-    {
-        if (prop_targetGameObject.objectReferenceValue == null)
-        {
-            GUI_Label(position, "<Needs Game Object>");
-            return;
-        }
-
-        GameObject selectedObj = prop_targetGameObject.objectReferenceValue as GameObject;
-        Component[] componentsToSelect = selectedObj.GetComponents(typeof(Component));
-        string[] componentNames = componentsToSelect.Select(c => c.GetType().Name).ToArray();
-
-        int selectedIndex;
-
-        if (prop_targetComponent.objectReferenceValue == null)
-            selectedIndex = -1;
-        else
-            selectedIndex = Mathf.Max(0, System.Array.IndexOf(componentNames, 
-                prop_targetComponent.objectReferenceValue.GetType().Name));
-
-        selectedIndex = EditorGUI.Popup(position, selectedIndex, componentNames);
-
-        if (selectedIndex >= 0)
-            prop_targetComponent.objectReferenceValue = componentsToSelect[selectedIndex];
-    }
-    public void GUI_SelectComponentField(Rect position)
-    {
-        EditorGUI.PropertyField(position, prop_targetComponent, GUIContent.none);
-
-        if (prop_targetComponent.objectReferenceValue == null)
-            prop_fieldName.stringValue = "";
-    }
-    public void GUI_SelectFieldDropdown(Rect position)
-    {
-        if (prop_targetComponent.objectReferenceValue == null)
-        {
-            GUI_Label(position, "<Needs Component>");
-            return;
-        }
-
-        Type fieldReferenceType = fieldInfo.FieldType.GetGenericArguments()[0];
-        Component selectedComponent = prop_targetComponent.objectReferenceValue as Component;
-
-        string[] fieldNames = selectedComponent.GetType()
-            .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-            .Where(f => f.FieldType == fieldReferenceType)
-            .Select(f => f.Name).ToArray();
-
-        if (fieldNames.Length > 0)
-        {
-            int selectedIndex = Mathf.Max(0, Array.IndexOf(fieldNames, prop_fieldName.stringValue));
-            selectedIndex = EditorGUI.Popup(position, selectedIndex, fieldNames);
-
-            if (selectedIndex >= 0)
-            {
-                prop_fieldName.stringValue = fieldNames[selectedIndex];
-            }
+            SetGameObjectAsComponentsGameObject();
+            GUISelectField(line);
         }
         else
         {
-            GUI_Label(position, "<No fields found>");
+            if (HasGameObject)
+                GUISelectComponentFromGameObject(line);
+            else
+                GUISelectGameObjectOrComponent(line);
         }
+        if (property[hideTypeFilterText].Property.boolValue)
+            contents.Add(new Boxed(line));
+        else
+            contents.Add(new FittedLabel($" {ReferenceType.SelectedName(true, true)}: ", new Boxed(line)).MaxWidthFactor(0.33f));
+
+
+        return contents;
     }
-    public void ValidateValues()
+    public override void OnAfterGUI()
     {
-        if (prop_targetComponent.objectReferenceValue != null)
+        if (!HasComponent || oldComponent == null)
+            return;
+
+        Component newComponent = GetComponent;
+        if ((oldComponent != newComponent) && HasGameObject && (newComponent is Transform))
         {
-            GameObject componentsGameObject = ((Component)prop_targetComponent.objectReferenceValue).gameObject;
-
-            //If component is selected but gameobject is not...
-            if (prop_targetGameObject.objectReferenceValue == null)
-                //... then use gameobject from component as selected gameobject
-                prop_targetGameObject.objectReferenceValue = componentsGameObject;
-
-            //If the component selected is of a different gameobject than the gameobject selected
-            else if (prop_targetGameObject.objectReferenceValue != componentsGameObject)
-                //... then clear the selected component
-                prop_targetComponent.objectReferenceValue = null;
+            property[targetComponent].Property.objectReferenceValue = null;
+            property[targetGameObject].Property.objectReferenceValue = oldComponent.gameObject;
         }
     }
 
-    public Rect StartLineCounting(Rect position)
+    public void GUISelectGameObjectOrComponent(HorizontalGroup line)
     {
-        totalBoxSpacing = 0f;
-        propertyDrawerLines = 1;
-        position.height = EditorGUIUtility.singleLineHeight;
-        return position;
+        line.Add(new Property(property[targetGameObject]).HideLabel());
+        line.Add(new Property(property[targetComponent]).HideLabel());
     }
-    public void EndLineCounting()
+    public void GUISelectComponentFromGameObject(HorizontalGroup line)
     {
-        propertyDrawerLines--;
+        line.Add(new Property(property[targetGameObject]).HideLabel());
+        line.Add(new SelectComponentFromGameObject(
+            (GameObject)property[targetGameObject].Property.objectReferenceValue,
+            property[targetComponent]
+            ));
     }
-    
-    public Rect AdvanceLine(Rect position)
+    public void GUISelectField(HorizontalGroup line)
     {
-        propertyDrawerLines++;
-        position.y += EditorGUIUtility.singleLineHeight + SPACING;
-        return position;
+        line.Add(new Property(property[targetComponent]).HideLabel());
+        line.Add(new SelectFieldDropdown(
+            property[targetComponent].Property.objectReferenceValue,
+            property[fieldName])
+            .FilterByType(ReferenceType)
+            );
     }
-    public float LineCountToHeight(int lines) =>
-        EditorGUIUtility.singleLineHeight * lines + (2 * (lines - 1));
 
-    public Rect Indent(Rect position)
+    public void SetGameObjectAsComponentsGameObject()
     {
-        //Make sure indentAmount is reasonable
-        float indentAmount = Mathf.Min(EditorGUIUtility.singleLineHeight, position.width * 0.1f);
-
-        position.x += indentAmount;
-        position.width -= indentAmount;
-
-        return position;
+        property[targetGameObject].Property.objectReferenceValue = 
+            ((Component)property[targetComponent].Property.objectReferenceValue).gameObject;
     }
-    public Rect[] DivideRectHorizontally(Rect position, int divisions)
-    {
-        Rect[] dividedRects = new Rect[divisions];
-        position.width /= divisions;
 
-        for (int i = 0; i < divisions; i++)
-        {
-            dividedRects[i] = position;
-            position.x += position.width;
-        }
-        return dividedRects;
-    }
+    public bool HasComponent => property[targetComponent].Property.objectReferenceValue != null;
+    public bool HasGameObject => property[targetGameObject].Property.objectReferenceValue != null;
+
+    public GameObject GetGameObject => (GameObject)property[targetGameObject].Property.objectReferenceValue;
+    public Component GetComponent => (Component)property[targetComponent].Property.objectReferenceValue;
+
+
+    public Type ReferenceType => fieldInfo.FieldType.GetGenericArguments()[0];
 }

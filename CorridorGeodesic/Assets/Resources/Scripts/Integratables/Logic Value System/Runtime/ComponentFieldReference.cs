@@ -15,6 +15,7 @@ public struct ComponentFieldReference<T>
 {
 #if UNITY_EDITOR
     [SerializeField] private GameObject EDITOR_targetGameObject;
+    [SerializeField] private bool EDITOR_hideTypeFilterText;
 #endif
     [SerializeField] private Component targetComponent;
     [SerializeField] private string fieldName;
@@ -25,7 +26,10 @@ public struct ComponentFieldReference<T>
 
     public ComponentFieldReference(Component target, string field)
     {
+#if UNITY_EDITOR
+        EDITOR_hideTypeFilterText = false;
         EDITOR_targetGameObject = target.gameObject;
+#endif
         targetComponent = target;
         fieldName = field;
         cachedValue = default;

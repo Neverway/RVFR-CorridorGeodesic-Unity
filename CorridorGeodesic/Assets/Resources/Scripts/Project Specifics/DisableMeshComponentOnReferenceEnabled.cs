@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DisableMeshComponentOnReferenceEnabled : MonoBehaviour
@@ -8,7 +6,6 @@ public class DisableMeshComponentOnReferenceEnabled : MonoBehaviour
     public bool ignoreHierarchy;
     public MeshRenderer meshRenderer;
     public MeshCollider meshCollider;
-
 
     private void Update()
     {

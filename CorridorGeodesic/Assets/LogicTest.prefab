@@ -182,16 +182,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6777dbea1d96f9b40b3186153822d5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  regularTest:
+    someStringField: Here we go, testing it out
+    someTransform: {fileID: 0}
+    mat: {fileID: 0}
+    fieldReference:
+      EDITOR_targetGameObject: {fileID: 0}
+      EDITOR_hideTypeFilterText: 0
+      targetComponent: {fileID: 0}
+      fieldName: 
+  regularTest2:
+    someStringField: 
+    someTransform: {fileID: 0}
+    mat: {fileID: 0}
+    fieldReference:
+      EDITOR_targetGameObject: {fileID: 0}
+      EDITOR_hideTypeFilterText: 0
+      targetComponent: {fileID: 0}
+      fieldName: 
+  arrayTest:
+  - someStringField: Hmmm very strange
+    someTransform: {fileID: 0}
+    mat: {fileID: 0}
+    fieldReference:
+      EDITOR_targetGameObject: {fileID: 0}
+      EDITOR_hideTypeFilterText: 0
+      targetComponent: {fileID: 0}
+      fieldName: 
+  - someStringField: Ew wtfffff
+    someTransform: {fileID: 0}
+    mat: {fileID: 0}
+    fieldReference:
+      EDITOR_targetGameObject: {fileID: 0}
+      EDITOR_hideTypeFilterText: 0
+      targetComponent: {fileID: 0}
+      fieldName: 
+  - someStringField: HUH?
+    someTransform: {fileID: 0}
+    mat: {fileID: 0}
+    fieldReference:
+      EDITOR_targetGameObject: {fileID: 5893741548833144883}
+      EDITOR_hideTypeFilterText: 0
+      targetComponent: {fileID: 617392572932219441}
+      fieldName: 
+  listTest: []
+  testInput:
+    value:
+      someStringField: 
+      someTransform: {fileID: 0}
+      mat: {fileID: 0}
+      fieldReference:
+        EDITOR_targetGameObject: {fileID: 0}
+        EDITOR_hideTypeFilterText: 0
+        targetComponent: {fileID: 0}
+        fieldName: 
+    sourceField:
+      EDITOR_targetGameObject: {fileID: 0}
+      EDITOR_hideTypeFilterText: 1
+      targetComponent: {fileID: 0}
+      fieldName: 
   inputA:
     value: 0
     sourceField:
       EDITOR_targetGameObject: {fileID: 5893741548833144883}
+      EDITOR_hideTypeFilterText: 1
       targetComponent: {fileID: 4323824957931830705}
       fieldName: isLogicComponentPowered
   inputB:
     value: 0
     sourceField:
       EDITOR_targetGameObject: {fileID: 3503323127223068314}
+      EDITOR_hideTypeFilterText: 1
       targetComponent: {fileID: 2403313380151851044}
       fieldName: isLogicComponentPowered
   output:
@@ -217,6 +278,7 @@ MonoBehaviour:
     value: 0
     sourceField:
       EDITOR_targetGameObject: {fileID: 8854582770140202501}
+      EDITOR_hideTypeFilterText: 1
       targetComponent: {fileID: 3075757302665810886}
       fieldName: output
 --- !u!1001 &704658562899283635
