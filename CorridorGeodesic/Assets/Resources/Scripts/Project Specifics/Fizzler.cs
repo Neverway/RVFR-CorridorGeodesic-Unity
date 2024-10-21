@@ -31,8 +31,9 @@ public class Fizzler : LogicComponent
     public void Update()
     {
         bool disabled = (disableFizzler != null && disableFizzler.isPowered);
-        fizzlerObjectToDisable.gameObject.SetActive(!disabled);
         isPowered = !disabled;
+        if (fizzlerObjectToDisable != null)
+            fizzlerObjectToDisable.gameObject.SetActive(!disabled);
     }
 
     //=-----------------=
