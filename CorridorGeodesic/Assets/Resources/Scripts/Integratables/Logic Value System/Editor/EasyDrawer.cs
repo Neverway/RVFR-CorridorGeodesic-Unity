@@ -5,7 +5,6 @@ using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 using Debug = UnityEngine.Debug;
 
 public abstract class EasyDrawer : PropertyDrawer
@@ -23,8 +22,8 @@ public abstract class EasyDrawer : PropertyDrawer
     {
         this.property = new Properties(property);
         this.label = label;
+        this.area = position;
 
-        area = position;
         DrawerObject.currentlyDrawing = new();
 
         EditorGUI.BeginProperty(position, label, property);
@@ -40,19 +39,28 @@ public abstract class EasyDrawer : PropertyDrawer
         }
         catch (Exception e)
         {
-            if (!(string.IsNullOrEmpty(e.StackTrace) || alreadyDisplayedErrors.Contains(e.StackTrace)))
+            if (e is not ExitGUIException && !(string.IsNullOrEmpty(e.StackTrace) || alreadyDisplayedErrors.Contains(e.StackTrace)))
             {
                 UnityEngine.Object unityObject = property.serializedObject.targetObject;
-                string errorMessage =
-                    $"<size=10><color=yellow>Error drawing property drawer. Context for next error:</color></size>" +
-                    $"   Type: {property.GetUnderlyingType().SelectedName(false, true)}" +
-                    $"  |  Field: {property.displayName}  " +
-                    $"  |  Object: {unityObject}" +
-                    $"\n{DrawerObject.CurrentDrawerChainNames()}";
+                try
+                {
+                    string errorMessage =
+                        $"<size=10><color=yellow>Error drawing property drawer. Context for next error:</color></size>" +
+                        $"   Type: {property.GetUnderlyingType().SelectedName(false, true)}" +
+                        $"  |  Field: {property.displayName}  " +
+                        $"  |  Object: {unityObject}" +
+                        $"\n{DrawerObject.CurrentDrawerChainNames()}";
 
                 alreadyDisplayedErrors.Add(e.StackTrace);
 
                 Debug.LogError(errorMessage, unityObject);
+                }
+                catch
+                {
+                    Debug.Log(property.GetUnderlyingField());
+                    Debug.LogWarning($"Had error trying to display extra context information for property drawer error???", unityObject);
+                }
+
                 Debug.LogException(e, unityObject);
             }
         }
@@ -189,7 +197,6 @@ public abstract class EasyDrawer : PropertyDrawer
         }
     }
     
-
 
     public abstract class DrawerObject
     {
@@ -626,6 +633,23 @@ public abstract class EasyDrawer : PropertyDrawer
 
         protected override float OnGetHeight() => contents.GetHeight();
     }
+    public class Hide : DrawerObject
+    {
+        public DrawerObject contents;
+        public Func<bool> doHide;
+        public Hide(DrawerObject contents, Func<bool> doHide)
+        {
+            this.contents = contents;
+            this.doHide = doHide;
+        }
+        protected override void OnDraw(Rect area)
+        {
+            if (!doHide.Invoke())
+                contents.Draw(area);
+        }
+
+        protected override float OnGetHeight() => (doHide.Invoke() ? 0 : contents.GetHeight());
+    }
 
     public class Title : Label
     {
@@ -777,32 +801,31 @@ public abstract class EasyDrawer : PropertyDrawer
             content = new GUIContent(GUIContent.none);
             this.property = property;
         }
-        public Property HideLabel()
+        public new Property HideLabel()
         {
             usePropertyLabel = false;
             return this;
         }
-        //public Property IncludeChildren()
-        //{
-        //    includeChildren = true;
-        //    return this;
-        //}
+        public Property IncludeChildren()
+        {
+            includeChildren = true;
+            return this;
+        }
 
         protected override void OnDraw(Rect area)
         {
-
             if (usePropertyLabel)
-                SetModified = EditorGUI.PropertyField(area, property);
+                SetModified = EditorGUI.PropertyField(area, property, includeChildren);
             else
-                SetModified = EditorGUI.PropertyField(area, property, content);
+                SetModified = EditorGUI.PropertyField(area, property, content, includeChildren);
         }
 
         protected override float OnGetHeight()
         {
             if (usePropertyLabel)
-                return EditorGUI.GetPropertyHeight(property);
+                return EditorGUI.GetPropertyHeight(property, includeChildren);
 
-            return EditorGUI.GetPropertyHeight(property, content);
+            return EditorGUI.GetPropertyHeight(property, content, includeChildren);
         }
     }
 
@@ -816,20 +839,20 @@ public abstract class EasyDrawer : PropertyDrawer
 
     public class PolymorphicSelector : DrawerObjectWithStyle
     {
-        public string label;
+        DrawerObject contents;
         SerializedProperty property;
         Type baseType;
-        public PolymorphicSelector(Properties property, string label)
+        public PolymorphicSelector(Properties property)
         {
             style = EditorStyles.label;
             this.property = property.Property;
             this.baseType = property.FieldType;
-            this.label = label;
+
+            this.contents = GetDrawerObjects();
         }
-        protected override void OnDraw(Rect area)
+        protected DrawerObject GetDrawerObjects()
         {
-            // Draw the main property field
-            EditorGUILayout.PropertyField(property, true);
+            VerticalGroup contents = new VerticalGroup();
 
             // Dropdown to change the type of the SerializeReference field
             if (property.propertyType == SerializedPropertyType.ManagedReference)
@@ -837,28 +860,42 @@ public abstract class EasyDrawer : PropertyDrawer
                 Type currentType = property.managedReferenceValue?.GetType();
                 if (currentType != null)
                 {
-                    EditorGUILayout.LabelField($"Current Type: {currentType.Name}");
+                    contents.Add(new Label($"Current Type: {currentType.Name}"));
                 }
-
-                if (GUILayout.Button("Change Type"))
+                else
                 {
-                    GenericMenu menu = new GenericMenu();
-                    List<Type> derivedTypes = baseType.GetAllDerivedTypes();
-
-                    foreach (Type type in derivedTypes)
-                    {
-                        menu.AddItem(new GUIContent(type.Name), false, () =>
-                        {
-                            // Assign new instance of the selected type
-                            object newInstance = Activator.CreateInstance(type);
-                            property.managedReferenceValue = newInstance;
-                            property.serializedObject.ApplyModifiedProperties();
-                        });
-                    }
-
-                    menu.ShowAsContext();
+                    contents.Add(new Label("No type found???"));
                 }
+
+                List<Type> derivedTypes = baseType.GetAllDerivedTypes();
+
+                foreach (Type type in derivedTypes)
+                {
+                    contents.Add(new Button(type.HumanName(true), () => { SetType(type); }));
+                }
+
+                contents.Add(new Divider());
             }
+            
+            contents.Add(new Property(property).IncludeChildren());
+
+            return new Boxed(contents).Boldness(1);
+        }
+
+        private void SetType(Type type)
+        {
+            object newInstance = Activator.CreateInstance(type);
+            property.managedReferenceValue = newInstance;
+            property.serializedObject.ApplyModifiedProperties();
+        }
+
+        protected override void OnDraw(Rect area)
+        {
+            contents.Draw(area);
+        }
+        protected override float OnGetHeight()
+        {
+            return contents.GetHeight();
         }
     }
     public class SelectComponentFromGameObject : DrawerObject
@@ -1057,4 +1094,15 @@ public static class EasyDrawerExtensions
     {
         return type.GetGenericArguments()[index];
     }
+
+    ///// <summary>
+    ///// Extension method to check if a layer is in a layermask
+    ///// </summary>
+    ///// <param name="mask"></param>
+    ///// <param name="layer"></param>
+    ///// <returns></returns>
+    //public static bool Contains(this LayerMask mask, int layer)
+    //{
+    //    return mask == (mask | (1 << layer));
+    //}
 }

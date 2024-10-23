@@ -1,12 +1,16 @@
 using Neverway.Framework.LogicValueSystem;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 [CustomPropertyDrawer(typeof(LogicOutput<>))]
 public class LogicOutputDrawer : EasyDrawer
 {
     string value = "value";
     string OnOutputChanged = "OnOutputChanged";
+    string handle = "handleTarget";
+
+    bool showHandleField = true;
 
     public override DrawerObject OnGUIEasyDrawer(VerticalGroup contents)
     {
@@ -16,6 +20,13 @@ public class LogicOutputDrawer : EasyDrawer
 
         contents.Add(fieldValueWithLabel);
         contents.Add(new Divider());
+
+        if (showHandleField)
+        {
+            contents.Add(new Property(property[handle]));
+            contents.Add(new Divider());
+        }
+
         contents.Add(new Property(property[OnOutputChanged]));
 
         return new Boxed(contents);

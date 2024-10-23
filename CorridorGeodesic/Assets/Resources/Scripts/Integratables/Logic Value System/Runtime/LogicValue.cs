@@ -4,40 +4,60 @@ using UnityEngine.Events;
 
 namespace Neverway.Framework.LogicValueSystem
 {
-    [Serializable]
-    public abstract class LogicValueBase
+    public interface LogicValue
     {
-
+        public Transform GetHandleTarget();
+        public abstract Type GetLogicValueType();
     }
+    
     [Serializable]
-    public abstract class LogicValue<T> : LogicValueBase
+    public abstract class LogicValue<T> : LogicValue
     {
-#if UNITY_EDITOR
-        public Transform EDITOR_handleTarget;
-#endif
-        [SerializeField] protected T value;
+        [SerializeField] protected Transform handleTarget;
 
-        public LogicValue(T defaultValue) { value = defaultValue; }
+        [SerializeField] protected T value;
         public virtual T Get() => value;
+
+        public LogicValue(T defaultValue) 
+        {
+            value = defaultValue; 
+        }
+
+        public Transform GetHandleTarget() => handleTarget;
+        public Type GetLogicValueType() => typeof(T);
 
         public static implicit operator T(LogicValue<T> logicValue) => logicValue.Get();
     }
 
+    public interface LogicInput
+    {
+        public abstract bool HasLogicOutputSource { get; }
+        public abstract LogicOutput GetSourceLogicOutput();
+    }
     [Serializable]
-    public class LogicInput<T> : LogicValue<T>
+    public class LogicInput<T> : LogicValue<T>, LogicInput
     {
         [SerializeField] public ComponentFieldReference<LogicOutput<T>> sourceField;
-        public bool IsLinkedToOutput => !sourceField.IsUndefined;
+
         public LogicInput(T defaultValue) : base(defaultValue) { }
-        public override T Get() => IsLinkedToOutput ? sourceField.GetCached().Get() : base.Get();
+        public override T Get() => HasLogicOutputSource ? value = sourceField.GetCached().Get() : base.Get();
         public void CallOnSourceChanged(UnityAction action) => sourceField.GetCached().OnOutputChanged.AddListener(action);
+
+        public bool HasLogicOutputSource => !sourceField.IsUndefined;
+        public LogicOutput GetSourceLogicOutput() => (HasLogicOutputSource ? sourceField.GetCached() as LogicOutput : null);
     }
 
+    public interface LogicOutput : LogicValue
+    {
+        public UnityEvent GetOnOutputChanged();
+    }
     [Serializable]
-    public class LogicOutput<T> : LogicValue<T>
+    public class LogicOutput<T> : LogicValue<T>, LogicOutput
     {
         [SerializeField] public UnityEvent OnOutputChanged;
+
         public LogicOutput(T startingValue) : base(startingValue) { }
+
         public void Set(T newValue)
         {
             if (!value.Equals(newValue))
@@ -48,6 +68,6 @@ namespace Neverway.Framework.LogicValueSystem
             else
                 value = newValue;
         }
-
+        public UnityEvent GetOnOutputChanged() => OnOutputChanged;
     }
 }
