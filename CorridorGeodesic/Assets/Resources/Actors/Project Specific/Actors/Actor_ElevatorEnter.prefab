@@ -410,7 +410,7 @@ PrefabInstance:
     - target: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       propertyPath: m_Name
-      value: Enterance Elevator
+      value: Actor_ElevatorEnter
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -566,6 +566,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8480011088966710340}
     m_Modifications:
+    - target: {fileID: 2009235240510235282, guid: 52c987090bcd4dc45a9a0c4133dbed7f,
+        type: 3}
+      propertyPath: startSignal
+      value: 
+      objectReference: {fileID: 4533407602720074239}
     - target: {fileID: 2009235240510235282, guid: 52c987090bcd4dc45a9a0c4133dbed7f,
         type: 3}
       propertyPath: elevatorTargets.Array.size
@@ -983,7 +988,7 @@ PrefabInstance:
     - target: {fileID: 6291239301692520232, guid: 750d840f18cf3ac479c0136c58a590a8,
         type: 3}
       propertyPath: uniqueCheckpointName
-      value: 7817345a-9b3d-4930-b027-91f14ae9603b
+      value: 915650b9-825f-4336-93ec-338762eef565
       objectReference: {fileID: 0}
     - target: {fileID: 8670862970717540647, guid: 750d840f18cf3ac479c0136c58a590a8,
         type: 3}
@@ -993,12 +998,12 @@ PrefabInstance:
     - target: {fileID: 8723237101249000872, guid: 750d840f18cf3ac479c0136c58a590a8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.02
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8723237101249000872, guid: 750d840f18cf3ac479c0136c58a590a8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.84
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8723237101249000872, guid: 750d840f18cf3ac479c0136c58a590a8,
         type: 3}
@@ -1180,6 +1185,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8714624932041353558}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4533407602720074239 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5051199325652713641, guid: 25ecce1d4d40796fc80bc4111abf4700,
+    type: 3}
+  m_PrefabInstance: {fileID: 8714624932041353558}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a2b6dd573eced7f98260ed9f7d8d60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &9124916647531484508
 PrefabInstance:
   m_ObjectHideFlags: 0
