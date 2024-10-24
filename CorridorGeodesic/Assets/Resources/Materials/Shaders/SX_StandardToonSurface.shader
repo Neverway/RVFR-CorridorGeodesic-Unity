@@ -29,6 +29,9 @@ Shader "Soulex/Surface/Standard Toon"
         _EmissionColor ("Emission Color", Color) = (0, 0, 0, 0)
         [NoScaleOffset] _EmissionMap ("Emission", 2D) = "white" {}
 
+        _DetailAlbedoMap ("Detail Texture", 2D) = "black" {}
+        _DetailProminence ("Detail Prominence", Range(0, 1)) = 0.2
+
         _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
 
@@ -59,10 +62,13 @@ Shader "Soulex/Surface/Standard Toon"
         #include "AutoLight.cginc"
         #include "UnityStandardBRDF.cginc"
         #include "UnityStandardUtils.cginc"
+        #include "UnityGBuffer.cginc"
+        #include "SX_Helpers.cginc"
 
         struct Input
         {
             float2 uv_MainTex;
+            float2 uv_DetailAlbedoMap;
             float2 uv_Normal;
             float3 viewDir;
             float3 worldPos;
@@ -90,6 +96,9 @@ Shader "Soulex/Surface/Standard Toon"
 
         half4 _EmissionColor;
         sampler2D _EmissionMap;
+
+        sampler2D _DetailAlbedoMap;
+        half _DetailProminence;
         
         float2 _Tiling;
         float2 _Offset;
@@ -176,20 +185,27 @@ Shader "Soulex/Surface/Standard Toon"
                 gi = UnityGlobalIllumination(data, s.Occlusion, s.Normal, g);
             #endif
         }
-        half4 LightingRamp(SurfaceOutputToon s, float3 viewDir, UnityGI gi)
+        half4 LightingRamp(SurfaceOutputToon s, float3 viewDir, UnityGI gi/*, out half4 outDiffuseOcclusion, out half4 outSpecSmoothness, out half4 outNormal*/)
         {
             float3 normal = normalize(s.Normal);
             float3 viewDirection = normalize(viewDir);
-            float3 viewReflectDirection = normalize(reflect(-viewDirection, normal));
+            //float3 viewReflectDirection = normalize(reflect(-viewDirection, normal));
 
             half oneMinusReflectivity;
-            //half outputAlpha;
             half3 specColor;
 
             s.Albedo = DiffuseAndSpecularFromMetallic(s.Albedo, s.Metallic, specColor, oneMinusReflectivity);
-            //s.Albedo = PreMultiplyAlpha(s.Albedo, s.Alpha, oneMinusReflectivity, outputAlpha);
 
             half3 c = BRDFToon(s.Albedo, specColor, oneMinusReflectivity, 1 - s.Roughness, normal, viewDirection, gi.light, gi.indirect);
+
+            //UnityStandardData data;
+            //data.diffuseColor = s.Albedo;
+            //data.occlusion = s.Occlusion;
+            //data.specularColor = specColor;
+            //data.smoothness = 1 - s.Roughness;
+            //data.normalWorld = s.Normal;
+
+            //UnityStandardDataToGbuffer(data, outDiffuseOcclusion, outSpecSmoothness, outNormal);
 
             half4 emission = half4(s.Emission + c, s.Alpha);
 
@@ -204,11 +220,13 @@ Shader "Soulex/Surface/Standard Toon"
             uv += parallaxOffset;
 
             fixed4 col = tex2D(_MainTex, uv) * _Color;
+            half4 detailCol = tex2D(_DetailAlbedoMap, IN.uv_DetailAlbedoMap);
+            half detailMask = luminance(detailCol.rgb) * detailCol.a * _DetailProminence;
 
             o.viewDir = IN.viewDir;
             o.worldPos = IN.worldPos;
 
-            o.Albedo = col.rgb;
+            o.Albedo = lerp(col.rgb, detailCol.rgb, detailMask);
 
             o.Normal = UnpackScaleNormal(tex2D(_BumpMap, uv), _BumpScale);
 
