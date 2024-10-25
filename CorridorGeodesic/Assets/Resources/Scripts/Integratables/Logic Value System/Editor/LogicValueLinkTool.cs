@@ -33,7 +33,12 @@ public class LogicValueLinkTool : EditorTool
         lastToolType = Tool.None;
         ToolManager.activeToolChanged -= ClearLastToolType;
     }
-   
+    public override void OnWillBeDeactivated()
+    {
+        componentsWithLogicValues = null;
+        ClearLastToolType();
+    }
+
     // Define the icon displayed in the toolbar
     public static GUIContent m_Icon;
     public override GUIContent toolbarIcon
@@ -43,7 +48,7 @@ public class LogicValueLinkTool : EditorTool
             if (m_Icon == null)
                 m_Icon =  new GUIContent()
                 {
-                    image = EditorIcons.SettingsIcon,
+                    image = EditorIcons.ZEROKEY,
                     text = "Logic Value Link Tool",
                     tooltip = "Logic Value Link Tool (Alt + L)"
                 };
@@ -52,7 +57,8 @@ public class LogicValueLinkTool : EditorTool
     }
     #endregion
 
-    private const float SPHERE_HANDLE_SIZE = 0.3f;
+    private const float HANDLESIZE_POI = 0.3f;
+    private const float HANDLESIZE_UNIMPORTANT = 0.15f;
 
     private LogicComponent firstLogicComponent = null; // Track the first object (where dragging starts)
     private Vector3 startHandlePosition;
@@ -65,14 +71,43 @@ public class LogicValueLinkTool : EditorTool
     private LogicOutput[] outputs;
     private ValueLink[] links;
     private Dictionary<Component, LogicValue[]> logicValues;
-    private Component[] componentsWithLogicValues;
+    private static Component[] componentsWithLogicValues;
     private static Dictionary<Type, FieldInfo[]> logicValueFieldInfos;
     private Type[] typesWithLogicValues;
     private Component[] allComponents;
 
     private LinkerToolPopupWindow activeWindow;
 
-
+    public struct Handle
+    {
+        public Transform handleTarget;
+        public List<LogicInput> inputs;
+        public List<LogicOutput> outputs;
+        public Handle(Transform handleTarget)
+        {
+            this.handleTarget = handleTarget;
+            this.inputs = new List<LogicInput>();
+            this.outputs = new List<LogicOutput>();
+        }
+        public void Add(params LogicValue[] logicvalues)
+        {
+            foreach(LogicValue value in logicvalues)
+            {
+                if (value is LogicInput input)
+                    Add(input);
+                if (value is LogicInput output)
+                    Add(output);
+            }
+        }
+        public void Add(params LogicInput[] logicvalues)
+        {
+            inputs.AddRange(logicvalues);
+        }
+        public void Add(params LogicOutput[] logicvalues)
+        {
+            outputs.AddRange(logicvalues);
+        }
+    }
     public struct ValueLink
     {
         public Type linkType;
@@ -89,9 +124,19 @@ public class LogicValueLinkTool : EditorTool
         {
             Color old = Handles.color;
             Handles.color = color;
+
             Vector3 delta = end.position - start.position;
             Vector3 offsetDirection = Vector3.Cross(delta, sceneViewCameraTransform.forward);
-            Handles.DrawLine(start.position, end.position, thickness);
+            offsetDirection = offsetDirection.normalized * 0.05f;
+            Handles.DrawLine(start.position + offsetDirection, end.position + offsetDirection, thickness);
+            Handles.DrawLine(start.position - offsetDirection, end.position - offsetDirection, thickness);
+            for (float i = 0; i < delta.magnitude - .1f; i += .3f)
+            {
+                Vector3 onLinePosition = start.position + (delta.normalized * i);
+                Vector3 furtherUpOffset = (delta.normalized * .1f);
+                Handles.DrawLine(onLinePosition + furtherUpOffset, onLinePosition + offsetDirection, thickness * 2f);
+                Handles.DrawLine(onLinePosition + furtherUpOffset, onLinePosition - offsetDirection, thickness * 2f);
+            }
             Handles.color = old;
         }
     }
@@ -136,8 +181,13 @@ public class LogicValueLinkTool : EditorTool
 
         if (!doRecalculate)
         {
-            foreach (Component c in componentsWithLogicValues)
-                doRecalculate |= c == null;
+            if (componentsWithLogicValues == null)
+                doRecalculate = true;
+            else
+            {
+                foreach (Component c in componentsWithLogicValues)
+                    doRecalculate |= c == null;
+            }
 
             if (doRecalculate)
                 allComponents = FindObjectsOfType<Component>();
@@ -172,11 +222,10 @@ public class LogicValueLinkTool : EditorTool
                         inputsList.Add(input);
                         if (input.HasLogicOutputSource)
                         {
-                            LogicValue otherValue = input.GetSourceLogicOutput(); 
-
+                            LogicValue otherValue = input.GetSourceLogicOutput();
+                            Debug.Log(otherValue.GetLogicValueType());
                             Transform startHandle = otherValue.GetHandleTarget();
                             Transform endHandle = value.GetHandleTarget();
-                            Debug.Log(startHandle + " | " + endHandle);
 
                             if (startHandle != null && endHandle != null)
                                 linksList.Add(new ValueLink(value.GetLogicValueType(), startHandle, endHandle));
@@ -206,7 +255,7 @@ public class LogicValueLinkTool : EditorTool
 
         foreach (Component c in componentsWithLogicValues)
         {
-            if (Handles.Button(c.transform.position, Quaternion.identity, SPHERE_HANDLE_SIZE * 0.7f, SPHERE_HANDLE_SIZE, Handles.SphereHandleCap))
+            if (Handles.Button(c.transform.position, Quaternion.identity, HANDLESIZE_POI, HANDLESIZE_POI, Handles.SphereHandleCap))
             {
                 Debug.ClearDeveloperConsole(); 
                 foreach(FieldInfo field in logicValueFieldInfos[c.GetType()])
@@ -216,7 +265,6 @@ public class LogicValueLinkTool : EditorTool
                 }
             }
         }
-        Debug.Log(links.Length);
         foreach(ValueLink link in links)
         {
             link.Draw(Color.white, 1f);
@@ -298,7 +346,7 @@ public class LogicValueLinkTool : EditorTool
             logicComponent.transform.position;
 
         // Handle clicking the sphere to start dragging
-        if (Handles.Button(handlePosition, Quaternion.identity, SPHERE_HANDLE_SIZE * 0.7f, SPHERE_HANDLE_SIZE, Handles.SphereHandleCap))
+        if (Handles.Button(handlePosition, Quaternion.identity, HANDLESIZE_POI, HANDLESIZE_POI, Handles.SphereHandleCap))
         {
             if (infos.Length > 1)
                 activeWindow = new LinkerToolPopupWindow(logicComponent, firstLogicComponent, infos, true);
@@ -325,7 +373,7 @@ public class LogicValueLinkTool : EditorTool
             logicComponent.transform.position;
 
         // Handle clicking the sphere to start dragging
-        if (Handles.Button(handlePosition, Quaternion.identity, SPHERE_HANDLE_SIZE * 0.7f, SPHERE_HANDLE_SIZE, Handles.SphereHandleCap))
+        if (Handles.Button(handlePosition, Quaternion.identity, HANDLESIZE_POI, HANDLESIZE_POI, Handles.SphereHandleCap))
         {
             // Start dragging from this object
             firstLogicComponent = logicComponent;
@@ -347,7 +395,7 @@ public class LogicValueLinkTool : EditorTool
         //    new Vector3(info.attribute.xOffset, info.attribute.yOffset, info.attribute.zOffset));
 
         // Handle clicking the sphere to start dragging
-        if (Handles.Button(handlePosition, Quaternion.identity, SPHERE_HANDLE_SIZE * 0.7f, SPHERE_HANDLE_SIZE, Handles.SphereHandleCap))
+        if (Handles.Button(handlePosition, Quaternion.identity, HANDLESIZE_POI, HANDLESIZE_POI, Handles.SphereHandleCap))
         {
             //Tring to check for infinite loops
             /*recursionInfiniteLoopProtection = 0;

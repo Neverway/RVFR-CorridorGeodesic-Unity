@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -11,6 +12,7 @@ public class EditorIcons : EditorWindow
 {
     #region EditorGUIUtility Icons
     public static Texture ScriptableObjectIcon => GetEditorGUIUtilityIcon("ScriptableObject Icon");
+    public static Texture ZEROKEY => AssetDatabase.LoadAssetAtPath("Assets/Packages/Xelu_Prompts/Keyboard & Mouse/Dark/0_Key_Dark.png", typeof(Texture2D)) as Texture;
     public static Texture Popup => GetEditorGUIUtilityIcon("_Popup");
     public static Texture Help => GetEditorGUIUtilityIcon("_Help");
     public static Texture Clipboard => GetEditorGUIUtilityIcon("Clipboard");
@@ -343,7 +345,7 @@ public class EditorIcons : EditorWindow
         // Add more buttons for other tools as needed
     }
 
-    //[Shortcut("DEBUG STRINGS", typeof(SceneView), KeyCode.J, ShortcutModifiers.Alt)]
+    [Shortcut("DEBUG STRINGS", typeof(SceneView), KeyCode.J, ShortcutModifiers.Alt)]
     public static void GeneratingString()
     { 
         string startPrintingNamesAtName = "TreeEditor.BranchRotate";

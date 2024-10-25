@@ -15,7 +15,7 @@ public class LogicInputDrawer : EasyDrawer
     string _fieldName = "fieldName";
     string _targetComponent = "targetComponent";
 
-    bool showHandleField = true;
+    bool showHandleField = true; 
 
     public override DrawerObject OnGUIEasyDrawer(VerticalGroup contents)
     {

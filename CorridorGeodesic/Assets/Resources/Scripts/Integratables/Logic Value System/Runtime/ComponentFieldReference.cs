@@ -1,4 +1,5 @@
 //=-------- Script by Errynei ----------=//
+using Neverway.Framework.LogicValueSystem;
 using System;
 using System.Reflection;
 using UnityEngine;
@@ -20,9 +21,9 @@ public struct ComponentFieldReference<T>
     [SerializeField] private Component targetComponent;
     [SerializeField] private string fieldName;
 
-    private T cachedValue;
-    private bool hasCached;
-    private FieldInfo _field;
+    [NonSerialized] private T cachedValue;
+    [NonSerialized] private bool hasCached;
+    [NonSerialized] private FieldInfo _field;
 
     public ComponentFieldReference(Component target, string field)
     {

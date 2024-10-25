@@ -29,7 +29,7 @@ namespace Neverway.Framework.LogicValueSystem
         public static implicit operator T(LogicValue<T> logicValue) => logicValue.Get();
     }
 
-    public interface LogicInput
+    public interface LogicInput : LogicValue
     {
         public abstract bool HasLogicOutputSource { get; }
         public abstract LogicOutput GetSourceLogicOutput();
