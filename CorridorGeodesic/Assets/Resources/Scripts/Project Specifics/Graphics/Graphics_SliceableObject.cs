@@ -52,8 +52,8 @@ public class Graphics_SliceableObject : MonoBehaviour
         {
             child2.space = SliceSpace.Plane2;
             childNull.space = SliceSpace.Null;
-            child2.gameObject.SetActive (false);
-            childNull.gameObject.SetActive (false);
+            child2.SetVisible (false);
+            childNull.SetVisible (false);
             Graphics_SliceableObjectManager.Instance.AddToList (this);
         }
 
@@ -134,7 +134,12 @@ public class Graphics_SliceableObject : MonoBehaviour
         if (GeometryUtility.TestPlanesAABB(planes, rend.bounds))
             Slice();
     }
-    private void Slice()
+
+    /// <summary>
+    /// Turn on slicing for this object's materials, and trigger any child actors as well.
+    /// </summary>
+    /// <param name="parentAnimator"></param>
+    private void Slice(Animator parentAnimator = null)
     {
         useSlice = true;
 
@@ -154,13 +159,13 @@ public class Graphics_SliceableObject : MonoBehaviour
         //and parent them to their respective transforms.
         if (child2)
         {
-            child2.gameObject.SetActive(true);
+            child2.SetVisible (true);
             child2.Slice ();
             child2.transform.SetParent (Alt_Item_Geodesic_Utility_GeoGun.planeBMeshes.transform);
         }
         if (childNull)
         {
-            childNull.gameObject.SetActive(true);
+            childNull.SetVisible (true);
             childNull.Slice ();
             childNull.transform.SetParent (Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform);
         }
@@ -181,12 +186,12 @@ public class Graphics_SliceableObject : MonoBehaviour
         if (child2)
         {
             child2.transform.SetParent (null);
-            child2.gameObject.SetActive (false);
+            child2.SetVisible (false);
         }
         if (childNull)
         {
             childNull.transform.SetParent (null);
-            childNull.gameObject.SetActive(false);
+            childNull.SetVisible (false);
         }
     }
 
@@ -194,4 +199,10 @@ public class Graphics_SliceableObject : MonoBehaviour
     {
         animator.SetBool ("Powered", isPowered);
     }
+
+    public void SetVisible (bool _visible)
+    {
+        rend.enabled = _visible;
+    }
+
 }
