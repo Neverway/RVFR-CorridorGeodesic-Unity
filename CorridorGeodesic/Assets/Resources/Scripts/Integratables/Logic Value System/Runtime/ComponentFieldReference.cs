@@ -69,16 +69,29 @@ public struct ComponentFieldReference<T>
     /// </summary>
     public T Get()
     {
+#if UNITY_EDITOR
+        _field = null;
+#endif
         cachedValue = (T)Field.GetValue(targetComponent);
         hasCached = true;
         return cachedValue;
     }
 
     /// <summary>
+    /// Gets the targeted Component
+    /// </summary>
+    public Component GetTargetComponent() => targetComponent;
+
+    /// <summary>
     /// Gets the last value returned from <see cref="Get"/>.
     /// <para>If a value has not been cached, will call <see cref="Get"/> instead</para>
     /// </summary>
-    public T GetCached() => (hasCached ? cachedValue : Get());
+    public T GetCached() => 
+#if UNITY_EDITOR
+        Get();
+#else
+    (hasCached ? cachedValue : Get());
+#endif
 
     /// <summary>
     /// Uses reflection to set the value directly to the field

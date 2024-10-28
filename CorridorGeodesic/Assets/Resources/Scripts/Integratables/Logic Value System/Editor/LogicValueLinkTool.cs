@@ -1,23 +1,80 @@
+using DG.Tweening;
 using Neverway.Framework.LogicValueSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Plastic.Newtonsoft.Json.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.EditorTools;
+using UnityEditor.Rendering;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.MessageBox;
 
-[EditorTool("Logic Value Link Tool")]
+//[EditorTool("Logic Value Link Tool")]
 public class LogicValueLinkTool : EditorTool
 {
     #region EditorTool Setup
+    public static bool ShowGUIInScene = false;
+
+    [InitializeOnLoadMethod]
+    public static void StartGUIToggled()
+    {
+        ShowGUIInScene = false;
+        ToggleSceneGUI();
+    }
+    [MenuItem("Neverway/Logic Value Link Tool/Toggle Scene GUI")]
+    public static void ToggleSceneGUI()
+    {
+        ShowGUIInScene = !ShowGUIInScene;
+        if (ShowGUIInScene)
+        {
+            SceneView.duringSceneGui += OnSceneGUI;
+        }
+        else
+        {
+            SceneView.duringSceneGui -= OnSceneGUI;
+            SceneView.duringSceneGui -= OnSceneGUI;
+        }
+    }
+    private static void OnSceneGUI(SceneView sceneview)
+    {
+        Rect area = sceneview.cameraViewport;
+        Handles.BeginGUI();
+        Rect toolButtonArea = area;
+        toolButtonArea.size = new Vector2(40, 22);
+        toolButtonArea.center = new Vector2(area.width / 2, 21);
+
+        //Offset from probuilderbar
+        toolButtonArea.x += 85;
+        GUIStyle style = new GUIStyle(EditorStyles.miniButton);
+        //style.padding = new RectOffset();
+        style.fixedHeight = toolButtonArea.height;
+        //EditorGUI.DrawRect(toolButtonArea, Color.white);
+
+        if (IsCurrentTool != EditorGUI.Toggle(toolButtonArea, IsCurrentTool, style))
+            SetAsCurrentTool();
+
+        if (IsCurrentTool)
+        {
+
+        }
+        else
+        {
+            
+        }
+        Handles.EndGUI();
+    }
+    public static bool IsCurrentTool => ToolManager.activeToolType == typeof(LogicValueLinkTool);
+
     public static Tool lastToolType;
     [Shortcut("Use Logic Value Link Tool", typeof(SceneView), KeyCode.L, ShortcutModifiers.Alt)]
     public static void SetAsCurrentTool()
     {
-        if (lastToolType != Tool.None)
+        if (IsCurrentTool && lastToolType != Tool.None)
         {
             Tools.current = lastToolType;
             ClearLastToolType();
@@ -33,23 +90,32 @@ public class LogicValueLinkTool : EditorTool
         lastToolType = Tool.None;
         ToolManager.activeToolChanged -= ClearLastToolType;
     }
-    public override void OnWillBeDeactivated()
+    public void OnEnable()
     {
-        componentsWithLogicValues = null;
+        Undo.undoRedoPerformed += RESET;
+        EditorApplication.hierarchyChanged += RESET;
+        ClearALL();
+    }
+    public void OnDisable()
+    {
+        Undo.undoRedoPerformed -= RESET;
+        EditorApplication.hierarchyChanged -= RESET;
+        ClearALL();
         ClearLastToolType();
     }
 
     // Define the icon displayed in the toolbar
     public static GUIContent m_Icon;
-    public override GUIContent toolbarIcon
+    public override GUIContent toolbarIcon => ToolbarIconContent;
+    public static GUIContent ToolbarIconContent
     {
         get 
         {
             if (m_Icon == null)
                 m_Icon =  new GUIContent()
                 {
-                    image = EditorIcons.ZEROKEY,
-                    text = "Logic Value Link Tool",
+                    image = EditorIcons.SettingsIcon,
+                    //text = "Logic Value Link Tool",
                     tooltip = "Logic Value Link Tool (Alt + L)"
                 };
             return m_Icon;
@@ -60,52 +126,305 @@ public class LogicValueLinkTool : EditorTool
     private const float HANDLESIZE_POI = 0.3f;
     private const float HANDLESIZE_UNIMPORTANT = 0.15f;
 
-    private LogicComponent firstLogicComponent = null; // Track the first object (where dragging starts)
-    private Vector3 startHandlePosition;
-    private bool isDragging = false;
-    private int previousSceneObjectsCount = -1;
-    private LogicComponent[] logicComponents;
+    private static LogicValueField grabbedOutput = null;
+    private static LogicValueField targetInput = null;
+    private static SelectorWindowNonGeneric currentWindow = null;
+    public bool NotCurrentlyDoingAnything => LookingForOutput && currentWindow == null;
+    public static bool LookingForOutput => grabbedOutput == null && targetInput == null;
+    public static bool LookingForInput => grabbedOutput != null && targetInput == null;
+    public static bool LinkHasFinished => grabbedOutput != null && targetInput != null;
 
+    private List<Handle> handles;
     private static Transform sceneViewCameraTransform;
-    private LogicInput[] inputs;
-    private LogicOutput[] outputs;
+    private LogicValueField[] inputs;
+    private LogicValueField[] outputs;
     private ValueLink[] links;
-    private Dictionary<Component, LogicValue[]> logicValues;
-    private static Component[] componentsWithLogicValues;
-    private static Dictionary<Type, FieldInfo[]> logicValueFieldInfos;
+    private Dictionary<Component, LogicValueField[]> logicValues;
+    private Component[] componentsWithLogicValues;
+    private Dictionary<Type, FieldInfo[]> logicValueFieldInfos;
     private Type[] typesWithLogicValues;
     private Component[] allComponents;
 
-    private LinkerToolPopupWindow activeWindow;
+    public static GUIStyle labelStyle;
 
-    public struct Handle
+    public class LogicValueField
     {
+        public FieldInfo fieldInfo;
+        public LogicValue value;
+        public string valueName;
         public Transform handleTarget;
-        public List<LogicInput> inputs;
-        public List<LogicOutput> outputs;
+        public Component onComponent;
+
+        public bool IsInput => value is LogicInput;
+        public LogicInput Input => value as LogicInput;
+        public bool IsOutput => value is LogicOutput;
+        public LogicOutput Output => value as LogicOutput;
+
+        public Type LogicValueType => value.GetLogicValueType();
+
+        public LogicValueField(FieldInfo field, Component onComponent)
+        {
+            if (field == null)
+                throw new ArgumentNullException(nameof(field));
+
+            if (onComponent == null)
+                throw new ArgumentNullException(nameof(onComponent));
+
+            this.onComponent = onComponent;
+            this.fieldInfo = field;
+            this.value = (LogicValue)field.GetValue(onComponent);
+
+            this.handleTarget = value.EditorHandles_GetHandle();
+            if (handleTarget == null) 
+                handleTarget = onComponent.transform;
+
+            this.valueName = value.EditorHandles_GetCustomName();
+            this.valueName = string.IsNullOrEmpty(valueName) ? field.HumanName() : valueName;
+        }
+    }
+    public class Handle
+    {
+        public SelectorWindowNonGeneric window;
+        public Transform handleTarget;
+        public List<LogicValueField> inputs;
+        public List<LogicValueField> outputs;
+        
+        public bool HasOutputs => outputs.Count > 0;
+        public bool HasMultipleOutputs => outputs.Count > 1;
+        public bool HasInputs => ValidInputs.Length > 0;
+        public bool HasMultipleInputs => ValidInputs.Length > 1;
+        public LogicValueField[] ValidInputs => GetCachedValidInputs();
+
+        private LogicValueField[] cachedValidInputs;
+        private Type cachedValidInputsType;
+
         public Handle(Transform handleTarget)
         {
+            if (handleTarget == null)
+                throw new ArgumentNullException(nameof(handleTarget));
+
+            this.cachedValidInputsType = typeof(object);
+            this.cachedValidInputs = new LogicValueField[0];
+            this.window = null;
             this.handleTarget = handleTarget;
-            this.inputs = new List<LogicInput>();
-            this.outputs = new List<LogicOutput>();
+            this.inputs = new List<LogicValueField>();
+            this.outputs = new List<LogicValueField>();
         }
-        public void Add(params LogicValue[] logicvalues)
+        public void Add(params LogicValueField[] logicvalues)
         {
-            foreach(LogicValue value in logicvalues)
+            foreach (LogicValueField value in logicvalues)
+                (value.IsInput ? inputs : outputs).Add(value);
+
+            cachedValidInputsType = null;
+        }
+
+        public void ProcessHandle()
+        {
+            if (window != null)
             {
-                if (value is LogicInput input)
-                    Add(input);
-                if (value is LogicInput output)
-                    Add(output);
+                ProcessWindow();
+                return;
+            }
+
+            if (LookingForOutput)
+                ProcessOutputs();
+            else
+                ProcessInputs();
+        }
+        private void ProcessWindow()
+        {
+            if (window.GetIfOptionSelected())
+            {
+                LogicValueField value = (LogicValueField)window.GetOption();
+
+                if (LookingForOutput && value.IsOutput)
+                    grabbedOutput = value;
+
+                if (LookingForInput && value.IsInput)
+                    targetInput = value;
+
+                window = null;
+                currentWindow = null;
             }
         }
-        public void Add(params LogicInput[] logicvalues)
+        private void ProcessOutputs()
         {
-            inputs.AddRange(logicvalues);
+            if (!HasOutputs)
+            {
+                HandleDrawUnimportant();
+                return;
+            }
+
+            if (HandleButtonPressed())
+            {
+                if (HasMultipleOutputs)
+                    currentWindow = window = new SelectorWindow<LogicValueField>("Select Output", outputs.ToArray(), ValueName);
+                else
+                    grabbedOutput = outputs[0];
+            }
         }
-        public void Add(params LogicOutput[] logicvalues)
+        private void ProcessInputs()
         {
-            outputs.AddRange(logicvalues);
+            if (!HasInputs)
+            {
+                HandleDrawUnimportant();
+                return;
+            }
+            if (HandleButtonPressed())
+            {
+                if (HasMultipleInputs)
+                    currentWindow = window = new SelectorWindow<LogicValueField>("Select Input", GetCachedValidInputs(), ValueName);
+                else
+                    targetInput = GetCachedValidInputs()[0];
+            }
+        }
+        private LogicValueField[] GetCachedValidInputs(bool forceCache = false)
+        {
+            if (LookingForOutput)
+                return inputs.ToArray();
+
+            if (!forceCache)
+                if (cachedValidInputsType == grabbedOutput.LogicValueType)
+                    return cachedValidInputs;
+
+            Type cacheType = cachedValidInputsType = grabbedOutput.LogicValueType;
+            return cachedValidInputs = inputs.Where(o => cacheType.IsAssignableFrom(o.LogicValueType)).ToArray();
+        }
+        private bool HandleButtonPressed()
+        {
+            bool result = Handles.Button(handleTarget.position, capDirection, HANDLESIZE_POI, HANDLESIZE_POI, Cap);
+            DrawLable(1f);
+            return result;
+        }
+        private void HandleDrawUnimportant()
+        {
+            Color oldColor = Handles.color;
+            Handles.color = new Color(1f, 1f, 1f, 0.5f);
+            Handles.Button(handleTarget.position, capDirection, HANDLESIZE_UNIMPORTANT, HANDLESIZE_UNIMPORTANT, Cap);
+            Handles.color = oldColor;
+
+            DrawLable(0.5f);
+        }
+
+        private void DrawLable(float factor = 1f)
+        {
+            string handleName;
+            LogicValueField[] relevantValueFields = GetRelevantValueFields();
+            if (relevantValueFields.Length == 1)
+                handleName = relevantValueFields[0].valueName;
+            else
+                handleName = $"[ {handleTarget.name} ]";
+
+            Vector3 labelPosition = handleTarget.position + (sceneViewCameraTransform.up * 0.3f * factor);
+            float distanceFactor = Vector2.Distance(HandleUtility.WorldToGUIPoint(handleTarget.position), HandleUtility.WorldToGUIPoint(labelPosition));
+            //distanceFactor /= 2f;
+            distanceFactor = Mathf.Min(distanceFactor, 16f);
+            GUIStyle myHandleStyle = new GUIStyle(labelStyle);
+            myHandleStyle.fontSize = Mathf.RoundToInt(distanceFactor);
+            Color newColor = myHandleStyle.normal.textColor;
+            newColor.a = factor;
+            myHandleStyle.normal.textColor = newColor;
+            //Vector3 shadowPos = labelPosition + (sceneViewCameraTransform.right + (sceneViewCameraTransform.up * -1)) * 0.1f;
+            if (!IsUnimportant)
+            {
+                GUIStyle shadowStyle = new GUIStyle(myHandleStyle);
+                shadowStyle.contentOffset = new Vector2(1, 1);
+                shadowStyle.normal.textColor = Color.black;
+                Handles.Label(labelPosition, handleName, shadowStyle);
+            }
+            else
+                myHandleStyle.fontStyle = FontStyle.Normal;
+            Handles.Label(labelPosition, handleName, myHandleStyle);
+        }
+
+        private Handles.CapFunction Cap =>
+                GetRelevantValueFields().Length == 1 ? Handles.SphereHandleCap : 
+                (GetRelevantValueFields().Length == 0 ? Handles.CircleHandleCap : Handles.CubeHandleCap);
+        private Quaternion capDirection => (GetRelevantValueFields().Length > 1 ? Quaternion.identity :
+            Quaternion.LookRotation(sceneViewCameraTransform.forward, sceneViewCameraTransform.up));
+
+        private string ValueName(LogicValueField valueField) =>
+            $"<size=10>{valueField.onComponent.name}</size>: <b>{valueField.valueName}</b>";
+
+        private bool IsUnimportant => GetRelevantValueFields().Length == 0;
+        private LogicValueField[] GetRelevantValueFields()
+        {
+            if (LookingForOutput)
+            {
+                return outputs.ToArray();
+            }
+            else if (LookingForInput)
+            {
+                return GetCachedValidInputs();
+            }
+            List<LogicValueField> valueFields = new List<LogicValueField>();
+            valueFields.AddRange(inputs);
+            valueFields.AddRange(outputs);
+            return valueFields.ToArray();
+        }
+
+        public static Handle[] CompactByDistance(float distance = 0.01f, params Handle[] handles)
+        {
+            float sqrDistance = distance * distance;
+            List<Handle> newHandles = new List<Handle>();
+            for (int i = 0; i < handles.Length; i++)
+            {
+                bool doAdd = true;
+                //Check if any of the previously added handles are close to the one about to be added
+                for (int e = 0; e < newHandles.Count; e++)
+                {
+                    Vector3 deltaPosition = newHandles[e].handleTarget.position - handles[i].handleTarget.position;
+                    if (deltaPosition.sqrMagnitude < sqrDistance)
+                    {
+                        newHandles[e].Add(handles[i].inputs.ToArray());
+                        newHandles[e].Add(handles[i].outputs.ToArray());
+                        doAdd = false;
+                    }
+                }
+                if (doAdd)
+                {
+                    Handle handleToAdd = new Handle(handles[i].handleTarget);
+                    handleToAdd.Add(handles[i].inputs.ToArray());
+                    handleToAdd.Add(handles[i].outputs.ToArray());
+
+                    newHandles.Add(handleToAdd);
+                }
+            }
+            return newHandles.ToArray();
+        }
+        public static Handle[] SortByDistanceToCamera(params Handle[] handles)
+        {
+            int n = handles.Length;
+            bool swapped;
+
+            // Outer loop to iterate through all elements
+            for (int i = 0; i < n - 1; i++)
+            {
+                swapped = false;
+
+                // Inner loop to compare adjacent elements
+                for (int j = 0; j < n - i - 1; j++)
+                {
+                    if (CompareDistanceToCamera(handles[j], handles[j + 1]))
+                    {
+                        // Swap if elements are in the wrong order
+                        Handle temp = handles[j];
+                        handles[j] = handles[j + 1];
+                        handles[j + 1] = temp;
+                        swapped = true;
+                    }
+                }
+
+                // If no two elements were swapped, the array is already sorted
+                if (!swapped)
+                    break;
+            }
+            return handles;
+        }
+        public static bool CompareDistanceToCamera(Handle h1, Handle h2)
+        {
+            return (h1.handleTarget.position - sceneViewCameraTransform.position).sqrMagnitude <
+                (h2.handleTarget.position - sceneViewCameraTransform.position).sqrMagnitude;
         }
     }
     public struct ValueLink
@@ -141,10 +460,15 @@ public class LogicValueLinkTool : EditorTool
         }
     }
 
-    private bool CacheFieldInfos()
+    private void CacheFieldInfos()
     {
+        if (!LookingForOutput)
+            return;
+
         if (logicValueFieldInfos != null)
-            return false;
+            return;
+        
+        ClearLogicValuesCache();
 
         logicValueFieldInfos = new Dictionary<Type, FieldInfo[]>();
 
@@ -173,362 +497,260 @@ public class LogicValueLinkTool : EditorTool
             }
         }
         typesWithLogicValues = uniqueTypesWithLogicValues.ToArray();
-        return true;
     }
     private void CacheLogicValues()
     {
-        bool doRecalculate = CacheFieldInfos();
-
-        if (!doRecalculate)
-        {
-            if (componentsWithLogicValues == null)
-                doRecalculate = true;
-            else
-            {
-                foreach (Component c in componentsWithLogicValues)
-                    doRecalculate |= c == null;
-            }
-
-            if (doRecalculate)
-                allComponents = FindObjectsOfType<Component>();
-        }
-
-        if (!doRecalculate)
+        if (!LookingForOutput)
             return;
 
+        if (logicValues != null)
+            return;
+
+        ClearLogicValuesCache();
+
         List<Component> componentsWithLogicValuesList = new List<Component>();
-        logicValues = new Dictionary<Component, LogicValue[]>();
-        List<LogicInput> inputsList = new List<LogicInput>();
-        List<LogicOutput> outputsList = new List<LogicOutput>();
+        logicValues = new Dictionary<Component, LogicValueField[]>();
+        List<LogicValueField> inputsList = new List<LogicValueField>();
+        List<LogicValueField> outputsList = new List<LogicValueField>();
         List<ValueLink> linksList = new List<ValueLink>();
+        allComponents = FindObjectsOfType<Component>();
         foreach (Component currentComponent in allComponents)
         {
             Type currentComponentType = currentComponent.GetType();
             if (typesWithLogicValues.Contains(currentComponentType))
             {
                 componentsWithLogicValuesList.Add(currentComponent);
-                List<LogicValue> logicValueList = new List<LogicValue>();
+                List<LogicValueField> logicValueList = new List<LogicValueField>();
                 foreach (FieldInfo field in logicValueFieldInfos[currentComponentType])
                 {
-                    LogicValue value = field.GetValue(currentComponent) as LogicValue;
-                    logicValueList.Add(value);
+                    LogicValueField logicValueField = new LogicValueField(field, currentComponent);
+                    logicValueList.Add(logicValueField);
 
-                    if (value is LogicOutput output)
+                    if (logicValueField.IsOutput)
+                        outputsList.Add(logicValueField);
+
+                    else if (logicValueField.IsInput)
                     {
-                        outputsList.Add(output);
-                    }
-                    else if (value is LogicInput input)
-                    {
-                        inputsList.Add(input);
-                        if (input.HasLogicOutputSource)
+                        inputsList.Add(logicValueField);
+                        LogicInput input = logicValueField.Input;
+                        if (input.HasLogicOutputSource) 
                         {
                             LogicValue otherValue = input.GetSourceLogicOutput();
-                            Debug.Log(otherValue.GetLogicValueType());
-                            Transform startHandle = otherValue.GetHandleTarget();
-                            Transform endHandle = value.GetHandleTarget();
+                            Transform startHandle = otherValue.EditorHandles_GetHandle();
+                            Transform endHandle = input.EditorHandles_GetHandle();
+
+                            if (endHandle == null)
+                                endHandle = currentComponent.transform;
+
+                            if (startHandle == null) 
+                                startHandle = input.GetSourceLogicOutputComponent().transform;
 
                             if (startHandle != null && endHandle != null)
-                                linksList.Add(new ValueLink(value.GetLogicValueType(), startHandle, endHandle));
+                                linksList.Add(new ValueLink(input.GetLogicValueType(), startHandle, endHandle));
                         }
                     }
                 }
                 logicValues.Add(currentComponent, logicValueList.ToArray());
-
             }
         }
         componentsWithLogicValues = componentsWithLogicValuesList.ToArray();
         inputs = inputsList.ToArray();
         outputs = outputsList.ToArray();
         links = linksList.ToArray();
+
+        handles = new List<Handle>();
+        AddValueFieldsToHandle(inputs);
+        AddValueFieldsToHandle(outputs); 
+    }
+
+    private void RESET()
+    {
+        ClearALL();
+        SceneView.RepaintAll();
+    }
+    private void ClearLogicValuesCacheAndSelectedValues()
+    {
+        ClearLogicValuesCache();
+        ClearSelectedValues();
+    }
+    private void ClearLogicValuesCache()
+    {
+        componentsWithLogicValues = null;
+        logicValues = null;
+        inputs = null;
+        outputs = null;
+        grabbedOutput = null;
+        handles = null;
+        links = null;
+    }
+    private void ClearSelectedValues()
+    {
+        grabbedOutput = null;
+        targetInput = null;
+        currentWindow = null;
+    }
+    private void ClearLogicValueFieldInfos()
+    {
+        logicValueFieldInfos = null;
+        typesWithLogicValues = null;
+        allComponents = null;
+    }
+    private void ClearALL() 
+    {
+        ClearLogicValueFieldInfos();
+        ClearLogicValuesCacheAndSelectedValues();
     }
 
     public override void OnToolGUI(EditorWindow window)
     {
         if (!(window is SceneView)) return;
-        GUIStyle style = new GUIStyle();
-        style.alignment = TextAnchor.MiddleCenter;
-        style.fontStyle = FontStyle.Bold;
+        if (NotCurrentlyDoingAnything && (Event.current.isKey))
+            ClearALL();
+
+        try
+        {
+            CacheFieldInfos();
+            CacheLogicValues();
+
+            DrawGUI();
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+            ClearALL();
+        }
+        SceneView.RepaintAll();
+    }
+    public void DrawGUI()
+    {
+        if (labelStyle == null)
+        {
+            labelStyle = new GUIStyle();
+            labelStyle.alignment = TextAnchor.MiddleCenter;
+            labelStyle.fontStyle = FontStyle.Bold;
+            labelStyle.normal.textColor = Color.white;
+        } 
 
         if (sceneViewCameraTransform == null)
             sceneViewCameraTransform = SceneView.lastActiveSceneView.camera.transform;
-        CacheLogicValues();
 
-        foreach (Component c in componentsWithLogicValues)
-        {
-            if (Handles.Button(c.transform.position, Quaternion.identity, HANDLESIZE_POI, HANDLESIZE_POI, Handles.SphereHandleCap))
-            {
-                Debug.ClearDeveloperConsole(); 
-                foreach(FieldInfo field in logicValueFieldInfos[c.GetType()])
-                {
-                    LogicValue val = field.GetValue(c) as LogicValue;
-                    Debug.Log(field.FieldType.Generic(0).HumanName(true) + (val is LogicOutput ? " Output: " : " Input: ") + field.Name);
-                }
-            }
-        }
-        foreach(ValueLink link in links)
+        foreach (ValueLink link in links)
         {
             link.Draw(Color.white, 1f);
         }
-
-        SceneView.RepaintAll();
-        return;
-        //Caching the Logic Components
-        //if (logicComponents == null)
-        //{
-        logicComponents = FindObjectsOfType<LogicComponent>();
-        //}
-
-        if (isDragging && firstLogicComponent == null)
-            isDragging = false;
-
-        if (activeWindow != null)
+        foreach (Handle handle in Handle.SortByDistanceToCamera(handles.ToArray()))
         {
-            activeWindow.RenderWindow();
-
-            if (Event.current.type == EventType.MouseDown && !activeWindow.windowRect.Contains(Event.current.mousePosition))
-                activeWindow.readyToDestroy = true;
-
-            if (activeWindow.readyToDestroy)
-                activeWindow = null;
+            handle.ProcessHandle();
         }
-        else
+        if (LookingForOutput)
         {
-            foreach (LogicComponent logicComponent in logicComponents)
-            {
-                if (logicComponent == null) continue;
-
-                LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(logicComponent.GetType());
-
-                if (infos.Length > 1)
-                    style.normal.textColor = Color.yellow;
-                else if (infos.Length > 0)
-                    style.normal.textColor = Color.green;
-                else
-                    style.normal.textColor = Color.red;
-
-                Handles.Label(logicComponent.transform.position + Vector3.up * 0.5f, logicComponent.name, style);
-
-                if (Event.current.shift)
-                {
-                    HandleClearHandle(logicComponent, infos);
-                    isDragging = false;
-                }
-                else if (isDragging)
-                {
-                    HandleInputHandle(logicComponent, infos);
-                    //foreach (LogicComponentHandleInfo info in infos)
-                    //    HandleInputHandle(logicComponent, info);
-                }
-                else
-                {
-                    HandleOutputHandle(logicComponent);
-                }
-            }
+            Vector3 mousePosition = sceneViewCameraTransform.position;
+            Ray cursorForwardRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+            mousePosition += cursorForwardRay.direction;
+            Handles.DrawWireDisc(mousePosition, sceneViewCameraTransform.forward, 0.025f);
         }
-
-        // If dragging and not releasing over a handle, draw a line to the current mouse position
-        if (isDragging && firstLogicComponent != null)
+        if (LookingForInput)
         {
             Vector3 mousePosition = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin;
-            Handles.DrawLine(startHandlePosition, mousePosition, 8f);
+            Handles.DrawLine(grabbedOutput.handleTarget.position, mousePosition, 8f);
         }
-
-        SceneView.RepaintAll(); // Ensure SceneView is updated during dragging
-    }
-    private void HandleClearHandle(LogicComponent logicComponent, LogicComponentHandleInfo[] infos)
-    {
-        if (infos.Length <= 0)
-            return;
-
-        // Position of the draggable handle (sphere)
-        Handles.color = Color.red;
-        Vector3 handlePosition =
-            logicComponent.transform.position;
-
-        // Handle clicking the sphere to start dragging
-        if (Handles.Button(handlePosition, Quaternion.identity, HANDLESIZE_POI, HANDLESIZE_POI, Handles.SphereHandleCap))
+        if (LinkHasFinished)
         {
-            if (infos.Length > 1)
-                activeWindow = new LinkerToolPopupWindow(logicComponent, firstLogicComponent, infos, true);
-            else if (infos.Length > 0)
+            if (!(targetInput.Input.HasLogicOutputSource &&
+                targetInput.Input.GetSourceLogicOutputComponent() == grabbedOutput.onComponent &&
+                targetInput.Input.GetSourceLogicOutput() == grabbedOutput.Output))
             {
-                Undo.RecordObject(logicComponent, "Clearing any LogicComponent inputs on " + logicComponent.name);
-                infos[0].TryClear(logicComponent);
-                EditorUtility.SetDirty(logicComponent);
+                Undo.RecordObject(targetInput.onComponent,
+                $"Assigning input \"{targetInput.valueName}\" on {targetInput.onComponent.name} " +
+                $"to reference output \"{grabbedOutput.valueName}\" on {grabbedOutput.onComponent.name}");
+
+                targetInput.Input.SetFieldReference(grabbedOutput.onComponent, grabbedOutput.fieldInfo.Name);
+                targetInput.fieldInfo.SetValue(targetInput.onComponent, targetInput.value.GetClone());
+
+                EditorUtility.SetDirty(targetInput.onComponent);
             }
-
-            //foreach (LogicComponentHandleInfo info in infos)
-            //{
-            //    Undo.RecordObject(logicComponent, "Clearing any LogicComponent inputs on " + logicComponent.name);
-            //    info.TryClear(logicComponent);
-            //    EditorUtility.SetDirty(logicComponent);
-            //}
-        }
-    }
-    private void HandleOutputHandle(LogicComponent logicComponent)
-    {
-        // Position of the draggable handle (sphere)
-        Handles.color = (logicComponent.isPowered ? Color.cyan : new Color(0.3f, 0.3f, 1f));
-        Vector3 handlePosition =
-            logicComponent.transform.position;
-
-        // Handle clicking the sphere to start dragging
-        if (Handles.Button(handlePosition, Quaternion.identity, HANDLESIZE_POI, HANDLESIZE_POI, Handles.SphereHandleCap))
-        {
-            // Start dragging from this object
-            firstLogicComponent = logicComponent;
-            startHandlePosition = handlePosition;
-            isDragging = true;
+            ClearALL();
         }
     }
 
-    private void HandleInputHandle(LogicComponent logicComponent, LogicComponentHandleInfo[] infos)
+    public interface SelectorWindowNonGeneric
     {
-        if (logicComponent == firstLogicComponent)
-            return;
-
-        // Position of the draggable handle (sphere)
-        Handles.color = Color.green;
-        Vector3 handlePosition = logicComponent.transform.position;
-        //Vector3 handlePosition =
-        //    logicComponent.transform.TransformPoint(
-        //    new Vector3(info.attribute.xOffset, info.attribute.yOffset, info.attribute.zOffset));
-
-        // Handle clicking the sphere to start dragging
-        if (Handles.Button(handlePosition, Quaternion.identity, HANDLESIZE_POI, HANDLESIZE_POI, Handles.SphereHandleCap))
-        {
-            //Tring to check for infinite loops
-            /*recursionInfiniteLoopProtection = 0;
-            //if (IsInfiniteLoop(firstLogicComponent, logicComponent))
-            //{
-            //    Debug.LogWarning("That connection would cause an infinite loop silly!");
-            //}
-            //else
-            //{
-            //    // Try to assign the first LogicComponent to the next LogicComponent
-            //    info.TryAssign(logicComponent, firstLogicComponent);
-            //}*/
-
-            // Try to assign the first LogicComponent to the next LogicComponent
-
-            if (infos.Length > 1)
-                activeWindow = new LinkerToolPopupWindow(logicComponent, firstLogicComponent, infos);
-            else if (infos.Length > 0)
-            {
-                Undo.RecordObject(logicComponent, "Link LogicComponent Input from " + firstLogicComponent.name + " to " + logicComponent.name);
-                infos[0].TryAssign(logicComponent, firstLogicComponent);
-                EditorUtility.SetDirty(logicComponent);
-            }
-
-            isDragging = false;
-        }
+        public bool GetIfOptionSelected();
+        public object GetOption();
     }
-    private int recursionInfiniteLoopProtection;
-    private bool IsInfiniteLoop(LogicComponent startingComponent, LogicComponent currentComponent)
+    public class SelectorWindow<T> : SelectorWindowNonGeneric
     {
-        if (currentComponent == null)
-            return false;
+        private GUIStyle buttonStyle;
+        private string title;
+        private T[] returnItems;
+        private Func<T, string> itemToString;
 
-        if (recursionInfiniteLoopProtection++ > 5000)
-        {
-            Debug.LogError("You either got 5000 LogicComponents linked together and I stopped whatever madness you were trying to do, " +
-                "or you have an infinite loop somewhere in your LogicComponents. (Or I possibly programmed this wrong)");
-            return true;
-        }
-
-        if (startingComponent == currentComponent)
-            return true;
-
-        LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(currentComponent.GetType());
-        foreach (LogicComponentHandleInfo info in infos)
-        {
-            if (typeof(LogicComponent).IsAssignableFrom(info.field.FieldType))
-            {
-                LogicComponent linkedComponent = (LogicComponent)info.field.GetValue(currentComponent);
-                if (IsInfiniteLoop(startingComponent, linkedComponent))
-                    return true;
-            }
-            else if (typeof(List<LogicComponent>).IsAssignableFrom(info.field.FieldType))
-            {
-                List<LogicComponent> linkedComponentList = (List<LogicComponent>)info.field.GetValue(currentComponent);
-                if (linkedComponentList == null)
-                    return false;
-                foreach (LogicComponent linkedComponent in linkedComponentList)
-                {
-                    if (IsInfiniteLoop(startingComponent, linkedComponent))
-                        return true;
-                }
-            }
-            else
-            {
-                Debug.LogWarning("Infinite loop check for LogicComponent chains was not defined for this type. Allowing link for now");
-                return false;
-            }
-        }
-        return false;
-    }
-
-
-    public class LinkerToolPopupWindow
-    {
-        public bool readyToDestroy;
-
-        private bool clearing;
-
-        public Rect windowRect;
+        private T selectedItem;
+        private bool itemHasBeenSelected;
 
         private GUID windowID;
+        private Rect windowArea;
 
-        private LogicComponent logicComponent;
-        private LogicComponent firstLogicComponent;
-        private List<LogicComponentHandleInfo> infos = new List<LogicComponentHandleInfo>();
-
-        public LinkerToolPopupWindow(LogicComponent logicComponent, LogicComponent firstLogicComponent, LogicComponentHandleInfo[] infos, bool clearing = false)
+        public SelectorWindow(string title, T[] returnItems, Func<T, string> itemToString)
         {
-            this.logicComponent = logicComponent;
-            this.firstLogicComponent = firstLogicComponent;
-            this.infos.AddRange(infos);
-            this.clearing = clearing;
+            this.buttonStyle = new GUIStyle(EditorStyles.miniButton);
+            this.buttonStyle.richText = true;
 
-            windowRect.size = new Vector2(200, infos.Length * 20);
-            windowRect.center = Event.current.mousePosition;
-
+            this.title = title;
+            this.returnItems = returnItems;
+            this.itemToString = itemToString;
+            this.itemHasBeenSelected = false;
+            CalculateWindowArea();
+        }
+        private void CalculateWindowArea()
+        {
             windowID = new GUID();
-        }
-        public void RenderWindow()
-        {
-            GUILayout.Window(windowID.GetHashCode(), windowRect, LayoutWindow, "Which Signal?");
-        }
-        public void LayoutWindow(int window)
-        {
-            bool pressedButton = false;
 
-            for (int i = 0; i < infos.Count; i++)
+            float width = 100f;
+            foreach (T item in returnItems)
+                width = Mathf.Max(width, buttonStyle.CalcSize(new GUIContent(itemToString.Invoke(item))).x);
+            float height = returnItems.Length * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
+
+            windowArea.size = new Vector2(width, height);
+            windowArea.center = Event.current.mousePosition;
+        }
+
+        public bool GetIfOptionSelected()
+        {
+            windowArea = GUILayout.Window(windowID.GetHashCode(), windowArea, LayoutWindow, title);
+            return itemHasBeenSelected;
+        }
+        public object GetOption() => selectedItem;
+        private void LayoutWindow(int window)
+        {
+            foreach (T item in returnItems)
             {
-                if (GUILayout.Button(infos[i].field.Name))
+                if (GUILayout.Button(itemToString.Invoke(item), buttonStyle))
                 {
-                    pressedButton = true;
-                    if (!clearing)
-                        AssignLogicComponent(infos[i]);
-                    else
-                        UnAssignLogicComponent(infos[i]);
+                    selectedItem = item;
+                    itemHasBeenSelected = true;
                 }
             }
+        }
+    }
 
-            if (pressedButton)
-                readyToDestroy = true;
-        }
-        private void AssignLogicComponent(LogicComponentHandleInfo info)
+    public void AddValueFieldsToHandle(params LogicValueField[] valueFields)
+    {
+        foreach(LogicValueField valueField in valueFields)
+            AddValueFieldsToHandle(valueField);
+    }
+    public void AddValueFieldsToHandle(LogicValueField valueField)
+    {
+        for (int i = 0; i < handles.Count; i++)
         {
-            Undo.RecordObject(logicComponent, "Link LogicComponent Input from " + firstLogicComponent.name + " to " + logicComponent.name);
-            info.TryAssign(logicComponent, firstLogicComponent);
-            EditorUtility.SetDirty(logicComponent);
+            if (handles[i].handleTarget == valueField.handleTarget)
+            {
+                handles[i].Add(valueField);
+                return;
+            }
         }
-        private void UnAssignLogicComponent(LogicComponentHandleInfo info)
-        {
-            Undo.RecordObject(logicComponent, "Clearing any LogicComponent inputs on " + logicComponent.name);
-            info.TryClear(logicComponent);
-            EditorUtility.SetDirty(logicComponent);
-        }
+        Handle newHandle = new Handle(valueField.handleTarget);
+        newHandle.Add(valueField);
+        handles.Add(newHandle);
     }
 }

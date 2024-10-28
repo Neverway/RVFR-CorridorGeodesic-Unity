@@ -47,7 +47,8 @@ MonoBehaviour:
   _isPowered: 0
   animator: {fileID: 0}
   powerLogicComponent:
-    handleTarget: {fileID: 2996630924731091107}
+    editorHandles_handleTarget: {fileID: 2996630924731091107}
+    editorHandles_customName: Output
     value: 0
     sourceField:
       EDITOR_targetGameObject: {fileID: 8854582770140202501}
@@ -88,8 +89,8 @@ Transform:
   - {fileID: 7004789626373858826}
   - {fileID: 617392572932219441}
   - {fileID: 8344977692671718992}
-  - {fileID: 8093076018080776568}
   - {fileID: 8527314816277511722}
+  - {fileID: 8093076018080776568}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3503323127223068314
@@ -138,7 +139,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   someComponent: {fileID: 3552310444166639312}
   isLogicComponentPowered:
-    handleTarget: {fileID: 8344977692671718992}
+    editorHandles_handleTarget: {fileID: 8344977692671718992}
+    editorHandles_customName: Right Floor Button
     value: 0
     OnOutputChanged:
       m_PersistentCalls:
@@ -220,7 +222,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   someComponent: {fileID: 3984328735731159426}
   isLogicComponentPowered:
-    handleTarget: {fileID: 617392572932219441}
+    editorHandles_handleTarget: {fileID: 617392572932219441}
+    editorHandles_customName: Left Floor Button
     value: 0
     OnOutputChanged:
       m_PersistentCalls:
@@ -303,7 +306,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputA:
-    handleTarget: {fileID: 206123665602342977}
+    editorHandles_handleTarget: {fileID: 206123665602342977}
+    editorHandles_customName: 
     value: 0
     sourceField:
       EDITOR_targetGameObject: {fileID: 5893741548833144883}
@@ -311,7 +315,8 @@ MonoBehaviour:
       targetComponent: {fileID: 4323824957931830705}
       fieldName: isLogicComponentPowered
   inputB:
-    handleTarget: {fileID: 2505085305757970609}
+    editorHandles_handleTarget: {fileID: 2505085305757970609}
+    editorHandles_customName: 
     value: 0
     sourceField:
       EDITOR_targetGameObject: {fileID: 3503323127223068314}
@@ -319,11 +324,22 @@ MonoBehaviour:
       targetComponent: {fileID: 2403313380151851044}
       fieldName: isLogicComponentPowered
   output:
-    handleTarget: {fileID: 7004789626373858826}
+    editorHandles_handleTarget: {fileID: 0}
+    editorHandles_customName: AND Gate Output
     value: 0
     OnOutputChanged:
       m_PersistentCalls:
         m_Calls: []
+  TESTINGGGG: 0
+  someFilter:
+    rid: -2
+  someField: {fileID: 0}
+  someField2: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1001 &704658562899283635
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -332,6 +348,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6431729295340827147}
     m_Modifications:
+    - target: {fileID: 2022625659131364856, guid: 6d8401619d10b1a44bb5d2cd6dcc5012,
+        type: 3}
+      propertyPath: inputSignal
+      value: 
+      objectReference: {fileID: 6056152739550270718}
     - target: {fileID: 6343129428308208430, guid: 6d8401619d10b1a44bb5d2cd6dcc5012,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -406,6 +427,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6431729295340827147}
     m_Modifications:
+    - target: {fileID: 3397088360405504864, guid: 266912a0256cca04f9a7dff5edb90a8d,
+        type: 3}
+      propertyPath: m_Name
+      value: Volume3DTriggerEvent (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 7585677182710121538, guid: 266912a0256cca04f9a7dff5edb90a8d,
         type: 3}
       propertyPath: m_Name
@@ -492,10 +518,15 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6431729295340827147}
     m_Modifications:
+    - target: {fileID: 3397088360405504864, guid: 266912a0256cca04f9a7dff5edb90a8d,
+        type: 3}
+      propertyPath: m_Name
+      value: Volume3DTriggerEvent (2)
+      objectReference: {fileID: 0}
     - target: {fileID: 7585677182710121538, guid: 266912a0256cca04f9a7dff5edb90a8d,
         type: 3}
       propertyPath: m_Name
-      value: Button Floor Large
+      value: Button Floor Large (2)
       objectReference: {fileID: 0}
     - target: {fileID: 7949558051162055028, guid: 266912a0256cca04f9a7dff5edb90a8d,
         type: 3}

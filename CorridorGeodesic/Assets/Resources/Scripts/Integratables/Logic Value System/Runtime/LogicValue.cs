@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,14 +8,19 @@ namespace Neverway.Framework.LogicValueSystem
 {
     public interface LogicValue
     {
-        public Transform GetHandleTarget();
+        public Transform EditorHandles_GetHandle();
+        public string EditorHandles_GetCustomName();
         public abstract Type GetLogicValueType();
+
+        public abstract LogicValue GetClone();
     }
     
     [Serializable]
     public abstract class LogicValue<T> : LogicValue
     {
-        [SerializeField] protected Transform handleTarget;
+        [SerializeField] protected Transform editorHandles_handleTarget;
+        [SerializeField] protected string editorHandles_customName = "";
+
 
         [SerializeField] protected T value;
         public virtual T Get() => value;
@@ -23,8 +30,32 @@ namespace Neverway.Framework.LogicValueSystem
             value = defaultValue; 
         }
 
-        public Transform GetHandleTarget() => handleTarget;
+        public Transform EditorHandles_GetHandle() => editorHandles_handleTarget;
+        public string EditorHandles_GetCustomName() => editorHandles_customName;
         public Type GetLogicValueType() => typeof(T);
+
+        public LogicValue GetClone()
+        {
+            if (this is LogicInput<T> input)
+            {
+                LogicInput<T> toReturn = new LogicInput<T>(value);
+                toReturn.sourceField = input.sourceField;
+                toReturn.editorHandles_handleTarget = input.editorHandles_handleTarget;
+                toReturn.editorHandles_customName = input.editorHandles_customName;
+
+                return toReturn;
+            }
+            if (this is LogicOutput<T> output)
+            {
+                LogicOutput<T> toReturn = new LogicOutput<T>(value);
+                toReturn.OnOutputChanged = output.OnOutputChanged;
+                toReturn.editorHandles_handleTarget = output.editorHandles_handleTarget;
+                toReturn.editorHandles_customName = output.editorHandles_customName;
+
+                return toReturn;
+            }
+            throw new Exception("Cannot Clone: LogicValue was neither a LogicInput nor a LogicOutput");
+        }
 
         public static implicit operator T(LogicValue<T> logicValue) => logicValue.Get();
     }
@@ -33,6 +64,8 @@ namespace Neverway.Framework.LogicValueSystem
     {
         public abstract bool HasLogicOutputSource { get; }
         public abstract LogicOutput GetSourceLogicOutput();
+        public abstract Component GetSourceLogicOutputComponent();
+        public abstract object SetFieldReference(Component component, string fieldName);
     }
     [Serializable]
     public class LogicInput<T> : LogicValue<T>, LogicInput
@@ -40,11 +73,23 @@ namespace Neverway.Framework.LogicValueSystem
         [SerializeField] public ComponentFieldReference<LogicOutput<T>> sourceField;
 
         public LogicInput(T defaultValue) : base(defaultValue) { }
-        public override T Get() => HasLogicOutputSource ? value = sourceField.GetCached().Get() : base.Get();
-        public void CallOnSourceChanged(UnityAction action) => sourceField.GetCached().OnOutputChanged.AddListener(action);
+        public override T Get() => HasLogicOutputSource ? value = sourceField.Get() : base.Get();
+        public void CallOnSourceChanged(UnityAction action) => sourceField.Get().OnOutputChanged.AddListener(action);
 
         public bool HasLogicOutputSource => !sourceField.IsUndefined;
-        public LogicOutput GetSourceLogicOutput() => (HasLogicOutputSource ? sourceField.GetCached() as LogicOutput : null);
+        public LogicOutput GetSourceLogicOutput() => HasLogicOutputSource ? sourceField.Get() as LogicOutput : null;
+        public Component GetSourceLogicOutputComponent() => HasLogicOutputSource ? sourceField.GetTargetComponent() : null;
+        public object SetFieldReference(Component component, string fieldName)
+        {
+            if (component == null)
+                throw new ArgumentNullException(nameof(component));
+
+            if (component.GetType().GetField(fieldName) == null)
+                throw new ArgumentException($"{component.name} does not contain field named \"{fieldName}\"");
+
+            sourceField = new ComponentFieldReference<LogicOutput<T>>(component, fieldName);
+            return sourceField;
+        }
     }
 
     public interface LogicOutput : LogicValue

@@ -9,7 +9,8 @@ public class LogicInputDrawer : EasyDrawer
 {
     string sourceField = "sourceField";
     string value = "value";
-    string handle = "handleTarget";
+    string handle = "editorHandles_handleTarget";
+    string customName = "editorHandles_customName";
 
     string _hideTypeFilterText = "EDITOR_hideTypeFilterText";
     string _fieldName = "fieldName";
@@ -37,6 +38,7 @@ public class LogicInputDrawer : EasyDrawer
         if (showHandleField)
         {
             contents.Add(new Property(property[handle]));
+            contents.Add(new Property(property[customName]));
             contents.Add(new Divider());
         }
 

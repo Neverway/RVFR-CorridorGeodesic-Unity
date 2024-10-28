@@ -2,13 +2,16 @@ using Neverway.Framework.LogicValueSystem;
 using System;
 using UnityEngine;
 
-[HelpURL("Assets/TestHTML.html")]
 public class TEST_Component : MonoBehaviour
 { 
     public LogicInput<bool> inputA = new(false);
     public LogicInput<bool> inputB = new(false);
 
     public LogicOutput<bool> output;
+
+    [Space]
+    public int TESTINGGGG = 0;  
+    [Space]
 
     [SerializeReference][Polymorphic] public Filter someFilter;
     [Polymorphic] public Transform someField;

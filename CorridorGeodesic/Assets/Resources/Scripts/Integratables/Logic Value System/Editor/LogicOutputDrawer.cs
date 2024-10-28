@@ -8,8 +8,8 @@ public class LogicOutputDrawer : EasyDrawer
 {
     string value = "value";
     string OnOutputChanged = "OnOutputChanged";
-    string handle = "handleTarget";
-
+    string handle = "editorHandles_handleTarget";
+    string customName = "editorHandles_customName";
     bool showHandleField = true;
 
     public override DrawerObject OnGUIEasyDrawer(VerticalGroup contents)
@@ -24,6 +24,7 @@ public class LogicOutputDrawer : EasyDrawer
         if (showHandleField)
         {
             contents.Add(new Property(property[handle]));
+            contents.Add(new Property(property[customName]));
             contents.Add(new Divider());
         }
 
