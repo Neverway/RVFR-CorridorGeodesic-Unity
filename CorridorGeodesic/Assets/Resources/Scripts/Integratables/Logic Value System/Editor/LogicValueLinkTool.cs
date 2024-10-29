@@ -1,42 +1,34 @@
-using DG.Tweening;
 using Neverway.Framework.LogicValueSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Unity.Collections.LowLevel.Unsafe;
-using Unity.Plastic.Newtonsoft.Json.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.EditorTools;
-using UnityEditor.Rendering;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 //[EditorTool("Logic Value Link Tool")]
 public class LogicValueLinkTool : EditorTool
 {
     #region EditorTool Setup
-    public static bool ShowGUIInScene = false;
 
     [InitializeOnLoadMethod]
-    public static void StartGUIToggled()
+    public static void Initialize()
     {
-        ShowGUIInScene = false;
-        ToggleSceneGUI();
+        LogicValueLinkToolSettings.Instance.OnSettingsValidate += OnSettingsChanged;
+        OnSettingsChanged();
     }
-    [MenuItem("Neverway/Logic Value Link Tool/Toggle Scene GUI")]
-    public static void ToggleSceneGUI()
+    public static void OnSettingsChanged()
     {
-        ShowGUIInScene = !ShowGUIInScene;
-        if (ShowGUIInScene)
+        if (LogicValueLinkToolSettings.Instance.showSceneGUI)
         {
             SceneView.duringSceneGui += OnSceneGUI;
         }
         else
         {
-            SceneView.duringSceneGui -= OnSceneGUI;
             SceneView.duringSceneGui -= OnSceneGUI;
         }
     }
@@ -50,21 +42,38 @@ public class LogicValueLinkTool : EditorTool
 
         //Offset from probuilderbar
         toolButtonArea.x += 85;
+
         GUIStyle style = new GUIStyle(EditorStyles.miniButton);
-        //style.padding = new RectOffset();
         style.fixedHeight = toolButtonArea.height;
-        //EditorGUI.DrawRect(toolButtonArea, Color.white);
 
         if (IsCurrentTool != EditorGUI.Toggle(toolButtonArea, IsCurrentTool, style))
             SetAsCurrentTool();
 
-        if (IsCurrentTool)
+        if (!IsCurrentTool)
         {
+            try
+            {
+                BeforeGUI();
+                toolButtonArea.y += toolButtonArea.height;
+                EditorGUI.LabelField(toolButtonArea, $"links: {links.Length}");
 
-        }
-        else
-        {
-            
+                foreach (ValueLink link in links)
+                {
+                    link.DrawJustForDisplay();
+                }
+                Handle lastHandle = null;
+                foreach (Handle handle in Handle.SortByDistanceToCamera(handles.ToArray()))
+                {
+                    lastHandle = handle;
+                    handle.DrawJustForDisplay();
+                }
+                SceneView.RepaintAll();
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                ClearALL();
+            }
         }
         Handles.EndGUI();
     }
@@ -83,6 +92,7 @@ public class LogicValueLinkTool : EditorTool
 
         lastToolType = Tools.current;
         ToolManager.SetActiveTool<LogicValueLinkTool>();
+        RESET();
         ToolManager.activeToolChanged += ClearLastToolType;
     }
     public static void ClearLastToolType()
@@ -123,27 +133,27 @@ public class LogicValueLinkTool : EditorTool
     }
     #endregion
 
-    private const float HANDLESIZE_POI = 0.3f;
-    private const float HANDLESIZE_UNIMPORTANT = 0.15f;
+    public enum LogicValueLinkState { EditorToolClosed, LookingForOutput, SelectingOutputFromWindow, LookingForInput, SelectingInputFromWindow, LinkCompleted }
+    public static LogicValueLinkState currentLogicValueLinkState = LogicValueLinkState.EditorToolClosed;
 
     private static LogicValueField grabbedOutput = null;
     private static LogicValueField targetInput = null;
     private static SelectorWindowNonGeneric currentWindow = null;
-    public bool NotCurrentlyDoingAnything => LookingForOutput && currentWindow == null;
-    public static bool LookingForOutput => grabbedOutput == null && targetInput == null;
+    public static bool NotCurrentlyDoingAnything => LookingForOutput && currentWindow == null;
+    public static bool LookingForOutput => grabbedOutput == null && targetInput == null && IsCurrentTool;
     public static bool LookingForInput => grabbedOutput != null && targetInput == null;
     public static bool LinkHasFinished => grabbedOutput != null && targetInput != null;
 
-    private List<Handle> handles;
+    private static List<Handle> handles;
     private static Transform sceneViewCameraTransform;
-    private LogicValueField[] inputs;
-    private LogicValueField[] outputs;
-    private ValueLink[] links;
-    private Dictionary<Component, LogicValueField[]> logicValues;
-    private Component[] componentsWithLogicValues;
-    private Dictionary<Type, FieldInfo[]> logicValueFieldInfos;
-    private Type[] typesWithLogicValues;
-    private Component[] allComponents;
+    private static LogicValueField[] inputs;
+    private static LogicValueField[] outputs;
+    private static ValueLink[] links;
+    private static Dictionary<Component, LogicValueField[]> logicValues;
+    private static Component[] componentsWithLogicValues;
+    private static Dictionary<Type, FieldInfo[]> logicValueFieldInfos;
+    private static Type[] typesWithLogicValues;
+    private static Component[] allComponents;
 
     public static GUIStyle labelStyle;
 
@@ -184,42 +194,97 @@ public class LogicValueLinkTool : EditorTool
     }
     public class Handle
     {
+        public LogicValueLinkState currentStyleState;
+        public HandleStyle currentStyle;
+
         public SelectorWindowNonGeneric window;
         public Transform handleTarget;
         public List<LogicValueField> inputs;
         public List<LogicValueField> outputs;
         
-        public bool HasOutputs => outputs.Count > 0;
-        public bool HasMultipleOutputs => outputs.Count > 1;
-        public bool HasInputs => ValidInputs.Length > 0;
-        public bool HasMultipleInputs => ValidInputs.Length > 1;
-        public LogicValueField[] ValidInputs => GetCachedValidInputs();
+        public int OutputsAssigned => outputs.Count;
+        public int InputsAssigned => inputs.Count;
+        public int InputsFiltered => GetFilteredInputs().Length;
+        public int ValuesAssigned => OutputsAssigned + InputsAssigned;
+        public int ValuesFiltered => OutputsAssigned + InputsFiltered;
 
-        private LogicValueField[] cachedValidInputs;
-        private Type cachedValidInputsType;
+        public LogicValueField SingleValueFieldAssigned => 
+            (InputsAssigned > 0 ? inputs[0] : 
+            (OutputsAssigned > 0 ? outputs[0] : null));
+        public LogicValueField SingleValueFieldFiltered =>
+            (InputsFiltered > 0 ? GetFilteredInputs()[0] :
+            (OutputsAssigned > 0 ? outputs[0] : null));
+
+        public bool HasMultipleValuesAssigned => (inputs.Count + outputs.Count) > 1;
+
+        private LogicValueField[] cachedFilteredInputs;
+        private Type cachedFilteredInputsType;
+
+        private const float HANDLESIZE_POI = 0.3f;
+        private const float HANDLESIZE_UNIMPORTANT = 0.15f;
 
         public Handle(Transform handleTarget)
         {
             if (handleTarget == null)
                 throw new ArgumentNullException(nameof(handleTarget));
 
-            this.cachedValidInputsType = typeof(object);
-            this.cachedValidInputs = new LogicValueField[0];
+            this.cachedFilteredInputsType = typeof(object);
+            this.cachedFilteredInputs = new LogicValueField[0];
             this.window = null;
             this.handleTarget = handleTarget;
             this.inputs = new List<LogicValueField>();
             this.outputs = new List<LogicValueField>();
+
+            this.currentStyle = new HandleStyle(this);
         }
         public void Add(params LogicValueField[] logicvalues)
         {
             foreach (LogicValueField value in logicvalues)
                 (value.IsInput ? inputs : outputs).Add(value);
 
-            cachedValidInputsType = null;
+            cachedFilteredInputsType = null;
         }
 
+        public void DrawJustForDisplay()
+        {
+            if(Handles.Button(handleTarget.position, capDirection, HANDLESIZE_UNIMPORTANT, HANDLESIZE_UNIMPORTANT, CapForDisplay))
+            {
+                GameObject targetObject = handleTarget.gameObject;
+                if (ValuesAssigned == 0)
+                {
+                    LogicValueField[] valueFields = GetRelevantValueFields();
+                    targetObject = valueFields[0].onComponent.gameObject;
+                    for (int i = 1; i < valueFields.Length; i++)
+                    {
+                        if (valueFields[i].onComponent.gameObject != targetObject)
+                        {
+                            targetObject = handleTarget.gameObject;
+                            break;
+                        }
+                    }
+                }
+                if (Event.current.modifiers == EventModifiers.Shift)
+                {
+                    UnityEngine.Object[] currentSelection = Selection.gameObjects;
+                    if (!ArrayUtility.Contains(currentSelection, targetObject))
+                        ArrayUtility.Add(ref currentSelection, targetObject);
+
+                    Selection.activeGameObject = targetObject;
+                    Selection.objects = currentSelection;
+                }
+                else
+                    Selection.SetActiveObjectWithContext(targetObject, targetObject);
+            }
+            DrawLable(0.4f, false);
+        }
         public void ProcessHandle()
         {
+            if (currentStyleState != currentLogicValueLinkState)
+            {
+                currentStyleState = currentLogicValueLinkState;
+                currentStyle = new HandleStyle(this);
+            }
+
             if (window != null)
             {
                 ProcessWindow();
@@ -249,7 +314,7 @@ public class LogicValueLinkTool : EditorTool
         }
         private void ProcessOutputs()
         {
-            if (!HasOutputs)
+            if (OutputsAssigned == 0)
             {
                 HandleDrawUnimportant();
                 return;
@@ -257,7 +322,7 @@ public class LogicValueLinkTool : EditorTool
 
             if (HandleButtonPressed())
             {
-                if (HasMultipleOutputs)
+                if (OutputsAssigned > 1)
                     currentWindow = window = new SelectorWindow<LogicValueField>("Select Output", outputs.ToArray(), ValueName);
                 else
                     grabbedOutput = outputs[0];
@@ -265,30 +330,30 @@ public class LogicValueLinkTool : EditorTool
         }
         private void ProcessInputs()
         {
-            if (!HasInputs)
+            if (InputsFiltered == 0)
             {
                 HandleDrawUnimportant();
                 return;
             }
             if (HandleButtonPressed())
             {
-                if (HasMultipleInputs)
-                    currentWindow = window = new SelectorWindow<LogicValueField>("Select Input", GetCachedValidInputs(), ValueName);
+                if (InputsFiltered > 1)
+                    currentWindow = window = new SelectorWindow<LogicValueField>("Select Input", GetFilteredInputs(), ValueName);
                 else
-                    targetInput = GetCachedValidInputs()[0];
+                    targetInput = GetFilteredInputs()[0];
             }
         }
-        private LogicValueField[] GetCachedValidInputs(bool forceCache = false)
+        private LogicValueField[] GetFilteredInputs(bool forceCache = false)
         {
             if (LookingForOutput)
                 return inputs.ToArray();
 
             if (!forceCache)
-                if (cachedValidInputsType == grabbedOutput.LogicValueType)
-                    return cachedValidInputs;
+                if (cachedFilteredInputsType == grabbedOutput.LogicValueType)
+                    return cachedFilteredInputs;
 
-            Type cacheType = cachedValidInputsType = grabbedOutput.LogicValueType;
-            return cachedValidInputs = inputs.Where(o => cacheType.IsAssignableFrom(o.LogicValueType)).ToArray();
+            Type cacheType = cachedFilteredInputsType = grabbedOutput.LogicValueType;
+            return cachedFilteredInputs = inputs.Where(o => cacheType.IsAssignableFrom(o.LogicValueType)).ToArray();
         }
         private bool HandleButtonPressed()
         {
@@ -306,7 +371,7 @@ public class LogicValueLinkTool : EditorTool
             DrawLable(0.5f);
         }
 
-        private void DrawLable(float factor = 1f)
+        private void DrawLable(float factor = 1f, bool affectAlpha = true)
         {
             string handleName;
             LogicValueField[] relevantValueFields = GetRelevantValueFields();
@@ -322,10 +387,14 @@ public class LogicValueLinkTool : EditorTool
             GUIStyle myHandleStyle = new GUIStyle(labelStyle);
             myHandleStyle.fontSize = Mathf.RoundToInt(distanceFactor);
             Color newColor = myHandleStyle.normal.textColor;
-            newColor.a = factor;
+
+            if (affectAlpha)
+                newColor.a = factor;
+
+
             myHandleStyle.normal.textColor = newColor;
             //Vector3 shadowPos = labelPosition + (sceneViewCameraTransform.right + (sceneViewCameraTransform.up * -1)) * 0.1f;
-            if (!IsUnimportant)
+            if (!IsUnimportant || !IsCurrentTool)
             {
                 GUIStyle shadowStyle = new GUIStyle(myHandleStyle);
                 shadowStyle.contentOffset = new Vector2(1, 1);
@@ -338,8 +407,12 @@ public class LogicValueLinkTool : EditorTool
         }
 
         private Handles.CapFunction Cap =>
-                GetRelevantValueFields().Length == 1 ? Handles.SphereHandleCap : 
-                (GetRelevantValueFields().Length == 0 ? Handles.CircleHandleCap : Handles.CubeHandleCap);
+            GetRelevantValueFields().Length == 1 ? Handles.SphereHandleCap : 
+            (GetRelevantValueFields().Length == 0 ? Handles.CircleHandleCap : Handles.CubeHandleCap);
+        private Handles.CapFunction CapForDisplay =>
+            GetRelevantValueFields().Length == 1 ? Handles.CircleHandleCap :
+            (GetRelevantValueFields().Length == 0 ? Handles.SphereHandleCap : Handles.RectangleHandleCap);
+
         private Quaternion capDirection => (GetRelevantValueFields().Length > 1 ? Quaternion.identity :
             Quaternion.LookRotation(sceneViewCameraTransform.forward, sceneViewCameraTransform.up));
 
@@ -347,6 +420,7 @@ public class LogicValueLinkTool : EditorTool
             $"<size=10>{valueField.onComponent.name}</size>: <b>{valueField.valueName}</b>";
 
         private bool IsUnimportant => GetRelevantValueFields().Length == 0;
+       
         private LogicValueField[] GetRelevantValueFields()
         {
             if (LookingForOutput)
@@ -355,7 +429,7 @@ public class LogicValueLinkTool : EditorTool
             }
             else if (LookingForInput)
             {
-                return GetCachedValidInputs();
+                return GetFilteredInputs();
             }
             List<LogicValueField> valueFields = new List<LogicValueField>();
             valueFields.AddRange(inputs);
@@ -426,6 +500,70 @@ public class LogicValueLinkTool : EditorTool
             return (h1.handleTarget.position - sceneViewCameraTransform.position).sqrMagnitude <
                 (h2.handleTarget.position - sceneViewCameraTransform.position).sqrMagnitude;
         }
+    
+    
+        public struct HandleStyle
+        {
+            public LogicValueField[] relevantValues;
+
+            //Handle Info
+            public Handles.CapFunction handleCap;
+            public float handleSize;
+            public Transform handlePosition;
+            public Color handleColor;
+
+            //Label info
+            public GUIStyle labelStyle;
+            public GUIStyle labelShadow;
+            public string labelText;
+
+            public static bool IsUsingTool => currentLogicValueLinkState != LogicValueLinkState.EditorToolClosed;
+
+            public HandleStyle(Handle handle)
+            {
+                this.relevantValues = handle.GetRelevantValueFields();
+                this.handlePosition = handle.handleTarget;
+
+                this.handleCap = GetCap(this.relevantValues);
+                this.handleSize = 2f;
+                this.handleColor = Color.white;
+
+                this.labelStyle = null;
+                this.labelShadow = null;
+                this.labelText = null;
+            }
+
+            public bool Draw(Vector3 position)
+            {
+
+                return false;
+            }
+            public void DrawLable()
+            {
+
+            }
+
+
+            public static Handles.CapFunction GetCap(LogicValueField[] relevantValues)
+            {
+                Handles.CapFunction capToReturn;
+
+                //If there are NO relevant values:
+                if (relevantValues.Length == 0)
+                    capToReturn = Handles.CircleHandleCap;
+
+                //If there is exactly ONE relevant value:
+                else if (relevantValues.Length == 1)
+                    capToReturn = (IsUsingTool ? Handles.SphereHandleCap : Handles.CircleHandleCap);
+
+                //If there is MULTIPLE relevant values:
+                else
+                    capToReturn = (IsUsingTool ? Handles.CubeHandleCap : Handles.RectangleHandleCap);
+
+                return capToReturn;
+            }
+        }
+    
     }
     public struct ValueLink
     {
@@ -458,11 +596,30 @@ public class LogicValueLinkTool : EditorTool
             }
             Handles.color = old;
         }
+        public void DrawJustForDisplay()
+        {
+            //Color old = Handles.color;
+            //Handles.color = Color.white;
+
+            Vector3 delta = end.position - start.position;
+
+            Vector3 offsetDirection = Vector3.Cross(delta, sceneViewCameraTransform.forward);
+            offsetDirection = offsetDirection.normalized * 0.05f;
+
+            //Vector3 gapPosition = start.position + (delta * 0.8f);
+            //Vector3 gapOffset = delta.normalized * Mathf.Min(0.1f, delta.magnitude * 0.05f);
+
+            EditorGUILayout.LabelField($"{start.position} -> {end.position}");
+            Handles.DrawLine(start.position + offsetDirection, end.position, 3f);
+            Handles.DrawLine(start.position - offsetDirection, end.position, 3f);
+
+            //Handles.color = old;
+        }
     }
 
-    private void CacheFieldInfos()
+    private static void CacheFieldInfos()
     {
-        if (!LookingForOutput)
+        if (LookingForInput)
             return;
 
         if (logicValueFieldInfos != null)
@@ -498,9 +655,9 @@ public class LogicValueLinkTool : EditorTool
         }
         typesWithLogicValues = uniqueTypesWithLogicValues.ToArray();
     }
-    private void CacheLogicValues()
+    private static void CacheLogicValues()
     {
-        if (!LookingForOutput)
+        if (LookingForInput)
             return;
 
         if (logicValues != null)
@@ -563,17 +720,17 @@ public class LogicValueLinkTool : EditorTool
         AddValueFieldsToHandle(outputs); 
     }
 
-    private void RESET()
+    private static void RESET()
     {
         ClearALL();
         SceneView.RepaintAll();
     }
-    private void ClearLogicValuesCacheAndSelectedValues()
+    private static void ClearLogicValuesCacheAndSelectedValues()
     {
         ClearLogicValuesCache();
         ClearSelectedValues();
     }
-    private void ClearLogicValuesCache()
+    private static void ClearLogicValuesCache()
     {
         componentsWithLogicValues = null;
         logicValues = null;
@@ -583,19 +740,19 @@ public class LogicValueLinkTool : EditorTool
         handles = null;
         links = null;
     }
-    private void ClearSelectedValues()
+    private static void ClearSelectedValues()
     {
         grabbedOutput = null;
         targetInput = null;
         currentWindow = null;
     }
-    private void ClearLogicValueFieldInfos()
+    private static void ClearLogicValueFieldInfos()
     {
         logicValueFieldInfos = null;
         typesWithLogicValues = null;
         allComponents = null;
     }
-    private void ClearALL() 
+    private static void ClearALL() 
     {
         ClearLogicValueFieldInfos();
         ClearLogicValuesCacheAndSelectedValues();
@@ -604,14 +761,10 @@ public class LogicValueLinkTool : EditorTool
     public override void OnToolGUI(EditorWindow window)
     {
         if (!(window is SceneView)) return;
-        if (NotCurrentlyDoingAnything && (Event.current.isKey))
-            ClearALL();
-
+        
         try
         {
-            CacheFieldInfos();
-            CacheLogicValues();
-
+            BeforeGUI();
             DrawGUI();
         }
         catch (Exception e)
@@ -621,19 +774,27 @@ public class LogicValueLinkTool : EditorTool
         }
         SceneView.RepaintAll();
     }
-    public void DrawGUI()
+    public static void BeforeGUI()
     {
+        if (NotCurrentlyDoingAnything && (Event.current.isKey))
+            ClearALL();
+
+        CacheFieldInfos();
+        CacheLogicValues();
+
         if (labelStyle == null)
         {
             labelStyle = new GUIStyle();
             labelStyle.alignment = TextAnchor.MiddleCenter;
             labelStyle.fontStyle = FontStyle.Bold;
             labelStyle.normal.textColor = Color.white;
-        } 
+        }
 
         if (sceneViewCameraTransform == null)
             sceneViewCameraTransform = SceneView.lastActiveSceneView.camera.transform;
-
+    }
+    public void DrawGUI()
+    {
         foreach (ValueLink link in links)
         {
             link.Draw(Color.white, 1f);
@@ -734,12 +895,12 @@ public class LogicValueLinkTool : EditorTool
         }
     }
 
-    public void AddValueFieldsToHandle(params LogicValueField[] valueFields)
+    public static void AddValueFieldsToHandle(params LogicValueField[] valueFields)
     {
         foreach(LogicValueField valueField in valueFields)
             AddValueFieldsToHandle(valueField);
     }
-    public void AddValueFieldsToHandle(LogicValueField valueField)
+    public static void AddValueFieldsToHandle(LogicValueField valueField)
     {
         for (int i = 0; i < handles.Count; i++)
         {
