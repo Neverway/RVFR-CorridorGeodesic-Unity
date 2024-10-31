@@ -6,16 +6,8 @@ public class TEST_Component : MonoBehaviour
 { 
     public LogicInput<bool> inputA = new(false);
     public LogicInput<bool> inputB = new(false);
-
     public LogicOutput<bool> output;
 
-    [Space]
-    public int TESTINGGGG = 0;  
-    [Space]
-
-    [SerializeReference][Polymorphic] public Filter someFilter;
-    [Polymorphic] public Transform someField;
-    [Polymorphic] public Transform someField2;
     public void Awake()
     {
         inputA.CallOnSourceChanged(OnInputUpdate);
@@ -27,6 +19,18 @@ public class TEST_Component : MonoBehaviour
         output.Set(inputA.Get() && inputB.Get());
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 [Serializable]
 public class BaseClass
 {

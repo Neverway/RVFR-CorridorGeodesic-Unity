@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,6 +6,7 @@ namespace Neverway.Framework.LogicValueSystem
 {
     public interface LogicValue
     {
+        public bool EditorHandles_GetShowHandle();
         public Transform EditorHandles_GetHandle();
         public string EditorHandles_GetCustomName();
         public abstract Type GetLogicValueType();
@@ -18,9 +17,9 @@ namespace Neverway.Framework.LogicValueSystem
     [Serializable]
     public abstract class LogicValue<T> : LogicValue
     {
+        [SerializeField] protected bool editorHandles_showHandle = true;
         [SerializeField] protected Transform editorHandles_handleTarget;
         [SerializeField] protected string editorHandles_customName = "";
-
 
         [SerializeField] protected T value;
         public virtual T Get() => value;
@@ -29,7 +28,7 @@ namespace Neverway.Framework.LogicValueSystem
         {
             value = defaultValue; 
         }
-
+        public bool EditorHandles_GetShowHandle() => editorHandles_showHandle;
         public Transform EditorHandles_GetHandle() => editorHandles_handleTarget;
         public string EditorHandles_GetCustomName() => editorHandles_customName;
         public Type GetLogicValueType() => typeof(T);

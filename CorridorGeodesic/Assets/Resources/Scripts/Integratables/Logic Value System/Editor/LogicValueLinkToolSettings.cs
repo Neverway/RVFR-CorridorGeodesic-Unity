@@ -10,6 +10,10 @@ public class LogicValueLinkToolSettings : ScriptableObject
 
     public bool showToolButton = true;
     public bool showLinksWhenNotUsingTool = true;
+    public bool selectTransformWhenNotUsingTool = true;
+
+    [Space]
+    public Texture2D toolbarIcon;
 
     [HideInInspector] public bool EditorToolUsesSceneGUI => showToolButton || showLinksWhenNotUsingTool;
 
@@ -32,6 +36,7 @@ public class LogicValueLinkToolSettings : ScriptableObject
             path = AssetDatabase.GUIDToAssetPath(settings[0]);
             return AssetDatabase.LoadAssetAtPath<LogicValueLinkToolSettings>(path);
         }
+
         LogicValueLinkToolSettings newSettings = ScriptableObject.CreateInstance<LogicValueLinkToolSettings>();
         try 
         {
@@ -39,7 +44,7 @@ public class LogicValueLinkToolSettings : ScriptableObject
             path = AssetDatabase.GetAssetPath(script);
 
             path = path.Substring(0, path.LastIndexOf('/'));
-            path += "LogicValueLinkToolSettings.asset";
+            path += "/LogicValueLinkToolSettings.asset";
 
             AssetDatabase.CreateAsset(newSettings, path);
             AssetDatabase.SaveAssets();

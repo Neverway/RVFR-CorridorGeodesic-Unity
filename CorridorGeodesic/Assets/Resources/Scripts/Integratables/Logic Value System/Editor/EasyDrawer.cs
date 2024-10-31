@@ -413,6 +413,15 @@ public abstract class EasyDrawer : PropertyDrawer
         }
     }
 
+    public class EmptySpace : DrawerObject
+    {
+        public EmptySpace() { }
+        public EmptySpace(float height) 
+        {
+            this.height = height;
+        }
+        protected override void OnDraw(Rect area) { }
+    }
     public class HorizontalGroup : DrawerObject
     {
         public DrawerObject[] objects;
@@ -535,10 +544,12 @@ public abstract class EasyDrawer : PropertyDrawer
                 {
                     float objWidth = obj.GetWidth(fullWidth);
                     subArea.width = objWidth;
-                    area.x += objWidth;
+                    area.width -= objWidth;
+                    subArea.x = area.x + area.width;
 
                         obj.obj.Draw(subArea);
                 }
+                unsizedObject.Draw(area);
             }
             catch (Exception e) { Debug.LogError(e); }
         }
@@ -623,7 +634,7 @@ public abstract class EasyDrawer : PropertyDrawer
             bool wasEnabled = GUI.enabled;
             try
             {
-                GUI.enabled = false;
+                GUI.enabled = !disabled;
                 contents.Draw(area);
             }
             catch (Exception e) { Debug.LogError(e); }
@@ -800,6 +811,12 @@ public abstract class EasyDrawer : PropertyDrawer
 
             content = new GUIContent(GUIContent.none);
             this.property = property;
+        }
+        public new Property Label(string label)
+        {
+            content.text = label;
+            usePropertyLabel = false;
+            return this;
         }
         public new Property HideLabel()
         {

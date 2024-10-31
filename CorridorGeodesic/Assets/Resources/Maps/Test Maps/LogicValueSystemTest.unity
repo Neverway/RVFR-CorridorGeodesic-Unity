@@ -700,6 +700,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de2c7c0fd33427460b535348d7f15e3b, type: 3}
+--- !u!1 &319692976 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8854582770140202501, guid: 66ef7f740d84d7d419ff442f106c24bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2157918917856371206}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &332867334
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1568,7 +1574,7 @@ Transform:
   m_GameObject: {fileID: 1213938870}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.06, y: -43.203, z: 4.57}
+  m_LocalPosition: {x: 31.24, y: -43.52, z: 3.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2046,6 +2052,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a5db751fef68c1fb9a9832cce7340c7, type: 3}
+--- !u!1 &1669102908 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8854582770140202501, guid: 66ef7f740d84d7d419ff442f106c24bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1704595819}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1669102910 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1704595819}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669102908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6777dbea1d96f9b40b3186153822d5fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1699809599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2170,6 +2194,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 617392572932219441, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.506
+      objectReference: {fileID: 0}
+    - target: {fileID: 617392572932219441, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.497
+      objectReference: {fileID: 0}
+    - target: {fileID: 2505085305757970609, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2505085305757970609, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.sourceField.fieldName
+      value: stringOutput
+      objectReference: {fileID: 0}
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: inputA.sourceField.targetComponent
@@ -2180,6 +2229,31 @@ PrefabInstance:
       propertyPath: inputB.sourceField.targetComponent
       value: 
       objectReference: {fileID: 1704595823}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.editorHandles_showHandle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringOutput.editorHandles_showHandle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.editorHandles_handleTarget
+      value: 
+      objectReference: {fileID: 54650482}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.sourceField.targetComponent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringOutput.editorHandles_handleTarget
+      value: 
+      objectReference: {fileID: 54650482}
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: inputA.sourceField.EDITOR_targetGameObject
@@ -2200,10 +2274,40 @@ PrefabInstance:
       propertyPath: inputB.sourceField.EDITOR_hideTypeFilterText
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.sourceField.EDITOR_targetGameObject
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.sourceField.EDITOR_hideTypeFilterText
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3084568034392712818, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: m_Name
       value: LogicTest (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6056152739550270718, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: powerLogicComponent.sourceField.fieldName
+      value: output
+      objectReference: {fileID: 0}
+    - target: {fileID: 6056152739550270718, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: powerLogicComponent.sourceField.targetComponent
+      value: 
+      objectReference: {fileID: 1669102910}
+    - target: {fileID: 6056152739550270718, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: powerLogicComponent.sourceField.EDITOR_targetGameObject
+      value: 
+      objectReference: {fileID: 1669102908}
+    - target: {fileID: 6056152739550270718, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: powerLogicComponent.sourceField.EDITOR_hideTypeFilterText
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6431729295340827147, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
@@ -10202,13 +10306,33 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
+      propertyPath: stringInput.value
+      value: Default
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
       propertyPath: inputA.sourceField.fieldName
       value: isLogicComponentPowered
       objectReference: {fileID: 0}
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: inputA.editorHandles_customName
-      value: GRAHHHHHHHSHDsdafsdfadsfsadkjhsfdhkjhkjdsahjasjdhflsddfasdfasdgdsfghfgdghdfghFSHDFHSDHFSHD
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: inputA.editorHandles_showHandle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: inputB.editorHandles_showHandle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: output.editorHandles_showHandle
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
@@ -10224,27 +10348,42 @@ PrefabInstance:
         type: 3}
       propertyPath: output.editorHandles_handleTarget
       value: 
-      objectReference: {fileID: 1213938871}
+      objectReference: {fileID: 54650482}
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: inputA.sourceField.targetComponent
       value: 
-      objectReference: {fileID: 1774945311}
+      objectReference: {fileID: 2157918917856371208}
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: inputB.sourceField.targetComponent
       value: 
-      objectReference: {fileID: 2157918917856371208}
+      objectReference: {fileID: 1774945311}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: something.editorHandles_showHandle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.editorHandles_showHandle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.editorHandles_handleTarget
+      value: 
+      objectReference: {fileID: 54650482}
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: inputA.sourceField.EDITOR_targetGameObject
       value: 
-      objectReference: {fileID: 1774945309}
+      objectReference: {fileID: 2157918917856371207}
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: inputB.sourceField.EDITOR_targetGameObject
       value: 
-      objectReference: {fileID: 2157918917856371207}
+      objectReference: {fileID: 1774945309}
     - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: inputA.sourceField.EDITOR_hideTypeFilterText
@@ -10255,6 +10394,21 @@ PrefabInstance:
       propertyPath: inputB.sourceField.EDITOR_hideTypeFilterText
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: something.sourceField.EDITOR_hideTypeFilterText
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.sourceField.EDITOR_targetGameObject
+      value: 
+      objectReference: {fileID: 54650478}
+    - target: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+        type: 3}
+      propertyPath: stringInput.sourceField.EDITOR_hideTypeFilterText
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3084568034392712818, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: m_Name
@@ -10263,18 +10417,18 @@ PrefabInstance:
     - target: {fileID: 6056152739550270718, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: powerLogicComponent.sourceField.fieldName
-      value: isLogicComponentPowered
+      value: output
       objectReference: {fileID: 0}
     - target: {fileID: 6056152739550270718, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: powerLogicComponent.sourceField.targetComponent
       value: 
-      objectReference: {fileID: 2157918917856371208}
+      objectReference: {fileID: 2157918917856371212}
     - target: {fileID: 6056152739550270718, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: powerLogicComponent.sourceField.EDITOR_targetGameObject
       value: 
-      objectReference: {fileID: 2157918917856371207}
+      objectReference: {fileID: 319692976}
     - target: {fileID: 6056152739550270718, guid: 66ef7f740d84d7d419ff442f106c24bb,
         type: 3}
       propertyPath: powerLogicComponent.sourceField.EDITOR_hideTypeFilterText
@@ -10351,6 +10505,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4788b55b9df91f04eb7f90983d99c055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2157918917856371212 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3075757302665810886, guid: 66ef7f740d84d7d419ff442f106c24bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2157918917856371206}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319692976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6777dbea1d96f9b40b3186153822d5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &8867198926367054608

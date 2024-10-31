@@ -8,9 +8,10 @@ public class LogicOutputDrawer : EasyDrawer
 {
     string value = "value";
     string OnOutputChanged = "OnOutputChanged";
+    string showHandle = "editorHandles_showHandle";
     string handle = "editorHandles_handleTarget";
     string customName = "editorHandles_customName";
-    bool showHandleField = true;
+    bool showHandleField = false;
 
     public override DrawerObject OnGUIEasyDrawer(VerticalGroup contents)
     {
@@ -18,17 +19,23 @@ public class LogicOutputDrawer : EasyDrawer
         FittedLabel fieldValueWithLabel = 
             new FittedLabel("<- " + property.Property.displayName, valueDrawer).Padding(6).Big().AlignUpperLeft() as FittedLabel;
 
-        contents.Add(fieldValueWithLabel);
-        contents.Add(new Divider());
+        contents.Add(new SizedHorizontalGroup(fieldValueWithLabel)
+            .AddOnRight(new Button("H", ToggleHandleEditing).AlignCenter(), 22)
+            .AddOnRight(new EmptySpace(), 3));
+
+        contents.Add(new EmptySpace(5));
+        contents.Add(new Property(property[OnOutputChanged]));
 
         if (showHandleField)
         {
-            contents.Add(new Property(property[handle]));
-            contents.Add(new Property(property[customName]));
             contents.Add(new Divider());
+            contents.Add(new Property(property[showHandle]).Label("Show Handle in Editor? "));
+            if (property[showHandle].Bool)
+            {
+                contents.Add(new Property(property[handle]).Label("Handle Transform :"));
+                contents.Add(new Property(property[customName]).Label("Handle Custom Name :"));
+            }
         }
-
-        contents.Add(new Property(property[OnOutputChanged]));
 
         return new Boxed(contents);
     }
@@ -45,4 +52,6 @@ public class LogicOutputDrawer : EasyDrawer
         EditorGUI.LabelField(area, content, style);
     }
     public override void OnAfterGUI() { }
+
+    public void ToggleHandleEditing() => showHandleField = !showHandleField;
 }
