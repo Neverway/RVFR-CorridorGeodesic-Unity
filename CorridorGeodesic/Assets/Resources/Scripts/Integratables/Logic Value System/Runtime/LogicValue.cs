@@ -81,15 +81,48 @@ namespace Neverway.Framework.LogicValueSystem
         public object SetFieldReference(Component component, string fieldName)
         {
             if (component == null)
-                throw new ArgumentNullException(nameof(component));
+                fieldName = "";
 
-            if (component.GetType().GetField(fieldName) == null)
+            if (!string.IsNullOrEmpty(fieldName) && component.GetType().GetField(fieldName) == null)
                 throw new ArgumentException($"{component.name} does not contain field named \"{fieldName}\"");
 
             sourceField = new ComponentFieldReference<LogicOutput<T>>(component, fieldName);
             return sourceField;
         }
     }
+     /*
+    public interface LogicInputList 
+    {
+        public abstract int SourceOutputCount { get; }
+        public abstract LogicOutput[] GetSourceLogicOutputs();
+        public abstract Component GetSourceLogicOutputComponent();
+        public abstract object SetFieldReference(Component component, string fieldName);
+    }
+    [Serializable]
+    public class LogicInputList<T> : LogicValue<T[]>, LogicInputList
+    {
+        [SerializeField] public ComponentFieldReference<LogicOutput<T>>[] sourceFields;
+
+        public LogicInput(T defaultValue) : base(defaultValue) { }
+        public override T Get() => HasLogicOutputSource ? value = sourceFields.Get() : base.Get();
+        public void CallOnSourceChanged(UnityAction action) => sourceFields.Get().OnOutputChanged.AddListener(action);
+
+        public bool HasLogicOutputSource => !sourceFields.IsUndefined;
+        public LogicOutput[] GetSourceLogicOutputs() => HasLogicOutputSource ? sourceFields.Get() as LogicOutput : null;
+        public Component GetSourceLogicOutputComponent() => HasLogicOutputSource ? sourceFields.GetTargetComponent() : null;
+        public object SetFieldReference(Component component, string fieldName)
+        {
+            if (component == null)
+                fieldName = "";
+
+            if (!string.IsNullOrEmpty(fieldName) && component.GetType().GetField(fieldName) == null)
+                throw new ArgumentException($"{component.name} does not contain field named \"{fieldName}\"");
+
+            sourceFields = new ComponentFieldReference<LogicOutput<T>>(component, fieldName);
+            return sourceFields;
+        }
+    }
+    // */
 
     public interface LogicOutput : LogicValue
     {

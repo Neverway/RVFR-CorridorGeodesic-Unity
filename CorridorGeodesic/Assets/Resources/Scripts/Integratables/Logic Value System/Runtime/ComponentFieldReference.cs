@@ -29,7 +29,10 @@ public struct ComponentFieldReference<T>
     {
 #if UNITY_EDITOR
         EDITOR_hideTypeFilterText = false;
-        EDITOR_targetGameObject = target.gameObject;
+        if (target == null)
+            EDITOR_targetGameObject = null;
+        else
+            EDITOR_targetGameObject = target.gameObject;
 #endif
         targetComponent = target;
         fieldName = field;

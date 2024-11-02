@@ -55,12 +55,17 @@ public class LogicInputDrawer : EasyDrawer
         if (showHandleField)
         {
             contents.Add(new Divider());
-            contents.Add(new Property(property[showHandle]).Label("Show Handle in Editor? "));
+            VerticalGroup handleEditor = new VerticalGroup();
+
+            handleEditor.Add(new Property(property[showHandle]).Label("Show Handle in Editor? "));
             if (property[showHandle].Bool)
             {
-                contents.Add(new Property(property[handle]).Label("Handle Transform :"));
-                contents.Add(new Property(property[customName]).Label("Handle Custom Name :"));
+                handleEditor.Add(new Property(property[handle]).Label("Handle Transform :"));
+                handleEditor.Add(new Property(property[customName]).Label("Handle Custom Name :"));
             }
+            Boxed boxedHandleEditor = new Boxed(handleEditor);
+            contents.Add(boxedHandleEditor);
+            contents.Add(new Divider());
         }
 
         Boxed boxedContents = new Boxed(contents);

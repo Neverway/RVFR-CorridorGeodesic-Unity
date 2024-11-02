@@ -1,4 +1,5 @@
 using Neverway.Framework.LogicValueSystem;
+using Neverway.Framework.Utility.StateMachine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +10,19 @@ using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
+using static LogicValueLinkTool;
 
 public class LogicValueLinkTool : EditorTool
 {
-    #region EditorTool Setup
+    #region EditorTool Setup ------------------------------------------------------------------------------------------------------------------------
 
     [InitializeOnLoadMethod]
     public static void Initialize()
     {
         LogicValueLinkToolSettings.Instance.OnSettingsValidate += OnSettingsChanged;
+        Undo.undoRedoPerformed += NewStateMachine;
         OnSettingsChanged();
+        NewStateMachine();
     }
     public static void OnSettingsChanged()
     {
@@ -50,7 +54,7 @@ public class LogicValueLinkTool : EditorTool
 
         lastToolType = Tools.current;
         ToolManager.SetActiveTool<LogicValueLinkTool>();
-        RESET();
+        NewStateMachine();
         ToolManager.activeToolChanged += ClearLastToolType;
     }
     public static void ClearLastToolType()
@@ -58,17 +62,8 @@ public class LogicValueLinkTool : EditorTool
         lastToolType = Tool.None;
         ToolManager.activeToolChanged -= ClearLastToolType;
     }
-    public void OnEnable()
-    {
-        Undo.undoRedoPerformed += RESET;
-        //EditorApplication.hierarchyChanged += RESET;
-        ClearALL();
-    }
     public void OnDisable()
     {
-        Undo.undoRedoPerformed -= RESET;
-        EditorApplication.hierarchyChanged -= RESET;
-        ClearALL();
         ClearLastToolType();
     }
 
@@ -95,341 +90,39 @@ public class LogicValueLinkTool : EditorTool
             return m_Icon;
         }
     }
-    #endregion
+    #endregion --------------------------------------------------------------------------------------------------------------------------------------
 
-    #region Cached Info
-    private static List<Handle> handles;
-    private static Transform sceneViewCameraTransform;
-    private static LogicValueField[] inputs;
-    private static LogicValueField[] outputs;
-    private static ValueLink[] links;
-    private static Dictionary<Component, LogicValueField[]> logicValues;
-    private static Dictionary<Type, FieldInfo[]> logicValueFieldInfos;
-    private static Type[] typesWithLogicValues;
-    private static Component[] allComponents;
+    private static ValueLinkMachine stateMachine;
+    private static bool wasInPlayMode = false;
+    private static void NewStateMachine() => stateMachine = new ValueLinkMachine(new ValueLinkMachine.StartingState());
 
-    public static GUIStyle labelStyle;
-
-    private static void CacheFieldInfos()
-    {
-        if (LookingForInput)
-            return;
-
-        if (logicValueFieldInfos != null)
-            return;
-        
-        ClearLogicValuesCache();
-
-        logicValueFieldInfos = new Dictionary<Type, FieldInfo[]>();
-
-        allComponents = FindObjectsOfType<Component>();
-        List<Type> allUniqueTypes = new List<Type>();
-
-        foreach (Component c in allComponents)
-        {
-            Type componentType = c.GetType();
-            if (!allUniqueTypes.Contains(componentType))
-                allUniqueTypes.Add(componentType);
-        }
-
-        List<Type> uniqueTypesWithLogicValues = new List<Type>();
-        foreach (Type currentType in allUniqueTypes)
-        {
-            FieldInfo[] fieldInfos = currentType
-                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .Where(info => typeof(LogicValue).IsAssignableFrom(info.FieldType))
-                .ToArray();
-
-            if (fieldInfos.Length > 0)
-            {
-                uniqueTypesWithLogicValues.Add(currentType);
-                logicValueFieldInfos.Add(currentType, fieldInfos);
-            }
-        }
-        typesWithLogicValues = uniqueTypesWithLogicValues.ToArray();
-    }
-    private static void CacheLogicValues()
-    {
-        if (LookingForInput)
-            return;
-
-        if (logicValues != null)
-            return;
-
-        ClearLogicValuesCache();
-
-        List<Component> componentsWithLogicValuesList = new List<Component>();
-        logicValues = new Dictionary<Component, LogicValueField[]>();
-        List<LogicValueField> inputsList = new List<LogicValueField>();
-        List<LogicValueField> outputsList = new List<LogicValueField>();
-        List<ValueLink> linksList = new List<ValueLink>();
-        allComponents = FindObjectsOfType<Component>();
-        foreach (Component currentComponent in allComponents)
-        {
-            Type currentComponentType = currentComponent.GetType();
-            if (typesWithLogicValues.Contains(currentComponentType))
-            {
-                componentsWithLogicValuesList.Add(currentComponent);
-                List<LogicValueField> logicValueList = new List<LogicValueField>();
-                foreach (FieldInfo field in logicValueFieldInfos[currentComponentType])
-                {
-                    LogicValueField logicValueField = new LogicValueField(field, currentComponent);
-                    logicValueList.Add(logicValueField);
-
-                    if (logicValueField.IsOutput)
-                        outputsList.Add(logicValueField);
-
-                    else if (logicValueField.IsInput)
-                    {
-                        inputsList.Add(logicValueField);
-                        LogicInput input = logicValueField.Input;
-                        if (input.HasLogicOutputSource) 
-                        {
-                            LogicValue otherValue = input.GetSourceLogicOutput();
-                            Transform startHandle = otherValue.EditorHandles_GetHandle();
-                            Transform endHandle = input.EditorHandles_GetHandle();
-
-                            if (endHandle == null)
-                                endHandle = currentComponent.transform;
-
-                            if (startHandle == null) 
-                                startHandle = input.GetSourceLogicOutputComponent().transform;
-
-                            if (startHandle != null && endHandle != null)
-                                linksList.Add(new ValueLink(input.GetLogicValueType(), startHandle, endHandle));
-                        }
-                    }
-                }
-                logicValues.Add(currentComponent, logicValueList.ToArray());
-            }
-        }
-        //componentsWithLogicValues = componentsWithLogicValuesList.ToArray();
-        inputs = inputsList.ToArray();
-        outputs = outputsList.ToArray();
-        links = linksList.ToArray();
-
-        handles = new List<Handle>();
-        AddValueFieldsToHandle(inputs);
-        AddValueFieldsToHandle(outputs); 
-    }
-
-    #endregion
-
-    #region State Info
-    public enum LogicValueLinkState 
-    { 
-        EditorToolClosed, 
-        LookingForOutput, SelectingOutputFromWindow, 
-        LookingForInput, SelectingInputFromWindow, 
-        RemovingLink, SelectingRemovedInputFromWindow,
-        LinkCompleted 
-    }
-    public static LogicValueLinkState currentLinkState = LogicValueLinkState.EditorToolClosed;
-
-    private static LogicValueField grabbedOutput = null;
-    private static LogicValueField targetInput = null;
-    private static SelectorWindowNonGeneric currentWindow = null;
-    public static bool NotCurrentlyDoingAnything => LookingForOutput && currentWindow == null;
-    public static bool LookingForOutput => grabbedOutput == null && targetInput == null && IsCurrentTool;
-    public static bool LookingForInput => grabbedOutput != null && targetInput == null;
-    public static bool LinkHasFinished => grabbedOutput != null && targetInput != null;
-    public static bool IsRemovingLinks => Event.current.shift;
-    #endregion
-    
-    #region Clearing Fields Methods
-    private static void RESET()
-    {
-        ClearALL();
-        SceneView.RepaintAll();
-    }
-    private static void ClearLogicValuesCacheAndSelectedValues()
-    {
-        ClearLogicValuesCache();
-        ClearSelectedValues();
-    }
-    private static void ClearLogicValuesCache()
-    {
-        //componentsWithLogicValues = null;
-        logicValues = null;
-        inputs = null;
-        outputs = null;
-        grabbedOutput = null;
-        handles = null;
-        links = null;
-    }
-    private static void ClearSelectedValues()
-    {
-        grabbedOutput = null;
-        targetInput = null;
-        currentWindow = null;
-    }
-    private static void ClearLogicValueFieldInfos()
-    {
-        logicValueFieldInfos = null;
-        typesWithLogicValues = null;
-        allComponents = null;
-    }
-    private static void ClearALL() 
-    {
-        ClearLogicValueFieldInfos();
-        ClearLogicValuesCacheAndSelectedValues();
-    }
-    #endregion
-
-    #region Main GUI Methods
     private static void OnSceneGUI(SceneView sceneview)
     {
-        Rect area = sceneview.cameraViewport;
-
-        //Draw SceneView toolbar button
-        if (LogicValueLinkToolSettings.Instance.showToolButton)
-        {
-            Handles.BeginGUI();
-
-            Rect toolButtonArea = area;
-            toolButtonArea.size = new Vector2(30, 30);
-            toolButtonArea.center = new Vector2(area.width / 2, 21);
-
-            //Offset from probuilderbar
-            toolButtonArea.x += 85;
-
-            GUIStyle style = new GUIStyle(EditorStyles.miniButton);
-            style.fixedHeight = toolButtonArea.height;
-
-
-            if (IsCurrentTool != EditorGUI.Toggle(toolButtonArea, IsCurrentTool, style))
-                SetAsCurrentTool();
-
-            GUIStyle alignedCenter = new GUIStyle(EditorStyles.centeredGreyMiniLabel);
-            EditorGUI.LabelField(toolButtonArea, new GUIContent(ToolbarIconContent.image), EditorStyles.centeredGreyMiniLabel);
-            Handles.EndGUI();
-        }
-        
-        if (LogicValueLinkToolSettings.Instance.showLinksWhenNotUsingTool && !IsCurrentTool)
-        {
-            try
-            {
-                BeforeGUI();
-
-                foreach (ValueLink link in links)
-                {
-                    link.DrawJustForDisplay();
-                }
-                Handle lastHandle = null;
-                foreach (Handle handle in Handle.SortByDistanceToCamera(handles.ToArray()))
-                {
-                    lastHandle = handle;
-                    handle.DrawJustForDisplay();
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                ClearALL();
-            }
-        }
-        
-        SceneView.RepaintAll();
+        if (!IsCurrentTool)
+            OnMainGUI(sceneview);
     }
     public override void OnToolGUI(EditorWindow window)
     {
-        if (!(window is SceneView)) return;
+        if (window is SceneView sceneview)
+            OnMainGUI(sceneview);
+    }
+    public static void OnMainGUI(SceneView sceneview)
+    {
+        if ((wasInPlayMode ^ Application.isPlaying))
+        {
+            wasInPlayMode = Application.isPlaying;
+            NewStateMachine();
+            return;
+        }
+        if (stateMachine == null)
+        {
+            NewStateMachine();
+            return;
+        }
 
-        try
-        {
-            BeforeGUI();
-            DrawGUI();
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-            ClearALL();
-        }
+        stateMachine.DoUpdate(sceneview);
         SceneView.RepaintAll();
     }
-    public static void BeforeGUI()
-    {
-        if (NotCurrentlyDoingAnything && (Event.current.isKey))
-            ClearALL();
-
-        CacheFieldInfos();
-        CacheLogicValues();
-
-        if (labelStyle == null)
-        {
-            labelStyle = new GUIStyle();
-            labelStyle.alignment = TextAnchor.MiddleCenter;
-            labelStyle.fontStyle = FontStyle.Bold;
-            labelStyle.normal.textColor = Color.white;
-        }
-
-        if (sceneViewCameraTransform == null)
-            sceneViewCameraTransform = SceneView.lastActiveSceneView.camera.transform;
-    }
-    public void DrawGUI()
-    {
-        foreach (ValueLink link in links)
-        {
-            link.Draw(Color.white, 1f);
-        }
-        foreach (Handle handle in Handle.SortByDistanceToCamera(handles.ToArray()))
-        {
-            handle.ProcessHandle();
-        }
-        if (LookingForOutput)
-        {
-            Vector3 mousePosition = sceneViewCameraTransform.position;
-            Ray cursorForwardRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-            mousePosition += cursorForwardRay.direction;
-            Handles.DrawWireDisc(mousePosition, sceneViewCameraTransform.forward, 0.015f);
-        }
-        if (LookingForInput)
-        {
-            Vector3 mousePosition = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin;
-            Handles.DrawLine(grabbedOutput.handleTarget.position, mousePosition, 8f);
-        }
-        if (LinkHasFinished)
-        {
-            if (!(targetInput.Input.HasLogicOutputSource &&
-                targetInput.Input.GetSourceLogicOutputComponent() == grabbedOutput.onComponent &&
-                targetInput.Input.GetSourceLogicOutput() == grabbedOutput.Output))
-            {
-                Undo.RecordObject(targetInput.onComponent,
-                $"Assigning input \"{targetInput.valueName}\" on {targetInput.onComponent.name} " +
-                $"to reference output \"{grabbedOutput.valueName}\" on {grabbedOutput.onComponent.name}");
-
-                targetInput.Input.SetFieldReference(grabbedOutput.onComponent, grabbedOutput.fieldInfo.Name);
-                targetInput.fieldInfo.SetValue(targetInput.onComponent, targetInput.value.GetClone());
-
-                EditorUtility.SetDirty(targetInput.onComponent);
-            }
-            ClearALL();
-        }
-    }
-
-    #endregion
-
-
-    public static void AddValueFieldsToHandle(params LogicValueField[] valueFields)
-    {
-        foreach(LogicValueField valueField in valueFields)
-            AddValueFieldsToHandle(valueField);
-    }
-    public static void AddValueFieldsToHandle(LogicValueField valueField)
-    {
-        for (int i = 0; i < handles.Count; i++)
-        {
-            if (handles[i].handleTarget == valueField.handleTarget)
-            {
-                handles[i].Add(valueField);
-                return;
-            }
-        }
-        Handle newHandle = new Handle(valueField.handleTarget);
-        newHandle.Add(valueField);
-        handles.Add(newHandle);
-    }
-
 
     public class LogicValueField
     {
@@ -468,31 +161,9 @@ public class LogicValueLinkTool : EditorTool
     }
     public class Handle
     {
-        public LogicValueLinkState currentStyleState;
-        public HandleDrawInfo currentStyle;
-
-        public SelectorWindowNonGeneric window;
         public Transform handleTarget;
-        public List<LogicValueField> inputs;
-        public List<LogicValueField> outputs;
-        
-        public int OutputsAssigned => outputs.Count;
-        public int InputsAssigned => inputs.Count;
-        public int InputsFiltered => GetFilteredInputs().Length;
-        public int ValuesAssigned => OutputsAssigned + InputsAssigned;
-        public int ValuesFiltered => OutputsAssigned + InputsFiltered;
-
-        public LogicValueField SingleValueFieldAssigned => 
-            (InputsAssigned > 0 ? inputs[0] : 
-            (OutputsAssigned > 0 ? outputs[0] : null));
-        public LogicValueField SingleValueFieldFiltered =>
-            (InputsFiltered > 0 ? GetFilteredInputs()[0] :
-            (OutputsAssigned > 0 ? outputs[0] : null));
-
-        public bool HasMultipleValuesAssigned => (inputs.Count + outputs.Count) > 1;
-
-        private LogicValueField[] cachedFilteredInputs;
-        private Type cachedFilteredInputsType;
+        public LogicValueField[] baseValues;
+        public LogicValueField[] filteredValues;
 
         public const float HANDLESIZE_POI = 0.3f;
         public const float HANDLESIZE_UNIMPORTANT = 0.15f;
@@ -504,23 +175,24 @@ public class LogicValueLinkTool : EditorTool
             if (handleTarget == null)
                 throw new ArgumentNullException(nameof(handleTarget));
 
-            this.cachedFilteredInputsType = typeof(object);
-            this.cachedFilteredInputs = new LogicValueField[0];
-            this.window = null;
             this.handleTarget = handleTarget;
-            this.inputs = new List<LogicValueField>();
-            this.outputs = new List<LogicValueField>();
-
-            this.currentStyle = new HandleDrawInfo(this);
+            baseValues = new LogicValueField[0];
+            filteredValues = new LogicValueField[0];
         }
-        public void Add(params LogicValueField[] logicvalues)
+        public void AddBaseValues(params LogicValueField[] logicvalues)
         {
-            foreach (LogicValueField value in logicvalues)
-                (value.IsInput ? inputs : outputs).Add(value);
-
-            cachedFilteredInputsType = null;
+            List<LogicValueField> modifiedValues = new List<LogicValueField>();
+            modifiedValues.AddRange(baseValues);
+            modifiedValues.AddRange(logicvalues);
+            baseValues = modifiedValues.ToArray();
+            filteredValues = baseValues;
         }
 
+        public void SetValueFilter(Func<LogicValueField, bool> valueFilter)
+        {
+            filteredValues = baseValues.Where(valueFilter).ToArray();
+        }
+        
         public void DrawJustForDisplay()
         {
             if(Handles.Button(handleTarget.position, capDirection, HANDLESIZE_DISPLAY, HANDLESIZE_DISPLAY, CapForDisplay))
@@ -529,13 +201,12 @@ public class LogicValueLinkTool : EditorTool
                     return;
 
                 GameObject targetObject = handleTarget.gameObject;
-                if (ValuesAssigned == 0)
+                if (filteredValues.Length > 0)
                 {
-                    LogicValueField[] valueFields = GetRelevantValueFields();
-                    targetObject = valueFields[0].onComponent.gameObject;
-                    for (int i = 1; i < valueFields.Length; i++)
+                    targetObject = filteredValues[0].onComponent.gameObject;
+                    for (int i = 1; i < filteredValues.Length; i++)
                     {
-                        if (valueFields[i].onComponent.gameObject != targetObject)
+                        if (filteredValues[i].onComponent.gameObject != targetObject)
                         {
                             targetObject = handleTarget.gameObject;
                             break;
@@ -556,83 +227,14 @@ public class LogicValueLinkTool : EditorTool
             }
             DrawLable(0.6f, false);
         }
-        public void ProcessHandle()
+        public bool DrawHandleAndGetPressed()
         {
-            if (currentStyleState != currentLinkState)
-            {
-                currentStyleState = currentLinkState;
-                currentStyle = new HandleDrawInfo(this);
-            }
-
-            if (window != null)
-            {
-                ProcessWindow();
-                return;
-            }
-
-            if (LookingForOutput)
-                ProcessOutputs();
-            else
-                ProcessInputs();
-        }
-        private void ProcessWindow()
-        {
-            if (window.GetIfOptionSelected())
-            {
-                LogicValueField value = (LogicValueField)window.GetOption();
-
-                if (LookingForOutput && value.IsOutput)
-                    grabbedOutput = value;
-
-                if (LookingForInput && value.IsInput)
-                    targetInput = value;
-
-                window = null;
-                currentWindow = null;
-            }
-        }
-        private void ProcessOutputs()
-        {
-            if (OutputsAssigned == 0)
+            if (filteredValues.Length == 0)
             {
                 HandleDrawUnimportant();
-                return;
+                return false;
             }
-
-            if (HandleButtonPressed())
-            {
-                if (OutputsAssigned > 1)
-                    currentWindow = window = new SelectorWindow<LogicValueField>("Select Output", outputs.ToArray(), ValueName);
-                else
-                    grabbedOutput = outputs[0];
-            }
-        }
-        private void ProcessInputs()
-        {
-            if (InputsFiltered == 0)
-            {
-                HandleDrawUnimportant();
-                return;
-            }
-            if (HandleButtonPressed())
-            {
-                if (InputsFiltered > 1)
-                    currentWindow = window = new SelectorWindow<LogicValueField>("Select Input", GetFilteredInputs(), ValueName);
-                else
-                    targetInput = GetFilteredInputs()[0];
-            }
-        }
-        private LogicValueField[] GetFilteredInputs(bool forceCache = false)
-        {
-            if (LookingForOutput || !IsCurrentTool)
-                return inputs.ToArray();
-
-            if (!forceCache)
-                if (cachedFilteredInputsType == grabbedOutput.LogicValueType)
-                    return cachedFilteredInputs;
-
-            Type cacheType = cachedFilteredInputsType = grabbedOutput.LogicValueType;
-            return cachedFilteredInputs = inputs.Where(o => cacheType.IsAssignableFrom(o.LogicValueType)).ToArray();
+            return HandleButtonPressed();
         }
         private bool HandleButtonPressed()
         {
@@ -653,20 +255,20 @@ public class LogicValueLinkTool : EditorTool
         private void DrawLable(float factor = 1f, bool affectAlpha = true)
         {
             string handleName;
-            if (ValuesAssigned == 1)
-                handleName = SingleValueFieldAssigned.valueName;
-            else if (ValuesFiltered == 1)
-                handleName = SingleValueFieldFiltered.valueName;
+            if (baseValues.Length == 1)
+                handleName = baseValues[0].valueName;
+            else if (filteredValues.Length == 1)
+                handleName = filteredValues[0].valueName;
             else
                 handleName = $"[ {handleTarget.name} ]";
 
-            Vector3 labelPosition = handleTarget.position + (sceneViewCameraTransform.up * 0.3f * factor);
+            Vector3 labelPosition = handleTarget.position + (ValueLinkMachine.sceneViewCameraTransform.up * 0.3f * factor);
             float distanceFactor = Vector2.Distance(HandleUtility.WorldToGUIPoint(handleTarget.position), HandleUtility.WorldToGUIPoint(labelPosition));
             //distanceFactor /= 2f;
             distanceFactor = Mathf.Min(distanceFactor, 16f);
-            GUIStyle myHandleStyle = new GUIStyle(labelStyle);
+            GUIStyle myHandleStyle = new GUIStyle(stateMachine.labelStyle);
             myHandleStyle.fontSize = Mathf.RoundToInt(distanceFactor);
-            Color newColor = myHandleStyle.normal.textColor;
+            Color newColor = (myHandleStyle.normal.textColor + Handles.color) / 2;
 
             if (affectAlpha)
                 newColor.a = factor;
@@ -687,35 +289,19 @@ public class LogicValueLinkTool : EditorTool
         }
 
         private Handles.CapFunction Cap =>
-            GetRelevantValueFields().Length == 1 ? Handles.SphereHandleCap : 
-            (GetRelevantValueFields().Length == 0 ? Handles.CircleHandleCap : Handles.CubeHandleCap);
+            filteredValues.Length == 1 ? Handles.SphereHandleCap : 
+            (filteredValues.Length == 0 ? Handles.CircleHandleCap : Handles.CubeHandleCap);
         private Handles.CapFunction CapForDisplay =>
-            GetRelevantValueFields().Length == 1 ? Handles.CircleHandleCap :
-            (GetRelevantValueFields().Length == 0 ? Handles.SphereHandleCap : Handles.RectangleHandleCap);
+            filteredValues.Length == 1 ? Handles.CircleHandleCap :
+            (filteredValues.Length == 0 ? Handles.SphereHandleCap : Handles.RectangleHandleCap);
 
-        private Quaternion capDirection => ((IsCurrentTool && GetRelevantValueFields().Length > 1) ? Quaternion.identity :
-            Quaternion.LookRotation(sceneViewCameraTransform.forward, sceneViewCameraTransform.up));
+        private Quaternion capDirection => ((IsCurrentTool && filteredValues.Length > 1) ? Quaternion.identity :
+            Quaternion.LookRotation(ValueLinkMachine.sceneViewCameraTransform.forward, ValueLinkMachine.sceneViewCameraTransform.up));
 
         private string ValueName(LogicValueField valueField) =>
             $"<size=10>{valueField.onComponent.name}</size>: <b>{valueField.valueName}</b>";
 
-        private bool IsUnimportant => GetRelevantValueFields().Length == 0;
-       
-        private LogicValueField[] GetRelevantValueFields()
-        {
-            if (LookingForOutput)
-            {
-                return outputs.ToArray();
-            }
-            else if (LookingForInput)
-            {
-                return GetFilteredInputs();
-            }
-            List<LogicValueField> valueFields = new List<LogicValueField>();
-            valueFields.AddRange(inputs);
-            valueFields.AddRange(outputs);
-            return valueFields.ToArray();
-        }
+        private bool IsUnimportant => filteredValues.Length == 0;
 
         public static Handle[] CompactByDistance(float distance = 0.01f, params Handle[] handles)
         {
@@ -730,16 +316,14 @@ public class LogicValueLinkTool : EditorTool
                     Vector3 deltaPosition = newHandles[e].handleTarget.position - handles[i].handleTarget.position;
                     if (deltaPosition.sqrMagnitude < sqrDistance)
                     {
-                        newHandles[e].Add(handles[i].inputs.ToArray());
-                        newHandles[e].Add(handles[i].outputs.ToArray());
+                        newHandles[e].AddBaseValues(handles[i].baseValues);
                         doAdd = false;
                     }
                 }
                 if (doAdd)
                 {
                     Handle handleToAdd = new Handle(handles[i].handleTarget);
-                    handleToAdd.Add(handles[i].inputs.ToArray());
-                    handleToAdd.Add(handles[i].outputs.ToArray());
+                    handleToAdd.AddBaseValues(handles[i].baseValues);
 
                     newHandles.Add(handleToAdd);
                 }
@@ -777,8 +361,8 @@ public class LogicValueLinkTool : EditorTool
         }
         public static bool CompareDistanceToCamera(Handle h1, Handle h2)
         {
-            return (h1.handleTarget.position - sceneViewCameraTransform.position).sqrMagnitude <
-                (h2.handleTarget.position - sceneViewCameraTransform.position).sqrMagnitude;
+            return (h1.handleTarget.position - ValueLinkMachine.sceneViewCameraTransform.position).sqrMagnitude <
+                (h2.handleTarget.position - ValueLinkMachine.sceneViewCameraTransform.position).sqrMagnitude;
         }
     
     
@@ -797,11 +381,11 @@ public class LogicValueLinkTool : EditorTool
             public GUIStyle labelShadow;
             public string labelText;
 
-            public static bool IsUsingTool => currentLinkState != LogicValueLinkState.EditorToolClosed;
+            public static bool IsUsingTool => IsCurrentTool;
 
             public HandleDrawInfo(Handle handle)
             {
-                this.relevantValues = handle.GetRelevantValueFields();
+                this.relevantValues = handle.filteredValues;
                 this.handlePosition = handle.handleTarget;
 
                 this.handleCap = GetCap(this.relevantValues);
@@ -863,7 +447,7 @@ public class LogicValueLinkTool : EditorTool
             Handles.color = color;
 
             Vector3 delta = end.position - start.position;
-            Vector3 offsetDirection = Vector3.Cross(delta, sceneViewCameraTransform.forward);
+            Vector3 offsetDirection = Vector3.Cross(delta, ValueLinkMachine.sceneViewCameraTransform.forward);
             offsetDirection = offsetDirection.normalized * 0.05f;
             Handles.DrawLine(start.position + offsetDirection, end.position + offsetDirection, thickness);
             Handles.DrawLine(start.position - offsetDirection, end.position - offsetDirection, thickness);
@@ -880,7 +464,7 @@ public class LogicValueLinkTool : EditorTool
         {
             Vector3 delta = end.position - start.position;
 
-            Vector3 offsetDirection = Vector3.Cross(delta, sceneViewCameraTransform.forward);
+            Vector3 offsetDirection = Vector3.Cross(delta, ValueLinkMachine.sceneViewCameraTransform.forward);
             offsetDirection = offsetDirection.normalized * Handle.HANDLESIZE_DISPLAY;
 
             Vector3 targetLocation = start.position + delta.normalized * (delta.magnitude - Handle.HANDLESIZE_DISPLAY - 0.01f);
@@ -930,6 +514,11 @@ public class LogicValueLinkTool : EditorTool
             windowArea.size = new Vector2(width, height);
             windowArea.center = Event.current.mousePosition;
         }
+        public void SetWindowPosition(Vector3 scenePosition)
+        {
+            
+            windowArea.center = HandleUtility.WorldToGUIPoint(scenePosition);
+        }
 
         public bool GetIfOptionSelected()
         {
@@ -950,4 +539,515 @@ public class LogicValueLinkTool : EditorTool
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public class ValueLinkMachine : StateMachine<ValueLinkMachine>
+    {
+        //todo: Update window position to handle when moving scene view
+        public static Dictionary<Type, FieldInfo[]> typeToLogicValueFields { get; private set; }
+        public Handle[] handles;
+        public ValueLink[] links;
+        private Func<LogicValueField, bool> _handleFilter;
+        public Func<LogicValueField, bool> HandleFilter
+        {
+            get { return (_handleFilter == null) ? NoFilter : _handleFilter; }
+            set { _handleFilter = value; }
+        }
+        public Func<LogicValueField, bool> NoFilter => (v => true);
+
+        public Rect sceneViewportArea { get; private set; }
+        private Vector3 mousePosition;
+        public GUIStyle labelStyle;
+        public static Transform sceneViewCameraTransform;
+        public bool IsCurrentStateRemovingLinks => currentState is RemovingLinkState ||
+            (currentState is WindowValueSelectState windowState && windowState.comingFromState is RemovingLinkState);
+
+        public LogicValueField selectedOutput = null;
+
+        public ValueLinkMachine(State<ValueLinkMachine> startingState) : base(startingState) 
+        {
+            this.labelStyle = new GUIStyle();
+            this.labelStyle.alignment = TextAnchor.MiddleCenter;
+            this.labelStyle.fontStyle = FontStyle.Bold;
+            this.labelStyle.normal.textColor = Color.white;
+
+            if (typeToLogicValueFields == null)
+                InitializeTypeFieldInfos();
+
+            RefreshHandlesAndLinks();
+        }
+
+        public void DoUpdate(SceneView sceneView)
+        {
+            if (sceneView == null) return;
+
+            Transform sceneCamera = sceneView.camera.transform;
+            if (sceneCamera != null)
+                sceneViewCameraTransform = sceneCamera;
+
+            this.sceneViewportArea = sceneView.cameraViewport;
+            DoUpdate();
+        }
+        public override void DoUpdate()
+        {
+            if (currentState is StartingState)
+            {
+                TryDrawToolButton();
+                base.DoUpdate();
+                return;
+            }
+
+            if (currentState is RefreshableState && (Event.current.isKey))
+                RefreshHandlesAndLinks();
+
+            if (currentState is not WindowValueSelectState)
+            {
+                mousePosition = sceneViewCameraTransform.position;
+                Ray cursorForwardRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                mousePosition += cursorForwardRay.direction;
+            }
+
+            if (IsCurrentTool ^ (currentState is not ToolNotActiveState))
+            {
+                ChangeState(new StartingState());
+                return;
+            }
+            if (IsCurrentTool)
+            {
+                bool isPressingShift = Event.current.shift;
+                if (isPressingShift ^ IsCurrentStateRemovingLinks)
+                {
+                    ChangeState(isPressingShift ? new RemovingLinkState() : new StartingState());
+                    return;
+                }
+            }
+
+
+            TryDrawToolButton();
+
+            base.DoUpdate();
+        }
+
+        public void InitializeTypeFieldInfos()
+        {
+            typeToLogicValueFields = new Dictionary<Type, FieldInfo[]>();
+
+            //Get all types from all assemblies that are MonoBehaviours
+            Type[] allMonoBehvaiourTypes = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(t => typeof(MonoBehaviour).IsAssignableFrom(t) && !t.IsAbstract)
+                .ToArray();
+
+            //Loop through all the MonoBehvaiour types to see if they have LogicValue fields
+            foreach (Type currentType in allMonoBehvaiourTypes)
+            {
+                //Get all FieldInfos for type LogicValue
+                FieldInfo[] fieldInfos = currentType
+                    .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                    .Where(info => typeof(LogicValue).IsAssignableFrom(info.FieldType))
+                    .ToArray();
+
+                //If there is at least 1 LogicValue field, add it to the type-to-logicvalues dictionary
+                if (fieldInfos.Length > 0)
+                    typeToLogicValueFields.Add(currentType, fieldInfos);
+            }
+        }
+        public void RefreshHandlesAndLinks()
+        {
+            //Find all logic value fields from all monobehaviours
+            LogicValueField[] logicValueFields = FindLogicValueFieldsInScene();
+
+            //Setup handle based on logic values found
+            handles = LogicValueFieldsToHandles(logicValueFields);
+
+            foreach (Handle handle in handles)
+                handle.SetValueFilter(HandleFilter);
+
+            //Setup links based on logic values found
+            links = LogicValueFieldsToLinks(logicValueFields);
+        }
+
+        private LogicValueField[] FindLogicValueFieldsInScene()
+        {
+            List<LogicValueField> logicValueFieldsToReturn = new List<LogicValueField>();
+
+            foreach (MonoBehaviour currentMonoBehaviour in FindObjectsOfType<MonoBehaviour>())
+            {
+                Type currentComponentType = currentMonoBehaviour.GetType();
+
+                //If this monobehvaiour type is not in the dictionary of types that have logic value fields, skip it
+                if (!typeToLogicValueFields.ContainsKey(currentComponentType))
+                    continue;
+
+                //Get the FieldInfos from the type-to-logicvaluefields dictionary and store the information from it to return
+                foreach (FieldInfo field in typeToLogicValueFields[currentComponentType])
+                    logicValueFieldsToReturn.Add(new LogicValueField(field, currentMonoBehaviour));
+
+            }
+            return logicValueFieldsToReturn.ToArray();
+        }
+        private Handle[] LogicValueFieldsToHandles(LogicValueField[] valueFields)
+        {
+            List<Handle> handlesToReturn = new List<Handle>();
+
+            foreach (LogicValueField valueField in valueFields)
+            {
+                //If handleTarget was already used in previous handle, add this value to that handle instead to group them
+                bool handleFound = false;
+                for (int i = 0; !handleFound && i < handlesToReturn.Count; i++)
+                {
+                    if (handlesToReturn[i].handleTarget == valueField.handleTarget)
+                    {
+                        handlesToReturn[i].AddBaseValues(valueField);
+                        handleFound = true;
+                    }
+                }
+                if (handleFound) continue;
+
+                //Otherwise, create a new handle as this handleTarget has not been used for a handle yet
+                Handle newHandle = new Handle(valueField.handleTarget);
+                newHandle.AddBaseValues(valueField);
+                handlesToReturn.Add(newHandle);
+            }
+            return handlesToReturn.ToArray();
+        }
+        private ValueLink[] LogicValueFieldsToLinks(LogicValueField[] valueFields)
+        {
+            List<ValueLink> linksToReturn = new List<ValueLink>();
+
+            foreach (LogicValueField valueField in valueFields)
+            {
+                //Value has to be an input and have an output source attached to 
+                if (!(valueField.IsInput && valueField.Input.HasLogicOutputSource))
+                    continue;
+
+                LogicInput inputValue = valueField.Input;
+                LogicValue outputValue = inputValue.GetSourceLogicOutput();
+
+                //Set up the start position of the link
+                Transform startHandle = outputValue.EditorHandles_GetHandle();
+                if (startHandle == null)
+                    startHandle = inputValue.GetSourceLogicOutputComponent().transform;
+
+                //Set up the end position of the link
+                Transform endHandle = inputValue.EditorHandles_GetHandle();
+                if (endHandle == null)
+                    endHandle = valueField.onComponent.transform;
+
+                //If start and end positions are set, go ahead and add that link to the list
+                if (startHandle != null && endHandle != null)
+                    linksToReturn.Add(new ValueLink(inputValue.GetLogicValueType(), startHandle, endHandle));
+            }
+            return linksToReturn.ToArray();
+        }
+
+        public void TryDrawToolButton()
+        {
+            //If tool button was turned off in settings, skip drawing the button
+            if (!LogicValueLinkToolSettings.Instance.showToolButton)
+                return;
+
+            Handles.BeginGUI();
+
+            Rect toolButtonArea = sceneViewportArea;
+            toolButtonArea.size = new Vector2(30, 30);
+            toolButtonArea.center = new Vector2(sceneViewportArea.width / 2, 21);
+
+            //Offset from probuilder bar
+            toolButtonArea.x += 85;
+
+            GUIStyle style = new GUIStyle(EditorStyles.miniButton);
+            style.fixedHeight = toolButtonArea.height;
+
+            if (IsCurrentTool != EditorGUI.Toggle(toolButtonArea, IsCurrentTool, style))
+                SetAsCurrentTool();
+
+            GUIStyle alignedCenter = new GUIStyle(EditorStyles.centeredGreyMiniLabel);
+            EditorGUI.LabelField(toolButtonArea, new GUIContent(ToolbarIconContent.image), EditorStyles.centeredGreyMiniLabel);
+
+            Handles.EndGUI();
+        }
+        public void DrawLinkFromOutputToMouse()
+        {
+            Handles.DrawLine(selectedOutput.handleTarget.position, mousePosition, 8f);
+        }
+        public void DrawCircleAroundMouse()
+        {
+            Handles.DrawWireDisc(mousePosition, sceneViewCameraTransform.forward, 0.015f);
+        }
+        
+        public Handle DrawHandlesAndGetPressedStandard()
+        {
+            Handle pressedHandle = null;
+            foreach (Handle handle in Handle.SortByDistanceToCamera(handles))
+            {
+                if (handle.DrawHandleAndGetPressed())
+                    pressedHandle = handle;
+            }
+            return pressedHandle;
+        }
+        public void DrawLinksStandard()
+        {
+            foreach (ValueLink link in links)
+            {
+                link.Draw(Color.white, 1f);
+            }
+        }
+
+        public void DrawHandlesSimplified()
+        {
+            foreach (Handle handle in Handle.SortByDistanceToCamera(handles))
+                handle.DrawJustForDisplay();
+        }
+        public void DrawLinksSimplified()
+        {
+            foreach (ValueLink link in links)
+            {
+                link.DrawJustForDisplay();
+            }
+        }
+
+
+
+        public interface RefreshableState { }
+        public abstract class ValueLinkState : State<ValueLinkMachine>
+        {
+            public abstract Func<LogicValueField, bool> GetValueFilter();
+            public override void OnEnter(State<ValueLinkMachine> lastState)
+            {
+                if (lastState != null)
+                    StateMachine.HandleFilter = GetValueFilter();
+            }
+        }
+        public class StartingState : ValueLinkState
+        {
+            public override Func<LogicValueField, bool> GetValueFilter() => StateMachine.NoFilter;
+
+            public override void OnEnter(State<ValueLinkMachine> lastState) { }
+
+            public override void OnUpdate() 
+            {
+                StateMachine.selectedOutput = null;
+                base.OnEnter(null);
+                if (IsCurrentTool)
+                    stateMachine.ChangeState(new SelectingOutputState());
+                else
+                    stateMachine.ChangeState(new ToolNotActiveState());
+            }
+        }
+        public class ToolNotActiveState : ValueLinkState, RefreshableState
+        {
+            public override Func<LogicValueField, bool> GetValueFilter() => StateMachine.NoFilter;
+
+            public override void OnEnter(State<ValueLinkMachine> lastState) 
+            {
+                base.OnEnter(lastState);
+                StateMachine.RefreshHandlesAndLinks();
+            }
+
+            public override void OnUpdate()
+            {
+                if (LogicValueLinkToolSettings.Instance.showLinksWhenNotUsingTool)
+                {
+                    StateMachine.DrawLinksSimplified();
+                    StateMachine.DrawHandlesSimplified();
+                }
+            }
+        }
+        
+        public class SelectingOutputState : SelectingHandleState, RefreshableState
+        {
+            public override Func<LogicValueField, bool> GetValueFilter() => (v => v.IsOutput);
+            protected override string GetSelectorWindowTitle() => "Select output to link from";
+
+            public override void OnUpdate()
+            {
+                StateMachine.DrawCircleAroundMouse();
+                base.OnUpdate();
+            }
+            protected override void OnSelectionFinished(LogicValueField selectedValue)
+            {
+                stateMachine.selectedOutput = selectedValue;
+                stateMachine.ChangeState(new SelectingInputState());
+            }
+        }
+        public class SelectingInputState : SelectingHandleState
+        {
+            public override Func<LogicValueField, bool> GetValueFilter() => 
+                (v => v.IsInput && v.LogicValueType.IsAssignableFrom(StateMachine.selectedOutput.LogicValueType));
+            protected override string GetSelectorWindowTitle() => "Select input to link to";
+            public override void OnUpdate()
+            {
+                StateMachine.DrawLinkFromOutputToMouse();
+                base.OnUpdate();
+            }
+
+            protected override void OnSelectionFinished(LogicValueField selectedValue)
+            {
+                LogicValueField selectedInput = selectedValue;
+                LogicValueField selectedOutput = StateMachine.selectedOutput;
+
+                if (!(selectedInput.Input.HasLogicOutputSource &&
+                selectedInput.Input.GetSourceLogicOutputComponent() == selectedOutput.onComponent &&
+                selectedInput.Input.GetSourceLogicOutput() == selectedOutput.Output))
+                {
+                    Undo.RecordObject(selectedInput.onComponent,
+                    $"Assigning input \"{selectedInput.valueName}\" on {selectedInput.onComponent.name} " +
+                    $"to reference output \"{selectedOutput.valueName}\" on {selectedOutput.onComponent.name}");
+
+                    selectedInput.Input.SetFieldReference(selectedOutput.onComponent, selectedOutput.fieldInfo.Name);
+                    selectedInput.fieldInfo.SetValue(selectedInput.onComponent, selectedInput.value.GetClone());
+
+                    EditorUtility.SetDirty(selectedInput.onComponent);
+                }
+
+                StateMachine.selectedOutput = null;
+                StateMachine.ChangeState(new StartingState());
+            }
+        }
+        public class RemovingLinkState : SelectingHandleState, RefreshableState
+        {
+            public override Func<LogicValueField, bool> GetValueFilter() => (v => v.IsInput && v.Input.HasLogicOutputSource);
+            protected override string GetSelectorWindowTitle() => "Select input to unlink";
+
+            public override void OnUpdate()
+            {
+                Color oldColor = Handles.color;
+                Handles.color = Color.red;
+                base.OnUpdate();
+                Handles.color = oldColor;
+            }
+            protected override void OnSelectionFinished(LogicValueField selectedValue)
+            {
+                LogicValueField selectedInput = selectedValue;
+
+                if (selectedInput.Input.HasLogicOutputSource)
+                {
+                    Undo.RecordObject(selectedInput.onComponent,
+                    $"Clearing output source from input \"{selectedInput.valueName}\" on {selectedInput.onComponent.name} ");
+
+                    selectedInput.Input.SetFieldReference(null, "");
+                    selectedInput.fieldInfo.SetValue(selectedInput.onComponent, selectedInput.value.GetClone());
+
+                    EditorUtility.SetDirty(selectedInput.onComponent);
+                }
+                StateMachine.ChangeState(new StartingState());
+            }
+        }
+        public abstract class SelectingHandleState : ValueLinkState
+        {
+            protected abstract string GetSelectorWindowTitle();
+
+            public override void OnEnter(State<ValueLinkMachine> lastState) 
+            {
+                base.OnEnter(lastState);
+
+                if (lastState is WindowValueSelectState windowState && windowState.comingFromState == this)
+                {
+                    OnSelectionFinished(windowState.GetSelectedValue());
+                }
+                else
+                {
+                    StateMachine.RefreshHandlesAndLinks();
+                }
+            }
+
+            public override void OnUpdate() 
+            {
+                StateMachine.DrawLinksStandard();
+                Handle pressedHandle = StateMachine.DrawHandlesAndGetPressedStandard();
+                if (pressedHandle != null)
+                {
+                    if (pressedHandle.filteredValues.Length == 1)
+                    {
+                        OnSelectionFinished(pressedHandle.filteredValues[0]);
+                    }
+                    else if (pressedHandle.filteredValues.Length > 1)
+                    {
+                        StateMachine.mousePosition = pressedHandle.handleTarget.position;
+                        StateMachine.ChangeState(new WindowValueSelectState(
+                            GetSelectorWindowTitle(), 
+                            pressedHandle.filteredValues, 
+                            pressedHandle.handleTarget));
+                    }
+                }
+            }
+
+            protected abstract void OnSelectionFinished(LogicValueField selectedValue);
+        }
+        public class WindowValueSelectState : ValueLinkState
+        {
+            public override Func<LogicValueField, bool> GetValueFilter() => comingFromState.GetValueFilter();
+            
+            public ValueLinkState comingFromState;
+            public SelectorWindow<LogicValueField> window;
+            public Transform windowAttachedTo;
+
+            public WindowValueSelectState(string title, LogicValueField[] valuesToSelect, Transform windowAttachedTo)
+            {
+                window = new SelectorWindow<LogicValueField>(title, valuesToSelect, ValueName);
+                this.windowAttachedTo = windowAttachedTo;
+            }
+
+            public override void OnEnter(State<ValueLinkMachine> lastState)
+            {
+                if (lastState == null)
+                {
+                    throw new Exception("LogicValueLinkTool: Entering Window Value Select State when previous state is null?");
+                }
+
+                comingFromState = lastState as ValueLinkState;
+                base.OnEnter(lastState);
+            }
+
+            public override void OnUpdate()
+            {
+                window.SetWindowPosition(windowAttachedTo.position);
+
+                Color oldColor = Handles.color;
+                if (comingFromState is RemovingLinkState)
+                    Handles.color = Color.red;
+
+                StateMachine.DrawLinksStandard();
+                StateMachine.DrawHandlesAndGetPressedStandard();
+
+                if (comingFromState is SelectingInputState)
+                {
+                    StateMachine.DrawLinkFromOutputToMouse();
+                }
+
+                if (window.GetIfOptionSelected())
+                {
+                    StateMachine.ChangeState(comingFromState);
+                }
+
+                Handles.color = oldColor;
+            }
+
+            public LogicValueField GetSelectedValue() => window.GetOption() as LogicValueField;
+
+            private string ValueName(LogicValueField valueField) =>
+                $"<size=10>{valueField.onComponent.name}</size>: <b>{valueField.valueName}</b>";
+
+        }
+
+    }
 }
+
+
+
