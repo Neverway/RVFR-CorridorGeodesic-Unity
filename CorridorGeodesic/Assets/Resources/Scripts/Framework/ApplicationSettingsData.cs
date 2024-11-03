@@ -80,6 +80,8 @@ public class ApplicationSettingsData
     public bool invertVerticalView;
     public float horizontalLookSpeed;
     public float verticalLookSpeed;
+    public float joystickLookSensitivity;
+    public float mouseLookSensitivity;
     public int cameraFov;
     
     // Communication
@@ -105,7 +107,7 @@ public class ApplicationSettingsData
         resolutionScale = 3;
         shadowQuality = 2;
         effectsQuality = 2;
-        textureQuality = 3;
+        textureQuality = 5;
         postprocessingQuality = 2;
 
         antialiasing = 0;
@@ -135,6 +137,8 @@ public class ApplicationSettingsData
         invertVerticalView = false;
         horizontalLookSpeed = 1;
         verticalLookSpeed = 0.75f;
+        joystickLookSensitivity = 0.7f;
+        mouseLookSensitivity = 0.7f;
         cameraFov = 90;
 
         hideTextChat = false;
