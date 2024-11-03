@@ -193,6 +193,8 @@ public class ApplicationSettingsData
         invertVerticalView = other.invertVerticalView;
         horizontalLookSpeed = other.horizontalLookSpeed;
         verticalLookSpeed = other.verticalLookSpeed;
+        joystickLookSensitivity = other.joystickLookSensitivity;
+        mouseLookSensitivity = other.mouseLookSensitivity;
         cameraFov = other.cameraFov;
 
         hideTextChat = other.hideTextChat;
