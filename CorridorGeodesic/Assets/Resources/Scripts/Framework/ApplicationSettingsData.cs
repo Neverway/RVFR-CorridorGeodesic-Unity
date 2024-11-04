@@ -95,6 +95,8 @@ public class ApplicationSettingsData
     public bool reduceStrobing;
     public bool screenReader;
 
+    public int localeID;
+
     // Default constructor
     public ApplicationSettingsData()
     {
@@ -149,6 +151,8 @@ public class ApplicationSettingsData
         dyslexicFriendlyFont = false;
         reduceStrobing = false;
         screenReader = false;
+
+        localeID = 0;
     }
 
     // Clone constructor
@@ -205,5 +209,7 @@ public class ApplicationSettingsData
         dyslexicFriendlyFont = other.dyslexicFriendlyFont;
         reduceStrobing = other.reduceStrobing;
         screenReader = other.screenReader;
+
+        localeID = other.localeID;
     }
 }

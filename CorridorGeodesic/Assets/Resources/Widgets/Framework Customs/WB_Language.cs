@@ -1,0 +1,53 @@
+//===================== (Neverway 2024) Written by Liz M. =====================
+//
+// Purpose:
+// Notes:
+//
+//=============================================================================
+
+using UnityEngine;
+using UnityEngine.UI;
+
+public class WB_Language : MonoBehaviour
+{
+    //=-----------------=
+    // Public Variables
+    //=-----------------=
+
+
+    //=-----------------=
+    // Private Variables
+    //=-----------------=
+
+
+    //=-----------------=
+    // Reference Variables
+    //=-----------------=
+    private ApplicationSettings applicationSettings;
+    [SerializeField] private Button buttonBack;
+
+
+    //=-----------------=
+    // Mono Functions
+    //=-----------------=
+    private void Start()
+    {
+        applicationSettings = FindObjectOfType<ApplicationSettings>();
+        buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
+    }
+
+
+    //=-----------------=
+    // Internal Functions
+    //=-----------------=
+
+
+    //=-----------------=
+    // External Functions
+    //=-----------------=
+    public void SetLocaleID(int _localeID)
+    {
+        applicationSettings.currentSettingsData.localeID = _localeID;
+        applicationSettings.ApplySettings();
+    }
+}
