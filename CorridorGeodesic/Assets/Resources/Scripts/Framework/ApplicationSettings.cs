@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System.Collections;
 using FMODUnity;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,7 @@ using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering.PostProcessing;
 
 public class ApplicationSettings : MonoBehaviour
@@ -150,6 +152,12 @@ public class ApplicationSettings : MonoBehaviour
         //        }
         //        break;
         //}
+    }
+
+    private IEnumerator SetLocalization(int _localeID)
+    {
+        yield return LocalizationSettings.InitializationOperation;
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[_localeID];
     }
 
 
@@ -519,17 +527,17 @@ public class ApplicationSettings : MonoBehaviour
             case 3:
                 // Tritanopia
                 postProcessProfile.GetSetting<ColorGrading>().active = true;
-                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 95;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 5;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 95*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 5*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0*colorBlindIntensityValue;
                     
-                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 0;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 43;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 57;
+                postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 0*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 43*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 57*colorBlindIntensityValue;
                 
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
-                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 47;
-                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 53;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 47*colorBlindIntensityValue;
+                postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 53*colorBlindIntensityValue;
                 break;
         }
         // Dyslexia Assist
@@ -541,6 +549,10 @@ public class ApplicationSettings : MonoBehaviour
         {
             GetComponent<ApplicationFontSetter>().currentFont = 0;
         }
+        
+        // Language
+        StartCoroutine(SetLocalization(currentSettingsData.localeID));
+        
         
         
         SaveSettings();

@@ -23,6 +23,8 @@ public class Logic_Timer: LogicComponent
     [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
     [SerializeField] private float timerDuration;
     [SerializeField] private bool runTimerOnStart = true;
+    [Tooltip("By default the output is powered when the timer is counting, then is unpowered on completion")]
+    [SerializeField] private bool outputPowersWhenTimerEnds;
     [field:SerializeField] public UnityEvent onTimerStart { get; private set; } = new UnityEvent();
     [field:SerializeField] public UnityEvent onTimerEnd { get; private set; } = new UnityEvent();
 
@@ -50,11 +52,22 @@ public class Logic_Timer: LogicComponent
     //=-----------------=
     IEnumerator CountDown()
     {
-        isPowered = true;
-        onTimerStart?.Invoke();
-        yield return new WaitForSeconds(timerDuration);
-        isPowered = false;
-        onTimerEnd?.Invoke();
+        if (!outputPowersWhenTimerEnds)
+        {
+            isPowered = true;
+            onTimerStart?.Invoke();
+            yield return new WaitForSeconds(timerDuration);
+            isPowered = false;
+            onTimerEnd?.Invoke();
+        }
+        else
+        {
+            isPowered = false;
+            onTimerStart?.Invoke();
+            yield return new WaitForSeconds(timerDuration);
+            isPowered = true;
+            onTimerEnd?.Invoke();
+        }
     }
     public override void OnEnable()
     {

@@ -80,6 +80,8 @@ public class ApplicationSettingsData
     public bool invertVerticalView;
     public float horizontalLookSpeed;
     public float verticalLookSpeed;
+    public float joystickLookSensitivity;
+    public float mouseLookSensitivity;
     public int cameraFov;
     
     // Communication
@@ -93,6 +95,8 @@ public class ApplicationSettingsData
     public bool reduceStrobing;
     public bool screenReader;
 
+    public int localeID;
+
     // Default constructor
     public ApplicationSettingsData()
     {
@@ -105,7 +109,7 @@ public class ApplicationSettingsData
         resolutionScale = 3;
         shadowQuality = 2;
         effectsQuality = 2;
-        textureQuality = 3;
+        textureQuality = 5;
         postprocessingQuality = 2;
 
         antialiasing = 0;
@@ -135,6 +139,8 @@ public class ApplicationSettingsData
         invertVerticalView = false;
         horizontalLookSpeed = 1;
         verticalLookSpeed = 0.75f;
+        joystickLookSensitivity = 0.7f;
+        mouseLookSensitivity = 0.7f;
         cameraFov = 90;
 
         hideTextChat = false;
@@ -145,6 +151,8 @@ public class ApplicationSettingsData
         dyslexicFriendlyFont = false;
         reduceStrobing = false;
         screenReader = false;
+
+        localeID = 0;
     }
 
     // Clone constructor
@@ -189,6 +197,8 @@ public class ApplicationSettingsData
         invertVerticalView = other.invertVerticalView;
         horizontalLookSpeed = other.horizontalLookSpeed;
         verticalLookSpeed = other.verticalLookSpeed;
+        joystickLookSensitivity = other.joystickLookSensitivity;
+        mouseLookSensitivity = other.mouseLookSensitivity;
         cameraFov = other.cameraFov;
 
         hideTextChat = other.hideTextChat;
@@ -199,5 +209,7 @@ public class ApplicationSettingsData
         dyslexicFriendlyFont = other.dyslexicFriendlyFont;
         reduceStrobing = other.reduceStrobing;
         screenReader = other.screenReader;
+
+        localeID = other.localeID;
     }
 }

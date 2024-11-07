@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class Phys_Oilable : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public bool preOiled;
 
 
     //=-----------------=
@@ -49,6 +51,14 @@ public class Phys_Oilable : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+        if (preOiled)
+        {
+            AddOil(1);
+        }
+    }
+
     private void FixedUpdate()
     {
         if(!burning && oilAmount > 0.3f && OilManager.Instance.BurnAtPositionSingle(transform.position))

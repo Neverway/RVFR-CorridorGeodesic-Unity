@@ -1,88 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4484606702466135519
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4023314950042398174}
-  - component: {fileID: 3070717176120185601}
-  - component: {fileID: 209293196636678098}
-  m_Layer: 14
-  m_Name: FogPlane
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4023314950042398174
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484606702466135519}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 20, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8480011088966710340}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!33 &3070717176120185601
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484606702466135519}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &209293196636678098
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484606702466135519}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 09fc1f3af834c7646a769ba761fdb147, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &8625462580118000677
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +12,7 @@ GameObject:
   - component: {fileID: 6108168937968881480}
   - component: {fileID: 6374715479446637499}
   m_Layer: 14
-  m_Name: TargetPlane
+  m_Name: FogPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -256,7 +173,7 @@ PrefabInstance:
     - target: {fileID: 3633760791344189617, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
       propertyPath: m_Name
-      value: VerticalWoodBeam (3)
+      value: Prop_WoodBeam1
       objectReference: {fileID: 0}
     - target: {fileID: 6058945426281507812, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
@@ -327,31 +244,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3576637194593950626, guid: 30cce448912321f07a09630c025dab49,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3942331157720186516, guid: 30cce448912321f07a09630c025dab49,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4636549806831524766, guid: 30cce448912321f07a09630c025dab49,
-        type: 3}
-      propertyPath: onOccupied.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6536829555207834286, guid: 30cce448912321f07a09630c025dab49,
-        type: 3}
-      propertyPath: worldID
-      value: c1s2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150274277903696518, guid: 30cce448912321f07a09630c025dab49,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 24170637264727976, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       propertyPath: m_Enabled
@@ -412,6 +304,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Actor_ElevatorEnter
       objectReference: {fileID: 0}
+    - target: {fileID: 3576637194593950626, guid: 30cce448912321f07a09630c025dab49,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3942331157720186516, guid: 30cce448912321f07a09630c025dab49,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4636549806831524766, guid: 30cce448912321f07a09630c025dab49,
+        type: 3}
+      propertyPath: onOccupied.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6536829555207834286, guid: 30cce448912321f07a09630c025dab49,
+        type: 3}
+      propertyPath: worldID
+      value: c1s2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8150274277903696518, guid: 30cce448912321f07a09630c025dab49,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 9201452023519088474, guid: 30cce448912321f07a09630c025dab49, type: 3}
@@ -427,11 +344,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1584053128322229762}
+      addedObject: {fileID: 687455820194180879}
     - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5275583907129822945}
+    - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 817577123579496002}
     - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       insertIndex: -1
@@ -459,23 +380,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 817577123579496002}
-    - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 5019798119204263609}
     - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4023314950042398174}
+      addedObject: {fileID: 1584053128322229762}
     - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1946567426124201870}
-    - targetCorrespondingSourceObject: {fileID: 5780902598049052086, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 687455820194180879}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
 --- !u!4 &8480011088966710340 stripped
@@ -545,7 +458,7 @@ PrefabInstance:
     - target: {fileID: 8761801792848222212, guid: a44beb3d3dc5bb6489e35b9b27915c04,
         type: 3}
       propertyPath: m_Name
-      value: VerticalOuterWoodBeam
+      value: Prop_WoodBeam
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -677,7 +590,7 @@ PrefabInstance:
     - target: {fileID: 3633760791344189617, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
       propertyPath: m_Name
-      value: VerticalWoodBeam (2)
+      value: Prop_WoodBeam1
       objectReference: {fileID: 0}
     - target: {fileID: 6058945426281507812, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
@@ -751,7 +664,7 @@ PrefabInstance:
     - target: {fileID: 3633760791344189617, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
       propertyPath: m_Name
-      value: VerticalWoodBeam (1)
+      value: Prop_WoodBeam1
       objectReference: {fileID: 0}
     - target: {fileID: 6058945426281507812, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
@@ -825,7 +738,7 @@ PrefabInstance:
     - target: {fileID: 3633760791344189617, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
       propertyPath: m_Name
-      value: VerticalWoodBeam
+      value: Prop_WoodBeam1
       objectReference: {fileID: 0}
     - target: {fileID: 6058945426281507812, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
@@ -899,7 +812,7 @@ PrefabInstance:
     - target: {fileID: 3633760791344189617, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
       propertyPath: m_Name
-      value: VerticalWoodBeam (4)
+      value: Prop_WoodBeam1
       objectReference: {fileID: 0}
     - target: {fileID: 6058945426281507812, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
@@ -978,7 +891,7 @@ PrefabInstance:
     - target: {fileID: 2802148435732491408, guid: 750d840f18cf3ac479c0136c58a590a8,
         type: 3}
       propertyPath: uniqueCheckpointName
-      value: 553fc5ac-fd1f-4f8f-a1f2-d21505ff3fbe
+      value: 624991c3-b2c5-442e-ae8d-1ae16bfcd73a
       objectReference: {fileID: 0}
     - target: {fileID: 6291239301692520232, guid: 750d840f18cf3ac479c0136c58a590a8,
         type: 3}
@@ -998,7 +911,7 @@ PrefabInstance:
     - target: {fileID: 8723237101249000872, guid: 750d840f18cf3ac479c0136c58a590a8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8723237101249000872, guid: 750d840f18cf3ac479c0136c58a590a8,
         type: 3}
@@ -1208,7 +1121,7 @@ PrefabInstance:
     - target: {fileID: 3633760791344189617, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
       propertyPath: m_Name
-      value: VerticalWoodBeam (5)
+      value: Prop_WoodBeam1
       objectReference: {fileID: 0}
     - target: {fileID: 6058945426281507812, guid: 7f4113aa82aaf6a4e8f79d255a497def,
         type: 3}
