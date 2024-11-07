@@ -62,14 +62,16 @@ public class Pawn_LookAt : MonoBehaviour
     private void UpdateTargets()
     {
         float closestDistance = -1;
-        foreach (var movableObject in FindObjectsOfType<Rigidbody>())
+        foreach (var movableObject in FindObjectsOfType<Pawn>())
         {
             var distanceToPawn = Vector3.Distance(transform.position, movableObject.transform.position);
             if (distanceToPawn >= targetRange.x && distanceToPawn <= targetRange.y)
             {
-                if (!(distanceToPawn < closestDistance) && closestDistance != -1) continue;
-                closestDistance = distanceToPawn;
-                currentTarget = movableObject.transform;
+                if (distanceToPawn < closestDistance || closestDistance == -1)
+                {
+                    closestDistance = distanceToPawn;
+                    currentTarget = movableObject.transform;
+                }
             }
         }
     }

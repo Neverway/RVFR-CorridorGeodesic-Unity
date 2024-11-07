@@ -62,8 +62,11 @@ public class DynamicCable : LogicComponent
 
     private void Update()
     {
-        if (isPowered != inputSignal.isPowered)
-            SourcePowerStateChanged(inputSignal.isPowered);
+        if (inputSignal)
+        {
+            if (isPowered != inputSignal.isPowered)
+                SourcePowerStateChanged(inputSignal.isPowered);
+        }
 
 
         if (AnchorPointsMoved() && generateWaypointsUsingLength && updateOnMove)
