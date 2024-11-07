@@ -89,7 +89,8 @@ public class ApplicationSettingsData
     public bool enablePushToTalk;
     
     // General Accessibility
-    public int colorBlindIntensity;
+    public float brightness;
+    public float colorBlindIntensity;
     [Range(0,3)] public int colorBlindFilter;
     public bool dyslexicFriendlyFont;
     public bool reduceStrobing;
@@ -146,6 +147,7 @@ public class ApplicationSettingsData
         hideTextChat = false;
         enablePushToTalk = false;
 
+        brightness = 1;
         colorBlindIntensity = 1;
         colorBlindFilter = 0;
         dyslexicFriendlyFont = false;
@@ -204,6 +206,7 @@ public class ApplicationSettingsData
         hideTextChat = other.hideTextChat;
         enablePushToTalk = other.enablePushToTalk;
 
+        brightness = other.brightness;
         colorBlindIntensity = other.colorBlindIntensity;
         colorBlindFilter = other.colorBlindFilter;
         dyslexicFriendlyFont = other.dyslexicFriendlyFont;

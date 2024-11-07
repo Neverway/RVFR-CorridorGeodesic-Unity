@@ -36,7 +36,8 @@ public class WB_Settings_Gameplay : MonoBehaviour
     [SerializeField] private Slider mouseLookSensitivity;
     [SerializeField] private Slider cameraFov;
     // Display
-    //[SerializeField] private Slider colorBlindIntensity;
+    [SerializeField] private Slider brightness;
+    [SerializeField] private Slider colorBlindIntensity;
     [SerializeField] private Button_Selector colorBlindFilter;
     [SerializeField] private Toggle dyslexicFriendlyFont;
 
@@ -68,6 +69,9 @@ public class WB_Settings_Gameplay : MonoBehaviour
         joystickLookSensitivity.value = applicationSettings.currentSettingsData.joystickLookSensitivity*10;
         mouseLookSensitivity.value = applicationSettings.currentSettingsData.mouseLookSensitivity*10;
         cameraFov.value = applicationSettings.currentSettingsData.cameraFov;
+        
+        brightness.value = applicationSettings.currentSettingsData.brightness*100;
+        colorBlindIntensity.value = applicationSettings.currentSettingsData.colorBlindIntensity*100;
         dyslexicFriendlyFont.isOn = applicationSettings.currentSettingsData.dyslexicFriendlyFont;
         colorBlindFilter.currentIndex = applicationSettings.currentSettingsData.colorBlindFilter;
     }
@@ -81,6 +85,9 @@ public class WB_Settings_Gameplay : MonoBehaviour
         joystickLookSensitivity.onValueChanged.AddListener(delegate { applicationSettings.currentSettingsData.joystickLookSensitivity = (joystickLookSensitivity.value / 10); });
         mouseLookSensitivity.onValueChanged.AddListener(delegate { applicationSettings.currentSettingsData.mouseLookSensitivity = (mouseLookSensitivity.value / 10); });
         cameraFov.onValueChanged.AddListener(delegate { applicationSettings.currentSettingsData.cameraFov = Mathf.RoundToInt(cameraFov.value); });
+        
+        brightness.onValueChanged.AddListener(delegate { applicationSettings.currentSettingsData.brightness = brightness.value/100; });
+        colorBlindIntensity.onValueChanged.AddListener(delegate { applicationSettings.currentSettingsData.colorBlindIntensity = (colorBlindIntensity.value/100); });
         dyslexicFriendlyFont.onValueChanged.AddListener(delegate { applicationSettings.currentSettingsData.dyslexicFriendlyFont = dyslexicFriendlyFont.isOn; });
     }    
 
