@@ -114,7 +114,7 @@ public class ApplicationSettingsData
         postprocessingQuality = 2;
 
         antialiasing = 0;
-        motionBlur = 1;
+        motionBlur = 0;
         ambientOcclusion = 2;
         bloom = 2;
 
