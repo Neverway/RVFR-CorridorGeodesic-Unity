@@ -131,10 +131,6 @@ Shader "Soulex/Surface/Standard Toon Oil"
             half Occlusion;
             fixed Alpha;
         };
-        float DotClamped(float3 a, float3 b)
-        {
-            return saturate(dot(a, b));
-        }
         half3 BRDFToon(half3 diffColor, half3 specColor, half oneMinusReflectivity, half smoothness, 
         float3 normal, float3 viewDir, UnityLight light, UnityIndirect gi)
         {
