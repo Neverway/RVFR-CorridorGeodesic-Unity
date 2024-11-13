@@ -4,13 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
-using static LogicValueLinkTool;
 
 public class LogicValueLinkTool : EditorTool
 {
@@ -925,7 +923,7 @@ public class LogicValueLinkTool : EditorTool
             public override Func<LogicValueField, bool> GetValueFilter() => (v => v.IsInput && v.Input.HasLogicOutputSource);
             protected override string GetSelectorWindowTitle() => "Select input to unlink";
 
-            public override void OnUpdate()
+            public override void OnUpdate() 
             {
                 Color oldColor = Handles.color;
                 Handles.color = Color.red;

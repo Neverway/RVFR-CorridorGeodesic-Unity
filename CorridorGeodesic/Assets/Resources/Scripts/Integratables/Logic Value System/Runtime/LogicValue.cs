@@ -90,7 +90,7 @@ namespace Neverway.Framework.LogicValueSystem
             return sourceField;
         }
     }
-     /*
+    /*
     public interface LogicInputList 
     {
         public abstract int SourceOutputCount { get; }
@@ -103,12 +103,15 @@ namespace Neverway.Framework.LogicValueSystem
     {
         [SerializeField] public ComponentFieldReference<LogicOutput<T>>[] sourceFields;
 
-        public LogicInput(T defaultValue) : base(defaultValue) { }
+        public LogicInputList(T[] defaultValue) : base(defaultValue) { }
         public override T Get() => HasLogicOutputSource ? value = sourceFields.Get() : base.Get();
         public void CallOnSourceChanged(UnityAction action) => sourceFields.Get().OnOutputChanged.AddListener(action);
 
-        public bool HasLogicOutputSource => !sourceFields.IsUndefined;
-        public LogicOutput[] GetSourceLogicOutputs() => HasLogicOutputSource ? sourceFields.Get() as LogicOutput : null;
+        public int SourceOutputCount => !sourceFields.IsUndefined;
+        public LogicOutput[] GetSourceLogicOutputs()
+        {
+
+        }
         public Component GetSourceLogicOutputComponent() => HasLogicOutputSource ? sourceFields.GetTargetComponent() : null;
         public object SetFieldReference(Component component, string fieldName)
         {

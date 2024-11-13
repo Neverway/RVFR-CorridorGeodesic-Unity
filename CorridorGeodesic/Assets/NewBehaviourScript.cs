@@ -11,40 +11,18 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
+    public int something;
+    public NewBehaviourScript RAHHH;
 
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
     private void Start()
     {
-    
+        RAHHH = GetComponent<NewBehaviourScript>();
+
+
     }
 
     private void Update()
     {
-    
+        
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }
