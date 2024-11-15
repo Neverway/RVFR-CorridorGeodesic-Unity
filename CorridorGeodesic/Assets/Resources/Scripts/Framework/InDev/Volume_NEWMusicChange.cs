@@ -34,7 +34,7 @@ public class Volume_NEWMusicChange : Volume
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    private Audio_FMODMusicManager musicManager => Audio_FMODMusicManager.Instance;
+    //private Audio_FMODMusicManager musicManager => Audio_FMODMusicManager.Instance;
 
     //=-----------------=
     // Mono Functions
@@ -97,21 +97,21 @@ public class Volume_NEWMusicChange : Volume
 
         print("dont know if music manager exists");
 
-        print(musicManager);
-        if (!musicManager)
+        print(Audio_FMODMusicManager.Instance);
+        if (Audio_FMODMusicManager.Instance.Equals(null))
             return;
 
         print("music will supposedly change");
         switch (musicPlayType)
         {
             case MusicPlayType.Play:
-                musicManager.PlayMusic(musicEvent);
+                Audio_FMODMusicManager.Instance.PlayMusic(musicEvent);
                 break;
             case MusicPlayType.StopAllowFadeOut:
-                musicManager.StopMusic(true);
+                Audio_FMODMusicManager.Instance.StopMusic(true);
                 break;
             case MusicPlayType.StopImmediate:
-                musicManager.StopMusic();
+                Audio_FMODMusicManager.Instance.StopMusic();
                 break;
             default:
                 break;
