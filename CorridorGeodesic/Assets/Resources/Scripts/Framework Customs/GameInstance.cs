@@ -242,6 +242,21 @@ public class GameInstance : MonoBehaviour
         AddWidget(UserInterfaceWidgets[7]);
     }
 
+    // 8
+    public void UI_ShowFeedbackMenu(bool enabled)
+    {
+        if (enabled && !GetWidget("WB_FeedbackMenu"))
+        {
+            AddWidget(UserInterfaceWidgets[8]);
+            SetAllPawnsIsPaused(true);
+        }
+        else if(!enabled)
+        {
+            Destroy(GetWidget("WB_FeedbackMenu"));
+            SetAllPawnsIsPaused(false);
+        }
+    }
+
     //=----Reload Static Fields----=
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void InitializeStaticFields()

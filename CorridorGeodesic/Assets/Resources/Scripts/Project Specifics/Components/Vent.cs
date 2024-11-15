@@ -69,7 +69,7 @@ public class Vent : LogicComponent
         }
         else
         {
-            if (isPowered != inputSignal.isPowered)
+            if (inputSignal && isPowered != inputSignal.isPowered)
                 SourcePowerStateChanged(inputSignal.isPowered);
         }
 

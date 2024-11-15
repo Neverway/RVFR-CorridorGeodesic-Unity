@@ -36,6 +36,7 @@ GameObject:
   - component: {fileID: 1897448500087468385}
   - component: {fileID: 7671813606931478154}
   - component: {fileID: 4134968938103219640}
+  - component: {fileID: 3819623013973250411}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -92,6 +93,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 1985048443619682036, guid: d7a6a9f14009a7035a7398092fcf75cd, type: 3}
   - {fileID: 5675289539813747590, guid: f951f1626e8a081628c8e41d018c0094, type: 3}
+  - {fileID: 2655442103756179889, guid: d88457d141bdcea49ad0746d72aec216, type: 3}
   PlayerControllerClasses:
   - {fileID: 11400000, guid: 02844299f83062e3688fb3e76ac2692a, type: 2}
   - {fileID: 11400000, guid: 39e9830e6bc5e60ee9bf7a0a613f8d82, type: 2}
@@ -561,8 +563,6 @@ MonoBehaviour:
     keybindSprite: {fileID: 21300000, guid: 7c89294ecabd3402a913a8d7c6edbde4, type: 3}
   - keybindID: ctrl
     keybindSprite: {fileID: 21300000, guid: b571c0032916afc2e8ad7eec55e3c3f5, type: 3}
-  - keybindID: escape
-    keybindSprite: {fileID: 21300000, guid: f4f8a5bf53891ca2d83d0fd3e1ed5254, type: 3}
   controllerList:
   - keybindID: buttonNorth
     keybindSprite: {fileID: 21300000, guid: 1c1753620a1d0d642a2b44519d6faa3e, type: 3}
@@ -1013,18 +1013,18 @@ MonoBehaviour:
     Path: event:/SFX/NixieCross/NixieTubePin
   hover:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1451508483
+      Data2: 1223420156
+      Data3: -639139949
+      Data4: -1961944707
+    Path: event:/SFX/Framework/Hover
   select:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 2102582212
+      Data2: 1161757476
+      Data3: -1614500943
+      Data4: 2117759777
+    Path: event:/SFX/Framework/Select
   riftSpawned:
     Guid:
       Data1: -415206669
@@ -1269,3 +1269,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueBoxWidget: {fileID: 5675289539813747590, guid: 44dd9fb15fe82680ca8d43c25df67783,
     type: 3}
+--- !u!114 &3819623013973250411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f7cb40a2083a8245a6ad15c805f4f8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
