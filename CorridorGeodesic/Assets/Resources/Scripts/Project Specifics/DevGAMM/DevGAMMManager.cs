@@ -72,7 +72,8 @@ public class DevGAMMManager: MonoBehaviour
     //=-----------------=
     void ResetGame()
     {
-        WorldLoader.Instance.LoadWorld("_Title");
+        SceneManager.LoadScene(1);
+        //WorldLoader.Instance.LoadWorld("_Title");
     }
 
     //=-----------------=

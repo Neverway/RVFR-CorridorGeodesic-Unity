@@ -149,11 +149,19 @@ Shader "Soulex/Surface/Standard Toon"
             half steps;
 
             #ifdef _SPECULARMODE_TRUEPBR
-                steps = _RampSmoothness * _RampSmoothness * 100;
+                steps = _RampSmoothness * _RampSmoothness * 100 * 64;
+    
+                //steps = 64;
+                
+                //float rNdotL = round(NdotL * steps) / steps;
+                //float rNdotV = round(NdotV * steps) / steps;
+    
+                float rNdotH = round(NdotH * steps) / steps;
+                
                 float V = SmithJointGGXVisibilityTerm(NdotL, NdotV, roughness);
-                float D = GGXTerm(NdotH, roughness);
+                float D = GGXTerm(rNdotH, roughness);
                 specularTerm = V * D * UNITY_PI;
-                specularTerm = lerp(round(specularTerm * steps) / steps, specularTerm, 1 - smoothness);
+                //specularTerm = lerp(round(specularTerm * steps) / steps, specularTerm, 1 - smoothness);
             #elif _SPECULARMODE_STYLIZEDPBR
                 steps = _RampSmoothness * _RampSmoothness * 300;
                 specularTerm = round(pow(NdotH * NdotL, smoothness * 10) * steps) / steps;
