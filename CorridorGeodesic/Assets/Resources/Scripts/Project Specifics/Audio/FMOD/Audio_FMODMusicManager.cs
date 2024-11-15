@@ -52,6 +52,7 @@ public class Audio_FMODMusicManager: MonoBehaviour
     //=-----------------=
     public void PlayMusic(EventReference musicReference)
     {
+        print("music playsinas");
         if (currentInstance.isValid())
         {
             currentInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
