@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 4250787532129264725}
   - component: {fileID: 5251644761428742376}
   - component: {fileID: 6884936314793814385}
+  - component: {fileID: 9044220838146930292}
+  - component: {fileID: 8943966481567140325}
   m_Layer: 0
   m_Name: OilDecal
   m_TagString: Untagged
@@ -102,3 +104,41 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 5c8ab1d40aeb30940b64b5dba6824f52, type: 2}
   - {fileID: 2100000, guid: 1cf1c95d87597a94c83bf3da700c17de, type: 2}
   rend: {fileID: 5251644761428742376}
+--- !u!114 &9044220838146930292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5734288331440696650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9328f886ac63731bba9d85776baa2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeInNullSpace: 0
+  destroyedInKillTrigger: 1
+  debugLogData: 0
+  homePosition: {x: 0, y: 0, z: 0}
+  homeScale: {x: 0, y: 0, z: 0}
+  homeParent: {fileID: 0}
+  dynamic: 0
+  crushInNullSpace: 1
+  isParentedIgnoreOffsets: 0
+  isHeld: 0
+  space: 0
+--- !u!114 &8943966481567140325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5734288331440696650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd1e386961f4f14bb3bc22127e12442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableType: 0
+  lifeTime: 1
+  startTimerOnEnable: 1

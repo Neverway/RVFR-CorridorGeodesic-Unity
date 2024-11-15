@@ -18,6 +18,7 @@ public class WB_DialogueBox : MonoBehaviour
     // Public Variables
     //=-----------------=
     public DialogueEvent dialogueEvent;
+    public float printSpeed = 0.05f;
 
 
     //=-----------------=
@@ -54,7 +55,7 @@ public class WB_DialogueBox : MonoBehaviour
         {
             currentText = dialogueEvent.dialogue[currentIndex].text.Substring(0, i+1);
             dialogue.text = currentText;
-            yield return new WaitForSeconds(0.05f / dialogueEvent.dialogue[currentIndex].textSpeed);
+            yield return new WaitForSeconds(printSpeed / dialogueEvent.dialogue[currentIndex].textSpeed);
         }
 
         StartCoroutine(NextFrame());

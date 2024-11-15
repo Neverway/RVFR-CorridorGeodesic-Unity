@@ -41,7 +41,7 @@ public class GameObject_ProceduralSway : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
-    [SerializeField] private Rigidbody positionReference;
+    //[SerializeField] private Rigidbody positionReference;
     [SerializeField] private Pawn pawn;
     [SerializeField] private PlayerController_FirstPersonShooter pawnController;
 

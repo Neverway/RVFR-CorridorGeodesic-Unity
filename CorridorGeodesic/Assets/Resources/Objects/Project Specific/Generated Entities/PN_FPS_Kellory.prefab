@@ -248,7 +248,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 1, z: 2}
+  m_ConnectedAnchor: {x: 0, y: 1.219, z: 2}
   serializedVersion: 3
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 2
@@ -521,14 +521,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7773136520291343801}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000038510765, y: -0.99144495, z: 0.13052596, w: 0.0000029251885}
-  m_LocalPosition: {x: 0, y: 1.527, z: 1.292}
+  m_LocalRotation: {x: 0.016965263, y: -0.9810213, z: 0.10113641, w: 0.16456272}
+  m_LocalPosition: {x: 0.355, y: 1.399, z: 1.043}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 36958893294195878}
   m_Father: {fileID: 7443549735799978621}
-  m_LocalEulerAnglesHint: {x: 15, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 11.772, y: -160.955, z: 0}
 --- !u!20 &1942029805131535907
 Camera:
   m_ObjectHideFlags: 0
@@ -641,9 +641,8 @@ MonoBehaviour:
   swayRotationStep: 1
   maxSwayDistance: 0
   maxSwayRotation: 5
-  positionReference: {fileID: 0}
   pawn: {fileID: 6503492705110824958}
-  pawnController: {fileID: 0}
+  pawnController: {fileID: 11400000, guid: b1246c8f7c44fe24c8a9e9f371b89f1c, type: 2}
 --- !u!1001 &337302178690688900
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1564,6 +1563,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2732704108008348563, guid: 791e00963c710219c810638553f52abb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2796237525572601696, guid: 791e00963c710219c810638553f52abb,
         type: 3}
       propertyPath: m_Layer
@@ -2330,6 +2334,11 @@ PrefabInstance:
       propertyPath: m_CullingMask.m_Bits
       value: 32759
       objectReference: {fileID: 0}
+    - target: {fileID: 7217751016841697080, guid: ff3469225baab858c9ebc9e25666dba4,
+        type: 3}
+      propertyPath: volumeLayer.m_Bits
+      value: 32759
+      objectReference: {fileID: 0}
     - target: {fileID: 7391132662113807829, guid: ff3469225baab858c9ebc9e25666dba4,
         type: 3}
       propertyPath: m_Name
@@ -2616,9 +2625,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.275
-  m_Height: 1.8
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0.125, z: 0}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!136 &3861239920297876187
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3187,6 +3196,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732704108008348563, guid: 791e00963c710219c810638553f52abb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2796237525572601696, guid: 791e00963c710219c810638553f52abb,
         type: 3}

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TMP_Timer : MonoBehaviour
+public class Func_Timer : MonoBehaviour
 {
     //=-----------------=
     // Public Variables

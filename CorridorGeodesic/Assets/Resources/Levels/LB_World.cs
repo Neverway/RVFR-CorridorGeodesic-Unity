@@ -50,7 +50,7 @@ public class LB_World : MonoBehaviour
             weaponInventory = FindObjectOfType<Pawn_WeaponInventory>();
             if (weaponInventory == null)
             {
-                Debug.LogWarning("Could not find " + nameof(Pawn_WeaponInventory) + " to update geogun");
+                //Debug.LogWarning("Could not find " + nameof(Pawn_WeaponInventory) + " to update geogun");
                 return;
             }
         }

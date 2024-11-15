@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -474,9 +475,11 @@ public class ApplicationSettings : MonoBehaviour
         {
             camera.fieldOfView = currentSettingsData.cameraFov;
         }
+
+        postProcessProfile.GetSetting<AutoExposure>().keyValue.value = currentSettingsData.brightness;
         
         // ColorBlind Filter
-        var colorBlindIntensityValue = 1; // @Liz I SUCK AT MATH AND EVERY EQUATION I TRIED CAUSES NEGATIVE COLOR VALUES (That's bad!)
+        var colorBlindIntensityValue = currentSettingsData.colorBlindIntensity; // @Liz I SUCK AT MATH AND EVERY EQUATION I TRIED CAUSES NEGATIVE COLOR VALUES (That's bad!)
         switch (currentSettingsData.colorBlindFilter
                 )
         {

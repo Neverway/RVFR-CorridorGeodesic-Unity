@@ -16,6 +16,7 @@ public class Object_Grabbable : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public float breakAwayDistance = 2;
 
 
     //=-----------------=
@@ -90,7 +91,7 @@ public class Object_Grabbable : MonoBehaviour
             // Drop the object if it's too far away
             if (Alt_Item_Geodesic_Utility_GeoGun.delayRiftCollapse == false
                 && Vector3.Distance(gameObject.transform.position,
-                    targetPawn.physObjectAttachmentPoint.transform.position) > 2)
+                    targetPawn.physObjectAttachmentPoint.transform.position) > breakAwayDistance)
             {
                 ToggleHeld();
             }
