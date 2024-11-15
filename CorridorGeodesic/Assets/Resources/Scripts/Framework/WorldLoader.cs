@@ -16,6 +16,8 @@ public class WorldLoader : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public static WorldLoader Instance;
+
     [SerializeField] public float delayBeforeWorldChange = 0.25f;
     [SerializeField] public float minimumRequiredLoadTime = 1f;
     [SerializeField] private string loadingWorldID = "_Travel";
@@ -39,6 +41,10 @@ public class WorldLoader : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         

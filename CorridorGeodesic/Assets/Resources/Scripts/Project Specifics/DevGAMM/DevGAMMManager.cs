@@ -28,11 +28,9 @@ public class DevGAMMManager: MonoBehaviour
     private float mouseDelta;
 
     private float timer;
-    private float playTimeTimer;
 
-    private string directoryPath => $"{Application.dataPath}/saves/";
+    private string directoryPath => $"{Application.persistentDataPath}/saves/";
     private string saveName = "Feedback.json";
-    private string fullSavePath => directoryPath + saveName;
 
     //=-----------------=
     // Reference Variables
@@ -48,6 +46,9 @@ public class DevGAMMManager: MonoBehaviour
     }
     private void Update()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+            return;
+
         mouseDelta = (Input.mousePosition - mouseLastPos).magnitude;
 
         timer += Time.deltaTime;
@@ -71,8 +72,7 @@ public class DevGAMMManager: MonoBehaviour
     //=-----------------=
     void ResetGame()
     {
-        playTimeTimer = 0;
-        SceneManager.LoadScene(1);
+        WorldLoader.Instance.LoadWorld("_Title");
     }
 
     //=-----------------=
@@ -80,41 +80,25 @@ public class DevGAMMManager: MonoBehaviour
     //=-----------------=
     public void SaveFeedback(int rating, string feedback)
     {
-        string[] splitLines = feedback.Split('.');
+        saveData.playTimeDatas.Add(new PlayTimeData(rating, feedback, 
+            (float)Stopwatch.Instance.timeElapsed));
 
-        feedback = "";
-
-        int currentLineLength = 0;
-
-        for (int i = 0; i < splitLines.Length; i++)
-        {
-            currentLineLength += splitLines[i].Length;
-
-            if(currentLineLength >= 60)
-            {
-                feedback += splitLines[i] + "\n";
-                currentLineLength = 0;
-            }  
-            else
-                feedback += splitLines[i];
-        }
-
-        saveData.playTimeDatas.Add(new PlayTimeData(rating, feedback, playTimeTimer));
-
-        FileStream stream;
+        string fullPath = Path.Combine(directoryPath, saveName);
 
         if(!Directory.Exists(directoryPath))
             Directory.CreateDirectory(directoryPath);
 
-        if (!File.Exists(fullSavePath))
-            stream = File.Create(fullSavePath);
-        else
-            stream = File.OpenWrite(fullSavePath);
-
-        using (StreamWriter writer = new StreamWriter(stream))
+        using (FileStream stream = new FileStream(fullPath, FileMode.Create))
         {
-            JsonSerializer serializer = new JsonSerializer();
-            serializer.Serialize(writer, saveData);
+            using (StreamWriter writer = new StreamWriter(stream))
+            {
+                string data = JsonUtility.ToJson(saveData, true);
+
+                writer.Write(data);
+
+                writer.Close();
+            }
+            stream.Close();
         }
     }
 }
@@ -123,6 +107,7 @@ public class SaveData
 {
     public List<PlayTimeData> playTimeDatas = new List<PlayTimeData>();
 }
+[System.Serializable]
 public struct PlayTimeData
 {
     public int rating;
