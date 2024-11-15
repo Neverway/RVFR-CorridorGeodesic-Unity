@@ -416,11 +416,11 @@ public class ApplicationSettings : MonoBehaviour
                 break;
             case 3:
                 postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
-                postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 1f;
+                postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 0.75f;
                 break;
             case 4:
                 postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
-                postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 2f;
+                postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 1f;
                 break;
         }
         // Bloom
