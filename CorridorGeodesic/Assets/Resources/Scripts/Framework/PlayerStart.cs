@@ -1,15 +1,13 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Defines 
 // Notes:
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.PawnManagement
 {
     public class PlayerStart : MonoBehaviour
     {

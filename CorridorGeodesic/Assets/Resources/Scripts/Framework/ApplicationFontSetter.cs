@@ -1,16 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Defines a consistent default font to all text elements and allows
+//  them to be replaced by the dyslexia friendly font
 // Notes:
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.ApplicationManagement
 {
     public class ApplicationFontSetter : MonoBehaviour
     {

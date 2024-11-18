@@ -1,18 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Sets and loads the parameters for the application settings from a file
+// Notes: This is only for the application settings like graphics, audio, gameplay, etc.
+//  This file should not be used to store any game-specific information
 //
 //=============================================================================
 
 using System.Collections;
 using FMODUnity;
-using System.Collections.Generic;
 using System.IO;
-using TMPro;
 using Unity.Collections;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Localization.Settings;
@@ -20,7 +17,7 @@ using UnityEngine.Rendering.PostProcessing;
 using Neverway.Framework.Customs;
 
 
-namespace Neverway.Framework
+namespace Neverway.Framework.ApplicationManagement
 {
     public class ApplicationSettings : MonoBehaviour
     {
@@ -59,7 +56,7 @@ namespace Neverway.Framework
         //=-----------------=
         private void Start()
         {
-            path = $"{Application.persistentDataPath}/settings.json";
+            path = $"{UnityEngine.Application.persistentDataPath}/settings.json";
             gameInstance = GetComponent<GameInstance>();
 
             masterBus = RuntimeManager.GetBus("bus:/Master");
@@ -218,11 +215,11 @@ namespace Neverway.Framework
             // FPS limit
             if (!currentSettingsData.enableVysnc)
             {
-                Application.targetFrameRate = currentSettingsData.fpslimit;
+                UnityEngine.Application.targetFrameRate = currentSettingsData.fpslimit;
             }
             else
             {
-                Application.targetFrameRate = 0;
+                UnityEngine.Application.targetFrameRate = 0;
             }
 
             // Framecounter

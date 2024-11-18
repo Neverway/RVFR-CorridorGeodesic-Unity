@@ -5,18 +5,19 @@
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-
 
 namespace Neverway.Framework
 {
-    public class CanvasForceGetActiveCamera : MonoBehaviour
+    public class ControlBindingEntry : MonoBehaviour
     {
         //=-----------------=
         // Public Variables
         //=-----------------=
+        public TMP_Text text;
+        public Image_KeyHint[] keyHints;
+        public bool isComposite;
 
 
         //=-----------------=
@@ -27,31 +28,12 @@ namespace Neverway.Framework
         //=-----------------=
         // Reference Variables
         //=-----------------=
-        private Canvas canvas;
-        private CameraManager cameraManager;
+
 
         //=-----------------=
         // Mono Functions
         //=-----------------=
-        private void Start()
-        {
-            canvas = GetComponent<Canvas>();
-        }
 
-        private void Update()
-        {
-            if (cameraManager == null)
-            {
-                cameraManager = FindObjectOfType<CameraManager>();
-                if (cameraManager == null)
-                {
-                    Debug.LogWarning("Could not find " + nameof(CameraManager) + " to update canvas.worldCamera");
-                    return;
-                }
-            }
-
-            canvas.worldCamera = cameraManager.GetActiveRenderingCamera();
-        }
 
         //=-----------------=
         // Internal Functions
@@ -61,5 +43,11 @@ namespace Neverway.Framework
         //=-----------------=
         // External Functions
         //=-----------------=
+        public void SendRebindRequest()
+        {
+            Debug.Log($"[{this.name}] Executing function 'SendRebindRequest()'");
+            FindObjectOfType<WB_Settings_Controls>()
+                .Rebind(keyHints[0].targetActionMap, keyHints[0].targetAction, isComposite);
+        }
     }
 }

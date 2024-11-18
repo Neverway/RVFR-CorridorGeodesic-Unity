@@ -1,13 +1,13 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Acts as the "brain" for a pawn. How it receives input essentially.
+// Notes: This class is a base class, so it should not be modified, only extended from
 //
 //=============================================================================
 
 using UnityEngine;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.PawnManagement
 {
     public abstract class PawnController : ScriptableObject
     {
@@ -33,6 +33,7 @@ namespace Neverway.Framework
         // Mono Functions
         //=-----------------=
 
+        
         //=-----------------=
         // Internal Functions
         //=-----------------=

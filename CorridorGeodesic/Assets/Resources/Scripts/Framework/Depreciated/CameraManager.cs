@@ -1,19 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Disables cameras on unpossessed pawns
+// Notes: This is depreciated, now there is only one "view camera" and the new 
+//  camera manager just assigns it to follow a handle on the possessed pawn
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-
 namespace Neverway.Framework
-{
+{/*
     public class CameraManager : MonoBehaviour
     {
         //=-----------------=
@@ -75,5 +71,5 @@ namespace Neverway.Framework
 
             return null;
         }
-    }
+    }*/
 }

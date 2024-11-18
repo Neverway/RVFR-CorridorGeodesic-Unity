@@ -1,17 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Handles switching persistent music tracks smoothly
 // Notes:
 //
 //=============================================================================
 
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using Neverway.Framework.ApplicationManagement;
 
-
-namespace Neverway.Framework
+namespace Neverway.Framework.AudioManagement
 {
     public class MusicManager : MonoBehaviour
     {

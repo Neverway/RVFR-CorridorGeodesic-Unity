@@ -12,6 +12,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Neverway.Framework.Customs;
+using Neverway.Framework.PawnManagement;
 
 namespace Neverway.Framework
 {

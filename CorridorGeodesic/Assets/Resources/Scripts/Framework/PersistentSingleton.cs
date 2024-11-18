@@ -1,9 +1,8 @@
-//======== Neverway 2023 Project Script | Written by Arthur Aka Liz ===========
-// 
-// Type: Utility
-// Purpose: Keep this object when changing scenes. Destroy the new instance
-//  if the object exists in the next scene.
-// Applied to: The persistent system manager
+//===================== (Neverway 2024) Written by Liz M. =====================
+//
+// Purpose: Keeps this object when changing scenes and ensures there is only
+//  ever one of them present in a scene
+// Notes: 
 //
 //=============================================================================
 
@@ -50,9 +49,7 @@ namespace Neverway.Framework
         //=-----------------=
         // External Functions
         //=-----------------=
-
-
-        //=----Reload Static Fields----=
+        // Reload Static Fields
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void InitializeStaticFields()
         {

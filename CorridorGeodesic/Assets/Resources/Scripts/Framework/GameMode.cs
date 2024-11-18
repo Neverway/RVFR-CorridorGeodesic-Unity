@@ -1,14 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Used to define the pawn type that should be spawned for the player
+//  as well as the fallback "spectator" pawn type that should be used if the player
+//  has not actually spawned yet.
+// Notes: These objects are assigned in the worldSettings
 //
 //=============================================================================
 
 using UnityEngine;
 
-
-namespace Neverway.Framework
+namespace Neverway.Framework.PawnManagement
 {
     [CreateAssetMenu(fileName = "GameMode", menuName = "Neverway/ScriptableObjects/Pawns & Gamemodes/GameMode")]
     public class GameMode : ScriptableObject

@@ -14,7 +14,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Neverway.Framework.Customs;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.ApplicationManagement
 {
     public class ApplicationKeybinds : MonoBehaviour
     {

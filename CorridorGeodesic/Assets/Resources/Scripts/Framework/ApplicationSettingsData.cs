@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Data structure class for what's stored in the application settings file
 // Notes:
 //
 //=============================================================================
@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Neverway.Framework
+namespace Neverway.Framework.ApplicationManagement
 {
     [Serializable]
     public class ApplicationSettingsData

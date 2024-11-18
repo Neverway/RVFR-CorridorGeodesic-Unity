@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Attached to a pawn, used to specify the stats and actions of a pawn
 // Notes:
 //
 //=============================================================================
@@ -9,9 +9,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Neverway.Framework.Customs;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.PawnManagement
 {
     public class Pawn : MonoBehaviour
     {

@@ -1,6 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Data structure used by ??? to find the corresponding keyhint sprites
+//  related to an action binding
 // Notes:
 //
 //=============================================================================
@@ -11,7 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Neverway.Framework
+namespace Neverway.Framework.ApplicationManagement
 {
     [Serializable]
     public class ApplicationKeybindsData

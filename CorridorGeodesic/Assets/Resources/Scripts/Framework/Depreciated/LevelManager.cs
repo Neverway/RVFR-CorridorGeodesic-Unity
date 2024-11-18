@@ -1,7 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
 // Purpose: Handles the saving and loading of map data
-// Notes:
+// Notes: This needs a major rework along with the whole cartographer system
 //
 //=============================================================================
 
@@ -15,7 +15,7 @@ using SimpleFileBrowser;
 using UnityEngine.SceneManagement;
 using Neverway.Framework.Customs;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.Cartographer
 {
     public class LevelManager : MonoBehaviour
     {
