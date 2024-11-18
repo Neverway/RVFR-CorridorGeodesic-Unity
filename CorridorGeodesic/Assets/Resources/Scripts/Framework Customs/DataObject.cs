@@ -7,10 +7,14 @@
 
 using System;
 using UnityEngine;
+using Neverway.Framework;
 
-[Serializable]
-public class DataObject : ScriptableObject
+namespace Neverway.Framework.Customs
 {
-    public string id;
-    public Sprite icon;
+    [Serializable]
+    public class DataObject : ScriptableObject
+    {
+        public string id;
+        public Sprite icon;
+    }
 }

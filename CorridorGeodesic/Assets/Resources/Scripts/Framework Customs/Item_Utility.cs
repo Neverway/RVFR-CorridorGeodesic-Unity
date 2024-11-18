@@ -9,32 +9,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework;
 
-[CreateAssetMenu(fileName="Item_Utility", menuName="Neverway/ScriptableObjects/Items/Utility")]
-public class Item_Utility : Item
+namespace Neverway.Framework.Customs
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
+
+    [CreateAssetMenu(fileName = "Item_Utility", menuName = "Neverway/ScriptableObjects/Items/Utility")]
+    public class Item_Utility : Item
+    {
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+    }
 }
 

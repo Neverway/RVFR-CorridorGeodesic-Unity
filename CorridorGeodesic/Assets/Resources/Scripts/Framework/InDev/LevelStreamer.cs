@@ -10,38 +10,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelStreamer : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    public List<GameObject> streamingActors;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Update()
+    public class LevelStreamer : MonoBehaviour
     {
-        streamingActors = new List<GameObject>();
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        public List<GameObject> streamingActors;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Update()
+        {
+            streamingActors = new List<GameObject>();
+        }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

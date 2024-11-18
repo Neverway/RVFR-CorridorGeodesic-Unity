@@ -11,35 +11,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Item_Weapon", menuName="Neverway/ScriptableObjects/Items/Weapon")]
-public class Item_Weapon : Item
+using Neverway.Framework;
+
+namespace Neverway.Framework.Customs
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public float damage;
-    public Vector2 knockbackForce;
-    public float knockbackForceDuration;
-    public string effect;
+    [CreateAssetMenu(fileName = "Item_Weapon", menuName = "Neverway/ScriptableObjects/Items/Weapon")]
+    public class Item_Weapon : Item
+    {
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public float damage;
+        public Vector2 knockbackForce;
+        public float knockbackForceDuration;
+        public string effect;
 
 
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+    }
 }
 

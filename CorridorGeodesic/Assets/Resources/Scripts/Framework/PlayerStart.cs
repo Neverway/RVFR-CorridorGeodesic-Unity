@@ -9,47 +9,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStart : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public string playerStartFilter;
-    public bool debugShowMesh;
-    public Color debugPlayerStartColor = new Color(0, 0.5f, 1, 0.5f);
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    void OnDrawGizmos()
+    public class PlayerStart : MonoBehaviour
     {
-        Gizmos.color = debugPlayerStartColor;
-        var fixedGizmoRotation = transform.rotation*Quaternion.AngleAxis(180, Vector3.up) * Quaternion.AngleAxis(-90, Vector3.right);
-        if (debugShowMesh)
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public string playerStartFilter;
+        public bool debugShowMesh;
+        public Color debugPlayerStartColor = new Color(0, 0.5f, 1, 0.5f);
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        void OnDrawGizmos()
         {
-            Gizmos.DrawMesh(Resources.Load<Mesh>("Models/DevCharacter"), transform.position+(transform.up*-0.1f), fixedGizmoRotation, transform.localScale*100);
+            Gizmos.color = debugPlayerStartColor;
+            var fixedGizmoRotation = transform.rotation * Quaternion.AngleAxis(180, Vector3.up) *
+                                     Quaternion.AngleAxis(-90, Vector3.right);
+            if (debugShowMesh)
+            {
+                Gizmos.DrawMesh(Resources.Load<Mesh>("Models/DevCharacter"),
+                    transform.position + (transform.up * -0.1f), fixedGizmoRotation, transform.localScale * 100);
+            }
+
+            Gizmos.DrawIcon(gameObject.transform.position, "player_start");
         }
-        Gizmos.DrawIcon(gameObject.transform.position,"player_start");
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-    
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

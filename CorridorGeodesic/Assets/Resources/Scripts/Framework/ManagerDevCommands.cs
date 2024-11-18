@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace Neverway.Framework
 {
-    public class Manager_DevCommands : MonoBehaviour
+    public class ManagerDevCommands : MonoBehaviour
     {
 
         // Update is called once per frame

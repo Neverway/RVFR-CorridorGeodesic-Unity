@@ -7,36 +7,39 @@
 
 using UnityEngine;
 
-public abstract class PawnController : ScriptableObject
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public abstract void PawnAwake(Pawn _pawn);
-    public abstract void PawnUpdate(Pawn _pawn);
-    public abstract void PawnFixedUpdate(Pawn _pawn);
+    public abstract class PawnController : ScriptableObject
+    {
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public abstract void PawnAwake(Pawn _pawn);
+        public abstract void PawnUpdate(Pawn _pawn);
+        public abstract void PawnFixedUpdate(Pawn _pawn);
 
 
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+    }
 }

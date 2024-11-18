@@ -7,9 +7,13 @@
 
 using System;
 using UnityEngine;
+using Neverway.Framework;
 
-[CreateAssetMenu(fileName="Prop", menuName="Neverway/ScriptableObjects/Prop")]
-public class Prop : Actor
+namespace Neverway.Framework.Customs
 {
-    
+    [CreateAssetMenu(fileName = "Prop", menuName = "Neverway/ScriptableObjects/Prop")]
+    public class Prop : Actor
+    {
+
+    }
 }

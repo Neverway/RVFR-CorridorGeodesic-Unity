@@ -9,60 +9,63 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Volume_Pain : Volume
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    [Tooltip("Negative values will heal pawns")]
-    [SerializeField] private float damageAmount;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Update()
+    public class Volume_Pain : Volume
     {
-        foreach (var entity in pawnsInTrigger)
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        [Tooltip("Negative values will heal pawns")] [SerializeField]
+        private float damageAmount;
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Update()
         {
-            // If no team specified, or self-infliction enabled, hurt everyone (Kinda metal huh)
-            if (owningTeam == "" || affectsOwnTeam)
+            foreach (var entity in pawnsInTrigger)
             {
-                entity.ModifyHealth(-damageAmount);
-            }
-            else
-            {
-                // If teams match allow healing only
-                if (entity.currentState.team == owningTeam && damageAmount < 0 && !affectsOwnTeam)
+                // If no team specified, or self-infliction enabled, hurt everyone (Kinda metal huh)
+                if (owningTeam == "" || affectsOwnTeam)
                 {
                     entity.ModifyHealth(-damageAmount);
                 }
-                // If teams don't match allow pain only
-                else if (entity.currentState.team != owningTeam && damageAmount > 0 && !affectsOwnTeam)
+                else
                 {
-                    entity.ModifyHealth(-damageAmount);
+                    // If teams match allow healing only
+                    if (entity.currentState.team == owningTeam && damageAmount < 0 && !affectsOwnTeam)
+                    {
+                        entity.ModifyHealth(-damageAmount);
+                    }
+                    // If teams don't match allow pain only
+                    else if (entity.currentState.team != owningTeam && damageAmount > 0 && !affectsOwnTeam)
+                    {
+                        entity.ModifyHealth(-damageAmount);
+                    }
                 }
             }
         }
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-    
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

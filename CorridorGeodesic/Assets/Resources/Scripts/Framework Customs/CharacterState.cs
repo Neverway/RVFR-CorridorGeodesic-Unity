@@ -21,45 +21,58 @@
 
 using System;
 using UnityEngine;
+using Neverway.Framework;
 
-[Serializable]
-public class CharacterState
+namespace Neverway.Framework.Customs
 {
-    // DON'T FORGET TO MODIFY THE Pawn & CharacterData CLASS TO MATCH THIS DATA!!!
-    public string characterName;
-    public float health;
-    public float invulnerabilityTime;
-    public float movementSpeed;
-    public string team;
-    public RuntimeAnimatorController animationController;
-    public CharacterSounds characterSounds;
-    public Vector3 groundCheckOffset;
-    public float groundCheckRadius;
-    [Tooltip("The collision layers that will be checked when testing if the entity is grounded")]
-    public LayerMask groundMask;
-    // Add project specific variables below this line!
-    public float groundDrag;
-    public float airDrag;
-    public float maxHorizontalMovementSpeed;
-    public float maxHorizontalAirSpeed;
-    public float movementMultiplier;
-    public float airMovementMultiplier;
-    public float gravityMultiplier;
-    public float jumpForce;
-    public float steepSlopeAngle;
-    [Tooltip("The multiplier added to the movementSpeed while grounded and sprinting")]
-    public float sprintSpeedMultiplier;
-    [Tooltip("Essentially how long it takes you to get up to speed while sprinting")]
-    public float sprintAcceleration;
-    public bool autoRegenHealth;
-    public float healthRegenPerSecond;
-    public float healthRegenDelay;
-    [Tooltip("Amount of damage taken from falling.")]
-    public float fallDamage;
-    [Tooltip ("Amount of damage taken from falling minimum distance.")]
-    public float minFallDamage;
-    [Tooltip ("Rigidbody Y velocity required for max fall damage.")]
-    public float fallDamageVelocity;
-    [Tooltip ("Rigidbody Y velocity required for minimum fall damage.")]
-    public float minFallDamageVelocity;
+    [Serializable]
+    public class CharacterState
+    {
+        // DON'T FORGET TO MODIFY THE Pawn & CharacterData CLASS TO MATCH THIS DATA!!!
+        public string characterName;
+        public float health;
+        public float invulnerabilityTime;
+        public float movementSpeed;
+        public string team;
+        public RuntimeAnimatorController animationController;
+        public CharacterSounds characterSounds;
+        public Vector3 groundCheckOffset;
+        public float groundCheckRadius;
+
+        [Tooltip("The collision layers that will be checked when testing if the entity is grounded")]
+        public LayerMask groundMask;
+
+        // Add project specific variables below this line!
+        public float groundDrag;
+        public float airDrag;
+        public float maxHorizontalMovementSpeed;
+        public float maxHorizontalAirSpeed;
+        public float movementMultiplier;
+        public float airMovementMultiplier;
+        public float gravityMultiplier;
+        public float jumpForce;
+        public float steepSlopeAngle;
+
+        [Tooltip("The multiplier added to the movementSpeed while grounded and sprinting")]
+        public float sprintSpeedMultiplier;
+
+        [Tooltip("Essentially how long it takes you to get up to speed while sprinting")]
+        public float sprintAcceleration;
+
+        public bool autoRegenHealth;
+        public float healthRegenPerSecond;
+        public float healthRegenDelay;
+
+        [Tooltip("Amount of damage taken from falling.")]
+        public float fallDamage;
+
+        [Tooltip("Amount of damage taken from falling minimum distance.")]
+        public float minFallDamage;
+
+        [Tooltip("Rigidbody Y velocity required for max fall damage.")]
+        public float fallDamageVelocity;
+
+        [Tooltip("Rigidbody Y velocity required for minimum fall damage.")]
+        public float minFallDamageVelocity;
+    }
 }

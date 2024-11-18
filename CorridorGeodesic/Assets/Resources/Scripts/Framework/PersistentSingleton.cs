@@ -9,52 +9,55 @@
 
 using UnityEngine;
 
-public class PersistentSingleton : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    [IsDomainReloaded] private static GameObject instance;
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Awake()
+    public class PersistentSingleton : MonoBehaviour
     {
-        if (instance != null)
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        [IsDomainReloaded] private static GameObject instance;
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Awake()
         {
-            Destroy(gameObject);
-            return;
+            if (instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            instance = gameObject;
+            DontDestroyOnLoad(instance);
         }
-
-        instance = gameObject;
-        DontDestroyOnLoad(instance);
-    }
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+        //=-----------------=
+        // External Functions
+        //=-----------------=
 
 
-    //=----Reload Static Fields----=
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void InitializeStaticFields()
-    {
-        instance = null;
+        //=----Reload Static Fields----=
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void InitializeStaticFields()
+        {
+            instance = null;
+        }
     }
 }
 

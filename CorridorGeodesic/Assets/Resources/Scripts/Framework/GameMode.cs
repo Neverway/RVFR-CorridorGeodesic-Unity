@@ -7,36 +7,40 @@
 
 using UnityEngine;
 
-[CreateAssetMenu(fileName="GameMode", menuName="Neverway/ScriptableObjects/Pawns & Gamemodes/GameMode")]
-public class GameMode : ScriptableObject
+
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public GameObject defaultPawnClass;
-    public GameObject spectatorClass;
+    [CreateAssetMenu(fileName = "GameMode", menuName = "Neverway/ScriptableObjects/Pawns & Gamemodes/GameMode")]
+    public class GameMode : ScriptableObject
+    {
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public GameObject defaultPawnClass;
+        public GameObject spectatorClass;
 
 
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+    }
 }

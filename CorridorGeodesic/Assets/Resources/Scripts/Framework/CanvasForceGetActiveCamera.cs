@@ -9,53 +9,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CanvasForceGetActiveCamera : MonoBehaviour
+
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private Canvas canvas;
-    private CameraManager cameraManager;
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class CanvasForceGetActiveCamera : MonoBehaviour
     {
-        canvas = GetComponent<Canvas>();
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
 
-    private void Update()
-    {
-        if (cameraManager == null)
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private Canvas canvas;
+        private CameraManager cameraManager;
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            cameraManager = FindObjectOfType<CameraManager>(); 
-            if (cameraManager == null)
-            {
-                Debug.LogWarning("Could not find " + nameof(CameraManager) + " to update canvas.worldCamera");
-                return;
-            }
+            canvas = GetComponent<Canvas>();
         }
 
-        canvas.worldCamera = cameraManager.GetActiveRenderingCamera();
+        private void Update()
+        {
+            if (cameraManager == null)
+            {
+                cameraManager = FindObjectOfType<CameraManager>();
+                if (cameraManager == null)
+                {
+                    Debug.LogWarning("Could not find " + nameof(CameraManager) + " to update canvas.worldCamera");
+                    return;
+                }
+            }
+
+            canvas.worldCamera = cameraManager.GetActiveRenderingCamera();
+        }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

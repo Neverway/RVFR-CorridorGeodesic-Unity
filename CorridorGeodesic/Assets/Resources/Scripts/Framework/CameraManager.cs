@@ -11,63 +11,69 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public List<Camera> cameras;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class CameraManager : MonoBehaviour
     {
-        InvokeRepeating(nameof(UpdateCameras), 0, 0.5f);
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public List<Camera> cameras;
 
-    private void UpdateCameras()
-    {
-        cameras.Clear();
-        foreach (var camera in FindObjectsOfType<Camera>())
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            cameras.Add(camera);
+            InvokeRepeating(nameof(UpdateCameras), 0, 0.5f);
         }
-    }
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    public Camera GetActiveRenderingCamera()
-    {
-        foreach (Camera cam in cameras)
+        private void UpdateCameras()
         {
-            if (cam.IsUnityNull())
+            cameras.Clear();
+            foreach (var camera in FindObjectsOfType<Camera>())
             {
-                cameras.Remove(cam);
-                return null;
-            }
-            if (cam.isActiveAndEnabled && cam.targetTexture == null)
-            {
-                return cam;
+                cameras.Add(camera);
             }
         }
-        return null;
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        public Camera GetActiveRenderingCamera()
+        {
+            foreach (Camera cam in cameras)
+            {
+                if (cam.IsUnityNull())
+                {
+                    cameras.Remove(cam);
+                    return null;
+                }
+
+                if (cam.isActiveAndEnabled && cam.targetTexture == null)
+                {
+                    return cam;
+                }
+            }
+
+            return null;
+        }
     }
 }

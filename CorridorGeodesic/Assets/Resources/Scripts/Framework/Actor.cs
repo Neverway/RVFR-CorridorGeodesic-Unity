@@ -9,9 +9,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework.Customs;
 
-public class Actor : DataObject
+
+namespace Neverway.Framework
 {
-    public string actorName;
-    public GameObject AssociatedGameObject;
+    public class Actor : DataObject
+    {
+        public string actorName;
+        public GameObject AssociatedGameObject;
+    }
 }

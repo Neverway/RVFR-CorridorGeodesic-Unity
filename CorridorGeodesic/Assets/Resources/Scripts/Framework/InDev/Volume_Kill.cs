@@ -9,61 +9,65 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Volume_Kill : Volume
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private new void OnTriggerEnter2D(Collider2D _other)
+    public class Volume_Kill : Volume
     {
-        base.OnTriggerEnter2D(_other); // Call the base class method
-        if (_other.CompareTag("Pawn"))
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private new void OnTriggerEnter2D(Collider2D _other)
         {
-            _other.GetComponent<Pawn>().Kill();
-        }
-    }
-    
-    private new void OnTriggerEnter(Collider _other)
-    {
-        base.OnTriggerEnter(_other); // Call the base class method
-        print("Connors stole something.");
-        if (_other.CompareTag("Pawn"))
-        {
-            print("Connors Has a hat!");
-            _other.GetComponent<Pawn>().Kill();
-        }
-        if (_other.TryGetComponent<CorGeo_ActorData> (out CorGeo_ActorData actor))
-        {
-            // Why was there a parameter to disable death in kill volumes? ~Liz
-            if (actor.destroyedInKillTrigger)
+            base.OnTriggerEnter2D(_other); // Call the base class method
+            if (_other.CompareTag("Pawn"))
             {
-                Destroy(_other.gameObject);
+                _other.GetComponent<Pawn>().Kill();
             }
         }
+
+        private new void OnTriggerEnter(Collider _other)
+        {
+            base.OnTriggerEnter(_other); // Call the base class method
+            print("Connors stole something.");
+            if (_other.CompareTag("Pawn"))
+            {
+                print("Connors Has a hat!");
+                _other.GetComponent<Pawn>().Kill();
+            }
+
+            if (_other.TryGetComponent<CorGeo_ActorData>(out CorGeo_ActorData actor))
+            {
+                // Why was there a parameter to disable death in kill volumes? ~Liz
+                if (actor.destroyedInKillTrigger)
+                {
+                    Destroy(_other.gameObject);
+                }
+            }
+        }
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-    
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

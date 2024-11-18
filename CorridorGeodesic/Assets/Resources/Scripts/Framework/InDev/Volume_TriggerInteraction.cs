@@ -9,35 +9,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Volume_TriggerInteraction : Volume
+
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public Pawn targetPawn;
+    public class Volume_TriggerInteraction : Volume
+    {
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public Pawn targetPawn;
 
 
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+    }
 }

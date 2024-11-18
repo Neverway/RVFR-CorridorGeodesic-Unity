@@ -10,61 +10,64 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ApplicationFontSetter : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public int currentFont;
-    
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    public TMP_FontAsset defaultFont, dyslexiaAssistFont;
-    
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class ApplicationFontSetter : MonoBehaviour
     {
-        InvokeRepeating(nameof(UpdateFonts), 0, 1);
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public int currentFont;
 
-    private void UpdateFonts()
-    {
-        TMP_FontAsset targetFont = null;
-        switch (currentFont)
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        public TMP_FontAsset defaultFont, dyslexiaAssistFont;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            case 0:
-                targetFont = defaultFont;
-                break;
-            case 1:
-                targetFont = dyslexiaAssistFont;
-                break;
-            default:
-                targetFont = defaultFont;
-                break;
+            InvokeRepeating(nameof(UpdateFonts), 0, 1);
         }
 
-        foreach (var textElement in FindObjectsOfType<TMP_Text>())
+        private void UpdateFonts()
         {
-            textElement.font = targetFont;
+            TMP_FontAsset targetFont = null;
+            switch (currentFont)
+            {
+                case 0:
+                    targetFont = defaultFont;
+                    break;
+                case 1:
+                    targetFont = dyslexiaAssistFont;
+                    break;
+                default:
+                    targetFont = defaultFont;
+                    break;
+            }
+
+            foreach (var textElement in FindObjectsOfType<TMP_Text>())
+            {
+                textElement.font = targetFont;
+            }
         }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }
