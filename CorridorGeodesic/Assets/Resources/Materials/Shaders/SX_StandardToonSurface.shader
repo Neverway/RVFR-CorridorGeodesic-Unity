@@ -41,6 +41,9 @@ Shader "Soulex/Surface/Standard Toon"
 
         [HideInInspector] _SliceNormalOne ("Slice Normal One", Vector) = (0, 0, 0, 0)
         [HideInInspector] _SliceNormalTwo ("Slice Normal Two", Vector) = (0, 0, 0, 0)
+
+        _DarkShadowTex ("Dark Shadow Tex", 2D) = "white"
+        _LightShadowTex ("Light Shadow Tex", 2D) = "white"
     }
     SubShader
     {
@@ -72,6 +75,7 @@ Shader "Soulex/Surface/Standard Toon"
             float2 uv_Normal;
             float3 viewDir;
             float3 worldPos;
+            float4 screenPos;
         };
 
         half _RampSmoothness;
@@ -113,6 +117,9 @@ Shader "Soulex/Surface/Standard Toon"
         float3 _SliceNormalOne;
         float3 _SliceNormalTwo;
 
+        sampler2D _DarkShadowTex;
+        sampler2D _LightShadowTex;
+
         struct SurfaceOutputToon
         {
             fixed3 Albedo;
@@ -124,9 +131,10 @@ Shader "Soulex/Surface/Standard Toon"
             half Roughness;
             half Occlusion;
             fixed Alpha;
+            fixed2 screenUv;
         };
         half3 BRDFToon(half3 diffColor, half3 specColor, half oneMinusReflectivity, half smoothness, 
-        float3 normal, float3 viewDir, UnityLight light, UnityIndirect gi)
+        float3 normal, float3 viewDir, UnityLight light, UnityIndirect gi, half darkShadow, half lightShadow)
         {
             float perceptualRoughness = SmoothnessToPerceptualRoughness(smoothness);
             float roughness = PerceptualRoughnessToRoughness(perceptualRoughness);
@@ -138,10 +146,15 @@ Shader "Soulex/Surface/Standard Toon"
             float3 halfDirection = Unity_SafeNormalize(viewDirection + lightDirection);
             float3 lightReflectDirection = normalize(reflect(-lightDirection, normal));
             
-            half NdotL = smoothstep(0, _RampSmoothness, DotClamped(normal, lightDirection));
+            half preNdotL = DotClamped(normal, lightDirection);
+            half NdotL = smoothstep(0, _RampSmoothness, preNdotL);
             half NdotH = DotClamped(normal, halfDirection);
             half NdotV = abs(dot(normal, viewDirection));
             half LdotH = DotClamped(lightDirection, halfDirection);
+
+            half shadowMix = lerp(1 - darkShadow * 0.95, 1 - lightShadow * -0.2, NdotL);
+            shadowMix = lerp(shadowMix, 1, saturate(preNdotL + 0.5));
+            NdotL *= shadowMix;
 
             half diffuseTerm = DisneyDiffuse(NdotV, NdotL, LdotH, perceptualRoughness) * NdotL;
 
@@ -189,27 +202,20 @@ Shader "Soulex/Surface/Standard Toon"
                 gi = UnityGlobalIllumination(data, s.Occlusion, s.Normal, g);
             #endif
         }
-        half4 LightingRamp(SurfaceOutputToon s, float3 viewDir, UnityGI gi/*, out half4 outDiffuseOcclusion, out half4 outSpecSmoothness, out half4 outNormal*/)
+        half4 LightingRamp(SurfaceOutputToon s, float3 viewDir, UnityGI gi)
         {
             float3 normal = normalize(s.Normal);
             float3 viewDirection = normalize(viewDir);
-            //float3 viewReflectDirection = normalize(reflect(-viewDirection, normal));
-
             half oneMinusReflectivity;
             half3 specColor;
 
             s.Albedo = DiffuseAndSpecularFromMetallic(s.Albedo, s.Metallic, specColor, oneMinusReflectivity);
 
-            half3 c = BRDFToon(s.Albedo, specColor, oneMinusReflectivity, 1 - s.Roughness, normal, viewDirection, gi.light, gi.indirect);
+            half darkShadow = tex2D(_DarkShadowTex, s.screenUv).r;
+            half lightShadow = tex2D(_LightShadowTex, s.screenUv).r;
 
-            //UnityStandardData data;
-            //data.diffuseColor = s.Albedo;
-            //data.occlusion = s.Occlusion;
-            //data.specularColor = specColor;
-            //data.smoothness = 1 - s.Roughness;
-            //data.normalWorld = s.Normal;
-
-            //UnityStandardDataToGbuffer(data, outDiffuseOcclusion, outSpecSmoothness, outNormal);
+            half3 c = BRDFToon(s.Albedo, specColor, oneMinusReflectivity, 1 - s.Roughness, normal, viewDirection, 
+            gi.light, gi.indirect, darkShadow, lightShadow);
 
             half4 emission = half4(s.Emission + c, s.Alpha);
 
@@ -229,6 +235,12 @@ Shader "Soulex/Surface/Standard Toon"
 
             o.viewDir = IN.viewDir;
             o.worldPos = IN.worldPos;
+            o.screenUv = IN.screenPos.xy / IN.screenPos.w;
+            o.screenUv.x *= (_ScreenParams.x / _ScreenParams.y);
+
+            o.screenUv *= 8;
+
+            //o.screenUv /= saturate((1 - GetDepth(IN.screenPos, 0.2)) + 0.001);
 
             o.Albedo = lerp(col.rgb, detailCol.rgb, detailMask);
 
