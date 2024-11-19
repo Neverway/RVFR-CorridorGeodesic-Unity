@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
 
 public class WB_DialogueBox : MonoBehaviour
 {

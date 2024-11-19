@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Neverway.Framework;
 
 public class DevGAMMManager: MonoBehaviour
 {

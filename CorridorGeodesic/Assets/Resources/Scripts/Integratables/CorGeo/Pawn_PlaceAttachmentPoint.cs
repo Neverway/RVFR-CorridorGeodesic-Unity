@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using Neverway.Framework.PawnManagement;
 
 public class Pawn_PlaceAttachmentPoint : MonoBehaviour
 {

@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Neverway.Framework.PawnManagement;
 
 [RequireComponent(typeof(Image))]
 public class UI_Image_EntityPain : MonoBehaviour

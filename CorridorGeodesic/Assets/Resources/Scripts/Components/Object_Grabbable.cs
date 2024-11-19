@@ -5,217 +5,224 @@
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using Neverway.Framework.LogicSystem;
 
-public class Object_Grabbable : MonoBehaviour
+namespace Neverway.Framework.PawnManagement
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public float breakAwayDistance = 2;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    public bool isHeld;
-    private bool is2D;
-    private bool wasGravityEnabled;
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    public Pawn targetPawn;
-    public Vector3 lastFaceDirection;
-    private Volume_TriggerInteractable interactableTrigger;
-    private Rigidbody propRigidbody;
-    private CorGeo_ActorData corGeoActorData;
-    [SerializeField] private LayerMask layerMask;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class Object_Grabbable : MonoBehaviour
     {
-        if (transform.childCount == 0) return;
-        interactableTrigger = transform.GetChild(0).GetComponent<Volume_TriggerInteractable>();
-        propRigidbody = GetComponent<Rigidbody>();
-        corGeoActorData = GetComponent<CorGeo_ActorData>();
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public float breakAwayDistance = 2;
 
-    private void FixedUpdate()
-    {
-        if (!isHeld || !targetPawn)
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        public bool isHeld;
+        private bool is2D;
+        private bool wasGravityEnabled;
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        public Pawn targetPawn;
+        public Vector3 lastFaceDirection;
+        private Volume_TriggerInteractable interactableTrigger;
+        private Rigidbody propRigidbody;
+        private CorGeo_ActorData corGeoActorData;
+        [SerializeField] private LayerMask layerMask;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            if (interactableTrigger) interactableTrigger.hideIndicator = false;
-            return;
+            if (transform.childCount == 0) return;
+            interactableTrigger = transform.GetChild(0).GetComponent<Volume_TriggerInteractable>();
+            propRigidbody = GetComponent<Rigidbody>();
+            corGeoActorData = GetComponent<CorGeo_ActorData>();
         }
 
-        if (interactableTrigger) interactableTrigger.hideIndicator = true;
-        
-        if (is2D)
+        private void FixedUpdate()
         {
-            transform.parent.position = targetPawn.transform.position + Get2DTargetPawnOffset();
-            //transform.parent.GetComponent<Object_DepthAssigner2D>().depthLayer = targetPawn.GetComponent<Object_DepthAssigner2D>().depthLayer;
-        }
-        else
-        {
-            var direction = targetPawn.physObjectAttachmentPoint.transform.position - gameObject.transform.position;
-            var distance = Vector3.Distance(targetPawn.physObjectAttachmentPoint.transform.position, gameObject.transform.position);
-            Vector3 targetPosition;
-            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance, layerMask))
+            if (!isHeld || !targetPawn)
             {
+                if (interactableTrigger) interactableTrigger.hideIndicator = false;
+                return;
+            }
 
-                targetPosition = (hit.point - (direction.normalized * 0.5f));
+            if (interactableTrigger) interactableTrigger.hideIndicator = true;
+
+            if (is2D)
+            {
+                transform.parent.position = targetPawn.transform.position + Get2DTargetPawnOffset();
+                //transform.parent.GetComponent<Object_DepthAssigner2D>().depthLayer = targetPawn.GetComponent<Object_DepthAssigner2D>().depthLayer;
             }
             else
             {
-                targetPosition = (targetPawn.physObjectAttachmentPoint.transform.position);
-            }
-            propRigidbody.velocity = Vector3.zero;
-            propRigidbody.angularVelocity = Vector3.zero;
-            propRigidbody.MovePosition (targetPosition);
-            
-            var targetRotation = targetPawn.physObjectAttachmentPoint.transform.rotation;
-            transform.rotation = new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
-            
-            //propRigidbody.velocity = new Vector3();
-            propRigidbody.useGravity = false;
-            
-            // Drop the object if it's too far away
-            if (Alt_Item_Geodesic_Utility_GeoGun.delayRiftCollapse == false
-                && Vector3.Distance(gameObject.transform.position,
-                    targetPawn.physObjectAttachmentPoint.transform.position) > breakAwayDistance)
-            {
-                ToggleHeld();
+                var direction = targetPawn.physObjectAttachmentPoint.transform.position - gameObject.transform.position;
+                var distance = Vector3.Distance(targetPawn.physObjectAttachmentPoint.transform.position,
+                    gameObject.transform.position);
+                Vector3 targetPosition;
+                if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance, layerMask))
+                {
+
+                    targetPosition = (hit.point - (direction.normalized * 0.5f));
+                }
+                else
+                {
+                    targetPosition = (targetPawn.physObjectAttachmentPoint.transform.position);
+                }
+
+                propRigidbody.velocity = Vector3.zero;
+                propRigidbody.angularVelocity = Vector3.zero;
+                propRigidbody.MovePosition(targetPosition);
+
+                var targetRotation = targetPawn.physObjectAttachmentPoint.transform.rotation;
+                transform.rotation =
+                    new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
+
+                //propRigidbody.velocity = new Vector3();
+                propRigidbody.useGravity = false;
+
+                // Drop the object if it's too far away
+                if (Alt_Item_Geodesic_Utility_GeoGun.delayRiftCollapse == false
+                    && Vector3.Distance(gameObject.transform.position,
+                        targetPawn.physObjectAttachmentPoint.transform.position) > breakAwayDistance)
+                {
+                    ToggleHeld();
+                }
             }
         }
-    }
 
-    private void OnDisable ()
-    {
-        Drop ();
-    }
+        private void OnDisable()
+        {
+            Drop();
+        }
 
 //=-----------------=
-    // Internal Functions
-    //=-----------------=
-    private Vector3 Get2DTargetPawnOffset()
-    {
-        var facingDirection = Get2DFaceDirectionFromQuaternion(targetPawn.faceDirection, -90);
-        switch (facingDirection.y)
+        // Internal Functions
+        //=-----------------=
+        private Vector3 Get2DTargetPawnOffset()
         {
-            case (1):
-                lastFaceDirection = new Vector3(0, 0.25f, 0);
-                return lastFaceDirection;
-            case (-1):
-                lastFaceDirection = new Vector3(0, -0.3f, 0);
-                return lastFaceDirection;
-        }
-        
-        switch (facingDirection.x)
-        {
-            case (1):
-                lastFaceDirection = new Vector3(0.5f, 0, 0);
-                return lastFaceDirection;
-            case (-1):
-                lastFaceDirection = new Vector3(-0.5f, 0, 0);
-                return lastFaceDirection;
-        }
-        return lastFaceDirection;
-    }
+            var facingDirection = Get2DFaceDirectionFromQuaternion(targetPawn.faceDirection, -90);
+            switch (facingDirection.y)
+            {
+                case (1):
+                    lastFaceDirection = new Vector3(0, 0.25f, 0);
+                    return lastFaceDirection;
+                case (-1):
+                    lastFaceDirection = new Vector3(0, -0.3f, 0);
+                    return lastFaceDirection;
+            }
 
-    private void OnTriggerEnter2D(Collider2D _other)
-    {
-        var interaction = _other.GetComponent<Volume_TriggerInteraction>();
-        if (interaction)
-        {
-            targetPawn = interaction.targetPawn;
-            ToggleHeld();
-            is2D = true;
-        }
-    }
+            switch (facingDirection.x)
+            {
+                case (1):
+                    lastFaceDirection = new Vector3(0.5f, 0, 0);
+                    return lastFaceDirection;
+                case (-1):
+                    lastFaceDirection = new Vector3(-0.5f, 0, 0);
+                    return lastFaceDirection;
+            }
 
-    private void OnTriggerEnter(Collider _other)
-    {
-        propRigidbody = GetComponent<Rigidbody>();
-        var interaction = _other.GetComponent<Volume_TriggerInteraction>();
-        if (interaction)
+            return lastFaceDirection;
+        }
+
+        private void OnTriggerEnter2D(Collider2D _other)
         {
-            targetPawn = interaction.targetPawn;
+            var interaction = _other.GetComponent<Volume_TriggerInteraction>();
+            if (interaction)
+            {
+                targetPawn = interaction.targetPawn;
+                ToggleHeld();
+                is2D = true;
+            }
+        }
+
+        private void OnTriggerEnter(Collider _other)
+        {
+            propRigidbody = GetComponent<Rigidbody>();
+            var interaction = _other.GetComponent<Volume_TriggerInteraction>();
+            if (interaction)
+            {
+                targetPawn = interaction.targetPawn;
+                if (!isHeld)
+                {
+                    // If this isn't being held, and the pawn is already holding something, exit
+                    if (targetPawn.physObjectAttachmentPoint.heldObject != null)
+                    {
+                        return;
+                    }
+
+                    targetPawn.physObjectAttachmentPoint.heldObject = gameObject;
+                    wasGravityEnabled =
+                        propRigidbody.useGravity; // Store whether gravity was enabled before we get picked up
+                    // Lerp to the position of the object to go to the position of the holding point
+                }
+                else
+                {
+                    propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
+                    targetPawn.physObjectAttachmentPoint.heldObject = null;
+                }
+
+                ToggleHeld();
+                is2D = false;
+            }
+        }
+
+        public Vector2 Get2DFaceDirectionFromQuaternion(Quaternion _rotation, int _zRotationOffset)
+        {
+            // Extract the z-axis rotation from the Quaternion
+            float angle = _rotation.eulerAngles.z - _zRotationOffset;
+
+            // Convert the angle back to radians since Unity's trig functions expect radians
+            float angleInRadians = angle * Mathf.Deg2Rad;
+
+            // Calculate the x and y components of the facing direction
+            float x = Mathf.Cos(angleInRadians);
+            float y = Mathf.Sin(angleInRadians);
+
+            // Create and return the facing direction vector
+            Vector2 facingDirection = new Vector2(x, y);
+
+            return facingDirection;
+        }
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        public void ToggleHeld()
+        {
+            isHeld = !isHeld;
+
+            if (corGeoActorData != null)
+            {
+                corGeoActorData.isHeld = isHeld;
+            }
+
             if (!isHeld)
             {
-                // If this isn't being held, and the pawn is already holding something, exit
-                if (targetPawn.physObjectAttachmentPoint.heldObject!=null)
-                {
-                    return;
-                }
-                targetPawn.physObjectAttachmentPoint.heldObject = gameObject;
-                wasGravityEnabled = propRigidbody.useGravity; // Store whether gravity was enabled before we get picked up
-                // Lerp to the position of the object to go to the position of the holding point
+                propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
+                targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
+
             }
-            else
+        }
+
+        public void Drop()
+        {
+            if (isHeld)
             {
                 propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
                 targetPawn.physObjectAttachmentPoint.heldObject = null;
+                ToggleHeld();
             }
-            ToggleHeld();
-            is2D = false;
-        }
-    }
-    
-    public Vector2 Get2DFaceDirectionFromQuaternion(Quaternion _rotation, int _zRotationOffset)
-    {
-        // Extract the z-axis rotation from the Quaternion
-        float angle = _rotation.eulerAngles.z - _zRotationOffset;
-
-        // Convert the angle back to radians since Unity's trig functions expect radians
-        float angleInRadians = angle * Mathf.Deg2Rad;
-
-        // Calculate the x and y components of the facing direction
-        float x = Mathf.Cos(angleInRadians);
-        float y = Mathf.Sin(angleInRadians);
-
-        // Create and return the facing direction vector
-        Vector2 facingDirection = new Vector2(x, y);
-
-        return facingDirection;
-    }
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    public void ToggleHeld()
-    {
-        isHeld = !isHeld;
-
-        if (corGeoActorData !=  null)
-        {
-            corGeoActorData.isHeld = isHeld;
-        }
-
-        if (!isHeld)
-        {
-            propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
-            targetPawn.physObjectAttachmentPoint.GetComponent<Pawn_AttachmentPoint>().heldObject = null;
-
-        }
-    }
-
-    public void Drop ()
-    {
-        if (isHeld)
-        {
-            propRigidbody.useGravity = wasGravityEnabled; // Restore gravity if it was enabled before pickup
-            targetPawn.physObjectAttachmentPoint.heldObject = null;
-            ToggleHeld ();
         }
     }
 }

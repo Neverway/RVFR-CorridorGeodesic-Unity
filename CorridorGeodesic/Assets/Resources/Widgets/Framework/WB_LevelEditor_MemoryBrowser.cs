@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Neverway.Framework;
+using Neverway.Framework.Cartographer;
 
 public class WB_LevelEditor_MemoryBrowser : MonoBehaviour
 {

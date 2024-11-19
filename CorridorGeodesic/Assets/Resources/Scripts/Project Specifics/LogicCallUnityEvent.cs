@@ -1,4 +1,5 @@
 using UnityEngine.Events;
+using Neverway.Framework.LogicSystem;
 
 public class LogicCallUnityEvent : LogicComponent
 {

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Neverway.Framework.PawnManagement;
 
 public class UI_Image_GeoGunCrosshair : MonoBehaviour
 {
