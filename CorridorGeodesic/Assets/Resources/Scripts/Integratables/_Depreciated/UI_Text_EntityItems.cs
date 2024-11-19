@@ -8,7 +8,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+/*
 [RequireComponent(typeof(Image))]
 public class UI_Text_PawnItems : MonoBehaviour
 {
@@ -126,7 +126,7 @@ public class UI_Text_PawnItems : MonoBehaviour
     private void SetSprite(Image _imageTarget, Sprite[] _images, int _index)
     {
         _imageTarget.sprite = _images[_index] != null ? _images[_index] : fallbackImage[_index];
-    }*/
+    }
 
 
     //=-----------------=
@@ -145,3 +145,4 @@ public class UI_Text_PawnItems : MonoBehaviour
     }
     
 }
+*/

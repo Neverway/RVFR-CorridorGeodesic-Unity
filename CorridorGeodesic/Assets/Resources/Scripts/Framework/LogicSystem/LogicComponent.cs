@@ -10,88 +10,92 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public abstract class LogicComponent : MonoBehaviour
+namespace Neverway.Framework.LogicSystem
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    [SerializeField] private bool _isPowered;
-
-    public delegate void PowerStateChanged(bool powered);
-    public event PowerStateChanged OnPowerStateChanged;
-
-    public bool isPowered
+    public abstract class LogicComponent : MonoBehaviour
     {
-        get { return _isPowered; }
-        set
-        {
-            if (_isPowered != value)
-            {
-                _isPowered = value;
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        [SerializeField] private bool _isPowered;
 
-                if(correctPowerState != null)
-                    StopCoroutine(correctPowerState);
-                if(gameObject.activeInHierarchy)
-                    correctPowerState = StartCoroutine(CorrectPowerState());
+        public delegate void PowerStateChanged(bool powered);
+
+        public event PowerStateChanged OnPowerStateChanged;
+
+        public bool isPowered
+        {
+            get { return _isPowered; }
+            set
+            {
+                if (_isPowered != value)
+                {
+                    _isPowered = value;
+
+                    if (correctPowerState != null)
+                        StopCoroutine(correctPowerState);
+                    if (gameObject.activeInHierarchy)
+                        correctPowerState = StartCoroutine(CorrectPowerState());
+                }
             }
         }
-    }
 
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    private List<LogicComponent> subscribeLogicComponents = new List<LogicComponent>();
-    private Coroutine correctPowerState;
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        private List<LogicComponent> subscribeLogicComponents = new List<LogicComponent>();
+        private Coroutine correctPowerState;
 
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    [SerializeField] protected Animator animator;
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        [SerializeField] protected Animator animator;
 
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    public virtual void Awake()
-    {
-        LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(this.GetType());
-
-        foreach (LogicComponentHandleInfo info in infos)
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        public virtual void Awake()
         {
-            if (typeof(LogicComponent).IsAssignableFrom(info.field.FieldType))
-                subscribeLogicComponents.Add((LogicComponent)info.field.GetValue(this));
-            else if (typeof(IEnumerable<LogicComponent>).IsAssignableFrom(info.field.FieldType))
-                subscribeLogicComponents.AddRange((IEnumerable<LogicComponent>)info.field.GetValue(this));
+            LogicComponentHandleInfo[] infos = LogicComponentHandleInfo.GetFromType(this.GetType());
+
+            foreach (LogicComponentHandleInfo info in infos)
+            {
+                if (typeof(LogicComponent).IsAssignableFrom(info.field.FieldType))
+                    subscribeLogicComponents.Add((LogicComponent)info.field.GetValue(this));
+                else if (typeof(IEnumerable<LogicComponent>).IsAssignableFrom(info.field.FieldType))
+                    subscribeLogicComponents.AddRange((IEnumerable<LogicComponent>)info.field.GetValue(this));
+            }
+
+            Subscribe();
+
+            if (animator)
+                animator.SetBool("StartState", _isPowered);
+
+            //AutoSubscribe();
         }
 
-        Subscribe();
-
-        if(animator)
-            animator.SetBool("StartState", _isPowered);
-
-        //AutoSubscribe();
-    }
-    public virtual void OnEnable()
-    {
-        //Fixes Animators to update its power state when re-enabled
-
-        if (subscribeLogicComponents.Count > 0 && subscribeLogicComponents.TrueForAll(s => s))
-            SourcePowerStateChanged(isPowered);
-
-        OnPowerStateChanged?.Invoke(isPowered);
-    }
-
-    protected void OnDestroy()
-    {
-        if (subscribeLogicComponents.Count <= 0)
-            return;
-        subscribeLogicComponents.ForEach(component =>
+        public virtual void OnEnable()
         {
-            if (component)
-                component.OnPowerStateChanged -= SourcePowerStateChanged;
-        });
+            //Fixes Animators to update its power state when re-enabled
 
-        isPowered = false;
-    }
+            if (subscribeLogicComponents.Count > 0 && subscribeLogicComponents.TrueForAll(s => s))
+                SourcePowerStateChanged(isPowered);
+
+            OnPowerStateChanged?.Invoke(isPowered);
+        }
+
+        protected void OnDestroy()
+        {
+            if (subscribeLogicComponents.Count <= 0)
+                return;
+            subscribeLogicComponents.ForEach(component =>
+            {
+                if (component)
+                    component.OnPowerStateChanged -= SourcePowerStateChanged;
+            });
+
+            isPowered = false;
+        }
 #if UNITY_EDITOR
     protected void OnDrawGizmos()
     {
@@ -140,42 +144,46 @@ public abstract class LogicComponent : MonoBehaviour
     }
 #endif
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-    //public virtual void AutoSubscribe()
-    //{
-    //    Subscribe();
-    //}
-    IEnumerator CorrectPowerState()
-    {
-        yield return null;
-        yield return null;
-        yield return null;
-
-        OnPowerStateChanged?.Invoke(_isPowered);
-        LocalPowerStateChanged(_isPowered);
-    }
-    public virtual void SourcePowerStateChanged(bool powered)
-    {
-
-    }
-    public virtual void LocalPowerStateChanged(bool powered)
-    {
-
-    }
-    void Subscribe()
-    {
-        if (subscribeLogicComponents.Count <= 0)
-            return;
-        subscribeLogicComponents.ForEach(component =>
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+        //public virtual void AutoSubscribe()
+        //{
+        //    Subscribe();
+        //}
+        IEnumerator CorrectPowerState()
         {
-            if (component)
-                component.OnPowerStateChanged += SourcePowerStateChanged;
-        });
-    }
+            yield return null;
+            yield return null;
+            yield return null;
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+            OnPowerStateChanged?.Invoke(_isPowered);
+            LocalPowerStateChanged(_isPowered);
+        }
+
+        public virtual void SourcePowerStateChanged(bool powered)
+        {
+
+        }
+
+        public virtual void LocalPowerStateChanged(bool powered)
+        {
+
+        }
+
+        void Subscribe()
+        {
+            if (subscribeLogicComponents.Count <= 0)
+                return;
+            subscribeLogicComponents.ForEach(component =>
+            {
+                if (component)
+                    component.OnPowerStateChanged += SourcePowerStateChanged;
+            });
+        }
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+    }
 }

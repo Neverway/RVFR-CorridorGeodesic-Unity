@@ -9,45 +9,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Logic_Xor : LogicComponent
+
+namespace Neverway.Framework.LogicSystem
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    [SerializeField, LogicComponentHandle]
-    public LogicComponent inputA;
-    [SerializeField, LogicComponentHandle]
-    public LogicComponent inputB;
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    //public override void AutoSubscribe()
-    //{
-    //    subscribeLogicComponents.AddRange(inputSignals);
-    //    base.AutoSubscribe();
-    //}
-    public override void SourcePowerStateChanged(bool powered)
+    public class Logic_Xor : LogicComponent
     {
-        isPowered = inputA.isPowered ^ inputB.isPowered;
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        [SerializeField, LogicComponentHandle] public LogicComponent inputA;
+        [SerializeField, LogicComponentHandle] public LogicComponent inputB;
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        //public override void AutoSubscribe()
+        //{
+        //    subscribeLogicComponents.AddRange(inputSignals);
+        //    base.AutoSubscribe();
+        //}
+        public override void SourcePowerStateChanged(bool powered)
+        {
+            isPowered = inputA.isPowered ^ inputB.isPowered;
+        }
     }
 }

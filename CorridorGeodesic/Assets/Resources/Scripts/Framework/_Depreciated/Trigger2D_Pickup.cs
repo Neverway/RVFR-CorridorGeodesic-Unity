@@ -8,9 +8,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
+using Neverway.Framework;
 
 public class Trigger2D_Pickup : Volume
-{
+{/*
     //=-----------------=
     // Public Variables
     //=-----------------=
@@ -58,5 +60,5 @@ public class Trigger2D_Pickup : Volume
         {
             Destroy(gameObject);
         }
-    }
+    }*/
 }

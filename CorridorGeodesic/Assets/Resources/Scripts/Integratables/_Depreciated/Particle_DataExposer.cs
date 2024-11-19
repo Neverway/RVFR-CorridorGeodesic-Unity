@@ -8,7 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
 [RequireComponent(typeof(ParticleSystem))]
 public class Particle_DataExposer : MonoBehaviour
 {
@@ -54,3 +54,4 @@ public class Particle_DataExposer : MonoBehaviour
     // External Functions
     //=-----------------=
 }
+*/

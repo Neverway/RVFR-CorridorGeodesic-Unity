@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using Neverway.Framework.PawnManagement;
 
 public class Object_DepthAssigner2D : MonoBehaviour
 {

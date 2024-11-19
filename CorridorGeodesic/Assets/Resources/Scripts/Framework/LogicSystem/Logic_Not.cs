@@ -12,56 +12,59 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-public class Logic_Not : LogicComponent
+namespace Neverway.Framework.LogicSystem
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    //private void OnEnable()
-    //{
-    //    if (input)
-    //        input.OnPowerStateChanged += SourcePowerStateChanged;
-    //}
-    //private void OnDestroy()
-    //{
-    //    if (input)
-    //        input.OnPowerStateChanged -= SourcePowerStateChanged;
-    //}
-    public void Update()
+    public class Logic_Not : LogicComponent
     {
-        isPowered = !(inputSignal != null && inputSignal.isPowered);
-    }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    //public override void AutoSubscribe()
-    //{
-    //    subscribeLogicComponents.Add(inputSignal);
-    //    base.AutoSubscribe();
-    //}
-    public override void SourcePowerStateChanged(bool powered)
-    {
-        isPowered = !powered;
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        //private void OnEnable()
+        //{
+        //    if (input)
+        //        input.OnPowerStateChanged += SourcePowerStateChanged;
+        //}
+        //private void OnDestroy()
+        //{
+        //    if (input)
+        //        input.OnPowerStateChanged -= SourcePowerStateChanged;
+        //}
+        public void Update()
+        {
+            isPowered = !(inputSignal != null && inputSignal.isPowered);
+        }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        //public override void AutoSubscribe()
+        //{
+        //    subscribeLogicComponents.Add(inputSignal);
+        //    base.AutoSubscribe();
+        //}
+        public override void SourcePowerStateChanged(bool powered)
+        {
+            isPowered = !powered;
+        }
     }
 }

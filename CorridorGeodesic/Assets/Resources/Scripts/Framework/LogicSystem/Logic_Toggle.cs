@@ -9,54 +9,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Logic_Toggle : LogicComponent
+namespace Neverway.Framework.LogicSystem
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    [Tooltip("If true, the toggle will stay powered once powered a single time. No other signals will turn it off")]
-    public bool stayPowered = false;
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private new void OnEnable()
+    public class Logic_Toggle : LogicComponent
     {
-        //This override is necessary to avoid SourcePowerStateChanged(); from getting called
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        [Tooltip("If true, the toggle will stay powered once powered a single time. No other signals will turn it off")]
+        public bool stayPowered = false;
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    //public override void AutoSubscribe()
-    //{
-    //    subscribeLogicComponents.Add(inputSignal);
-    //    base.AutoSubscribe();
-    //}
-    public override void SourcePowerStateChanged(bool powered)
-    {
-        base.SourcePowerStateChanged(powered);
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
 
-        if (stayPowered)
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private new void OnEnable()
         {
-            isPowered = isPowered || powered;
-            return;
-        }    
+            //This override is necessary to avoid SourcePowerStateChanged(); from getting called
+        }
 
-        isPowered = powered ? !isPowered : isPowered;
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        //public override void AutoSubscribe()
+        //{
+        //    subscribeLogicComponents.Add(inputSignal);
+        //    base.AutoSubscribe();
+        //}
+        public override void SourcePowerStateChanged(bool powered)
+        {
+            base.SourcePowerStateChanged(powered);
+
+            if (stayPowered)
+            {
+                isPowered = isPowered || powered;
+                return;
+            }
+
+            isPowered = powered ? !isPowered : isPowered;
+        }
     }
 }

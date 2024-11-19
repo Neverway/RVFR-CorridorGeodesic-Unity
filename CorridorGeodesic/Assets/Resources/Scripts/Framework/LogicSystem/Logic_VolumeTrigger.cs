@@ -9,42 +9,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Logic_VolumeTrigger : LogicComponent
+namespace Neverway.Framework.LogicSystem
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void OnTriggerEnter(Collider other)
+    public class Logic_VolumeTrigger : LogicComponent
     {
-        if(other.CompareTag("Pawn"))
-            isPowered = true;
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Pawn"))
-            isPowered = false;
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Pawn"))
+                isPowered = true;
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Pawn"))
+                isPowered = false;
+        }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+    }
 }

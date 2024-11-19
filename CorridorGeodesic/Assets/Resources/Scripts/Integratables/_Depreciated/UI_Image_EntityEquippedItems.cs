@@ -7,7 +7,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-
+/*
 [RequireComponent(typeof(Image))]
 public class UI_Image_PawnEquippedItems : MonoBehaviour
 {
@@ -143,3 +143,4 @@ public class UI_Image_PawnEquippedItems : MonoBehaviour
     // External Functions
     //=-----------------=
 }
+*/

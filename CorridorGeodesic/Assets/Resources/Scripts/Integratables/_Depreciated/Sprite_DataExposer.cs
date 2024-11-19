@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Sprite_DataExposer : MonoBehaviour

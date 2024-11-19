@@ -9,63 +9,66 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Logic_And: LogicComponent
+namespace Neverway.Framework.LogicSystem
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    [SerializeField, LogicComponentHandle] private List<LogicComponent> inputSignals = new List<LogicComponent>();
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    //private void OnEnable()
-    //{
-    //    if (inputs.Count == 0)
-    //        return;
-
-    //    inputs.ForEach(i =>
-    //    {
-    //        if (i)
-    //            i.OnPowerStateChanged += SourcePowerStateChanged;
-    //    });
-    //}
-    //private void OnDestroy()
-    //{
-    //    if (inputs.Count == 0)
-    //        return;
-
-    //    inputs.ForEach(i => 
-    //    {
-    //        if (i)
-    //            i.OnPowerStateChanged -= SourcePowerStateChanged;
-    //    });
-    //}
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    //public override void AutoSubscribe()
-    //{
-    //    subscribeLogicComponents.AddRange(inputSignals);
-    //    base.AutoSubscribe();
-    //}
-    public override void SourcePowerStateChanged(bool powered)
+    public class Logic_And : LogicComponent
     {
-        isPowered = inputSignals.TrueForAll(i => i && i.isPowered);
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        [SerializeField, LogicComponentHandle] private List<LogicComponent> inputSignals = new List<LogicComponent>();
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        //private void OnEnable()
+        //{
+        //    if (inputs.Count == 0)
+        //        return;
+
+        //    inputs.ForEach(i =>
+        //    {
+        //        if (i)
+        //            i.OnPowerStateChanged += SourcePowerStateChanged;
+        //    });
+        //}
+        //private void OnDestroy()
+        //{
+        //    if (inputs.Count == 0)
+        //        return;
+
+        //    inputs.ForEach(i => 
+        //    {
+        //        if (i)
+        //            i.OnPowerStateChanged -= SourcePowerStateChanged;
+        //    });
+        //}
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        //public override void AutoSubscribe()
+        //{
+        //    subscribeLogicComponents.AddRange(inputSignals);
+        //    base.AutoSubscribe();
+        //}
+        public override void SourcePowerStateChanged(bool powered)
+        {
+            isPowered = inputSignals.TrueForAll(i => i && i.isPowered);
+        }
     }
 }

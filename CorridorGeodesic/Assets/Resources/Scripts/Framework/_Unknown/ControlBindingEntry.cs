@@ -8,7 +8,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.ApplicationManagement
 {
     public class ControlBindingEntry : MonoBehaviour
     {

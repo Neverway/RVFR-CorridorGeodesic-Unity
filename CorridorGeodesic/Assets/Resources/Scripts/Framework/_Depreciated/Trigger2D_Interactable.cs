@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using UnityEngine.Events;
+using Neverway.Framework.LogicSystem;
 
 [RequireComponent(typeof(Logic_Processor))]
 public class Trigger2D_Interactable : Volume

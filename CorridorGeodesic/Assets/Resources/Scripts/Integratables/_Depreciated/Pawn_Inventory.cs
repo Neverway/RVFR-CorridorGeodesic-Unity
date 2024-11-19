@@ -10,7 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
 public class Pawn_Inventory : MonoBehaviour
 {
     //=-----------------=
@@ -213,4 +213,4 @@ public class Pawn_Inventory : MonoBehaviour
         }
     }
 }
-
+*/

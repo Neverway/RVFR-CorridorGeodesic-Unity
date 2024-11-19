@@ -6,10 +6,12 @@
 //
 //=============================================================================
 
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Neverway.Framework
-{/*
+{
     public class CameraManager : MonoBehaviour
     {
         //=-----------------=
@@ -71,5 +73,5 @@ namespace Neverway.Framework
 
             return null;
         }
-    }*/
+    }
 }

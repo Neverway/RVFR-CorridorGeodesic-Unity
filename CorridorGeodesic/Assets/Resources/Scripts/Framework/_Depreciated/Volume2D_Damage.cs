@@ -6,6 +6,7 @@
 //=============================================================================
 
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
 
 public class Volume2D_Damage : Volume
 {

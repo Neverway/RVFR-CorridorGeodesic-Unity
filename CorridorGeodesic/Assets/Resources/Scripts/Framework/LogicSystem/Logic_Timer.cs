@@ -10,87 +10,94 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Logic_Timer: LogicComponent
+namespace Neverway.Framework.LogicSystem
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
-    [SerializeField] private float timerDuration;
-    [SerializeField] private bool runTimerOnStart = true;
-    [Tooltip("By default the output is powered when the timer is counting, then is unpowered on completion")]
-    [SerializeField] private bool outputPowersWhenTimerEnds;
-    [field:SerializeField] public UnityEvent onTimerStart { get; private set; } = new UnityEvent();
-    [field:SerializeField] public UnityEvent onTimerEnd { get; private set; } = new UnityEvent();
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    //private void OnEnable()
-    //{
-    //    if (input)
-    //        input.OnPowerStateChanged += SourcePowerStateChanged;
-    //}
-    //private void OnDestroy()
-    //{
-    //    if (input)
-    //        input.OnPowerStateChanged -= SourcePowerStateChanged;
-    //}
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-    IEnumerator CountDown()
+    public class Logic_Timer : LogicComponent
     {
-        if (!outputPowersWhenTimerEnds)
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
+        [SerializeField] private float timerDuration;
+        [SerializeField] private bool runTimerOnStart = true;
+
+        [Tooltip("By default the output is powered when the timer is counting, then is unpowered on completion")]
+        [SerializeField]
+        private bool outputPowersWhenTimerEnds;
+
+        [field: SerializeField] public UnityEvent onTimerStart { get; private set; } = new UnityEvent();
+        [field: SerializeField] public UnityEvent onTimerEnd { get; private set; } = new UnityEvent();
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        //private void OnEnable()
+        //{
+        //    if (input)
+        //        input.OnPowerStateChanged += SourcePowerStateChanged;
+        //}
+        //private void OnDestroy()
+        //{
+        //    if (input)
+        //        input.OnPowerStateChanged -= SourcePowerStateChanged;
+        //}
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+        IEnumerator CountDown()
         {
-            isPowered = true;
-            onTimerStart?.Invoke();
-            yield return new WaitForSeconds(timerDuration);
-            isPowered = false;
-            onTimerEnd?.Invoke();
+            if (!outputPowersWhenTimerEnds)
+            {
+                isPowered = true;
+                onTimerStart?.Invoke();
+                yield return new WaitForSeconds(timerDuration);
+                isPowered = false;
+                onTimerEnd?.Invoke();
+            }
+            else
+            {
+                isPowered = false;
+                onTimerStart?.Invoke();
+                yield return new WaitForSeconds(timerDuration);
+                isPowered = true;
+                onTimerEnd?.Invoke();
+            }
         }
-        else
+
+        public override void OnEnable()
         {
-            isPowered = false;
-            onTimerStart?.Invoke();
-            yield return new WaitForSeconds(timerDuration);
-            isPowered = true;
-            onTimerEnd?.Invoke();
+            if (runTimerOnStart)
+                base.OnEnable();
         }
-    }
-    public override void OnEnable()
-    {
-        if (runTimerOnStart)
-            base.OnEnable();
-    }
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    //public override void AutoSubscribe()
-    //{
-    //    subscribeLogicComponents.Add(inputSignal);
-    //    base.AutoSubscribe();
-    //}
-    public override void SourcePowerStateChanged(bool powered)
-    {
-        base.SourcePowerStateChanged(powered);
-
-        if (powered)
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        //public override void AutoSubscribe()
+        //{
+        //    subscribeLogicComponents.Add(inputSignal);
+        //    base.AutoSubscribe();
+        //}
+        public override void SourcePowerStateChanged(bool powered)
         {
-            StopAllCoroutines();
-            StartCoroutine(CountDown());
+            base.SourcePowerStateChanged(powered);
+
+            if (powered)
+            {
+                StopAllCoroutines();
+                StartCoroutine(CountDown());
+            }
         }
     }
 }
