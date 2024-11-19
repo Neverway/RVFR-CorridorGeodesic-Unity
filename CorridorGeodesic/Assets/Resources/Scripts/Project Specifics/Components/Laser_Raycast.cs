@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http.Headers;
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
 
 public class Laser_Raycast : LogicComponent
 {

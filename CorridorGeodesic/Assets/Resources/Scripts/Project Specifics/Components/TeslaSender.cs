@@ -8,6 +8,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
+
 //todo: make a manager that Lists senders and receivers and calls them accordionly
 [RequireComponent(typeof(TeslaConductor))]
 public class TeslaSender : LogicComponent, TeslaPowerSource

@@ -7,6 +7,8 @@
 
 using System.Collections;
 using UnityEngine;
+using Neverway.Framework;
+using Neverway.Framework.PawnManagement;
 
 public class Enemy_Chaser : MonoBehaviour
 {

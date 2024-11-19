@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Neverway.Framework.ApplicationManagement;
 
 public class WB_Settings_Graphics : MonoBehaviour
 {

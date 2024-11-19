@@ -9,6 +9,7 @@
 
 using System;
 using UnityEngine;
+using Neverway.Framework.ApplicationManagement;
 
 public class Pawn_WallRun : MonoBehaviour
 {

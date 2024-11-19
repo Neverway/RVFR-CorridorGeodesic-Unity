@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
+using Neverway.Framework.LogicSystem;
 
 public class AnimatedRespawner : Prop_Respawner
 {
@@ -56,7 +57,7 @@ public class AnimatedRespawner : Prop_Respawner
     {
         yield return new WaitForSeconds (spawnDelay);
         anim.SetBool ("Powered", true);
-        GameObject animObject = Instantiate (animatedObject, animEndPos);
+        GameObject animObject = Instantiate(animatedObject, animEndPos);
         animObject.transform.position = animStartPos.position;
         animObject.transform.rotation = animEndPos.transform.rotation;
         animObject.transform.DOLocalMove (Vector3.zero, animDuration).SetEase (animEaseCurve)

@@ -25,6 +25,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using Neverway.Framework.PawnManagement;
+using Neverway.Framework;
+using Neverway.Framework.Cartographer;
+using Neverway.Framework.LogicSystem;
+using Neverway;
+using Neverway.Framework.ApplicationManagement;
 
 public class WB_LevelEditor : MonoBehaviour
 {
@@ -906,7 +912,7 @@ public class WB_LevelEditor : MonoBehaviour
             case "prop":
                 break;
             case "item":
-                if (asset.GetComponent<Trigger2D_Pickup>()) asset.GetComponent<Trigger2D_Pickup>().item = projectData.GetItemFromMemory(hotBarTileID[currentHotBarIndex]);
+                //if (asset.GetComponent<Trigger2D_Pickup>()) asset.GetComponent<Trigger2D_Pickup>().item = projectData.GetItemFromMemory(hotBarTileID[currentHotBarIndex]);
                 break;
             case "character":
                 asset.GetComponent<Pawn>().SetPawnDefaultState(projectData.GetCharacterFromMemory(hotBarTileID[currentHotBarIndex]));

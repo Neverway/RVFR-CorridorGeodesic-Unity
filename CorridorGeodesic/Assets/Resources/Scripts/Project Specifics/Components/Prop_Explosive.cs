@@ -9,6 +9,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
+using Neverway.Framework.PawnManagement;
 
 public class Prop_Explosive : LogicComponent
 {

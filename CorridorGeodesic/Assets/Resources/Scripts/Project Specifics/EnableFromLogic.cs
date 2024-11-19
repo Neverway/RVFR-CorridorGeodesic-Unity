@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Neverway.Framework.LogicSystem;
 
 public class EnableFromLogic : LogicComponent
 {
