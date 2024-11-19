@@ -47,6 +47,39 @@ MonoBehaviour:
   dirtIntensity:
     overrideState: 0
     value: 125
+--- !u!114 &-6532598893503993614
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a87eeffe594b1254cb3c89f5ab30d614, type: 3}
+  m_Name: ComicFilter
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  darkShadowTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: df20f755ebc0b1f4a87e5ef738aac8a5, type: 3}
+    defaultState: 1
+  lightShadowTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 7da25098e4b705445a1c7f7e064bb119, type: 3}
+    defaultState: 1
+  effectStrength:
+    overrideState: 1
+    value: 0.35
+  darkPoint:
+    overrideState: 1
+    value: 0.15
+  lightPoint:
+    overrideState: 1
+    value: 0.35
 --- !u!114 &-4110732194176603622
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1428,6 +1461,9 @@ MonoBehaviour:
   - {fileID: -4110732194176603622}
   - {fileID: 5977108932207599525}
   - {fileID: 1160765500471503049}
+  - {fileID: -6532598893503993614}
+  - {fileID: 3982782308721169403}
+  - {fileID: 4052998543056291606}
 --- !u!114 &1160765500471503049
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1486,7 +1522,7 @@ MonoBehaviour:
     value: 0
   intensity:
     overrideState: 1
-    value: 0.75
+    value: 0.5
   color:
     overrideState: 1
     value: {r: 0, g: 0, b: 0, a: 1}
@@ -1517,6 +1553,50 @@ MonoBehaviour:
   quality:
     overrideState: 1
     value: 2
+--- !u!114 &3982782308721169403
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f922733efcef548a9b59c8ce9988ec, type: 3}
+  m_Name: ColorQuantizationFilter
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  effectStrength:
+    overrideState: 1
+    value: 0.25
+  maxColors:
+    overrideState: 1
+    value: 32
+--- !u!114 &4052998543056291606
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7030d4eb31355b45b48dd7a7b37c54e, type: 3}
+  m_Name: DitheringFilter
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  effectStrength:
+    overrideState: 1
+    value: 1
+  spread:
+    overrideState: 1
+    value: 0.1
 --- !u!114 &5977108932207599525
 MonoBehaviour:
   m_ObjectHideFlags: 3

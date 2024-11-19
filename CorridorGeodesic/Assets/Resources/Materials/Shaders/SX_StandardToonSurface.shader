@@ -152,9 +152,9 @@ Shader "Soulex/Surface/Standard Toon"
             half NdotV = abs(dot(normal, viewDirection));
             half LdotH = DotClamped(lightDirection, halfDirection);
 
-            half shadowMix = lerp(1 - darkShadow * 0.95, 1 - lightShadow * -0.2, NdotL);
-            shadowMix = lerp(shadowMix, 1, saturate(preNdotL + 0.5));
-            NdotL *= shadowMix;
+            //half shadowMix = lerp(1 - darkShadow * 0.95, 1 - lightShadow * -0.2, NdotL);
+            //shadowMix = lerp(shadowMix, 1, saturate(preNdotL + 0.5));
+            //NdotL *= shadowMix;
 
             half diffuseTerm = DisneyDiffuse(NdotV, NdotL, LdotH, perceptualRoughness) * NdotL;
 

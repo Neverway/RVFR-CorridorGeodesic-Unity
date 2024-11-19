@@ -25,7 +25,7 @@ namespace Neverway.Framework
         //=-----------------=
         // Reference Variables
         //=-----------------=
-        [IsDomainReloaded] private static GameObject instance;
+        [IsDomainReloaded] private static GameObject instance; //change this to "private static PersistentSingleton Instance;"
 
         //=-----------------=
         // Mono Functions
@@ -38,8 +38,8 @@ namespace Neverway.Framework
                 return;
             }
 
-            instance = gameObject;
-            DontDestroyOnLoad(instance);
+            instance = gameObject; //if(Instance != this && Instance != null) { Destroy(gameObject); } else if (Instance != this) { Instance = this; }
+            DontDestroyOnLoad(instance); //should be DontDestroyOnLoad(gameobject);
         }
         //=-----------------=
         // Internal Functions
