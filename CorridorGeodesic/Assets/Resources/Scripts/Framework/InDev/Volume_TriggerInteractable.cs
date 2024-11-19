@@ -10,8 +10,9 @@ using System.Collections;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using Neverway.Framework.PawnManagement;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.LogicSystem
 {
     public class Volume_TriggerInteractable : Volume
     {

@@ -14,7 +14,6 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering.PostProcessing;
-using Neverway.Framework.Customs;
 
 
 namespace Neverway.Framework.ApplicationManagement

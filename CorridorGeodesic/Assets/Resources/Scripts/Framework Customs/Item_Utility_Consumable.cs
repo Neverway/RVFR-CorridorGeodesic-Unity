@@ -1,47 +1,19 @@
-//========== Neverway 2023 Project Script | Written by Unknown Dev ============
-// 
-// Type: 
+//===================== (Neverway 2024) Written by Liz M. =====================
+//
 // Purpose: 
-// Applied to: 
+// Notes:
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-using Neverway.Framework;
-
-namespace Neverway.Framework.Customs
+namespace Neverway.Framework
 {
     [CreateAssetMenu(fileName = "Item_Utility_Consumable", menuName = "Neverway/ScriptableObjects/Items/Consumable")]
     public class Item_Utility_Consumable : Item
     {
-        //=-----------------=
-        // Public Variables
-        //=-----------------=
         public string effect;
         public float amount;
-
-
-        //=-----------------=
-        // Private Variables
-        //=-----------------=
-
-
-        //=-----------------=
-        // Reference Variables
-        //=-----------------=
-
-
-        //=-----------------=
-        // Internal Functions
-        //=-----------------=
-
-
-        //=-----------------=
-        // External Functions
-        //=-----------------=
     }
 }
 

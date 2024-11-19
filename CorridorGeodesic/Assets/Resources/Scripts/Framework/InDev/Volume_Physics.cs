@@ -8,8 +8,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework.PawnManagement;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.LogicSystem
 {
     public class Volume_Physics : Volume
     {

@@ -1,24 +1,19 @@
-//========== Neverway 2023 Project Script | Written by Unknown Dev ============
-// 
-// Type: 
+//===================== (Neverway 2024) Written by Liz M. =====================
+//
 // Purpose: 
-// Applied to: 
+// Notes:
 //
 //=============================================================================
 
 using System.Collections.Generic;
 using UnityEngine;
-using Neverway.Framework;
 
-namespace Neverway.Framework.Customs
+namespace Neverway.Framework
 {
 
     [CreateAssetMenu(fileName = "Item_Defense", menuName = "Neverway/ScriptableObjects/Items/Defense")]
     public class Item_Defense : Item
     {
-        //=-----------------=
-        // Public Variables
-        //=-----------------=
         [Tooltip("The amount of damage that will be negated by default when this defense item is equipped")]
         public float baseDefense;
 
@@ -35,26 +30,6 @@ namespace Neverway.Framework.Customs
 
         [Tooltip("The damage types that this defense item is weak against")]
         public List<string> criticalTypes;
-
-
-        //=-----------------=
-        // Private Variables
-        //=-----------------=
-
-
-        //=-----------------=
-        // Reference Variables
-        //=-----------------=
-
-
-        //=-----------------=
-        // Internal Functions
-        //=-----------------=
-
-
-        //=-----------------=
-        // External Functions
-        //=-----------------=
     }
 }
 

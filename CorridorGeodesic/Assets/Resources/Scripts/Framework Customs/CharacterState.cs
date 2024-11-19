@@ -1,6 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: A duplicate data structure of characterData since dataStructure
+//  runs into issues with data being written directly to the Scriptable Object
 // Notes: Greetings future me! You are probably here trying to figure out why
 //  the Pawn class has defaultState inheriting this class, but currentState
 //  inheriting PlayerStateData.
@@ -21,9 +22,8 @@
 
 using System;
 using UnityEngine;
-using Neverway.Framework;
 
-namespace Neverway.Framework.Customs
+namespace Neverway.Framework.PawnManagement
 {
     [Serializable]
     public class CharacterState
@@ -38,7 +38,6 @@ namespace Neverway.Framework.Customs
         public CharacterSounds characterSounds;
         public Vector3 groundCheckOffset;
         public float groundCheckRadius;
-
         [Tooltip("The collision layers that will be checked when testing if the entity is grounded")]
         public LayerMask groundMask;
 
@@ -52,26 +51,19 @@ namespace Neverway.Framework.Customs
         public float gravityMultiplier;
         public float jumpForce;
         public float steepSlopeAngle;
-
         [Tooltip("The multiplier added to the movementSpeed while grounded and sprinting")]
         public float sprintSpeedMultiplier;
-
         [Tooltip("Essentially how long it takes you to get up to speed while sprinting")]
         public float sprintAcceleration;
-
         public bool autoRegenHealth;
         public float healthRegenPerSecond;
         public float healthRegenDelay;
-
         [Tooltip("Amount of damage taken from falling.")]
         public float fallDamage;
-
         [Tooltip("Amount of damage taken from falling minimum distance.")]
         public float minFallDamage;
-
         [Tooltip("Rigidbody Y velocity required for max fall damage.")]
         public float fallDamageVelocity;
-
         [Tooltip("Rigidbody Y velocity required for minimum fall damage.")]
         public float minFallDamageVelocity;
     }

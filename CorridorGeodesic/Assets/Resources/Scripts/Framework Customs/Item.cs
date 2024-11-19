@@ -1,17 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: 
 // Notes:
 //
 //=============================================================================
 
 using System;
 using UnityEngine;
-using Neverway.Framework;
 
-namespace Neverway.Framework.Customs
+namespace Neverway.Framework
 {
-
     [Serializable]
     public class Item : Actor
     {

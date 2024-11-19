@@ -1,20 +1,19 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Holds a collection of actors and uses their ids to do things like
+//  spawning the assets from a map file
 // Notes:
 //
 //=============================================================================
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Neverway.Framework;
+using Neverway.Framework.PawnManagement;
 
-namespace Neverway.Framework.Customs
+namespace Neverway.Framework
 {
-
     public class ProjectData : MonoBehaviour
     {
         public List<TileMemoryGroup> tiles;

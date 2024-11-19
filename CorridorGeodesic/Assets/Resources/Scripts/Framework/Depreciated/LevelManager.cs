@@ -13,7 +13,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using SimpleFileBrowser;
 using UnityEngine.SceneManagement;
-using Neverway.Framework.Customs;
 
 namespace Neverway.Framework.Cartographer
 {

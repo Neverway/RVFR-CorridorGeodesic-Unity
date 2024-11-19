@@ -1,25 +1,17 @@
-//========== Neverway 2023 Project Script | Written by Unknown Dev ============
-// 
-// Type: 
+//===================== (Neverway 2024) Written by Liz M. =====================
+//
 // Purpose: 
-// Applied to: 
+// Notes:
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-using Neverway.Framework;
-
-namespace Neverway.Framework.Customs
+namespace Neverway.Framework
 {
     [CreateAssetMenu(fileName = "Item_Utility_Throwable", menuName = "Neverway/ScriptableObjects/Items/Throwable")]
     public class Item_Utility_Throwable : Item
     {
-        //=-----------------=
-        // Public Variables
-        //=-----------------=
         public float baseDamage;
         public Vector2 forceStrength;
         public float removeForceDelay;
@@ -32,26 +24,6 @@ namespace Neverway.Framework.Customs
 
         [Tooltip("This is how long the object will exist for before destructing and creating the hit object")]
         public float lifetime;
-
-
-        //=-----------------=
-        // Private Variables
-        //=-----------------=
-
-
-        //=-----------------=
-        // Reference Variables
-        //=-----------------=
-
-
-        //=-----------------=
-        // Internal Functions
-        //=-----------------=
-
-
-        //=-----------------=
-        // External Functions
-        //=-----------------=
     }
 }
 

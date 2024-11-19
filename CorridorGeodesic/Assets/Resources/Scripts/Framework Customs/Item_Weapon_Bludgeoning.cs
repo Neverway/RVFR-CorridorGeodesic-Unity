@@ -5,51 +5,9 @@
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Neverway.Framework;
-
-namespace Neverway.Framework.Customs
+namespace Neverway.Framework
 {
-
     public class Item_Weapon_Bludgeoning : Item_Weapon
     {
-        //=-----------------=
-        // Public Variables
-        //=-----------------=
-
-
-        //=-----------------=
-        // Private Variables
-        //=-----------------=
-
-
-        //=-----------------=
-        // Reference Variables
-        //=-----------------=
-
-
-        //=-----------------=
-        // Mono Functions
-        //=-----------------=
-        private void Start()
-        {
-
-        }
-
-        private void Update()
-        {
-
-        }
-
-        //=-----------------=
-        // Internal Functions
-        //=-----------------=
-
-
-        //=-----------------=
-        // External Functions
-        //=-----------------=
     }
 }
