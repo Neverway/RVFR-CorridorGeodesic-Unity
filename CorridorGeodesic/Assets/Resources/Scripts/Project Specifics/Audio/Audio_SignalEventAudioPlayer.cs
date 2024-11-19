@@ -9,6 +9,7 @@ using FMODUnity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
 
 public class Audio_SignalEventAudioPlayer : LogicComponent
 {

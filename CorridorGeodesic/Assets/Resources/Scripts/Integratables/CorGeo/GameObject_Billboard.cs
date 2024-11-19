@@ -7,54 +7,58 @@
 
 using UnityEngine;
 
-public class GameObject_Billboard : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    [SerializeField] private float updateRate = 1;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private CameraManager cameraManager;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class GameObject_Billboard : MonoBehaviour
     {
-        cameraManager = FindObjectOfType<CameraManager>();
-        InvokeRepeating(nameof(UpdateBillboard), 0, updateRate);
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        [SerializeField] private float updateRate = 1;
 
-    private void UpdateBillboard()
-    {
-        if (!cameraManager)
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private CameraManager cameraManager;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
             cameraManager = FindObjectOfType<CameraManager>();
-            return;
+            InvokeRepeating(nameof(UpdateBillboard), 0, updateRate);
         }
 
-        if (cameraManager.GetActiveRenderingCamera())
+        private void UpdateBillboard()
         {
-            transform.LookAt(cameraManager.GetActiveRenderingCamera().transform.position, cameraManager.GetActiveRenderingCamera().transform.up);
+            if (!cameraManager)
+            {
+                cameraManager = FindObjectOfType<CameraManager>();
+                return;
+            }
+
+            if (cameraManager.GetActiveRenderingCamera())
+            {
+                transform.LookAt(cameraManager.GetActiveRenderingCamera().transform.position,
+                    cameraManager.GetActiveRenderingCamera().transform.up);
+            }
         }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

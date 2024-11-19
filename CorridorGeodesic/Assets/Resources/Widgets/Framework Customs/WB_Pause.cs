@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Neverway.Framework;
 
 public class WB_Pause : MonoBehaviour
 {

@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using Neverway.Framework;
 
 public class WB_Ranking : MonoBehaviour
 {

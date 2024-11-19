@@ -5,46 +5,11 @@
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class Item_Defense_Legs : Item_Defense
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
 
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class Item_Defense_Legs : Item_Defense
     {
-    
     }
-
-    private void Update()
-    {
-    
-    }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

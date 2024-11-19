@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using Neverway.Framework.ApplicationManagement;
 
 public class WB_Language : MonoBehaviour
 {

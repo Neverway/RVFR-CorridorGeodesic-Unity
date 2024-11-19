@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
 
 //[RequireComponent(typeof(Mesh_Slicable))]
 //[RequireComponent(typeof(SlicedPartsReference))]

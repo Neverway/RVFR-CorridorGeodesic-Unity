@@ -1,45 +1,21 @@
-//========== Neverway 2023 Project Script | Written by Unknown Dev ============
-// 
-// Type: 
+//===================== (Neverway 2024) Written by Liz M. =====================
+//
 // Purpose: 
-// Applied to: 
+// Notes:
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Item_Weapon", menuName="Neverway/ScriptableObjects/Items/Weapon")]
-public class Item_Weapon : Item
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public float damage;
-    public Vector2 knockbackForce;
-    public float knockbackForceDuration;
-    public string effect;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
+    [CreateAssetMenu(fileName = "Item_Weapon", menuName = "Neverway/ScriptableObjects/Items/Weapon")]
+    public class Item_Weapon : Item
+    {
+        public float damage;
+        public Vector2 knockbackForce;
+        public float knockbackForceDuration;
+        public string effect;
+    }
 }
 

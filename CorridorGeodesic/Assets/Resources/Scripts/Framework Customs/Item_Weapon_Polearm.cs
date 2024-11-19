@@ -5,46 +5,9 @@
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Item_Weapon_Polearm : Item_Weapon
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class Item_Weapon_Polearm : Item_Weapon
     {
-    
     }
-
-    private void Update()
-    {
-    
-    }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

@@ -5,11 +5,12 @@
 //
 //=============================================================================
 
-using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Prop", menuName="Neverway/ScriptableObjects/Prop")]
-public class Prop : Actor
+namespace Neverway.Framework
 {
-    
+    [CreateAssetMenu(fileName = "Prop", menuName = "Neverway/ScriptableObjects/Prop")]
+    public class Prop : Actor
+    {
+    }
 }

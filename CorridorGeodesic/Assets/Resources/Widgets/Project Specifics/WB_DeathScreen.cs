@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Neverway.Framework;
 
 public class WB_DeathScreen : MonoBehaviour
 {

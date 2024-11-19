@@ -7,43 +7,46 @@
 
 using UnityEngine;
 
-public class LB_LevelEditor : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private GameInstance gameInstance;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class LB_LevelEditor : MonoBehaviour
     {
-        gameInstance = FindObjectOfType<GameInstance>();
-        // I'm removing this and just making the Widget be pre-instantiated since the LevelEditor widget has SO MANY DANG REFERENCES IN THE CURRENT SCENE (P.S Don't tell Kevin)
-        // (Screw you past me!) ~Liz
-        // Oh boo-hoo, it's four references you dope! ~Future Liz
-        //gameInstance.UI_ShowLevelEditor();
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private GameInstance gameInstance;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
+        {
+            gameInstance = FindObjectOfType<GameInstance>();
+            // I'm removing this and just making the Widget be pre-instantiated since the LevelEditor widget has SO MANY DANG REFERENCES IN THE CURRENT SCENE (P.S Don't tell Kevin)
+            // (Screw you past me!) ~Liz
+            // Oh boo-hoo, it's four references you dope! ~Future Liz
+            //gameInstance.UI_ShowLevelEditor();
+        }
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-    
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

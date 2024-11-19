@@ -1,60 +1,60 @@
-//======== Neverway 2023 Project Script | Written by Arthur Aka Liz ===========
-// 
-// Type: Utility
-// Purpose: Keep this object when changing scenes. Destroy the new instance
-//  if the object exists in the next scene.
-// Applied to: The persistent system manager
+//===================== (Neverway 2024) Written by Liz M. =====================
+//
+// Purpose: Keeps this object when changing scenes and ensures there is only
+//  ever one of them present in a scene
+// Notes: 
 //
 //=============================================================================
 
 using UnityEngine;
 
-public class PersistentSingleton : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    [IsDomainReloaded] private static GameObject instance;
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Awake()
+    public class PersistentSingleton : MonoBehaviour
     {
-        if (instance != null)
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        [IsDomainReloaded] private static GameObject instance;
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Awake()
         {
-            Destroy(gameObject);
-            return;
+            if (instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            instance = gameObject;
+            DontDestroyOnLoad(instance);
         }
-
-        instance = gameObject;
-        DontDestroyOnLoad(instance);
-    }
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-
-
-    //=----Reload Static Fields----=
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void InitializeStaticFields()
-    {
-        instance = null;
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        // Reload Static Fields
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void InitializeStaticFields()
+        {
+            instance = null;
+        }
     }
 }
 

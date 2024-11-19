@@ -8,6 +8,8 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework.ApplicationManagement;
+using Neverway.Framework;
 
 public class WB_Settings_Controls : MonoBehaviour
 {
