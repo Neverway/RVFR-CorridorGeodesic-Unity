@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Handle loading scenes including showing a loading screen
 // Notes:
 //
 //=============================================================================
@@ -11,7 +11,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Neverway.Framework.Customs;
-
 
 namespace Neverway.Framework
 {

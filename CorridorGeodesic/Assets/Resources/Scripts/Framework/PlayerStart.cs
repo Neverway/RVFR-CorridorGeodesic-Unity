@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Defines 
+// Purpose: Defines a point and filter to spawn pawns at
 // Notes:
 //
 //=============================================================================

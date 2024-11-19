@@ -1,13 +1,11 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Adjusts parameters for the current world (scene) and handles 
+//  spawning the player pawn at player start points
 // Notes:
 //
 //=============================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;

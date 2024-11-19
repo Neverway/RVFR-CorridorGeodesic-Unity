@@ -1,16 +1,15 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: The base class of all logic system volumes
+// Notes: 
 //
 //=============================================================================
 
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using Neverway.Framework.PawnManagement;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.LogicSystem
 {
     public class Volume : LogicComponent
     {
