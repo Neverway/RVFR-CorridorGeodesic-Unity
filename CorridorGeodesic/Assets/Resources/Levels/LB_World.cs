@@ -8,67 +8,72 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework;
 
-public class LB_World : MonoBehaviour
+namespace Neverway
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public bool shouldHaveGeoGun=true;
-    public bool shouldHaveUpgradedGeoGund = false;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private GameInstance gameInstance;
-    private Pawn_WeaponInventory weaponInventory;
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class LB_World : MonoBehaviour
     {
-        gameInstance = FindObjectOfType<GameInstance>();
-        gameInstance.UI_ShowHUD();
-        UpdateGeoGunUpgrade();
-    }
-    private void Update()
-    {
-        UpdateGeoGunUpgrade();
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public bool shouldHaveGeoGun = true;
+        public bool shouldHaveUpgradedGeoGund = false;
 
-    public void UpdateGeoGunUpgrade()
-    {
-        if (weaponInventory == null)
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private GameInstance gameInstance;
+        private Pawn_WeaponInventory weaponInventory;
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            weaponInventory = FindObjectOfType<Pawn_WeaponInventory>();
-            if (weaponInventory == null)
-            {
-                //Debug.LogWarning("Could not find " + nameof(Pawn_WeaponInventory) + " to update geogun");
-                return;
-            }
+            gameInstance = FindObjectOfType<GameInstance>();
+            gameInstance.UI_ShowHUD();
+            UpdateGeoGunUpgrade();
         }
 
-        if (shouldHaveGeoGun)
-            weaponInventory.GiveGeoGun();
+        private void Update()
+        {
+            UpdateGeoGunUpgrade();
+        }
 
-        if (shouldHaveUpgradedGeoGund)
-            weaponInventory.UpgradeGeoGun();
+        public void UpdateGeoGunUpgrade()
+        {
+            if (weaponInventory == null)
+            {
+                weaponInventory = FindObjectOfType<Pawn_WeaponInventory>();
+                if (weaponInventory == null)
+                {
+                    //Debug.LogWarning("Could not find " + nameof(Pawn_WeaponInventory) + " to update geogun");
+                    return;
+                }
+            }
+
+            if (shouldHaveGeoGun)
+                weaponInventory.GiveGeoGun();
+
+            if (shouldHaveUpgradedGeoGund)
+                weaponInventory.UpgradeGeoGun();
+        }
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-    
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

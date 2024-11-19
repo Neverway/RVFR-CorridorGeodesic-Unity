@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using UnityEngine.Events;
+using Neverway.Framework.PawnManagement;
 
 public class CrushDetector : MonoBehaviour
 {

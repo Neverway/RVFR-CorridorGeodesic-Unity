@@ -9,7 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
 public class NEW_LogicProcessor : MonoBehaviour
 {
     //=-----------------=
@@ -76,4 +76,4 @@ public class NEW_LogicProcessor : MonoBehaviour
     //=-----------------=
     // External Functions
     //=-----------------=
-}
+}*/

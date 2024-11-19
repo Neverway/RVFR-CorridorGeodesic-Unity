@@ -8,56 +8,64 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework.PawnManagement;
 
-public class Pawn_FallDamage : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private Pawn pawn;
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-
-    private void Start ()
+    public class Pawn_FallDamage : MonoBehaviour
     {
-        pawn = GetComponent<Pawn>();
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
 
-    private void OnCollisionEnter (Collision collision)
-    {
-        foreach (var contact in collision.contacts)
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private Pawn pawn;
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+
+        private void Start()
         {
-           if (Vector3.Angle(contact.normal, Vector3.up) < pawn.currentState.steepSlopeAngle)
+            pawn = GetComponent<Pawn>();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            foreach (var contact in collision.contacts)
             {
-                if (collision.relativeVelocity.y > pawn.currentState.minFallDamageVelocity)
+                if (Vector3.Angle(contact.normal, Vector3.up) < pawn.currentState.steepSlopeAngle)
                 {
-                    float percent = (collision.relativeVelocity.y - pawn.currentState.minFallDamageVelocity) / (pawn.currentState.fallDamageVelocity - pawn.currentState.minFallDamageVelocity);
-                    float totalDamage = pawn.currentState.minFallDamage + ((pawn.currentState.fallDamage - pawn.currentState.minFallDamage) * percent);
-                    Debug.Log ("Fall Damage " + totalDamage + "(" + percent + "%)");
-                    pawn.ModifyHealth(-totalDamage);
+                    if (collision.relativeVelocity.y > pawn.currentState.minFallDamageVelocity)
+                    {
+                        float percent = (collision.relativeVelocity.y - pawn.currentState.minFallDamageVelocity) /
+                                        (pawn.currentState.fallDamageVelocity -
+                                         pawn.currentState.minFallDamageVelocity);
+                        float totalDamage = pawn.currentState.minFallDamage +
+                                            ((pawn.currentState.fallDamage - pawn.currentState.minFallDamage) *
+                                             percent);
+                        Debug.Log("Fall Damage " + totalDamage + "(" + percent + "%)");
+                        pawn.ModifyHealth(-totalDamage);
+                    }
                 }
             }
         }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }
