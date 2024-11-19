@@ -8,7 +8,6 @@
 
 using UnityEngine;
 
-
 namespace Neverway.Framework
 {
     public class Actor : DataObject
