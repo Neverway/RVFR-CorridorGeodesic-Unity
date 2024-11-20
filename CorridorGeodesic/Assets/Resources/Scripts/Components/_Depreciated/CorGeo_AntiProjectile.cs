@@ -1,17 +1,17 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Used to make 2D sprites tile dynamically when scaled for things like
-//  water volumes
-// Notes:
+// Purpose: Attach this to a game object to make markers not be able to be placed on this
+// Notes: This is only meant to be used in the CorGeo project
 //
 //=============================================================================
 
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Neverway.Framework
+namespace Neverway.CorGeo
 {
-    [RequireComponent(typeof(SpriteRenderer))]
-    public class SpriteRender_MatchTilingToScale : MonoBehaviour
+    public class CorGeo_AntiProjectile : MonoBehaviour
     {
         //=-----------------=
         // Public Variables
@@ -26,22 +26,12 @@ namespace Neverway.Framework
         //=-----------------=
         // Reference Variables
         //=-----------------=
-        private SpriteRenderer spriteRender;
-        [SerializeField] private GameObject targetObject;
 
 
         //=-----------------=
         // Mono Functions
         //=-----------------=
-        private void Start()
-        {
-            spriteRender = GetComponent<SpriteRenderer>();
-        }
 
-        private void Update()
-        {
-            spriteRender.size = targetObject.transform.localScale;
-        }
 
         //=-----------------=
         // Internal Functions

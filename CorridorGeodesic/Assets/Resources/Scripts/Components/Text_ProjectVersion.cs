@@ -8,40 +8,43 @@
 using TMPro;
 using UnityEngine;
 
-public class Text_ProjectVersion : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private TMP_Text tmpText;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class Text_ProjectVersion : MonoBehaviour
     {
-	    tmpText = GetComponent<TMP_Text>();
-        tmpText.text = Application.version;
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private TMP_Text tmpText;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
+        {
+            tmpText = GetComponent<TMP_Text>();
+            tmpText.text = Application.version;
+        }
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }
