@@ -402,27 +402,32 @@ namespace Neverway.Framework.ApplicationManagement
                     break;
             }
 
+            Bloom bloom = postProcessProfile.GetSetting<Bloom>();
+            MotionBlur motionBlur = postProcessProfile.GetSetting<MotionBlur>();
+            AmbientOcclusion ambientOcclusion = postProcessProfile.GetSetting<AmbientOcclusion>();
+            ColorGrading colorGrading = postProcessProfile.GetSetting<ColorGrading>();
+
             // Motion Blur
             switch (currentSettingsData.motionBlur)
             {
                 case 0:
-                    postProcessProfile.GetSetting<MotionBlur>().active = false;
+                    motionBlur.active = false;
                     break;
                 case 1:
-                    postProcessProfile.GetSetting<MotionBlur>().active = true;
-                    postProcessProfile.GetSetting<MotionBlur>().shutterAngle.value = 100f;
+                    motionBlur.active = true;
+                    motionBlur.shutterAngle.value = 100f;
                     break;
                 case 2:
-                    postProcessProfile.GetSetting<MotionBlur>().active = true;
-                    postProcessProfile.GetSetting<MotionBlur>().shutterAngle.value = 170f;
+                    motionBlur.active = true;
+                    motionBlur.shutterAngle.value = 170f;
                     break;
                 case 3:
-                    postProcessProfile.GetSetting<MotionBlur>().active = true;
-                    postProcessProfile.GetSetting<MotionBlur>().shutterAngle.value = 200f;
+                    motionBlur.active = true;
+                    motionBlur.shutterAngle.value = 200f;
                     break;
                 case 4:
-                    postProcessProfile.GetSetting<MotionBlur>().active = true;
-                    postProcessProfile.GetSetting<MotionBlur>().shutterAngle.value = 270f;
+                    motionBlur.active = true;
+                    motionBlur.shutterAngle.value = 270f;
                     break;
             }
 
@@ -430,23 +435,23 @@ namespace Neverway.Framework.ApplicationManagement
             switch (currentSettingsData.ambientOcclusion)
             {
                 case 0:
-                    postProcessProfile.GetSetting<AmbientOcclusion>().active = false;
+                    ambientOcclusion.active = false;
                     break;
                 case 1:
-                    postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
-                    postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 0.25f;
+                    ambientOcclusion.active = true;
+                    ambientOcclusion.intensity.value = 0.25f;
                     break;
                 case 2:
-                    postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
-                    postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 0.5f;
+                    ambientOcclusion.active = true;
+                    ambientOcclusion.intensity.value = 0.5f;
                     break;
                 case 3:
-                    postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
-                    postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 0.75f;
+                    ambientOcclusion.active = true;
+                    ambientOcclusion.intensity.value = 0.75f;
                     break;
                 case 4:
-                    postProcessProfile.GetSetting<AmbientOcclusion>().active = true;
-                    postProcessProfile.GetSetting<AmbientOcclusion>().intensity.value = 1f;
+                    ambientOcclusion.active = true;
+                    ambientOcclusion.intensity.value = 1f;
                     break;
             }
 
@@ -454,27 +459,23 @@ namespace Neverway.Framework.ApplicationManagement
             switch (currentSettingsData.bloom)
             {
                 case 0:
-                    postProcessProfile.GetSetting<Bloom>().active = false;
+                    bloom.active = false;
                     break;
                 case 1:
-                    postProcessProfile.GetSetting<Bloom>().active = true;
-                    postProcessProfile.GetSetting<Bloom>().intensity.value = 1f;
-                    postProcessProfile.GetSetting<Bloom>().threshold.value = 1f;
+                    bloom.active = true;
+                    bloom.intensity.value = 0.25f;
                     break;
                 case 2:
-                    postProcessProfile.GetSetting<Bloom>().active = true;
-                    postProcessProfile.GetSetting<Bloom>().intensity.value = 1.5f;
-                    postProcessProfile.GetSetting<Bloom>().threshold.value = 1f;
+                    bloom.active = true;
+                    bloom.intensity.value = 0.5f;
                     break;
                 case 3:
-                    postProcessProfile.GetSetting<Bloom>().active = true;
-                    postProcessProfile.GetSetting<Bloom>().intensity.value = 1.75f;
-                    postProcessProfile.GetSetting<Bloom>().threshold.value = 1f;
+                    bloom.active = true;
+                    bloom.intensity.value = 0.75f;
                     break;
                 case 4:
-                    postProcessProfile.GetSetting<Bloom>().active = true;
-                    postProcessProfile.GetSetting<Bloom>().intensity.value = 1.75f;
-                    postProcessProfile.GetSetting<Bloom>().threshold.value = 0.8f;
+                    bloom.active = true;
+                    bloom.intensity.value = 1.5f;
                     break;
             }
 
@@ -513,89 +514,89 @@ namespace Neverway.Framework.ApplicationManagement
                    )
             {
                 case 0:
-                    postProcessProfile.GetSetting<ColorGrading>().active = true;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value = 100;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value = 0;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
+                    colorGrading.active = true;
+                    colorGrading.mixerRedOutRedIn.value = 100;
+                    colorGrading.mixerGreenOutRedIn.value = 0;
+                    colorGrading.mixerBlueOutRedIn.value = 0;
 
-                    postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value = 0;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value = 100;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value = 0;
+                    colorGrading.mixerRedOutGreenIn.value = 0;
+                    colorGrading.mixerGreenOutGreenIn.value = 100;
+                    colorGrading.mixerBlueOutGreenIn.value = 0;
 
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value = 0;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value = 0;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value = 100;
+                    colorGrading.mixerBlueOutRedIn.value = 0;
+                    colorGrading.mixerGreenOutBlueIn.value = 0;
+                    colorGrading.mixerBlueOutBlueIn.value = 100;
                     break;
                 case 1:
                     // Protanopia
-                    postProcessProfile.GetSetting<ColorGrading>().active = true;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value =
+                    colorGrading.active = true;
+                    colorGrading.mixerRedOutRedIn.value =
                         56 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value =
+                    colorGrading.mixerGreenOutRedIn.value =
                         44 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value =
+                    colorGrading.mixerBlueOutRedIn.value =
                         0 * colorBlindIntensityValue;
 
-                    postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value =
+                    colorGrading.mixerRedOutGreenIn.value =
                         55 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value =
+                    colorGrading.mixerGreenOutGreenIn.value =
                         45 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value =
+                    colorGrading.mixerBlueOutGreenIn.value =
                         0 * colorBlindIntensityValue;
 
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value =
+                    colorGrading.mixerBlueOutRedIn.value =
                         0 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value =
+                    colorGrading.mixerGreenOutBlueIn.value =
                         24 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value =
+                    colorGrading.mixerBlueOutBlueIn.value =
                         76 * colorBlindIntensityValue;
                     break;
                 case 2:
                     // Deuteranopia
-                    postProcessProfile.GetSetting<ColorGrading>().active = true;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value =
+                    colorGrading.active = true;
+                    colorGrading.mixerRedOutRedIn.value =
                         80 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value =
+                    colorGrading.mixerGreenOutRedIn.value =
                         20 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value =
+                    colorGrading.mixerBlueOutRedIn.value =
                         0 * colorBlindIntensityValue;
 
-                    postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value =
+                    colorGrading.mixerRedOutGreenIn.value =
                         25 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value =
+                    colorGrading.mixerGreenOutGreenIn.value =
                         75 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value =
+                    colorGrading.mixerBlueOutGreenIn.value =
                         0 * colorBlindIntensityValue;
 
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value =
+                    colorGrading.mixerBlueOutRedIn.value =
                         0 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value =
+                    colorGrading.mixerGreenOutBlueIn.value =
                         14 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value =
+                    colorGrading.mixerBlueOutBlueIn.value =
                         86 * colorBlindIntensityValue;
                     break;
                 case 3:
                     // Tritanopia
-                    postProcessProfile.GetSetting<ColorGrading>().active = true;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerRedOutRedIn.value =
+                    colorGrading.active = true;
+                    colorGrading.mixerRedOutRedIn.value =
                         95 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutRedIn.value =
+                    colorGrading.mixerGreenOutRedIn.value =
                         5 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value =
+                    colorGrading.mixerBlueOutRedIn.value =
                         0 * colorBlindIntensityValue;
 
-                    postProcessProfile.GetSetting<ColorGrading>().mixerRedOutGreenIn.value =
+                    colorGrading.mixerRedOutGreenIn.value =
                         0 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutGreenIn.value =
+                    colorGrading.mixerGreenOutGreenIn.value =
                         43 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutGreenIn.value =
+                    colorGrading.mixerBlueOutGreenIn.value =
                         57 * colorBlindIntensityValue;
 
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutRedIn.value =
+                    colorGrading.mixerBlueOutRedIn.value =
                         0 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerGreenOutBlueIn.value =
+                    colorGrading.mixerGreenOutBlueIn.value =
                         47 * colorBlindIntensityValue;
-                    postProcessProfile.GetSetting<ColorGrading>().mixerBlueOutBlueIn.value =
+                    colorGrading.mixerBlueOutBlueIn.value =
                         53 * colorBlindIntensityValue;
                     break;
             }
