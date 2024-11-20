@@ -31,6 +31,7 @@ Shader "Soulex/Surface/Standard Toon"
 
         _DetailAlbedoMap ("Detail Texture", 2D) = "black" {}
         _DetailProminence ("Detail Prominence", Range(0, 1)) = 0.2
+        _DetailColor ("Detail Color", Color) = (0, 0, 0, 0)
 
         _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
@@ -41,9 +42,6 @@ Shader "Soulex/Surface/Standard Toon"
 
         [HideInInspector] _SliceNormalOne ("Slice Normal One", Vector) = (0, 0, 0, 0)
         [HideInInspector] _SliceNormalTwo ("Slice Normal Two", Vector) = (0, 0, 0, 0)
-
-        _DarkShadowTex ("Dark Shadow Tex", 2D) = "white"
-        _LightShadowTex ("Light Shadow Tex", 2D) = "white"
     }
     SubShader
     {
@@ -103,6 +101,7 @@ Shader "Soulex/Surface/Standard Toon"
 
         sampler2D _DetailAlbedoMap;
         half _DetailProminence;
+        half3 _DetailColor;
         
         float2 _Tiling;
         float2 _Offset;
@@ -116,9 +115,6 @@ Shader "Soulex/Surface/Standard Toon"
 
         float3 _SliceNormalOne;
         float3 _SliceNormalTwo;
-
-        sampler2D _DarkShadowTex;
-        sampler2D _LightShadowTex;
 
         struct SurfaceOutputToon
         {
@@ -134,7 +130,7 @@ Shader "Soulex/Surface/Standard Toon"
             fixed2 screenUv;
         };
         half3 BRDFToon(half3 diffColor, half3 specColor, half oneMinusReflectivity, half smoothness, 
-        float3 normal, float3 viewDir, UnityLight light, UnityIndirect gi, half darkShadow, half lightShadow)
+        float3 normal, float3 viewDir, UnityLight light, UnityIndirect gi)
         {
             float perceptualRoughness = SmoothnessToPerceptualRoughness(smoothness);
             float roughness = PerceptualRoughnessToRoughness(perceptualRoughness);
@@ -211,11 +207,10 @@ Shader "Soulex/Surface/Standard Toon"
 
             s.Albedo = DiffuseAndSpecularFromMetallic(s.Albedo, s.Metallic, specColor, oneMinusReflectivity);
 
-            half darkShadow = tex2D(_DarkShadowTex, s.screenUv).r;
-            half lightShadow = tex2D(_LightShadowTex, s.screenUv).r;
+            //half darkShadow = tex2D(_DarkShadowTex, s.screenUv).r;
+            //half lightShadow = tex2D(_LightShadowTex, s.screenUv).r;
 
-            half3 c = BRDFToon(s.Albedo, specColor, oneMinusReflectivity, 1 - s.Roughness, normal, viewDirection, 
-            gi.light, gi.indirect, darkShadow, lightShadow);
+            half3 c = BRDFToon(s.Albedo, specColor, oneMinusReflectivity, 1 - s.Roughness, normal, viewDirection, gi.light, gi.indirect);
 
             half4 emission = half4(s.Emission + c, s.Alpha);
 
@@ -235,14 +230,12 @@ Shader "Soulex/Surface/Standard Toon"
 
             o.viewDir = IN.viewDir;
             o.worldPos = IN.worldPos;
-            o.screenUv = IN.screenPos.xy / IN.screenPos.w;
-            o.screenUv.x *= (_ScreenParams.x / _ScreenParams.y);
+            //o.screenUv = IN.screenPos.xy / IN.screenPos.w;
+            //o.screenUv.x *= (_ScreenParams.x / _ScreenParams.y);
 
-            o.screenUv *= 8;
+            //o.screenUv *= 8;
 
-            //o.screenUv /= saturate((1 - GetDepth(IN.screenPos, 0.2)) + 0.001);
-
-            o.Albedo = lerp(col.rgb, detailCol.rgb, detailMask);
+            o.Albedo = lerp(col.rgb, detailCol.rgb * _DetailColor, detailMask);
 
             o.Normal = UnpackScaleNormal(tex2D(_BumpMap, uv), _BumpScale);
 

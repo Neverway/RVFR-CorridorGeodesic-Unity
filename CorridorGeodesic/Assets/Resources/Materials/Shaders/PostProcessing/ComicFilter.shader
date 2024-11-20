@@ -25,7 +25,7 @@ Shader "Soulex/PostProcessing/ComicFilter"
             half darkShadow = SAMPLE_TEXTURE2D(_DarkShadowTex, sampler_DarkShadowTex, uv).r;
             half lightShadow = SAMPLE_TEXTURE2D(_LightShadowTex, sampler_LightShadowTex, uv).r;
 
-            half lumLerp = smoothstep(_DarkPoint - 0.05, _DarkPoint + 0.1, luminance);
+            half lumLerp = pow(smoothstep(_DarkPoint, _DarkPoint + 0.01, luminance), 2);
             half shadow = lerp(darkShadow, lightShadow, lumLerp);
             shadow = 1 - (1 - shadow) * _EffectStrength;
             shadow = lerp(shadow, 1, smoothstep(0, _LightPoint, luminance));
