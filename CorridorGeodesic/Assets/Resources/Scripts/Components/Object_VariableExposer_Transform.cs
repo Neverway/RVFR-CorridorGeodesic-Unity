@@ -7,46 +7,51 @@
 
 using UnityEngine;
 
-public class Object_VariableExposer_Transform : MonoBehaviour
+namespace Neverway.Framework.Cartographer
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public float scaleX=1, scaleY=1, positionOffsetX, positionOffsetY;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    private Vector2 positionOrigin;
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class Object_VariableExposer_Transform : MonoBehaviour
     {
-        positionOrigin = new Vector2(transform.position.x-positionOffsetX, transform.position.y-positionOffsetY);
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public float scaleX = 1, scaleY = 1, positionOffsetX, positionOffsetY;
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        private Vector2 positionOrigin;
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
+        {
+            positionOrigin = new Vector2(transform.position.x - positionOffsetX,
+                transform.position.y - positionOffsetY);
+        }
+
+        private void Update()
+        {
+            transform.localScale = new Vector3(scaleX, scaleY, 1);
+            transform.position = new Vector3(positionOrigin.x + positionOffsetX, positionOrigin.y + positionOffsetY,
+                transform.position.z);
+        }
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    private void Update()
-    {
-        transform.localScale = new Vector3(scaleX, scaleY, 1);
-        transform.position = new Vector3(positionOrigin.x+positionOffsetX, positionOrigin.y+positionOffsetY, transform.position.z);
-    }
-
-    
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

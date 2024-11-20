@@ -1,8 +1,8 @@
-//======== Neverway 2023 Project Script | Written by Arthur Aka Liz ===========
-// 
-// Type: 
-// Purpose: 
-// Applied to: 
+//===================== (Neverway 2024) Written by Liz M. =====================
+//
+// Purpose: Gets the speed of a target object in m/s and displays it to a TMP
+//  text element
+// Notes:
 //
 //=============================================================================
 

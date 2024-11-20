@@ -7,97 +7,107 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-using Neverway.Framework;
 using Neverway.Framework.Cartographer;
 
-public class WB_Title : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public string targetLevelID;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private GameInstance gameInstance;
-    private WorldLoader worldLoader;
-    private LevelManager levelLoader; // Added for loading the overworld levels from Cartographer
-    [SerializeField] private Button buttonMainGame, buttonExtras, buttonRanking, buttonSettings, buttonQuit, buttonCredits, buttonLanguage;
-    [SerializeField] private GameObject extrasWidget, rankingWidget, settingsWidget, creditsWidget, languageWidget;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class WB_Title : MonoBehaviour
     {
-        gameInstance = FindObjectOfType<GameInstance>();
-        worldLoader = FindObjectOfType<WorldLoader>();
-        levelLoader = FindObjectOfType<LevelManager>();
-        buttonMainGame.onClick.AddListener(delegate { OnClick("buttonMainGame"); });
-        buttonExtras.onClick.AddListener(delegate { OnClick("buttonExtras"); });
-        buttonRanking.onClick.AddListener(delegate { OnClick("buttonRanking"); });
-        buttonSettings.onClick.AddListener(delegate { OnClick("buttonSettings"); });
-        buttonQuit.onClick.AddListener(delegate { OnClick("buttonQuit"); });
-        buttonCredits.onClick.AddListener(delegate { OnClick("buttonCredits"); });
-        buttonLanguage.onClick.AddListener(delegate { OnClick("buttonLanguage"); });
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public string targetLevelID;
 
-    private void Update()
-    {
-    
-    }
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-    private void OnClick(string button)
-    {
-        switch (button)
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private GameInstance gameInstance;
+        private WorldLoader worldLoader;
+        private LevelManager levelLoader; // Added for loading the overworld levels from Cartographer
+
+        [SerializeField] private Button buttonMainGame,
+            buttonExtras,
+            buttonRanking,
+            buttonSettings,
+            buttonQuit,
+            buttonCredits,
+            buttonLanguage;
+
+        [SerializeField] private GameObject extrasWidget, rankingWidget, settingsWidget, creditsWidget, languageWidget;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            case "buttonMainGame":
-                if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
-                if (!levelLoader) levelLoader = FindObjectOfType<LevelManager>();
-                worldLoader.LoadWorld(targetLevelID);
-                // levelLoader.Load("", true); // Replace with function to load save file level
-                break;
-            case "buttonExtras":
-                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-                GameInstance.AddWidget(extrasWidget);
-                break;
-            case "buttonRanking":
-                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-                GameInstance.AddWidget(rankingWidget);
-                break;
-            case "buttonSettings":
-                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-                GameInstance.AddWidget(settingsWidget); // Create the settings widget
-                //Destroy(gameObject); // Remove the current widget
-                //GameInstance.GetWidget("WB_Settings").GetComponent<WB_Settings>().Init();
-                break;
-            case "buttonQuit":
-                Application.Quit();
-                break;
-            case "buttonCredits":
-                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-                GameInstance.AddWidget(creditsWidget);
-                break;
-            case "buttonLanguage":
-                if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
-                GameInstance.AddWidget(languageWidget);
-                break;
+            gameInstance = FindObjectOfType<GameInstance>();
+            worldLoader = FindObjectOfType<WorldLoader>();
+            levelLoader = FindObjectOfType<LevelManager>();
+            buttonMainGame.onClick.AddListener(delegate { OnClick("buttonMainGame"); });
+            buttonExtras.onClick.AddListener(delegate { OnClick("buttonExtras"); });
+            buttonRanking.onClick.AddListener(delegate { OnClick("buttonRanking"); });
+            buttonSettings.onClick.AddListener(delegate { OnClick("buttonSettings"); });
+            buttonQuit.onClick.AddListener(delegate { OnClick("buttonQuit"); });
+            buttonCredits.onClick.AddListener(delegate { OnClick("buttonCredits"); });
+            buttonLanguage.onClick.AddListener(delegate { OnClick("buttonLanguage"); });
         }
+
+        private void Update()
+        {
+
+        }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+        private void OnClick(string button)
+        {
+            switch (button)
+            {
+                case "buttonMainGame":
+                    if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
+                    if (!levelLoader) levelLoader = FindObjectOfType<LevelManager>();
+                    worldLoader.LoadWorld(targetLevelID);
+                    // levelLoader.Load("", true); // Replace with function to load save file level
+                    break;
+                case "buttonExtras":
+                    if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                    GameInstance.AddWidget(extrasWidget);
+                    break;
+                case "buttonRanking":
+                    if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                    GameInstance.AddWidget(rankingWidget);
+                    break;
+                case "buttonSettings":
+                    if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                    GameInstance.AddWidget(settingsWidget); // Create the settings widget
+                    //Destroy(gameObject); // Remove the current widget
+                    //GameInstance.GetWidget("WB_Settings").GetComponent<WB_Settings>().Init();
+                    break;
+                case "buttonQuit":
+                    Application.Quit();
+                    break;
+                case "buttonCredits":
+                    if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                    GameInstance.AddWidget(creditsWidget);
+                    break;
+                case "buttonLanguage":
+                    if (!gameInstance) gameInstance = FindObjectOfType<GameInstance>();
+                    GameInstance.AddWidget(languageWidget);
+                    break;
+            }
+        }
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

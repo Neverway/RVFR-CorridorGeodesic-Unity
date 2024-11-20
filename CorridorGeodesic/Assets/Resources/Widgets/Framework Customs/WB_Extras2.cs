@@ -1,73 +1,75 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Provides a widget for selecting things like bonus content
+// Notes: Modified version for CorGeo
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Neverway.Framework;
 
-public class WB_Extras2 : MonoBehaviour
+namespace Neverway.CorGeo
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public string[] sceneID;
-    public string[] buttonText;
-    public Button[] extraButtons;
-    private WorldLoader worldLoader;
-    [SerializeField] private Button buttonBack;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class WB_Extras2 : MonoBehaviour
     {
-        buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
-        
-        for (int i = 0; i < extraButtons.Length && i < sceneID.Length; i++)
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public string[] sceneID;
+        public string[] buttonText;
+        public Button[] extraButtons;
+        private WorldLoader worldLoader;
+        [SerializeField] private Button buttonBack;
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            int index = i;
-            extraButtons[index].interactable = sceneID[index] != null;
-            extraButtons[index].transform.GetChild(0).GetComponent<TMP_Text>().text = buttonText[index];
-            extraButtons[index].onClick.AddListener(() =>
+            buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
+
+            for (int i = 0; i < extraButtons.Length && i < sceneID.Length; i++)
             {
-                if (!worldLoader)
+                int index = i;
+                extraButtons[index].interactable = sceneID[index] != null;
+                extraButtons[index].transform.GetChild(0).GetComponent<TMP_Text>().text = buttonText[index];
+                extraButtons[index].onClick.AddListener(() =>
                 {
-                    worldLoader = FindObjectOfType<WorldLoader>();
-                }
-                worldLoader.LoadWorld(sceneID[index]);
-            });
+                    if (!worldLoader)
+                    {
+                        worldLoader = FindObjectOfType<WorldLoader>();
+                    }
+
+                    worldLoader.LoadWorld(sceneID[index]);
+                });
+            }
         }
+
+        private void Update()
+        {
+
+        }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    private void Update()
-    {
-    
-    }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }
