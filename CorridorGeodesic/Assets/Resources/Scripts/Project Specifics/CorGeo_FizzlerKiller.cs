@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Neverway.Framework.LogicSystem;
+using Neverway.Framework;
 
 public class CorGeo_FizzlerKiller : Volume
 {

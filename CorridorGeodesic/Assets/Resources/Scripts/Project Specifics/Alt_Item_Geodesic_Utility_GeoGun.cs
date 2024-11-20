@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
+using Neverway.Framework.AudioManagement;
 
 public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 {

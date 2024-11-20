@@ -9,7 +9,7 @@ using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Neverway.Framework
+namespace Neverway.Framework.AudioManagement
 {
     [RequireComponent(typeof(AudioSource))]
     public class AudioSource_PitchVarienceModulator : MonoBehaviour
