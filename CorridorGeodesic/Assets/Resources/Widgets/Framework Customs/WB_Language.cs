@@ -9,46 +9,49 @@ using UnityEngine;
 using UnityEngine.UI;
 using Neverway.Framework.ApplicationManagement;
 
-public class WB_Language : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private ApplicationSettings applicationSettings;
-    [SerializeField] private Button buttonBack;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class WB_Language : MonoBehaviour
     {
-        applicationSettings = FindObjectOfType<ApplicationSettings>();
-        buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    public void SetLocaleID(int _localeID)
-    {
-        applicationSettings.currentSettingsData.localeID = _localeID;
-        applicationSettings.ApplySettings();
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private ApplicationSettings applicationSettings;
+        [SerializeField] private Button buttonBack;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
+        {
+            applicationSettings = FindObjectOfType<ApplicationSettings>();
+            buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
+        }
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        public void SetLocaleID(int _localeID)
+        {
+            applicationSettings.currentSettingsData.localeID = _localeID;
+            applicationSettings.ApplySettings();
+        }
     }
 }
