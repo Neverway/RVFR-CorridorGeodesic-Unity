@@ -11,51 +11,54 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WB_LevelEditor_MemoryBrowser_Item : MonoBehaviour
+namespace Neverway.Framework.Cartographer
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public string tileId;
-    public string tileName;
-    public Sprite tileSprite;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class WB_LevelEditor_MemoryBrowser_Item : MonoBehaviour
     {
-        transform.GetChild(0).GetComponent<Image>().sprite = tileSprite;
-        transform.GetChild(2).GetComponent<TMP_Text>().text = tileName;
-        if (tileName == "")
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public string tileId;
+        public string tileName;
+        public Sprite tileSprite;
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            transform.GetChild(2).GetComponent<TMP_Text>().text = tileId;
+            transform.GetChild(0).GetComponent<Image>().sprite = tileSprite;
+            transform.GetChild(2).GetComponent<TMP_Text>().text = tileName;
+            if (tileName == "")
+            {
+                transform.GetChild(2).GetComponent<TMP_Text>().text = tileId;
+            }
         }
-    }
-    
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
 
 
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    public void SendTileToHotbar()
-    {
-        var LevelEditorWidget = FindObjectOfType<WB_LevelEditor>();
-        LevelEditorWidget.SetCurrentHotBarTile(tileId);
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        public void SendTileToHotbar()
+        {
+            var LevelEditorWidget = FindObjectOfType<WB_LevelEditor>();
+            LevelEditorWidget.SetCurrentHotBarTile(tileId);
+        }
     }
 }

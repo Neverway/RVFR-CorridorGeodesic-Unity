@@ -12,84 +12,87 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Button_Selector : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public List<string> selectorOptions;
-    public int currentIndex;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    public event Action onValueChanged;
-    [SerializeField] private Button left, right;
-    [SerializeField] private GameObject indicator, indicatorSelected, indicatorRoot;
-    [SerializeField] private TMP_Text text;
-    [SerializeField] private List<GameObject> indicators;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class Button_Selector : MonoBehaviour
     {
-        left.onClick.AddListener(delegate
-        {
-            onValueChanged?.Invoke();
-            if (currentIndex - 1 >= 0)
-            {
-                currentIndex--;
-            }
-        });
-        right.onClick.AddListener(delegate
-        {
-            onValueChanged?.Invoke();
-            if (currentIndex + 1 <= selectorOptions.Count-1)
-            {
-                currentIndex++;
-            }
-        });
-        // Create indicators
-        for (int i = 0; i < selectorOptions.Count; i++)
-        {
-            var newIndicator = Instantiate(indicator, indicatorRoot.transform);
-            newIndicator.SetActive(true);
-            indicators.Add(newIndicator);
-        }
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public List<string> selectorOptions;
+        public int currentIndex;
 
-    public void Update()
-    {
-        // Updated selection
-        // I really wish this could have been done inside an onClick event instead of update, but the iterator acts possessed otherwise >:L  ~Liz (Jun12-24)
-        for (int i = 0; i < indicators.Count; i++)
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        public event Action onValueChanged;
+        [SerializeField] private Button left, right;
+        [SerializeField] private GameObject indicator, indicatorSelected, indicatorRoot;
+        [SerializeField] private TMP_Text text;
+        [SerializeField] private List<GameObject> indicators;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            // Reset all the indicator colors
-            indicators[i].GetComponent<Image>().color = indicator.GetComponent<Image>().color;
-            // Set selected indicator (via colour, dummy) and text 
-            if (i == currentIndex)
+            left.onClick.AddListener(delegate
             {
-                indicators[i].GetComponent<Image>().color = indicatorSelected.GetComponent<Image>().color;
-                text.text = selectorOptions[i];
+                onValueChanged?.Invoke();
+                if (currentIndex - 1 >= 0)
+                {
+                    currentIndex--;
+                }
+            });
+            right.onClick.AddListener(delegate
+            {
+                onValueChanged?.Invoke();
+                if (currentIndex + 1 <= selectorOptions.Count - 1)
+                {
+                    currentIndex++;
+                }
+            });
+            // Create indicators
+            for (int i = 0; i < selectorOptions.Count; i++)
+            {
+                var newIndicator = Instantiate(indicator, indicatorRoot.transform);
+                newIndicator.SetActive(true);
+                indicators.Add(newIndicator);
             }
         }
+
+        public void Update()
+        {
+            // Updated selection
+            // I really wish this could have been done inside an onClick event instead of update, but the iterator acts possessed otherwise >:L  ~Liz (Jun12-24)
+            for (int i = 0; i < indicators.Count; i++)
+            {
+                // Reset all the indicator colors
+                indicators[i].GetComponent<Image>().color = indicator.GetComponent<Image>().color;
+                // Set selected indicator (via colour, dummy) and text 
+                if (i == currentIndex)
+                {
+                    indicators[i].GetComponent<Image>().color = indicatorSelected.GetComponent<Image>().color;
+                    text.text = selectorOptions[i];
+                }
+            }
+        }
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

@@ -1,83 +1,84 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
 // Purpose:
-// Notes:
+// Notes: This is currently CorGeo specific, it should be adopted into the framework
 // Reference: https://youtu.be/1qbjmb_1hV4
 //
 //=============================================================================
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Neverway.Framework.LogicSystem;
 
-public class WB_DialogueBox : MonoBehaviour
+namespace Neverway.Framework.LogicSystem
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public DialogueEvent dialogueEvent;
-    public float printSpeed = 0.05f;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    private int currentIndex;
-    private string currentText;
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    [SerializeField] private TMP_Text name;
-    [SerializeField] private TMP_Text dialogue;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-    public void PrintFrame()
+    public class WB_DialogueBox : MonoBehaviour
     {
-        name.text = dialogueEvent.dialogue[currentIndex].name;
-        StartCoroutine(ShowText());
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public DialogueEvent dialogueEvent;
+        public float printSpeed = 0.05f;
 
-    private IEnumerator ShowText()
-    {
-        for (int i = 0; i < dialogueEvent.dialogue[currentIndex].text.Length; i++)
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        private int currentIndex;
+        private string currentText;
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        [SerializeField] private TMP_Text name;
+        [SerializeField] private TMP_Text dialogue;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+        public void PrintFrame()
         {
-            currentText = dialogueEvent.dialogue[currentIndex].text.Substring(0, i+1);
-            dialogue.text = currentText;
-            yield return new WaitForSeconds(printSpeed / dialogueEvent.dialogue[currentIndex].textSpeed);
+            name.text = dialogueEvent.dialogue[currentIndex].name;
+            StartCoroutine(ShowText());
         }
 
-        StartCoroutine(NextFrame());
-    }
-
-    private IEnumerator NextFrame()
-    {
-        yield return new WaitForSeconds(dialogueEvent.dialogue[currentIndex].endDelay);
-        if (dialogueEvent.dialogue.Count-1 == currentIndex)
+        private IEnumerator ShowText()
         {
-            Destroy(gameObject);
+            for (int i = 0; i < dialogueEvent.dialogue[currentIndex].text.Length; i++)
+            {
+                currentText = dialogueEvent.dialogue[currentIndex].text.Substring(0, i + 1);
+                dialogue.text = currentText;
+                yield return new WaitForSeconds(printSpeed / dialogueEvent.dialogue[currentIndex].textSpeed);
+            }
+
+            StartCoroutine(NextFrame());
         }
-        else
+
+        private IEnumerator NextFrame()
         {
-            currentIndex++;
-            PrintFrame();
+            yield return new WaitForSeconds(dialogueEvent.dialogue[currentIndex].endDelay);
+            if (dialogueEvent.dialogue.Count - 1 == currentIndex)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                currentIndex++;
+                PrintFrame();
+            }
         }
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

@@ -1,7 +1,8 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
-// Notes:
+// Purpose: Allow a pawn to physically hold this object out in front of them
+// Notes: Held objects will look for a physObjectAttachmentPoint on the pawn
+//  to follow
 //
 //=============================================================================
 
