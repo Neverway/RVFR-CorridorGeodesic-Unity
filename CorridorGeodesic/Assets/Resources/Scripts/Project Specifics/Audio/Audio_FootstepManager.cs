@@ -1,4 +1,4 @@
-//===================== (Neverway 2024) Written by _____ =====================
+//===================== (Neverway 2024) Written by Andre Blunt =====================
 //
 // Purpose:
 // Notes:
@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Audio_FootstepManager: MonoBehaviour
+public class Audio_FootstepManager : MonoBehaviour
 {
     //=-----------------=
     // Public Variables

@@ -8,7 +8,9 @@ public enum CommonStateEnum { AddForce }
 public enum PlayerStateEnum { Idle, Walk, Jump, Airborne, CrouchIdle, CrouchWalk, WallSlide }
 public enum ElevatorState { Idle, Moving }
 public enum EventCallType { EveryFrameWhenPowered, OnSourceChanged, OnSourceChangedWhenPowered }
+public enum LocalEffectSetting { Clean, Rusty, Dusty, Rainy, Stormy }
 [Flags] public enum Hazard { Blank = 1, Confined = 2, Explosive = 4, Fire = 8, Kinetic = 16, Lava = 32 }
+[Flags] public enum VolumeActivationType { None = 1, Pawn = 2, PhysProp = 4 }
 public enum SliceSpace
 {
     Plane1,

@@ -6,11 +6,11 @@ Shader "Soulex/Particles/LitVertex"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent" }
         LOD 200
 
         CGPROGRAM
-        #pragma surface surf Standard fullforwardshadows addshadow
+        #pragma surface surf Standard fullforwardshadows addshadow alpha:fade
         #pragma target 3.0
 
         sampler2D _MainTex;
@@ -28,7 +28,7 @@ Shader "Soulex/Particles/LitVertex"
             //o.Albedo = color.rgb;
             o.Alpha = color.a;
 
-            clip(o.Alpha - 0.5);
+            //clip(o.Alpha - 0.5);
         }
         ENDCG
     }
