@@ -1338,6 +1338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onlyIfNecessaryForCorGeoActorDataOrMeshSliceable: 0
 --- !u!114 &8305852024530591397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1350,8 +1351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e1e85659a68cc489a9a3eb2912fdfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  section: 1
-  floor: B
+  section: 00
+  floor: B4
   info: 
   hazards: 0
   symbolPairs:
@@ -1511,6 +1512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onlyIfNecessaryForCorGeoActorDataOrMeshSliceable: 0
 --- !u!114 &148299534774995135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1633,13 +1635,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '
-
-
-
-
-
-'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2c045bfe6fc79dc1cbe7fd011d751e32, type: 2}
   m_sharedMaterial: {fileID: 2668621922408729126, guid: 2c045bfe6fc79dc1cbe7fd011d751e32,
@@ -2192,7 +2188,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 40607be8a98d225b1a89895cf09f46fb, type: 2}
+  - {fileID: 2100000, guid: 56c77e8920412a0219067c2c23742ddc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2313,12 +2309,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<b>Section -</b>
+  m_text: '<b>00</b>
 
-    <size=2>Floor -
+    <size=2>Floor - B??
 
     -------------------------------
 
+    ERROR
 
 
 
@@ -2355,19 +2352,19 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4
-  m_fontSizeBase: 4
+  m_fontSize: 8
+  m_fontSizeBase: 8
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 2
   m_fontSizeMax: 4
   m_fontStyle: 32
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -15
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0

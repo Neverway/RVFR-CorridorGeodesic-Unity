@@ -35,6 +35,9 @@ GameObject:
   - component: {fileID: 246071141861368921}
   - component: {fileID: 1897448500087468385}
   - component: {fileID: 7671813606931478154}
+  - component: {fileID: 4134968938103219640}
+  - component: {fileID: 3819623013973250411}
+  - component: {fileID: 3836919005447195509}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -91,6 +94,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 1985048443619682036, guid: d7a6a9f14009a7035a7398092fcf75cd, type: 3}
   - {fileID: 5675289539813747590, guid: f951f1626e8a081628c8e41d018c0094, type: 3}
+  - {fileID: 2655442103756179889, guid: d88457d141bdcea49ad0746d72aec216, type: 3}
   PlayerControllerClasses:
   - {fileID: 11400000, guid: 02844299f83062e3688fb3e76ac2692a, type: 2}
   - {fileID: 11400000, guid: 39e9830e6bc5e60ee9bf7a0a613f8d82, type: 2}
@@ -271,10 +275,10 @@ MonoBehaviour:
     resolutionScale: 3
     shadowQuality: 2
     effectsQuality: 2
-    textureQuality: 2
+    textureQuality: 4
     postprocessingQuality: 2
     antialiasing: 2
-    motionBlur: 2
+    motionBlur: 1
     ambientOcclusion: 2
     bloom: 2
     outputDevice: 0
@@ -296,14 +300,18 @@ MonoBehaviour:
     invertVerticalView: 0
     horizontalLookSpeed: 1
     verticalLookSpeed: 0.75
+    joystickLookSensitivity: 0.7
+    mouseLookSensitivity: 0.7
     cameraFov: 90
     hideTextChat: 0
     enablePushToTalk: 0
-    colorBlindIntensity: 0
+    brightness: 1
+    colorBlindIntensity: 1
     colorBlindFilter: 0
     dyslexicFriendlyFont: 0
     reduceStrobing: 0
     screenReader: 0
+    localeID: 0
   currentSettingsData:
     targetResolution: 0
     windowMode: 0
@@ -316,7 +324,7 @@ MonoBehaviour:
     textureQuality: 2
     postprocessingQuality: 2
     antialiasing: 2
-    motionBlur: 2
+    motionBlur: 1
     ambientOcclusion: 2
     bloom: 2
     outputDevice: 0
@@ -338,14 +346,18 @@ MonoBehaviour:
     invertVerticalView: 0
     horizontalLookSpeed: 1
     verticalLookSpeed: 0.75
+    joystickLookSensitivity: 0.7
+    mouseLookSensitivity: 0.7
     cameraFov: 90
     hideTextChat: 0
     enablePushToTalk: 0
-    colorBlindIntensity: 0
+    brightness: 1
+    colorBlindIntensity: 1
     colorBlindFilter: 0
     dyslexicFriendlyFont: 0
     reduceStrobing: 0
     screenReader: 0
+    localeID: 0
   debugApply: 0
   audioMixer: {fileID: 24100000, guid: 549b84953554a157688e4ed0cb77d9a7, type: 2}
   cameraPrefab: {fileID: 1032958373095033568, guid: 94967e615899f4eb88f9883b59fd0167,
@@ -1004,18 +1016,18 @@ MonoBehaviour:
     Path: event:/SFX/NixieCross/NixieTubePin
   hover:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1451508483
+      Data2: 1223420156
+      Data3: -639139949
+      Data4: -1961944707
+    Path: event:/SFX/Framework/Hover
   select:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 2102582212
+      Data2: 1161757476
+      Data3: -1614500943
+      Data4: 2117759777
+    Path: event:/SFX/Framework/Select
   riftSpawned:
     Guid:
       Data1: -415206669
@@ -1246,3 +1258,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 002eb5b82ecb14940a3472f2ab262821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4134968938103219640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561055d749b2886f080db0c8477344c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueBoxWidget: {fileID: 5675289539813747590, guid: 44dd9fb15fe82680ca8d43c25df67783,
+    type: 3}
+--- !u!114 &3819623013973250411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f7cb40a2083a8245a6ad15c805f4f8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveData:
+    playTimeDatas: []
+--- !u!114 &3836919005447195509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f37be30b3c815244a08afed1941e25e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polkaDotTex: {fileID: 2800000, guid: 7da25098e4b705445a1c7f7e064bb119, type: 3}
+  stripeTex: {fileID: 2800000, guid: df20f755ebc0b1f4a87e5ef738aac8a5, type: 3}

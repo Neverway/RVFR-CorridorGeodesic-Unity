@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
 
 [RequireComponent(typeof(TeslaConductor))]
 public class TeslaReciever : LogicComponent

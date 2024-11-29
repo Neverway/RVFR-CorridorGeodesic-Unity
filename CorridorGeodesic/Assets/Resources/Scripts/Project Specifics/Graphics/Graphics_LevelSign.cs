@@ -65,8 +65,8 @@ public class Graphics_LevelSign : MonoBehaviour
     }
     void SetText()
     {
-
-        screenText.text = $"<b>Section -</b> {section}\r\n<size=2>Floor - {floor}\r\n-------------------------------\r\n{info}";
+        //screenText.text = $"<b>Section -</b> {section}\r\n<size=2>Floor - {floor}\r\n-------------------------------\r\n{info}";
+        screenText.text = $"<b>{section}</b>\r\n<size=2>Floor - {floor}\r\n-------------------------------\r\n{info}";
     }
 
     //=-----------------=

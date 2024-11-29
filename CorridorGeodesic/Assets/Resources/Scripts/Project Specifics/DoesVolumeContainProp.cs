@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoesVolumeContainProp : LogicComponent
+namespace Neverway.Framework.LogicSystem
 {
-    public Volume volume;
-
-    void Update()
+    public class DoesVolumeContainProp : LogicComponent
     {
-        isPowered = volume.propsInTrigger.Count > 0;
+        public Volume volume;
+
+        void Update()
+        {
+            isPowered = volume.propsInTrigger.Count > 0;
+        }
     }
 }

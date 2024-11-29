@@ -7,40 +7,43 @@
 
 using UnityEngine;
 
-public class LB_Error : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Update()
+    public class LB_Error : MonoBehaviour
     {
-        if (Input.anyKeyDown)
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Update()
         {
-            FindObjectOfType<WorldLoader>().ForceLoadWorld("_Title", 0.3f);
+            if (Input.anyKeyDown)
+            {
+                FindObjectOfType<WorldLoader>().ForceLoadWorld("_Title", 0.3f);
+            }
         }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

@@ -5,44 +5,45 @@
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class LB_Travel : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private GameInstance gameInstance;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class LB_Travel : MonoBehaviour
     {
-        gameInstance = FindObjectOfType<GameInstance>();
-        gameInstance.UI_ShowLoading();
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private GameInstance gameInstance;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
+        {
+            gameInstance = FindObjectOfType<GameInstance>();
+            gameInstance.UI_ShowLoading();
+        }
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-    
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

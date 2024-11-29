@@ -144,7 +144,7 @@ Shader "Soulex/Effects/Lava"
                 
                 output += top * _TopColor * _StrengthOver;
 
-                UNITY_APPLY_FOG(i.fogCoord, col);
+                UNITY_APPLY_FOG(i.fogCoord, output);
 
                 return output;
             }

@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Widget for a local or steam-powered leaderboard
 // Notes:
 //
 //=============================================================================
@@ -8,39 +8,42 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WB_Ranking : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private WorldLoader worldLoader;
-    [SerializeField] private Button buttonBack;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class WB_Ranking : MonoBehaviour
     {
-        buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private WorldLoader worldLoader;
+        [SerializeField] private Button buttonBack;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
+        {
+            buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
+        }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

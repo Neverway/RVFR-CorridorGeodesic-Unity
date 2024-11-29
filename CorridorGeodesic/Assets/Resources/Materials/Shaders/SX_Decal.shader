@@ -55,7 +55,7 @@ Shader "Soulex/Effects/Decal"
 
                 o.screenPos = ComputeScreenPos(o.position);
 
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                UNITY_TRANSFER_FOG(o, o.position);
 
                 return o;
             }

@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Audio_FMODMusicManager: MonoBehaviour
+public class Audio_FMODMusicManager : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -35,6 +35,15 @@ public class Audio_FMODMusicManager: MonoBehaviour
     {
         Instance = this;
         Audio_FMODAudioManager.SetGlobalParameter("MusicPlaying", 0);
+
+        print("im doing things");
+        print(Instance);
+    }
+    void FixedUpdate()
+    {
+        if(Instance == null)
+            Instance = this;
+        //print(Instance);
     }
 
     //=-----------------=
@@ -52,6 +61,7 @@ public class Audio_FMODMusicManager: MonoBehaviour
     //=-----------------=
     public void PlayMusic(EventReference musicReference)
     {
+        print("music playsinas");
         if (currentInstance.isValid())
         {
             currentInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

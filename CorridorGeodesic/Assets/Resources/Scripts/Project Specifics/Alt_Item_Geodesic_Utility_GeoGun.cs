@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
+using Neverway.Framework.AudioManagement;
 
 public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 {
@@ -446,12 +447,13 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             if (obj.space == CorGeo_ActorData.Space.Null && obj.dynamic && !obj.crushInNullSpace)
             {
                 //Get object's position relative to the rift, then move the object based on the new size of the rift.
+                if (prevRiftWidth == 0) continue;
                 float percent = planeA.GetDistanceToPoint (obj.transform.position) / prevRiftWidth;
                 float oldDistance = prevRiftWidth * percent;
                 float newDistance = newRiftWidth * percent;
 
                 Vector3 move = riftNormal * (newDistance - oldDistance);
-                if (move.x != float.NaN)
+                if (move.x != float.NaN && move.y != float.NaN && move.z != float.NaN)
                 {
                     if (obj.TryGetComponent<Rigidbody> (out var objRigidBody) && obj.isHeld == false)
                     {

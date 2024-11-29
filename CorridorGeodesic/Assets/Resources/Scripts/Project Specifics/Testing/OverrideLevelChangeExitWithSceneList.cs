@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Neverway.Framework.LogicSystem;
+using Neverway.Framework.PawnManagement;
+using Neverway.Framework;
 
 public class OverrideLevelChangeExitWithSceneList : MonoBehaviour
 {

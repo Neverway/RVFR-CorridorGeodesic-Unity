@@ -1,59 +1,60 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
 // Purpose:
-// Notes:
+// Notes: This is currently CorGeo specific, it should be adopted into the framework
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class WB_DeathScreen : MonoBehaviour
+namespace Neverway.Framework
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-    private InputActions.FirstPersonShooterActions fpsActions;
-    private WorldLoader worldLoader;
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class WB_DeathScreen : MonoBehaviour
     {
-        // Setup inputs
-        fpsActions = new InputActions().FirstPersonShooter;
-        fpsActions.Enable();
-    }
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
 
-    private void Update()
-    {
-        if (Input.anyKeyDown)
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+        private InputActions.FirstPersonShooterActions fpsActions;
+        private WorldLoader worldLoader;
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
         {
-            worldLoader = FindObjectOfType<WorldLoader>();
-            worldLoader.ForceLoadWorld(SceneManager.GetActiveScene().name, 0.25f);
+            // Setup inputs
+            fpsActions = new InputActions().FirstPersonShooter;
+            fpsActions.Enable();
         }
+
+        private void Update()
+        {
+            if (Input.anyKeyDown)
+            {
+                worldLoader = FindObjectOfType<WorldLoader>();
+                worldLoader.ForceLoadWorld(SceneManager.GetActiveScene().name, 0.25f);
+            }
+        }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

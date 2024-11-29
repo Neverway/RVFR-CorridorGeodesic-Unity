@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Neverway.Framework.LogicSystem;
 
 public class Vent : LogicComponent
 {
@@ -69,7 +70,7 @@ public class Vent : LogicComponent
         }
         else
         {
-            if (isPowered != inputSignal.isPowered)
+            if (inputSignal && isPowered != inputSignal.isPowered)
                 SourcePowerStateChanged(inputSignal.isPowered);
         }
 

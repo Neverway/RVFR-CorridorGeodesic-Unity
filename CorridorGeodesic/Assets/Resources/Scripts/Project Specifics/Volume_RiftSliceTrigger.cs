@@ -9,6 +9,7 @@ using System;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using Neverway.Framework.LogicSystem;
 
 public class Volume_RiftSliceTrigger : Volume
 {

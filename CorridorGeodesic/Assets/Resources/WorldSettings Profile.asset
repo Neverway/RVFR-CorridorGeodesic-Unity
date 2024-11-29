@@ -18,10 +18,10 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 1.5
+    value: 0.25
   threshold:
     overrideState: 1
-    value: 1
+    value: 0.8
   softKnee:
     overrideState: 1
     value: 0.5
@@ -47,6 +47,39 @@ MonoBehaviour:
   dirtIntensity:
     overrideState: 0
     value: 125
+--- !u!114 &-6532598893503993614
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a87eeffe594b1254cb3c89f5ab30d614, type: 3}
+  m_Name: ComicFilter
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  darkShadowTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: df20f755ebc0b1f4a87e5ef738aac8a5, type: 3}
+    defaultState: 1
+  lightShadowTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 7da25098e4b705445a1c7f7e064bb119, type: 3}
+    defaultState: 1
+  effectStrength:
+    overrideState: 1
+    value: 0.15
+  darkPoint:
+    overrideState: 1
+    value: 0
+  lightPoint:
+    overrideState: 1
+    value: 0.05
 --- !u!114 &-4110732194176603622
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -59,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556797029e73b2347956b6579e77e05b, type: 3}
   m_Name: DepthOfField
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
@@ -99,8 +132,8 @@ MonoBehaviour:
     value: {fileID: 0}
     defaultState: 1
   tonemapper:
-    overrideState: 0
-    value: 2
+    overrideState: 1
+    value: 1
   toneCurveToeStrength:
     overrideState: 0
     value: 0
@@ -139,17 +172,17 @@ MonoBehaviour:
     overrideState: 0
     value: 0
   saturation:
-    overrideState: 0
-    value: 100
+    overrideState: 1
+    value: -5
   brightness:
     overrideState: 0
-    value: 0
+    value: 4000
   postExposure:
     overrideState: 0
     value: 0
   contrast:
     overrideState: 0
-    value: 100
+    value: 10
   mixerRedOutRedIn:
     overrideState: 1
     value: 100
@@ -1398,7 +1431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b94fcd11afffcb142908bfcb1e261fba, type: 3}
   m_Name: MotionBlur
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
@@ -1408,6 +1441,50 @@ MonoBehaviour:
   sampleCount:
     overrideState: 1
     value: 10
+--- !u!114 &-867587464913695539
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b924e2dad56384a8df2a1e111bb675, type: 3}
+  m_Name: Vignette
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  mode:
+    overrideState: 1
+    value: 0
+  color:
+    overrideState: 0
+    value: {r: 0, g: 0, b: 0, a: 1}
+  center:
+    overrideState: 0
+    value: {x: 0.5, y: 0.5}
+  intensity:
+    overrideState: 1
+    value: 0.2
+  smoothness:
+    overrideState: 0
+    value: 0.2
+  roundness:
+    overrideState: 0
+    value: 1
+  rounded:
+    overrideState: 0
+    value: 0
+  mask:
+    overrideState: 0
+    value: {fileID: 0}
+    defaultState: 1
+  opacity:
+    overrideState: 0
+    value: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1428,6 +1505,11 @@ MonoBehaviour:
   - {fileID: -4110732194176603622}
   - {fileID: 5977108932207599525}
   - {fileID: 1160765500471503049}
+  - {fileID: -6532598893503993614}
+  - {fileID: 3982782308721169403}
+  - {fileID: 4052998543056291606}
+  - {fileID: -867587464913695539}
+  - {fileID: 5980392836088833046}
 --- !u!114 &1160765500471503049
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1483,7 +1565,7 @@ MonoBehaviour:
     value: 1
   mode:
     overrideState: 1
-    value: 1
+    value: 0
   intensity:
     overrideState: 1
     value: 0.5
@@ -1492,7 +1574,7 @@ MonoBehaviour:
     value: {r: 0, g: 0, b: 0, a: 1}
   ambientOnly:
     overrideState: 0
-    value: 1
+    value: 0
   noiseFilterTolerance:
     overrideState: 0
     value: 0
@@ -1512,11 +1594,55 @@ MonoBehaviour:
     overrideState: 0
     value: 0
   radius:
-    overrideState: 0
-    value: 0.25
-  quality:
-    overrideState: 0
+    overrideState: 1
     value: 2
+  quality:
+    overrideState: 1
+    value: 2
+--- !u!114 &3982782308721169403
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f922733efcef548a9b59c8ce9988ec, type: 3}
+  m_Name: ColorQuantizationFilter
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  effectStrength:
+    overrideState: 1
+    value: 0.25
+  maxColors:
+    overrideState: 1
+    value: 32
+--- !u!114 &4052998543056291606
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7030d4eb31355b45b48dd7a7b37c54e, type: 3}
+  m_Name: DitheringFilter
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  effectStrength:
+    overrideState: 1
+    value: 0.1
+  spread:
+    overrideState: 1
+    value: 0.1
 --- !u!114 &5977108932207599525
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1543,7 +1669,7 @@ MonoBehaviour:
     overrideState: 0
     value: 0
   keyValue:
-    overrideState: 0
+    overrideState: 1
     value: 1
   eyeAdaptation:
     overrideState: 0
@@ -1554,3 +1680,31 @@ MonoBehaviour:
   speedDown:
     overrideState: 0
     value: 1
+--- !u!114 &5980392836088833046
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
+  m_Name: Grain
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  colored:
+    overrideState: 0
+    value: 1
+  intensity:
+    overrideState: 1
+    value: 0.2
+  size:
+    overrideState: 0
+    value: 1
+  lumContrib:
+    overrideState: 0
+    value: 0.8

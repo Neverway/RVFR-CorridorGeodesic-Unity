@@ -63,6 +63,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5788601456160722961}
+  - component: {fileID: 2381113069891102643}
   m_Layer: 0
   m_Name: Audio
   m_TagString: Untagged
@@ -85,6 +86,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4699421934600881159}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2381113069891102643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8632882293045528091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac4b96a8faa061843ba496a252d79e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPowered: 0
+  animator: {fileID: 0}
+  inputSignal: {fileID: 369627841793239761}
+  audioTransform: {fileID: 5788601456160722961}
+  onPoweredAudio:
+    Guid:
+      Data1: -494617115
+      Data2: 1326019338
+      Data3: 1552551092
+      Data4: -1128738772
+    Path: event:/SFX/Components/DoorOpen
+  onUnPoweredAudio:
+    Guid:
+      Data1: 1837733599
+      Data2: 1126626910
+      Data3: -1917897076
+      Data4: -111282720
+    Path: event:/SFX/Components/DoorClose
 --- !u!1001 &15450536020741447
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -364,7 +395,7 @@ PrefabInstance:
     - target: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
       propertyPath: m_Name
-      value: Door Large
+      value: Actor_Door
       objectReference: {fileID: 0}
     - target: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
         type: 3}
@@ -391,10 +422,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 369627841793239761}
-    - targetCorrespondingSourceObject: {fileID: 6282197743217528960, guid: 6ae66ffdcdadd2ba39169a029b132e7a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8735061515359076736}
   m_SourcePrefab: {fileID: 100100000, guid: 6ae66ffdcdadd2ba39169a029b132e7a, type: 3}
 --- !u!4 &4699421934600881159 stripped
 Transform:
@@ -423,36 +450,6 @@ MonoBehaviour:
   _isPowered: 0
   animator: {fileID: 818395751258156438}
   inputSignal: {fileID: 5057422706704780782}
---- !u!114 &8735061515359076736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5053195466703233329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac4b96a8faa061843ba496a252d79e36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPowered: 0
-  animator: {fileID: 0}
-  inputSignal: {fileID: 369627841793239761}
-  audioTransform: {fileID: 5788601456160722961}
-  onPoweredAudio:
-    Guid:
-      Data1: -494617115
-      Data2: 1326019338
-      Data3: 1552551092
-      Data4: -1128738772
-    Path: event:/SFX/Components/DoorOpen
-  onUnPoweredAudio:
-    Guid:
-      Data1: 1837733599
-      Data2: 1126626910
-      Data3: -1917897076
-      Data4: -111282720
-    Path: event:/SFX/Components/DoorClose
 --- !u!1001 &8891737757010969508
 PrefabInstance:
   m_ObjectHideFlags: 0

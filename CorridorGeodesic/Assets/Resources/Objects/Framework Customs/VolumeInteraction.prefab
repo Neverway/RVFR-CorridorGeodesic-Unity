@@ -69,7 +69,7 @@ PrefabInstance:
     - target: {fileID: 5768345158830630263, guid: c14d3f99c71d2f5c5920d5892075b3f3,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 2.25
       objectReference: {fileID: 0}
     - target: {fileID: 5768345158830630263, guid: c14d3f99c71d2f5c5920d5892075b3f3,
         type: 3}
@@ -79,17 +79,17 @@ PrefabInstance:
     - target: {fileID: 5768345158830630263, guid: c14d3f99c71d2f5c5920d5892075b3f3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00000018952602
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5768345158830630263, guid: c14d3f99c71d2f5c5920d5892075b3f3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000022351738
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5768345158830630263, guid: c14d3f99c71d2f5c5920d5892075b3f3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.75
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5768345158830630263, guid: c14d3f99c71d2f5c5920d5892075b3f3,
         type: 3}
@@ -165,10 +165,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64094eef1da80ea27aca88bf684ddd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPowered: 0
+  animator: {fileID: 0}
   owningTeam: 
   affectsOwnTeam: 0
+  ignoreHeldObjects: 1
+  disabledObjectsExitVolume: 1
   pawnsInTrigger: []
   propsInTrigger: []
-  targetEnt: {fileID: 0}
+  targetEntity: {fileID: 0}
   targetProp: {fileID: 0}
   targetPawn: {fileID: 0}

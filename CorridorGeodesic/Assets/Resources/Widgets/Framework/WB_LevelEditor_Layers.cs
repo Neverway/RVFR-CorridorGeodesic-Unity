@@ -9,42 +9,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WB_LevelEditor_Layers : MonoBehaviour
+namespace Neverway.Framework.Cartographer
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-    private void Start()
+    public class WB_LevelEditor_Layers : MonoBehaviour
     {
-    
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+        private void Start()
+        {
+
+        }
+
+        private void Update()
+        {
+
+        }
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
     }
-
-    private void Update()
-    {
-    
-    }
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
 }

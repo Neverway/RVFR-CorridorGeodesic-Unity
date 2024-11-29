@@ -16,6 +16,8 @@ public class Stopwatch : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public static Stopwatch Instance;
+
     public System.Diagnostics.Stopwatch timer;
 
     [DebugReadOnly] public bool isInvalid = false;
@@ -34,6 +36,10 @@ public class Stopwatch : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         timer = new System.Diagnostics.Stopwatch();

@@ -12,65 +12,69 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SignalEventPlayer : LogicComponent
+namespace Neverway.Framework.LogicSystem
 {
-    //=-----------------=
-    // Public Variables
-    //=-----------------=
-    public UnityEvent onPoweredEvent, onUnpoweredEvent;
-    public event Action OnPowered, OnUnpowered;
-
-
-    //=-----------------=
-    // Private Variables
-    //=-----------------=
-    [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
-
-    //=-----------------=
-    // Reference Variables
-    //=-----------------=
-
-
-    //=-----------------=
-    // Mono Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
-
-
-    //=-----------------=
-    // External Functions
-    //=-----------------=
-    //public override void AutoSubscribe()
-    //{
-    //    subscribeLogicComponents.Add(inputSignal);
-    //    base.AutoSubscribe();
-    //}
-    public override void SourcePowerStateChanged(bool powered)
+    public class SignalEventPlayer : LogicComponent
     {
-        base.SourcePowerStateChanged(powered);
+        //=-----------------=
+        // Public Variables
+        //=-----------------=
+        public UnityEvent onPoweredEvent, onUnpoweredEvent;
+        public event Action OnPowered, OnUnpowered;
 
-        if (isPowered == powered)
-            return;
 
-        isPowered = powered;
+        //=-----------------=
+        // Private Variables
+        //=-----------------=
+        [SerializeField, LogicComponentHandle] private LogicComponent inputSignal;
 
-        if (isPowered)
+        //=-----------------=
+        // Reference Variables
+        //=-----------------=
+
+
+        //=-----------------=
+        // Mono Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        //public override void AutoSubscribe()
+        //{
+        //    subscribeLogicComponents.Add(inputSignal);
+        //    base.AutoSubscribe();
+        //}
+        public override void SourcePowerStateChanged(bool powered)
         {
-            onPoweredEvent?.Invoke();
-            OnPowered?.Invoke();
+            base.SourcePowerStateChanged(powered);
+
+            if (isPowered == powered)
+                return;
+
+            isPowered = powered;
+
+            if (isPowered)
+            {
+                onPoweredEvent?.Invoke();
+                OnPowered?.Invoke();
+            }
+            else
+            {
+                onUnpoweredEvent?.Invoke();
+                OnUnpowered?.Invoke();
+            }
         }
-        else
+
+        public void SetIsPowered(bool _isPowered)
         {
-            onUnpoweredEvent?.Invoke();
-            OnUnpowered?.Invoke();
+            isPowered = _isPowered;
         }
-    }
-    public void SetIsPowered(bool _isPowered)
-    {
-        isPowered = _isPowered;
     }
 }

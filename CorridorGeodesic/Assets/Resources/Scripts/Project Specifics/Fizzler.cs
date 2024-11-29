@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using Neverway.Framework.LogicSystem;
 
 public class Fizzler : LogicComponent
 {
