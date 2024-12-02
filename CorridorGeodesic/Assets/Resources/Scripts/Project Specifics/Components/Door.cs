@@ -92,6 +92,6 @@ public class Door : LogicComponent
             sliceableObject.AnimatorSetBool (isPowered);
         }
 
-        partsReference.SetLayer (isPowered ? "Ignore Player" : "Default");
+        partsReference.SetLayer (isPowered ? "NoCollision" : "Default");
     }
 }

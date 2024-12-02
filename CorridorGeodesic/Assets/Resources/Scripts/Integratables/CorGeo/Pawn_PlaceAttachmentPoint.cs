@@ -78,6 +78,10 @@ public class Pawn_PlaceAttachmentPoint : MonoBehaviour
                 {
                     continue;
                 }
+                if (LayerMask.LayerToName (hit.collider.gameObject.layer) == "NoCollision")
+                {
+                    continue;
+                }
             }
 
             if (hit.distance < nearestHit)
