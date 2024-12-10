@@ -59,11 +59,11 @@ namespace Neverway.Framework
         {
             foreach (Camera cam in cameras)
             {
-                if (cam != null)
+                /*if (cam == null)
                 {
                     cameras.Remove(cam);
                     return null;
-                }
+                }*/
 
                 if (cam.isActiveAndEnabled && cam.targetTexture == null)
                 {
