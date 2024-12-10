@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1876775304551396626}
+  - component: {fileID: 7267255158897286376}
   m_Layer: 10
   m_Name: ShatteredGraphics
   m_TagString: Untagged
@@ -42,6 +43,21 @@ Transform:
   - {fileID: 4842890069550848202}
   m_Father: {fileID: 8540479716774181155}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7267255158897286376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166401924672809843}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd1e386961f4f14bb3bc22127e12442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableType: 0
+  lifeTime: 2
+  startTimerOnEnable: 1
 --- !u!1 &338924368946413604
 GameObject:
   m_ObjectHideFlags: 0
@@ -2378,6 +2394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actorId: 
   scriptDataList: []
+  isHeld: 0
   storedVariableData: []
 --- !u!136 &377624038038618786
 CapsuleCollider:
