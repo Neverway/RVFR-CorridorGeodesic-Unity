@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Neverway.Framework;
-
+/*
 public class Object_LiveThrowable : MonoBehaviour
 {
     //=-----------------=
@@ -85,4 +85,4 @@ public class Object_LiveThrowable : MonoBehaviour
         Explode();
     }
 }
-
+*/

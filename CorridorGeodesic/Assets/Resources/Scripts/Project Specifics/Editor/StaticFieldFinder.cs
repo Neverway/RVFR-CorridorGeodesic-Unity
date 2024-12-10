@@ -88,7 +88,9 @@ public class StaticFieldFinder : EditorWindow
                     if (field.IsInitOnly || field.IsLiteral)
                         continue;
 
-                    bool hasAttribute = field.HasAttribute<IsDomainReloadedAttribute>();
+                   // bool hasAttribute = field.HasAttribute<IsDomainReloadedAttribute>();
+                   // todo: Fix missing reference to IsDomainReloadedAttribute
+                   bool hasAttribute = false;
 
                     if (field.IsStatic)
                     {
