@@ -67,12 +67,22 @@ MonoBehaviour:
       m_Bits: 0
     groundDrag: 0
     airDrag: 0
+    maxHorizontalMovementSpeed: 0
+    maxHorizontalAirSpeed: 0
     movementMultiplier: 0
     airMovementMultiplier: 0
     gravityMultiplier: 0
     jumpForce: 0
+    steepSlopeAngle: 0
     sprintSpeedMultiplier: 0
     sprintAcceleration: 0
+    autoRegenHealth: 0
+    healthRegenPerSecond: 0
+    healthRegenDelay: 0
+    fallDamage: 0
+    minFallDamage: 0
+    fallDamageVelocity: 0
+    minFallDamageVelocity: 0
   isPossessed: 0
   isPaused: 0
   wasPaused: 0
@@ -83,6 +93,9 @@ MonoBehaviour:
   destroyOnDeathDelay: 0
   faceDirection: {x: 0, y: 0, z: 0, w: 0}
   physObjectAttachmentPoint: {fileID: 0}
+  groundDetectionLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &-4335853035724456227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,6 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actorId: 
   scriptDataList: []
+  isHeld: 0
   storedVariableData: []
 --- !u!1001 &7550106473696388917
 PrefabInstance:

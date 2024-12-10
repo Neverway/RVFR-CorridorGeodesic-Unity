@@ -170,8 +170,7 @@ namespace Neverway.Framework.PawnManagement
             Vector3 spawnPosition = startPoint ? startPoint.position : Vector3.zero;
             Quaternion spawnRotation = startPoint ? startPoint.rotation : Quaternion.identity;
             // Instantiate the player character.
-            gameInstance.localPlayerCharacter =
-                Instantiate(classToInstantiate, spawnPosition, spawnRotation).GetComponent<Pawn>();
+            gameInstance.localPlayerCharacter = Instantiate(classToInstantiate, spawnPosition, spawnRotation).GetComponent<Pawn>();
 
         }
     }

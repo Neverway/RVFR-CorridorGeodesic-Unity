@@ -59,7 +59,7 @@ namespace Neverway.Framework
         {
             foreach (Camera cam in cameras)
             {
-                if (cam)
+                if (cam != null)
                 {
                     cameras.Remove(cam);
                     return null;
