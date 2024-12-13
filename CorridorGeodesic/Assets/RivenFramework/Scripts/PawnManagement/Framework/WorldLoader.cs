@@ -112,12 +112,12 @@ namespace Neverway.Framework.PawnManagement
 
             isLoading = false;
 
-            //GameObject[] streamedObjects = SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects();
+            GameObject[] streamedObjects = SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects();
 
             SceneManager.SetActiveScene(
                 SceneManager.GetSceneByName(targetWorldID)); // Assign the new scene to be the active scene
 
-            EjectStreamedActors( /*streamedObjects*/);
+            EjectStreamedActors(streamedObjects);
         }
         //private IEnumerator StreamLoadDos()
         //{
@@ -151,32 +151,32 @@ namespace Neverway.Framework.PawnManagement
 
         //    EjectStreamedActors(streamedObjects);
         //}
-        //private IEnumerator LoadAsync()
-        //{
-        //    isLoading = true;
+        private IEnumerator LoadAsync()
+        {
+            isLoading = true;
 
-        //    yield return new WaitForSeconds(delayBeforeWorldChange);
+            yield return new WaitForSeconds(delayBeforeWorldChange);
 
-        //    AsyncOperation loadAsync = SceneManager.LoadSceneAsync(targetWorldID);
-        //    loadAsync.allowSceneActivation = false;
+            AsyncOperation loadAsync = SceneManager.LoadSceneAsync(targetWorldID);
+            loadAsync.allowSceneActivation = false;
 
-        //    while (loadAsync.progress < 0.9f)
-        //    {
-        //        yield return null;
-        //    }
+            while (loadAsync.progress < 0.9f)
+            {
+                yield return null;
+            }
 
-        //    GameObject[] streamedObjects = SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects();
+            GameObject[] streamedObjects = SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects();
 
-        //    loadAsync.allowSceneActivation = true;
+            loadAsync.allowSceneActivation = true;
 
-        //    yield return null;
+            yield return null;
 
-        //    EjectStreamedActors(streamedObjects);
+            EjectStreamedActors(streamedObjects);
 
-        //    isLoading = false;
+            isLoading = false;
 
-        //    print("Active scene is " + SceneManager.GetActiveScene().name);
-        //}
+            print("Active scene is " + SceneManager.GetActiveScene().name);
+        }
 
         private IEnumerator LoadAsyncOperation()
         {
@@ -198,7 +198,7 @@ namespace Neverway.Framework.PawnManagement
             }
         }
 
-        private void EjectStreamedActors( /*GameObject[] streamedObjects*/)
+        private void EjectStreamedActors( GameObject[] streamedObjects)
         {
             foreach (var actor in SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects())
             {
@@ -255,6 +255,25 @@ namespace Neverway.Framework.PawnManagement
             // TODO: Identify purpose of Graphics_SliceableObjectManager
             //Graphics_SliceableObjectManager.Instance.ClearList();
             //StartCoroutine(LoadAsync());
+            //StartCoroutine(StreamLoadDos());
+        }
+
+        public void StreamLoadWorld(int _targetSceneIDnum)
+        {
+            Scene targetScene = SceneManager.GetSceneByBuildIndex(_targetSceneIDnum);
+            targetWorldID = SceneManager.GetSceneByBuildIndex(_targetSceneIDnum).name;
+            /*if (SceneManager.GetSceneByBuildIndex(_targetSceneIDnum).name == "")
+            {
+                Debug.LogWarning(_targetSceneIDnum + " Is not a valid level! Loading fallback scene...");
+                targetWorldID = "_Error";
+                Destroy(GameInstance.GetWidget("WB_Loading"));
+            }*/
+
+            if (isLoading) return;
+            StartCoroutine(StreamLoad());
+            // TODO: Identify purpose of Graphics_SliceableObjectManager
+            //Graphics_SliceableObjectManager.Instance.ClearList();
+            StartCoroutine(LoadAsync());
             //StartCoroutine(StreamLoadDos());
         }
 

@@ -77,14 +77,15 @@ public class Projectile : MonoBehaviour
     }
     public virtual bool CollisionLogic ()
     {
+        Debug.DrawRay(transform.position, transform.forward, Color.green, 1);
         if (Physics.Raycast (transform.position, transform.forward, out RaycastHit hit, moveVector.magnitude + radius, layerMask))
         {
-            OnCollision (hit);
+            OnProjectileCollision (hit);
             return true;
         }
         return false;
     }
-    public virtual void OnCollision (RaycastHit hit)
+    public virtual void OnProjectileCollision (RaycastHit hit)
     {
         if (projectileGraphics != null)
         {

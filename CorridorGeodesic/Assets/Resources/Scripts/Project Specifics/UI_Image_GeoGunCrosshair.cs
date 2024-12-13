@@ -30,7 +30,7 @@ public class UI_Image_GeoGunCrosshair : MonoBehaviour
     // Reference Variables
     //=-----------------=
     private Alt_Item_Geodesic_Utility_GeoGun geoGun;
-    [SerializeField] private Image sineA, markerA, sineB, markerB, badDogNoBiscuit;
+    [SerializeField] private Image sineA, markerA, shadowA, sineB, markerB, badDogNoBiscuits;
     [SerializeField] private GameObject crosshair;
 
 
@@ -78,6 +78,29 @@ public class UI_Image_GeoGunCrosshair : MonoBehaviour
                 break;
             default:
                 print("other");
+                break;
+        }
+        
+        // Toggle bad dog crosshair according to if the target is shootable
+        switch (geoGun.isValidTarget)
+        {
+            case true:
+                badDogNoBiscuits.gameObject.SetActive(true);
+                break;
+            case false:
+                badDogNoBiscuits.gameObject.SetActive(false);
+                break;
+        }
+        
+        switch (geoGun.allowExpandingRift)
+        {
+            case true:
+                shadowA.gameObject.SetActive(true);
+                sineA.gameObject.SetActive(true);
+                break;
+            case false:
+                shadowA.gameObject.SetActive(false);
+                sineA.gameObject.SetActive(false);
                 break;
         }
     }

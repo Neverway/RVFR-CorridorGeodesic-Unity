@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     public bool allowNoLinearSlicing;
     public LayerMask viewCastMask;
     public bool allowExpandingRift = false;
+    public bool isValidTarget;
 
     //=-----------------=
     // Private Variables
@@ -91,6 +93,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private float secondsToMaxSpeedMod = 1.3f;
     private float timeMoveRiftButtonHeld = 0f;
     private float slowDistance = 1.5f;
+    [Tooltip("This should match the mask on Projectile_Vacumm, You're welcome future me you idiot ~Liz")]
+    [SerializeField] private LayerMask validTargetMask;
 
     [IsDomainReloaded] public static RiftState previousState = RiftState.None;
     [IsDomainReloaded] public static RiftState currentState = RiftState.None;
@@ -288,6 +292,62 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
             UpdateRiftOffset(offset);
         }
+
+        isValidTarget = GetValidTarget();
+    }
+
+    bool GetValidTarget()
+    {
+        
+        // Get weather the gun is pointed at a valid target (for crosshair)
+        if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out RaycastHit hit, Mathf.Infinity, validTargetMask))
+        {
+            if (hit.collider.gameObject.TryGetComponent<BulbCollisionBehaviour>(out var bulbBehaviourObj))
+            {
+                return true;
+            }
+            
+            else if (hit.collider.gameObject.TryGetComponent<Mesh_Slicable>(out var _out))
+            {
+                if (hit.collider is not MeshCollider)
+                {
+                    return false;
+                }
+                MeshCollider mCollider = (MeshCollider)hit.collider;
+
+                Mesh colMesh = mCollider.sharedMesh;
+
+                int triIndex = hit.triangleIndex;
+
+                //todo: Commented out this line of code, actually ended up throwing an IndexOutOfRangeException
+                //DisplayDebugTriangle(colMesh, triIndex, hit.collider.transform);
+
+                if (hit.collider.gameObject.TryGetComponent(out Renderer rend))
+                {
+                    int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
+                    if (subMeshIndex != -1 && !CorGeo_ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+            
+        return false;
+    }
+    int GetSubMeshIndex(Mesh mesh, int triIndex)
+    {
+        int triangleCounter = 0;
+        for (int i = 0; i < mesh.subMeshCount; i++)
+        {
+            triangleCounter += mesh.GetSubMesh(i).indexCount / 3;
+            if (triIndex < triangleCounter)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     //Added by Errynei to get closed rift previews to work right
@@ -350,7 +410,15 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 //Un-collapse things in the rift.
                 for (int i = 0; i < deployedRift.transform.childCount; i++)
                 {
-                    deployedRift.transform.GetChild (i).gameObject.SetActive (true);
+                    try
+                    {
+                        deployedRift.transform.GetChild (i).gameObject.SetActive (true);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("A known error occured");
+                        throw;
+                    }
                 }
                 foreach (var plane in cutPreviews)
                 {
@@ -517,7 +585,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         currentState = _newState;
 
         OnStateChanged?.Invoke();
-        Debug.Log("RiftState: " + currentState);
+        //Debug.Log("RiftState: " + currentState);
     }
 
     private void DeployRiftAndPreview ()
