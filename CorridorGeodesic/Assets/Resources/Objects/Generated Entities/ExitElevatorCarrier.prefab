@@ -4941,6 +4941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPowered: 0
+  animator: {fileID: 85651528300689545}
   OnReachFinalTarget:
     m_PersistentCalls:
       m_Calls: []
@@ -4951,7 +4952,6 @@ MonoBehaviour:
   stopSignal: {fileID: 0}
   forceOpenSignal: {fileID: 8743242989487857178}
   elevatorTargets: []
-  animator: {fileID: 85651528300689545}
   doorOpenTrigger: {fileID: 5472006355980260497}
 --- !u!114 &6405578968892007510
 MonoBehaviour:
@@ -5563,6 +5563,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6395976602960543948}
     m_Modifications:
+    - target: {fileID: 3924434273310656804, guid: 73403a250b23478b4a05e7f933758a75,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7257438820734618043, guid: 73403a250b23478b4a05e7f933758a75,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.11999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 7257438820734618043, guid: 73403a250b23478b4a05e7f933758a75,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7585677182710121538, guid: 73403a250b23478b4a05e7f933758a75,
         type: 3}
       propertyPath: m_Name

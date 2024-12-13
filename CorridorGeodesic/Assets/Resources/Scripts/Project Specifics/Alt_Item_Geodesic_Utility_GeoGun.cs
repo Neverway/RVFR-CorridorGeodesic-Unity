@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -409,7 +410,15 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 //Un-collapse things in the rift.
                 for (int i = 0; i < deployedRift.transform.childCount; i++)
                 {
-                    deployedRift.transform.GetChild (i).gameObject.SetActive (true);
+                    try
+                    {
+                        deployedRift.transform.GetChild (i).gameObject.SetActive (true);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("A known error occured");
+                        throw;
+                    }
                 }
                 foreach (var plane in cutPreviews)
                 {
@@ -576,7 +585,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         currentState = _newState;
 
         OnStateChanged?.Invoke();
-        Debug.Log("RiftState: " + currentState);
+        //Debug.Log("RiftState: " + currentState);
     }
 
     private void DeployRiftAndPreview ()
