@@ -39,7 +39,7 @@ public class IKFootSolver : MonoBehaviour
     //=-----------------=
     private Vector3 oldPosition, currentPosition, newPosition;
     private Vector3 oldRotation, currentRotation, newRotation;
-    private float lerp;
+    private float stepTimeLerp;
 
 
     //=-----------------=
@@ -75,9 +75,9 @@ public class IKFootSolver : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, 10, layerMask))
         {
             // If the current foot position is too far from our new target, move the foot
-            if (Vector3.Distance(newPosition, hit.point) >= stepDistance && !otherFoot.IsMoving() && lerp >= 1)
+            if (Vector3.Distance(newPosition, hit.point) >= stepDistance && !otherFoot.IsMoving() && stepTimeLerp >= 1)
             {
-                lerp = 0;
+                stepTimeLerp = 0;
                 UpdateFootPosition(hit);
             }
             // If the distance is too far, force the position to update
@@ -89,13 +89,22 @@ public class IKFootSolver : MonoBehaviour
             }*/
         }
         // Swing the leg to the new point if it's moving
-        if (lerp < 1)
+        if (stepTimeLerp < 1)
         {
-            Vector3 swingingPosition = Vector3.Lerp(oldPosition, newPosition, lerp);
-            swingingPosition.y += Mathf.Sin(lerp * Mathf.PI) * stepHeight;
-            currentPosition = swingingPosition;
-            currentRotation = Vector3.Lerp(oldRotation, newRotation, lerp);
-            lerp += Time.deltaTime * stepSpeed;
+            if (Vector3.Distance(newPosition, hit.point) >= stepFarRange)
+            {
+                currentPosition = newPosition;
+                stepTimeLerp = 1;
+                UpdateFootPosition(hit);
+            }
+            else
+            {
+                Vector3 swingingPosition = Vector3.Lerp(oldPosition, newPosition, stepTimeLerp);
+                swingingPosition.y += Mathf.Sin(stepTimeLerp * Mathf.PI) * stepHeight;
+                currentPosition = swingingPosition;
+                currentRotation = Vector3.Lerp(oldRotation, newRotation, stepTimeLerp);
+                stepTimeLerp += Time.deltaTime * stepSpeed;
+            }
         }
         else
         {
@@ -139,7 +148,7 @@ public class IKFootSolver : MonoBehaviour
     //=-----------------=
     public bool IsMoving()
     {
-        return lerp < 1;
+        return stepTimeLerp < 1;
     }
 }
 }
