@@ -42,6 +42,9 @@ public class IKFootSolver : MonoBehaviour
     private Vector3 oldRotation, currentRotation, newRotation;
     private float stepTimeLerp;
     public bool disableWaitForFoot;
+    public Vector3 lastBodyPosition, currentBodyPosition;
+    public Vector3 moveDirection;
+    public float moveDirectionMultiplier=1;
 
 
     //=-----------------=
@@ -72,12 +75,15 @@ public class IKFootSolver : MonoBehaviour
         transform.position = currentPosition;
         transform.up = currentRotation;
         
+        // Get the direction the entity is moving in, so we can use that value to place the feet ahead of where we are traveling
+        moveDirection = (body.position - lastBodyPosition).normalized*moveDirectionMultiplier;
+        
         // Update the new target position
         Ray ray = new Ray(body.position + (body.right * footSpacing) + (body.forward * forwardSpacing) + (body.up * raycastOffset), Vector3.down);
         if (Physics.Raycast(ray, out RaycastHit hit, 10, layerMask))
         {
             // If the current foot position is too far from our new target, move the foot
-            if (Vector3.Distance(newPosition, hit.point) >= stepDistance && stepTimeLerp >= 1)
+            if (Vector3.Distance(currentPosition, hit.point+moveDirection) >= stepDistance && stepTimeLerp >= 1)
             {
                 if (!otherFoot.IsMoving() || disableWaitForFoot)
                 {
@@ -96,20 +102,20 @@ public class IKFootSolver : MonoBehaviour
         // Swing the leg to the new point if it's moving
         if (stepTimeLerp < 1)
         {
-            if (Vector3.Distance(newPosition, hit.point) >= stepFarRange)
+            /*if (Vector3.Distance(newPosition, hit.point) >= stepFarRange)
             {
                 currentPosition = newPosition;
                 stepTimeLerp = 1;
                 UpdateFootPosition(hit);
             }
             else
-            {
+            {*/
                 Vector3 swingingPosition = Vector3.Lerp(oldPosition, newPosition, stepTimeLerp);
                 swingingPosition.y += Mathf.Sin(stepTimeLerp * Mathf.PI) * stepHeight;
                 currentPosition = swingingPosition;
                 currentRotation = Vector3.Lerp(oldRotation, newRotation, stepTimeLerp);
                 stepTimeLerp += Time.deltaTime * stepSpeed;
-            }
+            //}
         }
         else
         {
@@ -119,18 +125,26 @@ public class IKFootSolver : MonoBehaviour
 
         // Update the position the calculated current position
         transform.position = currentPosition;
+        lastBodyPosition = body.position;
     }
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(newPosition, 0.1f); // Target foot position
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(body.position, 0.1f); // Body position
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(body.position, body.position + body.forward * forwardSpacing); // Forward direction
     }
+
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
     private void UpdateFootPosition(RaycastHit _hit)
     {
-        //fullSwingDistance = Vector3.Distance(newPosition, _hit.point);
+        /*//fullSwingDistance = Vector3.Distance(newPosition, _hit.point);
         // Get the direction to swing the leg
         int direction;
         if (body.InverseTransformPoint(_hit.point).z > body.InverseTransformPoint(newPosition).z)
@@ -140,10 +154,11 @@ public class IKFootSolver : MonoBehaviour
         else
         {
             direction = -1;
-        }
+        }*/
 
-        Debug.DrawLine(body.position + (body.right * footSpacing) + (body.up * raycastOffset), _hit.point + (body.forward * stepLength * direction) + footOffset, Color.green, 0.25f);
-        newPosition = _hit.point + (body.forward * stepLength * direction) + footOffset;
+        //Debug.DrawLine(body.position + (body.right * footSpacing) + (body.up * raycastOffset), _hit.point + (body.forward * stepLength) + footOffset, Color.green, 0.25f);
+        Vector3 movementDirection = (_hit.point - oldPosition).normalized;
+        newPosition = _hit.point+moveDirection;
         newRotation = _hit.normal;
     }
 

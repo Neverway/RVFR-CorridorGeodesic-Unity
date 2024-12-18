@@ -5465,16 +5465,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footSpacing: 0.2
+  forwardSpacing: 0
   raycastOffset: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  stepDistance: 0.13
+  stepDistance: 0.35
   stepFarRange: 2
   stepLength: 0
-  stepHeight: 0.2
-  stepSpeed: 8
+  stepHeight: 0.3
+  stepSpeed: 6
   footOffset: {x: 0, y: -0.125, z: 0}
+  disableWaitForFoot: 0
+  lastBodyPosition: {x: 0, y: 0, z: 0}
+  currentBodyPosition: {x: 0, y: 0, z: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  moveDirectionMultiplier: 0.5
   body: {fileID: 7002935125612402890}
   target: {fileID: 2428108982650981138}
   otherFoot: {fileID: 4104635875110088602}
@@ -7413,16 +7419,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footSpacing: -0.2
+  forwardSpacing: 0
   raycastOffset: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  stepDistance: 0.13
+  stepDistance: 0.35
   stepFarRange: 2
   stepLength: 0
-  stepHeight: 0.2
-  stepSpeed: 8
+  stepHeight: 0.3
+  stepSpeed: 6
   footOffset: {x: 0, y: -0.125, z: 0}
+  disableWaitForFoot: 0
+  lastBodyPosition: {x: 0, y: 0, z: 0}
+  currentBodyPosition: {x: 0, y: 0, z: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  moveDirectionMultiplier: 0.5
   body: {fileID: 7002935125612402890}
   target: {fileID: 4323052025558692188}
   otherFoot: {fileID: 5838210610455063688}

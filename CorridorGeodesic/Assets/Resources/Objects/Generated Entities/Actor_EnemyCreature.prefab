@@ -514,16 +514,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footSpacing: -0.7
   forwardSpacing: -0.7
-  raycastOffset: 1
+  raycastOffset: 0.5
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  stepDistance: 0.13
-  stepFarRange: 2
+  stepDistance: 1
+  stepFarRange: 25
   stepLength: 0
-  stepHeight: 0.6
+  stepHeight: 0.35
   stepSpeed: 4
   footOffset: {x: 0, y: -0.125, z: 0}
+  disableWaitForFoot: 0
+  lastBodyPosition: {x: 0, y: 0, z: 0}
+  currentBodyPosition: {x: 0, y: 0, z: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  moveDirectionMultiplier: 2
   body: {fileID: 7002736307898156189}
   target: {fileID: 6382658640019250499}
   otherFoot: {fileID: 5636205459530315683}
@@ -735,7 +740,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &-7918235921829998568
 MonoBehaviour:
@@ -887,16 +892,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footSpacing: 0.7
   forwardSpacing: -0.7
-  raycastOffset: 1
+  raycastOffset: 0.5
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  stepDistance: 0.13
-  stepFarRange: 2
+  stepDistance: 1
+  stepFarRange: 25
   stepLength: 0
-  stepHeight: 0.6
+  stepHeight: 0.35
   stepSpeed: 4
   footOffset: {x: 0, y: -0.125, z: 0}
+  disableWaitForFoot: 0
+  lastBodyPosition: {x: 0, y: 0, z: 0}
+  currentBodyPosition: {x: 0, y: 0, z: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  moveDirectionMultiplier: 2
   body: {fileID: 7002736307898156189}
   target: {fileID: 6032494808134517967}
   otherFoot: {fileID: 3720126622389845633}
@@ -1506,16 +1516,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footSpacing: 0.7
   forwardSpacing: 0.7
-  raycastOffset: 1
+  raycastOffset: 0.5
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  stepDistance: 0.13
-  stepFarRange: 2
+  stepDistance: 1
+  stepFarRange: 25
   stepLength: 0
-  stepHeight: 0.6
+  stepHeight: 0.35
   stepSpeed: 4
   footOffset: {x: 0, y: -0.125, z: 0}
+  disableWaitForFoot: 0
+  lastBodyPosition: {x: 0, y: 0, z: 0}
+  currentBodyPosition: {x: 0, y: 0, z: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  moveDirectionMultiplier: 2
   body: {fileID: 7002736307898156189}
   target: {fileID: 7974550431081728998}
   otherFoot: {fileID: 6309395299654205362}
@@ -1660,16 +1675,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footSpacing: -0.7
   forwardSpacing: 0.7
-  raycastOffset: 1
+  raycastOffset: 0.5
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  stepDistance: 0.13
-  stepFarRange: 2
+  stepDistance: 1
+  stepFarRange: 25
   stepLength: 0
-  stepHeight: 0.6
+  stepHeight: 0.35
   stepSpeed: 4
   footOffset: {x: 0, y: -0.125, z: 0}
+  disableWaitForFoot: 0
+  lastBodyPosition: {x: 0, y: 0, z: 0}
+  currentBodyPosition: {x: 0, y: 0, z: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  moveDirectionMultiplier: 2
   body: {fileID: 7002736307898156189}
   target: {fileID: 5585955499409950489}
   otherFoot: {fileID: 9204262368643154535}
