@@ -24,6 +24,7 @@ public class IKFootSolver : MonoBehaviour
     // Public Variables
     //=-----------------=
     [SerializeField] private float footSpacing;
+    [SerializeField] private float forwardSpacing;
     [SerializeField] private float raycastOffset;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private float stepDistance;
@@ -40,6 +41,7 @@ public class IKFootSolver : MonoBehaviour
     private Vector3 oldPosition, currentPosition, newPosition;
     private Vector3 oldRotation, currentRotation, newRotation;
     private float stepTimeLerp;
+    public bool disableWaitForFoot;
 
 
     //=-----------------=
@@ -71,14 +73,17 @@ public class IKFootSolver : MonoBehaviour
         transform.up = currentRotation;
         
         // Update the new target position
-        Ray ray = new Ray(body.position + (body.right * footSpacing) + (body.up * raycastOffset), Vector3.down);
+        Ray ray = new Ray(body.position + (body.right * footSpacing) + (body.forward * forwardSpacing) + (body.up * raycastOffset), Vector3.down);
         if (Physics.Raycast(ray, out RaycastHit hit, 10, layerMask))
         {
             // If the current foot position is too far from our new target, move the foot
-            if (Vector3.Distance(newPosition, hit.point) >= stepDistance && !otherFoot.IsMoving() && stepTimeLerp >= 1)
+            if (Vector3.Distance(newPosition, hit.point) >= stepDistance && stepTimeLerp >= 1)
             {
-                stepTimeLerp = 0;
-                UpdateFootPosition(hit);
+                if (!otherFoot.IsMoving() || disableWaitForFoot)
+                {
+                    stepTimeLerp = 0;
+                    UpdateFootPosition(hit);
+                }
             }
             // If the distance is too far, force the position to update
             /*if (Vector3.Distance(newPosition, hit.point) >= stepFarRange)
