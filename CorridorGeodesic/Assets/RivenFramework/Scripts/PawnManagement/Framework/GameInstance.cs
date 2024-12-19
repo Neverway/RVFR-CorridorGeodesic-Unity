@@ -198,8 +198,6 @@ namespace Neverway.Framework.PawnManagement
                 var _settingsWidget = GetWidget("WB_Settings");
                 if (_settingsWidget)
                 {
-                    // TODO fix this cyclical reference
-                    //_settingsWidget.GetComponent<WB_Settings>().RemoveSubwidgets();
                     Destroy(_settingsWidget);
                 }
 
