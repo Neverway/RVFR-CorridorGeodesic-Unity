@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Neverway.Framework.PawnManagement;
@@ -56,6 +57,11 @@ namespace Neverway.Framework.ApplicationManagement
             buttonControls.onClick.AddListener(delegate { OnClick("buttonControls"); });
             buttonGameplay.onClick.AddListener(delegate { OnClick("buttonGameplay"); });
             Init();
+        }
+
+        private void OnDestroy()
+        {
+            RemoveSubwidgets();
         }
 
         //=-----------------=

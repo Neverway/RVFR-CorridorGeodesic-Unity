@@ -227,7 +227,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 573453912304318192}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.53066295, y: 0.066980794, z: 0.03285529, w: 0.8442932}
+  m_LocalRotation: {x: -0.53080994, y: 0.066975005, z: 0.032860305, w: 0.844201}
   m_LocalPosition: {x: -1.1256724e-10, y: 0.004425369, z: 3.504796e-11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2561,7 +2561,7 @@ MonoBehaviour:
   m_Direction: 1
   m_Center: {x: -0.0003, y: 0.003, z: 0}
   m_Bound: 0
-  m_Radius: 0.001
+  m_Radius: 0.0015
   m_Height: 0.005
   m_Radius2: 0
 --- !u!1 &2570046801377568837
@@ -2797,7 +2797,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2732704108008348563}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
   m_Name: 
@@ -3787,7 +3787,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -4576,7 +4576,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -4687,7 +4687,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4323279232942730333}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.9841634, y: -0.02096995, z: -0.071886405, w: 0.16067044}
+  m_LocalRotation: {x: 0.9841913, y: -0.020963186, z: -0.071886554, w: 0.16050021}
   m_LocalPosition: {x: -0.00104076, y: 0.00075209263, z: 0.00027550693}
   m_LocalScale: {x: 0.99999994, y: 0.9999999, z: 0.9999981}
   m_ConstrainProportionsScale: 0
@@ -4710,7 +4710,7 @@ MonoBehaviour:
   m_Direction: 1
   m_Center: {x: 0.0003, y: 0.003, z: 0}
   m_Bound: 0
-  m_Radius: 0.001
+  m_Radius: 0.0015
   m_Height: 0.005
   m_Radius2: 0
 --- !u!1 &4386376717496346918
@@ -4923,7 +4923,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -5062,7 +5062,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -5470,20 +5470,16 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1
+  placementOffset: {x: 0, y: -0.125, z: 0}
+  movementThreshold: 0.15
   stepDistance: 0.35
-  stepFarRange: 2
-  stepLength: 0
-  stepHeight: 0.5
-  stepSpeed: 4
-  footOffset: {x: 0, y: -0.125, z: 0}
+  stepHeight: 0.3
+  stepSpeed: 5
+  moveDirectionMultiplier: 8
   disableWaitForFoot: 0
-  lastBodyPosition: {x: 0, y: 0, z: 0}
-  currentBodyPosition: {x: 0, y: 0, z: 0}
-  moveDirection: {x: 0, y: 0, z: 0}
-  moveDirectionMultiplier: 2
   body: {fileID: 7002935125612402890}
-  target: {fileID: 2428108982650981138}
   otherFoot: {fileID: 4104635875110088602}
+  moveDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &5148499146721206109
 GameObject:
   m_ObjectHideFlags: 0
@@ -5728,7 +5724,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -5931,7 +5927,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -6164,7 +6160,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -6212,7 +6208,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5768846200273161679}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08947783, y: -0.0013971889, z: -0.014693793, w: 0.9958795}
+  m_LocalRotation: {x: 0.0894789, y: -0.0013971932, z: -0.014693968, w: 0.9958794}
   m_LocalPosition: {x: -3.0541562e-11, y: 0.0060983268, z: -2.6376804e-11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6235,7 +6231,7 @@ MonoBehaviour:
   m_Direction: 1
   m_Center: {x: 0, y: 0.001, z: 0}
   m_Bound: 0
-  m_Radius: 0.001
+  m_Radius: 0.0015
   m_Height: 0.005
   m_Radius2: 0
 --- !u!1 &5806271548786364597
@@ -6458,7 +6454,7 @@ MonoBehaviour:
   m_Direction: 1
   m_Center: {x: 0, y: 0.001, z: 0}
   m_Bound: 0
-  m_Radius: 0.001
+  m_Radius: 0.0015
   m_Height: 0.005
   m_Radius2: 0
 --- !u!1 &6134743154989630733
@@ -7424,20 +7420,16 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1
+  placementOffset: {x: 0, y: -0.125, z: 0}
+  movementThreshold: 0.15
   stepDistance: 0.35
-  stepFarRange: 2
-  stepLength: 0
-  stepHeight: 0.5
-  stepSpeed: 4
-  footOffset: {x: 0, y: -0.125, z: 0}
+  stepHeight: 0.3
+  stepSpeed: 5
+  moveDirectionMultiplier: 8
   disableWaitForFoot: 0
-  lastBodyPosition: {x: 0, y: 0, z: 0}
-  currentBodyPosition: {x: 0, y: 0, z: 0}
-  moveDirection: {x: 0, y: 0, z: 0}
-  moveDirectionMultiplier: 2
   body: {fileID: 7002935125612402890}
-  target: {fileID: 4323052025558692188}
   otherFoot: {fileID: 5838210610455063688}
+  moveDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &6993026096914952506
 GameObject:
   m_ObjectHideFlags: 0
@@ -7744,7 +7736,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -7914,7 +7906,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -8116,7 +8108,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -8505,7 +8497,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []
@@ -8740,7 +8732,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Radius: 0.0004
+  m_Radius: 0.00075
   m_RadiusDistrib:
     serializedVersion: 2
     m_Curve: []

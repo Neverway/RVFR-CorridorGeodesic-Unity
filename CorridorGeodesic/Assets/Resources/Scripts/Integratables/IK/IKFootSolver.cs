@@ -10,7 +10,11 @@
 //
 //=============================================================================
 
+using System.Reflection;
 using UnityEngine;
+using Neverway.Framework;
+using Unity.Collections;
+using UnityEditor;
 
 namespace Neverway
 {
@@ -28,7 +32,12 @@ public class IKFootSolver : MonoBehaviour
     [SerializeField] private float raycastOffset;
     [Tooltip("What layers can trigger raycasts for the feet positions")]
     [SerializeField] private LayerMask layerMask;
-    [Header("Movement")]
+    [Tooltip("Offset for the final position to place the targets")]
+    [SerializeField] private Vector3 placementOffset;
+
+    [Header("Movement")] 
+    [Tooltip("")] 
+    [SerializeField] private float movementThreshold;
     [Tooltip("How far the target can move before the leg updates it's position")]
     [SerializeField] private float stepDistance;
     [Tooltip("How high to bend the legs when taking a step")]
@@ -48,7 +57,6 @@ public class IKFootSolver : MonoBehaviour
     private Vector3 oldRotation, currentRotation, newRotation;
     private float stepTimeLerp;
     private Vector3 lastBodyPosition, currentBodyPosition;
-    private Vector3 moveDirection;
 
 
     //=-----------------=
@@ -58,6 +66,7 @@ public class IKFootSolver : MonoBehaviour
     [SerializeField] private Transform body;
     [Tooltip("Used to make sure legs don't step at the same time")]
     [SerializeField] private IKFootSolver otherFoot;
+    [ReadOnly][SerializeField] private Vector3 moveDirection;
 
 
     //=-----------------=
@@ -81,7 +90,7 @@ public class IKFootSolver : MonoBehaviour
         transform.up = currentRotation;
         
         // Get the direction the entity is moving in, so we can use that value to place the feet ahead of where we are traveling
-        moveDirection = (body.position - lastBodyPosition).normalized*moveDirectionMultiplier;
+        CalculateMovementDirectionInfluence();
         
         // Update the new target position
         Ray ray = new Ray(body.position + (body.right * footSpacing) + (body.forward * forwardSpacing) + (body.up * raycastOffset), Vector3.down);
@@ -136,6 +145,28 @@ public class IKFootSolver : MonoBehaviour
     {
         newPosition = _hit.point+moveDirection;
         newRotation = _hit.normal;
+    }
+
+    private void CalculateMovementDirectionInfluence()
+    {
+        // Reset the moveDirection value
+        moveDirection = Vector3.zero;
+        
+        Vector3 initialMovementDirection = (body.position - lastBodyPosition);
+        
+        // Use a threshold value to determine if the entity is actually moving somewhere, or just repositioning
+        if (initialMovementDirection.x >= movementThreshold ||
+            initialMovementDirection.z >= movementThreshold ||
+            initialMovementDirection.x <= -movementThreshold ||
+            initialMovementDirection.z <= -movementThreshold)
+        {
+            // We have moved a significant amount and should apply the movement offset
+            moveDirection = initialMovementDirection * moveDirectionMultiplier + placementOffset;
+        }
+        else
+        {
+            moveDirection = placementOffset;
+        }
     }
 
 
