@@ -24,6 +24,8 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         [Tooltip("Chains only spawn something at the end if they are connected to a source, set this to true if it's the first volume in the chain")]
         [SerializeField] private bool isSourceChain;
+        [Tooltip("Set this to true if this chain is the last link and you don't want it to spawn anything when it's connected")]
+        [SerializeField] private bool absorbsSource;
         [Tooltip("How far out to check for the next chain in the line")]
         [SerializeField] private float raycastDistance;
         [Tooltip("")]
@@ -94,10 +96,11 @@ namespace Neverway.Framework.LogicSystem
                 if (isSourceChain || connectedToSource)
                 {
                     // ...and we haven't created the source object
-                    if (!instantiatedSourceObject)
+                    if (!instantiatedSourceObject && !absorbsSource)
                     {
                         // Spawn the source object at the end of our raycast
                         instantiatedSourceObject = Instantiate(sourceObjectPrefab, raycastOrigin.position+(raycastOrigin.forward*raycastDistance), raycastOrigin.rotation);
+                        instantiatedSourceObject.transform.parent = raycastOrigin;
                     }
                     
                 }
