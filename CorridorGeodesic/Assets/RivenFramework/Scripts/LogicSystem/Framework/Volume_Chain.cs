@@ -31,6 +31,9 @@ namespace Neverway.Framework.LogicSystem
         [Tooltip("")]
         [SerializeField] private LayerMask layerMask;
 
+        [SerializeField] private float sourceObjectForwardPositionOffset;
+        [SerializeField] private Vector3 sourceObjectScale=Vector3.one;
+
         
         //=-----------------=
         // Private Variables
@@ -74,6 +77,8 @@ namespace Neverway.Framework.LogicSystem
                     // Flow the source object to the next link, and ensure the next link knows it's connected now
                     nextLink.connectedToSource = true;
                     nextLink.sourceObjectPrefab = sourceObjectPrefab;
+                    nextLink.sourceObjectForwardPositionOffset = sourceObjectForwardPositionOffset;
+                    nextLink.sourceObjectScale = sourceObjectScale;
                     ClearInstantiatedSourceObject();
                 }
                 // ... and we are not the source or connected to it
@@ -85,6 +90,8 @@ namespace Neverway.Framework.LogicSystem
                         // clear the source object to the next link, and ensure the next link knows it's not connected now
                         nextLink.connectedToSource = false;
                         nextLink.sourceObjectPrefab = null;
+                        nextLink.sourceObjectForwardPositionOffset = 0;
+                        nextLink.sourceObjectScale = Vector3.one;
                     }
                     ClearInstantiatedSourceObject();
                 }
@@ -99,7 +106,8 @@ namespace Neverway.Framework.LogicSystem
                     if (!instantiatedSourceObject && !absorbsSource)
                     {
                         // Spawn the source object at the end of our raycast
-                        instantiatedSourceObject = Instantiate(sourceObjectPrefab, raycastOrigin.position+(raycastOrigin.forward*raycastDistance), raycastOrigin.rotation);
+                        instantiatedSourceObject = Instantiate(sourceObjectPrefab, raycastOrigin.position+(raycastOrigin.forward*raycastDistance)+(raycastOrigin.forward*sourceObjectForwardPositionOffset), raycastOrigin.rotation);
+                        instantiatedSourceObject.transform.localScale = sourceObjectScale;
                         instantiatedSourceObject.transform.parent = raycastOrigin;
                     }
                     
