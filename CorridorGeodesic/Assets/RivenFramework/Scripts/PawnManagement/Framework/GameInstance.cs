@@ -144,10 +144,13 @@ namespace Neverway.Framework.PawnManagement
         public static GameObject GetWidget(string _widgetName)
         {
             var canvas = GameObject.FindWithTag("UserInterface");
-            for (var i = 0; i < canvas.transform.childCount; i++)
+            if (canvas)
             {
-                var widget = canvas.transform.GetChild(i).gameObject;
-                if (widget.name == _widgetName) return widget;
+                for (var i = 0; i < canvas.transform.childCount; i++)
+                {
+                    var widget = canvas.transform.GetChild(i).gameObject;
+                    if (widget.name == _widgetName) return widget;
+                }
             }
 
             return null;

@@ -129,7 +129,6 @@ public class IKFootSolver : MonoBehaviour
         }
         else
         {
-            print("NoFloor");
             stepTimeLerp = 1;
             transform.position = body.position + (body.right * footSpacing) + (body.forward * forwardSpacing) + placementOffset;
             lastBodyPosition = body.position;

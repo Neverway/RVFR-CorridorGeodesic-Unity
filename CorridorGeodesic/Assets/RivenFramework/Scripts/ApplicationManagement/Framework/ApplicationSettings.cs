@@ -7,6 +7,7 @@
 //=============================================================================
 
 using System.Collections;
+using System.Collections.Generic;
 using FMODUnity;
 using System.IO;
 using Unity.Collections;
@@ -15,7 +16,7 @@ using UnityEngine.Audio;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering.PostProcessing;
 using Neverway.Framework.PawnManagement;
-using UnityEngine.ResourceManagement;
+using UnityEngine.SceneManagement;
 
 
 namespace Neverway.Framework.ApplicationManagement
@@ -25,16 +26,19 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         // Public Variables
         //=-----------------=
+        [Tooltip("The default values for the settings (pulled from the constructor in ApplicationSettingsData)")]
         [ReadOnly] [SerializeField] private ApplicationSettingsData defaultSettingsData;
+        [Tooltip("The current, possibly unapplied, values for the settings")]
         public ApplicationSettingsData currentSettingsData;
-        public Resolution[] resolutions;
+        [Tooltip("A list of which folders contain textures that are affected by the dynamic texture filters")] 
+        [SerializeField] private List<string> dynamicallyFilteredTexturePaths = new List<string> {"Materials/Textures/DynamicallyFiltered"};
 
 
         //=-----------------=
         // Private Variables
         //=-----------------=
-        public bool debugApply;
-        private string path;
+        private string configurationFilePath;
+        public Resolution[] resolutions;
 
 
         //=-----------------=
@@ -57,34 +61,94 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         private void Start()
         {
-            path = $"{UnityEngine.Application.persistentDataPath}/settings.json";
+            // Get the default file path to save the application settings config
+            configurationFilePath = $"{UnityEngine.Application.persistentDataPath}/settings.json";
+            InitializeReferenceVariables();
+            InitialConfigurationSetup();
+            
+            // Todo: this seems like a silly fix for updating the fps visibility and texture filtering ~Liz
+            InvokeRepeating(nameof(CheckFPSCounterVisibility), 0, 1);
+            InvokeRepeating(nameof(CheckDynamicTextureFiltering), 0, 1);
+        }
+        
+
+        //=-----------------=
+        // Internal Functions
+        //=-----------------=
+        private void InitializeReferenceVariables()
+        {
             gameInstance = GetComponent<GameInstance>();
 
+            // Pretty sure this is Soulex's FMOD stuff (RAH I HATE FMOD RAH!!!! ~Liz)
             masterBus = RuntimeManager.GetBus("bus:/Master");
             sfxBus = RuntimeManager.GetBus("bus:/Master/SFX");
             musicBus = RuntimeManager.GetBus("bus:/Master/Music");
             musicBus = RuntimeManager.GetBus("bus:/Master/Ambience");
             voicesBus = RuntimeManager.GetBus("bus:/Master/Voices");
+        }
 
-            LoadSettings();
+        private void InitialConfigurationSetup()
+        {
+            DevConsole.Log("Initializing application settings...", "App Config");
+            // If we have a config file...
+            if (File.Exists(configurationFilePath))
+            {
+                var json = File.ReadAllText(configurationFilePath);
+                var data = JsonUtility.FromJson<ApplicationSettingsData>(json);
+                // Ensure the config version has not changed...
+                if (data.configurationFileCompatibilityVersion == defaultSettingsData.configurationFileCompatibilityVersion)
+                {
+                    // Everything checks out, let's apply those settings!
+                    currentSettingsData = data;
+                    GetCurrentResolutionFromList();
+                    ApplySettings();
+                    
+                    // If we are on the firstTimeSetup scene...
+                    if (SceneManager.GetActiveScene().buildIndex == 0)
+                    {
+                        // Skip to the next scene
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    }
+                    DevConsole.LogSuccess("Successfully loaded config file", "App Config");
+                    return;
+                }
+            }
+            
+            // Force create a new empty configuration file
+            currentSettingsData = new ApplicationSettingsData(defaultSettingsData);
             GetCurrentResolutionFromList();
             ApplySettings();
-            InvokeRepeating(nameof(CheckFPSCounterVisibility), 0, 1);
-            InvokeRepeating(nameof(CheckDynamicTextureFiltering), 0, 1);
-        }
-
-        private void Update()
-        {
-            if (debugApply)
+            DevConsole.Log("No valid config file found, default config created", "App Config");
+            
+            // The config was not valid...
+            // If we are not on the firstTimeSetup scene...
+            if (SceneManager.GetActiveScene().buildIndex != 0)
             {
-                debugApply = false;
-                ApplySettings();
+                return;
             }
+            DevConsole.Log("Continuing with first-time setup", "App Config");
         }
 
-        //=-----------------=
-        // Internal Functions
-        //=-----------------=
+        private void GetCurrentResolutionFromList()
+        {
+            resolutions = Screen.resolutions;
+            int currentResolutionIndex = 0;
+
+            for (int i = 0; i < resolutions.Length; i++)
+            {
+                // Check if this resolution is the current one
+                if (resolutions[i].width == Screen.currentResolution.width &&
+                    resolutions[i].height == Screen.currentResolution.height)
+                {
+                    currentResolutionIndex = i;
+                }
+            }
+
+            // Set the dropdown options
+            currentSettingsData.targetResolution = currentResolutionIndex;
+        }
+        
+        // Todo: give this function a better name ~Liz
         private void UpdateActiveWindowButtons()
         {
             if (FindObjectOfType<WB_Settings_Graphics>())
@@ -126,39 +190,42 @@ namespace Neverway.Framework.ApplicationManagement
 
         private void CheckDynamicTextureFiltering()
         {
-            //switch (currentSettingsData.textureQuality)
-            //{
-            //    case 0:
-            //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-            //        {
-            //            texture.filterMode = FilterMode.Point;
-            //        }
-            //        break;
-            //    case 1:
-            //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-            //        {
-            //            texture.filterMode = FilterMode.Point;
-            //        }
-            //        break;
-            //    case 2:
-            //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-            //        {
-            //            texture.filterMode = FilterMode.Bilinear;
-            //        }
-            //        break;
-            //    case 3:
-            //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-            //        {
-            //            texture.filterMode = FilterMode.Bilinear;
-            //        }
-            //        break;
-            //    case 4:
-            //        foreach (var texture in Resources.LoadAll<Texture>("Materials/Textures/DynamicallyFiltered"))
-            //        {
-            //            texture.filterMode = FilterMode.Trilinear;
-            //        }
-            //        break;
-            //}
+            foreach (var texturePath in dynamicallyFilteredTexturePaths)
+            {
+                switch (currentSettingsData.textureQuality)
+                {
+                    case 0:
+                        foreach (var texture in Resources.LoadAll<Texture>(texturePath))
+                        {
+                            texture.filterMode = FilterMode.Point;
+                        }
+                        break;
+                    case 1:
+                        foreach (var texture in Resources.LoadAll<Texture>(texturePath))
+                        {
+                            texture.filterMode = FilterMode.Point;
+                        }
+                        break;
+                    case 2:
+                        foreach (var texture in Resources.LoadAll<Texture>(texturePath))
+                        {
+                            texture.filterMode = FilterMode.Bilinear;
+                        }
+                        break;
+                    case 3:
+                        foreach (var texture in Resources.LoadAll<Texture>(texturePath))
+                        {
+                            texture.filterMode = FilterMode.Bilinear;
+                        }
+                        break;
+                    case 4:
+                        foreach (var texture in Resources.LoadAll<Texture>(texturePath))
+                        {
+                            texture.filterMode = FilterMode.Trilinear;
+                        }
+                        break;
+                }
+            }
         }
 
         private IEnumerator SetLocalization(int _localeID)
@@ -180,22 +247,32 @@ namespace Neverway.Framework.ApplicationManagement
         public void SaveSettings()
         {
             var json = JsonUtility.ToJson(currentSettingsData, true);
-            File.WriteAllText(path, json); // Save JSON data to file
+            File.WriteAllText(configurationFilePath, json); // Save JSON data to file
         }
 
-        public void LoadSettings()
+        /*private void LoadSettings()
         {
-            if (File.Exists(path))
+            if (File.Exists(configurationFilePath))
             {
-                var json = File.ReadAllText(path);
+                var json = File.ReadAllText(configurationFilePath);
                 var data = JsonUtility.FromJson<ApplicationSettingsData>(json);
-                currentSettingsData = data;
+                // Ensure the configuration version has not changed
+                if (data.configurationFileCompatibilityVersion == defaultSettingsData.configurationFileCompatibilityVersion)
+                {
+                    currentSettingsData = data;
+                }
+                // Config was not valid, need to generate a new one
+                else
+                {
+                    currentSettingsData = new ApplicationSettingsData(defaultSettingsData);
+                }
             }
+            // Config was not valid, need to generate a new one
             else
             {
                 currentSettingsData = new ApplicationSettingsData(defaultSettingsData);
             }
-        }
+        }*/
 
         public void ApplySettings()
         {
@@ -216,7 +293,7 @@ namespace Neverway.Framework.ApplicationManagement
             // FPS limit
             if (!currentSettingsData.enableVysnc)
             {
-                UnityEngine.Application.targetFrameRate = currentSettingsData.fpslimit;
+                UnityEngine.Application.targetFrameRate = currentSettingsData.fpsLimit;
             }
             else
             {
@@ -622,7 +699,7 @@ namespace Neverway.Framework.ApplicationManagement
             UpdateActiveWindowButtons();
         }
 
-        FullScreenMode GetFullscreenMode()
+        public FullScreenMode GetFullscreenMode()
         {
             // Window Mode
             switch (currentSettingsData.windowMode)
@@ -638,25 +715,6 @@ namespace Neverway.Framework.ApplicationManagement
                 default:
                     return FullScreenMode.ExclusiveFullScreen;
             }
-        }
-
-        void GetCurrentResolutionFromList()
-        {
-            resolutions = Screen.resolutions;
-            int currentResolutionIndex = 0;
-
-            for (int i = 0; i < resolutions.Length; i++)
-            {
-                // Check if this resolution is the current one
-                if (resolutions[i].width == Screen.currentResolution.width &&
-                    resolutions[i].height == Screen.currentResolution.height)
-                {
-                    currentResolutionIndex = i;
-                }
-            }
-
-            // Set the dropdown options
-            currentSettingsData.targetResolution = currentResolutionIndex;
         }
 
         public static float ConvertVolumeToPercentage(int _volumeSliderValue)

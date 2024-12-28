@@ -85,7 +85,7 @@ namespace Neverway.Framework.ApplicationManagement
             targetResolution.value = applicationSettings.currentSettingsData.targetResolution;
             windowMode.currentIndex = applicationSettings.currentSettingsData.windowMode;
             enableVsync.isOn = applicationSettings.currentSettingsData.enableVysnc;
-            fpslimit.value = applicationSettings.currentSettingsData.fpslimit;
+            fpslimit.value = applicationSettings.currentSettingsData.fpsLimit;
             showFramecounter.isOn = applicationSettings.currentSettingsData.showFramecounter;
 
             resolutionScale.currentIndex = applicationSettings.currentSettingsData.resolutionScale;
@@ -108,7 +108,7 @@ namespace Neverway.Framework.ApplicationManagement
             });
             fpslimit.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.fpslimit = Mathf.RoundToInt(fpslimit.value);
+                applicationSettings.currentSettingsData.fpsLimit = Mathf.RoundToInt(fpslimit.value);
             });
             showFramecounter.onValueChanged.AddListener(delegate
             {

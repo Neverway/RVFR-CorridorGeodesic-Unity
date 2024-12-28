@@ -16,9 +16,14 @@ namespace Neverway.Framework.ApplicationManagement
     [Serializable]
     public class ApplicationSettingsData
     {
+        // File
+        [Tooltip("Change this value when you want to force players not to use an older config")]
+        public int configurationFileCompatibilityVersion;
+        
         // Graphics
         // Display
-        [Tooltip("X-Width, Y-Height")] public int targetResolution;
+        [Tooltip("X-Width, Y-Height")] 
+        public int targetResolution;
 
         [Tooltip("0-Fullscreen, 1-Fullscreen Windowed, 2-Windowed, 3-Windowed Maximized")] [Range(0, 3)]
         public int windowMode;
@@ -26,7 +31,7 @@ namespace Neverway.Framework.ApplicationManagement
         [Tooltip("Vertical sync")] public bool enableVysnc;
 
         [Tooltip("Also referred to as target framerate")] [Range(-1, 300)]
-        public int fpslimit;
+        public int fpsLimit;
 
         [Tooltip("Also referred to as fps counter")]
         public bool showFramecounter;
@@ -111,10 +116,12 @@ namespace Neverway.Framework.ApplicationManagement
         // Default constructor
         public ApplicationSettingsData()
         {
+            configurationFileCompatibilityVersion = 1;
+            
             targetResolution = 0;
             windowMode = 0;
             enableVysnc = false;
-            fpslimit = 60;
+            fpsLimit = 60;
             showFramecounter = false;
 
             resolutionScale = 3;
@@ -170,10 +177,12 @@ namespace Neverway.Framework.ApplicationManagement
         // Clone constructor
         public ApplicationSettingsData(ApplicationSettingsData other)
         {
+            configurationFileCompatibilityVersion = other.configurationFileCompatibilityVersion;
+            
             targetResolution = other.targetResolution;
             windowMode = other.windowMode;
             enableVysnc = other.enableVysnc;
-            fpslimit = other.fpslimit;
+            fpsLimit = other.fpsLimit;
             showFramecounter = other.showFramecounter;
 
             resolutionScale = other.resolutionScale;

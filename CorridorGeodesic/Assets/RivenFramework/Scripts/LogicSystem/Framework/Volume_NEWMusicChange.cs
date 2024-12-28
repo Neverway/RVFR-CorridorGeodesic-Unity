@@ -71,14 +71,12 @@ namespace Neverway.Framework.LogicSystem
 
         private new void OnTriggerEnter(Collider _other)
         {
-            print("something entered the trigger");
             if (activated)
                 return;
 
             base.OnTriggerEnter(_other); // Call the base class method
             if (_other.CompareTag("Pawn") && pawnActivates)
             {
-                print("pawn entered");
                 if (onlyPlayerControllerPawns && GetPlayerInTrigger())
                 {
                     ChangeMusic();
@@ -103,13 +101,10 @@ namespace Neverway.Framework.LogicSystem
             if (!resetAutomatically)
                 activated = true;
 
-            print("dont know if music manager exists");
 
-            print(Audio_FMODMusicManager.Instance);
             if (Audio_FMODMusicManager.Instance.Equals(null))
                 return;
 
-            print("music will supposedly change");
             /*switch (musicPlayType)
             {
                 case MusicPlayType.Play:

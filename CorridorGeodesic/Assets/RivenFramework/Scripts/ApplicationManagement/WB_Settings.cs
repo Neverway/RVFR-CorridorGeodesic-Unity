@@ -48,7 +48,7 @@ namespace Neverway.Framework.ApplicationManagement
         {
             gameInstance = FindObjectOfType<GameInstance>();
             applicationSettings = FindObjectOfType<ApplicationSettings>();
-            applicationSettings.LoadSettings();
+            //applicationSettings.LoadSettings();
             buttonBack.onClick.AddListener(delegate { OnClick("buttonBack"); });
             buttonApply.onClick.AddListener(delegate { OnClick("buttonApply"); });
             buttonReset.onClick.AddListener(delegate { OnClick("buttonReset"); });
