@@ -6448,15 +6448,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0355bf3c2fd804f7ca404dab47fa7230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAmmo: 2
-  currentAmmo: 2
-  allowNoLinearSlicing: 1
-  viewCastMask:
+  allowNonLinearSlicing: 1
+  allowExpandingRift: 0
+  allowSlamingRift: 0
+  allowMarkerDragging: 0
+  allowMarkerPlacementAnywhere: 1
+  viewRaycastMask:
     serializedVersion: 2
     m_Bits: 1
-  allowExpandingRift: 0
   isValidTarget: 0
-  previousPlanePosition: {x: 0, y: 0, z: 0}
+  maxAmmo: 2
+  currentAmmo: 2
   barrelTransform: {fileID: 4015725417602206536}
   centerViewTransform: {fileID: 0}
   debugObject: {fileID: 0}

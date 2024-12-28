@@ -18,8 +18,7 @@ public class Projectile_Vacumm : Projectile
     //=-----------------=
     // Public Variables
     //=-----------------=
-    //[SerializeField] private float castRadius;
-    //[SerializeField] private Vector3 castOffset;
+    public bool allowMarkerPlacementAnywhere;
     [SerializeField] private float pinOffset;
     [SerializeField] private float gridSize = 1;
     public bool pinned => disabled;
@@ -79,7 +78,7 @@ public class Projectile_Vacumm : Projectile
             if (hit.collider.gameObject.TryGetComponent(out Renderer rend))
             {
                 int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
-                if (subMeshIndex != -1 && !CorGeo_ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
+                if (subMeshIndex != -1 && !CorGeo_ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]) && !allowMarkerPlacementAnywhere)
                 {
                     KillProjectile();
                     killScheduled = true;

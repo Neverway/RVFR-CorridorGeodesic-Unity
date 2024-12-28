@@ -20,17 +20,30 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [Header("GeoGun Upgrades")]
+    [Tooltip("Allows rifts to be placed on walls")]
+    public bool allowNonLinearSlicing;
+    [Tooltip("Allows rifts to expand past the start position")]
+    public bool allowExpandingRift;
+    [Tooltip("Allows the player to slam rifts closed, creating a vacuum that flings things out of rifts")]
+    public bool allowSlamingRift;
+    [Tooltip("Allows the player to slam rifts closed, creating a vacuum that flings things out of rifts")]
+    public bool allowMarkerDragging;
+    [Tooltip("Debug parameter to... well, you get it")]
+    public bool allowMarkerPlacementAnywhere;
+    
+    [Header("Other Variables")]
+    [Tooltip("Used in the view raycast to aim the barrel transform of the gun towards the proper point")]
+    public LayerMask viewRaycastMask;
+    [Tooltip("Used by the crosshair to visualize if the gun is pointing at a valid target")]
+    public bool isValidTarget;
     public int maxAmmo = 2;
     public int currentAmmo = 2;
-    public bool allowNoLinearSlicing;
-    public LayerMask viewCastMask;
-    public bool allowExpandingRift = false;
-    public bool isValidTarget;
 
     //=-----------------=
     // Private Variables
     //=-----------------=
-    public Vector3 previousPlanePosition;
+    private Vector3 previousPlanePosition;
     private AudioSource_PitchVarienceModulator audioSource;
     private RaycastHit viewPoint; //For aiming projectiles
 
@@ -38,6 +51,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    [Header("Reference Variables")]
     //[SerializeField] private AudioClip projectileTravel, projectileFire;
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private Transform centerViewTransform;
@@ -57,6 +71,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [IsDomainReloaded] public static GameObject deployedRift;
     private Mesh_Slicable[] meshSlicers;
 
+    [Header("ALTMeshSlicer Static Reference Variables")]
     //Statics for ALTMeshSlicer to use
     [IsDomainReloaded] public static Plane planeA;
     [IsDomainReloaded] public static Plane planeB;
@@ -611,7 +626,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         deployedRift.name = "Rift";
         deployedRift.transform.position = deployedInfinityMarkers[0].transform.position;
         deployedRift.transform.LookAt (deployedInfinityMarkers[1].transform);
-        if (allowNoLinearSlicing) deployedRift.transform.rotation = new Quaternion (deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
+        if (allowNonLinearSlicing) deployedRift.transform.rotation = new Quaternion (deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
         else deployedRift.transform.rotation = new Quaternion (0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
 
         riftNormal = deployedRift.transform.forward;
@@ -626,7 +641,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * planeOffset;
         Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * planeOffset;
 
-        if (allowNoLinearSlicing)
+        if (allowNonLinearSlicing)
         {
             riftWidth = Vector3.Distance (pos1, pos2);
         }
@@ -708,7 +723,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             projectile.GetComponent<Projectile_Vacumm> ().KillProjectile (false);
         }
         deployedInfinityMarkers.Clear ();
-        currentAmmo = 2;
+        currentAmmo = maxAmmo;
 
         anims.SetBool("Empty", false);
 
@@ -839,6 +854,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         var projectile = Instantiate (projectileVacumm, centerViewTransform.transform.position, centerViewTransform.rotation, null);
         projectile.InitializeProjectile (projectileForce, barrelTransform.position, viewPoint.distance);
         projectile.geoGun = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+        projectile.allowMarkerPlacementAnywhere = allowMarkerPlacementAnywhere;
         deployedInfinityMarkers.Add (projectile);
     }
 
@@ -1034,7 +1050,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     {
         viewPoint = new RaycastHit ();
         // Perform the raycast, ignoring the trigger layer
-        if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out viewPoint, Mathf.Infinity, viewCastMask))
+        if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out viewPoint, Mathf.Infinity, viewRaycastMask))
         {
             // If the raycast hits something, aim the barrel towards the hit point
             barrelTransform.LookAt (viewPoint.point);
