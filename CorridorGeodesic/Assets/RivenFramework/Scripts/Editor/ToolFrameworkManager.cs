@@ -38,9 +38,8 @@ namespace Neverway.Framework
         //=-----------------=
         // Reference Variables
         //=-----------------=
-        private ToolFrameworkManagerProps propManager;
-        private ToolFrameworkManagerItems itemManager;
-        private ToolFrameworkManagerCharacters characterManager;
+        // ToDo Add Pages Below 1/3
+        private ToolFrameworkManagerActorDatabase actorDatabase;
 
 
         //=-----------------=
@@ -57,6 +56,7 @@ namespace Neverway.Framework
             EditorGUILayout.LabelField("Framework Version: 1.0.0a");
             HeaderImage();
             EditorGUILayout.LabelField(currentWindow, EditorStyles.boldLabel);
+            // ToDo Add Pages Below 2/3
             switch (currentWindow)
             {
                 case "Home":
@@ -65,14 +65,8 @@ namespace Neverway.Framework
                 case "ProjectSetup":
                     ProjectSetup();
                     break;
-                case "PropManager":
-                    if (propManager) propManager.Window(this);
-                    break;
-                case "ItemManager":
-                    if (itemManager) itemManager.Window(this);
-                    break;
-                case "CharacterManager":
-                    if (characterManager) characterManager.Window(this);
+                case "ActorDatabase":
+                    if (actorDatabase) actorDatabase.Window(this);
                     break;
                 default:
                     Missing();
@@ -94,39 +88,18 @@ namespace Neverway.Framework
             {
                 currentWindow = "ProjectSetup";
             }
+            // ToDo Add Pages Below 3/3
 
             GUILayout.Space(10);
-            if (GUILayout.Button("Prop Manager"))
+            if (GUILayout.Button("Actor Database"))
             {
-                if (propManager is null)
+                if (actorDatabase is null)
                 {
-                    propManager = CreateInstance<ToolFrameworkManagerProps>();
-                    propManager.initialized = false;
+                    actorDatabase = CreateInstance<ToolFrameworkManagerActorDatabase>();
+                    actorDatabase.initialized = false;
                 }
 
-                currentWindow = "PropManager";
-            }
-
-            if (GUILayout.Button("Item Manager"))
-            {
-                if (itemManager is null)
-                {
-                    itemManager = CreateInstance<ToolFrameworkManagerItems>();
-                    itemManager.initialized = false;
-                }
-
-                currentWindow = "ItemManager";
-            }
-
-            if (GUILayout.Button("Character Manager"))
-            {
-                if (characterManager is null)
-                {
-                    characterManager = CreateInstance<ToolFrameworkManagerCharacters>();
-                    characterManager.initialized = false;
-                }
-
-                currentWindow = "CharacterManager";
+                currentWindow = "ActorDatabase";
             }
         }
 

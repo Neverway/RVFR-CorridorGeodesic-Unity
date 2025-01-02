@@ -111,8 +111,8 @@ Shader "Soulex/Effects/Lava"
                 float2 uvMain = i.worldPos.xz * _Scale;
                 float2 uvDistort = i.worldPos.xz * _DistScale;
 
-                PixelizeUV(uvMain, 128);
-                PixelizeUV(uvDistort, 1280);
+                //PixelizeUV(uvMain, 128);
+                //PixelizeUV(uvDistort, 1280);
 
                 float distort1 = tex2D(_DistortTex, uvDistort + scrollUV).r;
                 float distort2 = tex2D(_DistortTex, uvDistort + scrollUV * 0.5).g;

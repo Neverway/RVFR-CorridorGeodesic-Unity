@@ -56,6 +56,7 @@ namespace Neverway.Framework.ApplicationManagement
 
             foreach (var textElement in FindObjectsOfType<TMP_Text>())
             {
+                if (textElement.gameObject.GetComponent(typeof(Text_DontOverideFont))) continue;
                 textElement.font = targetFont;
             }
         }

@@ -1,13 +1,15 @@
-Shader "Soulex/Surface/Standard Toon"
+Shader "Soulex/Surface/Standard Toon2"
 {
     Properties
     {
+        [Header(Material Settings)][Space]
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode ("Cull Mode", Float) = 2
         [KeywordEnum(TruePBR, StylizedPBR)] _SpecularMode ("Specular Mode", Float) = 0
         _AlphaClip ("Alpha Clip", Range(0, 1)) = 0.5
 
         _Color ("Color", Color) = (1,1,1,1)
 
+        [Header(Main Texture Properties)][Space]
         _RampSmoothness ("Ramp Smoothness", Range(0.1, 1.0)) = 0.1
 
         [NoScaleOffset] _MainTex ("Albedo", 2D) = "white" {}
@@ -25,17 +27,22 @@ Shader "Soulex/Surface/Standard Toon"
         [NoScaleOffset] _ParallaxMap ("Height Map", 2D) = "black" {}
 
         [NoScaleOffset] _OcclusionMap ("Occlusion", 2D) = "white" {}
-
-        _EmissionColor ("Emission Color", Color) = (0, 0, 0, 0)
-        [NoScaleOffset] _EmissionMap ("Emission", 2D) = "white" {}
-
-        _DetailAlbedoMap ("Detail Texture", 2D) = "black" {}
-        _DetailProminence ("Detail Prominence", Range(0, 1)) = 0.2
-
+        
         _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
         _Offset ("Offset", Vector) = (0, 0, 0, 0)
 
+        [Header(Emission Properties)][Space]
+        _EmissionColor ("Emission Color", Color) = (0, 0, 0, 0)
+        [NoScaleOffset] _EmissionMap ("Emission", 2D) = "white" {}
+
+        [Header(Detail Layer)][Space]
+        _DetailAlbedoMap ("Detail Texture", 2D) = "black" {}
+        _DetailProminence ("Detail Prominence", Range(0, 1)) = 0.2
+        _DetailColor ("Detail Color", Color) = (0, 0, 0, 0)
+
+        [Header(Debug Parameters)][Space]
         [Toggle] _UseSlice ("Use Slice", Float) = 0
+        [Toggle] _ColorOnly ("Color Only", Float) = 0
         [HideInInspector] _SliceCenterOne ("Slice Center One", Vector) = (0, 0, 0, 0)
         [HideInInspector] _SliceCenterTwo ("Slice Center Two", Vector) = (0, 0, 0, 0)
 
@@ -72,6 +79,7 @@ Shader "Soulex/Surface/Standard Toon"
             float2 uv_Normal;
             float3 viewDir;
             float3 worldPos;
+            float4 screenPos;
         };
 
         half _RampSmoothness;
@@ -99,6 +107,7 @@ Shader "Soulex/Surface/Standard Toon"
 
         sampler2D _DetailAlbedoMap;
         half _DetailProminence;
+        half3 _DetailColor;
         
         float2 _Tiling;
         float2 _Offset;
@@ -106,6 +115,7 @@ Shader "Soulex/Surface/Standard Toon"
         fixed4 _Color;
 
         float _UseSlice;
+        float _ColorOnly;
 
         float3 _SliceCenterOne;
         float3 _SliceCenterTwo;
@@ -124,6 +134,7 @@ Shader "Soulex/Surface/Standard Toon"
             half Roughness;
             half Occlusion;
             fixed Alpha;
+            fixed2 screenUv;
         };
         half3 BRDFToon(half3 diffColor, half3 specColor, half oneMinusReflectivity, half smoothness, 
         float3 normal, float3 viewDir, UnityLight light, UnityIndirect gi)
@@ -138,10 +149,15 @@ Shader "Soulex/Surface/Standard Toon"
             float3 halfDirection = Unity_SafeNormalize(viewDirection + lightDirection);
             float3 lightReflectDirection = normalize(reflect(-lightDirection, normal));
             
-            half NdotL = smoothstep(0, _RampSmoothness, DotClamped(normal, lightDirection));
+            half preNdotL = DotClamped(normal, lightDirection);
+            half NdotL = smoothstep(0, _RampSmoothness, preNdotL);
             half NdotH = DotClamped(normal, halfDirection);
             half NdotV = abs(dot(normal, viewDirection));
             half LdotH = DotClamped(lightDirection, halfDirection);
+
+            //half shadowMix = lerp(1 - darkShadow * 0.95, 1 - lightShadow * -0.2, NdotL);
+            //shadowMix = lerp(shadowMix, 1, saturate(preNdotL + 0.5));
+            //NdotL *= shadowMix;
 
             half diffuseTerm = DisneyDiffuse(NdotV, NdotL, LdotH, perceptualRoughness) * NdotL;
 
@@ -149,11 +165,19 @@ Shader "Soulex/Surface/Standard Toon"
             half steps;
 
             #ifdef _SPECULARMODE_TRUEPBR
-                steps = _RampSmoothness * _RampSmoothness * 100;
+                steps = _RampSmoothness * _RampSmoothness * 100 * 64;
+    
+                //steps = 64;
+                
+                //float rNdotL = round(NdotL * steps) / steps;
+                //float rNdotV = round(NdotV * steps) / steps;
+    
+                float rNdotH = round(NdotH * steps) / steps;
+                
                 float V = SmithJointGGXVisibilityTerm(NdotL, NdotV, roughness);
-                float D = GGXTerm(NdotH, roughness);
+                float D = GGXTerm(rNdotH, roughness);
                 specularTerm = V * D * UNITY_PI;
-                specularTerm = lerp(round(specularTerm * steps) / steps, specularTerm, 1 - smoothness);
+                //specularTerm = lerp(round(specularTerm * steps) / steps, specularTerm, 1 - smoothness);
             #elif _SPECULARMODE_STYLIZEDPBR
                 steps = _RampSmoothness * _RampSmoothness * 300;
                 specularTerm = round(pow(NdotH * NdotL, smoothness * 10) * steps) / steps;
@@ -181,27 +205,19 @@ Shader "Soulex/Surface/Standard Toon"
                 gi = UnityGlobalIllumination(data, s.Occlusion, s.Normal, g);
             #endif
         }
-        half4 LightingRamp(SurfaceOutputToon s, float3 viewDir, UnityGI gi/*, out half4 outDiffuseOcclusion, out half4 outSpecSmoothness, out half4 outNormal*/)
+        half4 LightingRamp(SurfaceOutputToon s, float3 viewDir, UnityGI gi)
         {
             float3 normal = normalize(s.Normal);
             float3 viewDirection = normalize(viewDir);
-            //float3 viewReflectDirection = normalize(reflect(-viewDirection, normal));
-
             half oneMinusReflectivity;
             half3 specColor;
 
             s.Albedo = DiffuseAndSpecularFromMetallic(s.Albedo, s.Metallic, specColor, oneMinusReflectivity);
 
+            //half darkShadow = tex2D(_DarkShadowTex, s.screenUv).r;
+            //half lightShadow = tex2D(_LightShadowTex, s.screenUv).r;
+
             half3 c = BRDFToon(s.Albedo, specColor, oneMinusReflectivity, 1 - s.Roughness, normal, viewDirection, gi.light, gi.indirect);
-
-            //UnityStandardData data;
-            //data.diffuseColor = s.Albedo;
-            //data.occlusion = s.Occlusion;
-            //data.specularColor = specColor;
-            //data.smoothness = 1 - s.Roughness;
-            //data.normalWorld = s.Normal;
-
-            //UnityStandardDataToGbuffer(data, outDiffuseOcclusion, outSpecSmoothness, outNormal);
 
             half4 emission = half4(s.Emission + c, s.Alpha);
 
@@ -221,20 +237,31 @@ Shader "Soulex/Surface/Standard Toon"
 
             o.viewDir = IN.viewDir;
             o.worldPos = IN.worldPos;
+            //o.screenUv = IN.screenPos.xy / IN.screenPos.w;
+            //o.screenUv.x *= (_ScreenParams.x / _ScreenParams.y);
 
-            o.Albedo = lerp(col.rgb, detailCol.rgb, detailMask);
+            //o.screenUv *= 8;
 
-            o.Normal = UnpackScaleNormal(tex2D(_BumpMap, uv), _BumpScale);
+            o.Albedo = lerp(col.rgb, detailCol.rgb * _DetailColor, detailMask);
 
-            o.Metallic = tex2D(_MetallicGlossMap, uv).r * _Metallic;
+            if (_ColorOnly == 0)
+            {
+                o.Normal = UnpackScaleNormal(tex2D(_BumpMap, uv), _BumpScale);
 
-            o.Roughness = tex2D(_SpecGlossMap, uv).r * _Glossiness;
+                o.Metallic = tex2D(_MetallicGlossMap, uv).r * _Metallic;
 
-            o.Occlusion = tex2D(_OcclusionMap, uv).r;
+                o.Roughness = tex2D(_SpecGlossMap, uv).r * _Glossiness;
 
-            o.Emission = tex2D(_EmissionMap, uv) * _EmissionColor;
+                o.Occlusion = tex2D(_OcclusionMap, uv).r;
 
-            o.Alpha = col.a;
+                o.Emission = tex2D(_EmissionMap, uv) * _EmissionColor;
+
+                o.Alpha = col.a;
+            }
+            else
+            {
+                o.Roughness = tex2D(_SpecGlossMap, uv).r * _Glossiness;
+            }
 
             float sliceA = dot(_SliceNormalOne, IN.worldPos - _SliceCenterOne);
             float sliceB = dot(_SliceNormalTwo, IN.worldPos - _SliceCenterTwo);

@@ -129,11 +129,18 @@ namespace Neverway.Framework.PawnManagement
         public static void AddWidget(GameObject _widgetBlueprint)
         {
             var canvas = GameObject.FindWithTag("UserInterface");
-            var newWidget = Instantiate(_widgetBlueprint, canvas.transform, false);
-            newWidget.transform.localScale = new Vector3(1, 1, 1);
+            if (canvas)
+            {
+                var newWidget = Instantiate(_widgetBlueprint, canvas.transform, false);
+                newWidget.transform.localScale = new Vector3(1, 1, 1);
 
-            // Remove (Clone) from the name since we reference the widgets by name 
-            newWidget.name = newWidget.name.Replace("(Clone)", "").Trim();
+                // Remove (Clone) from the name since we reference the widgets by name 
+                newWidget.name = newWidget.name.Replace("(Clone)", "").Trim();
+            }
+            else
+            {
+                DevConsole.LogError($"Failed to find canvas in AddWidget, canvas returns '{canvas}'", "Game Instance");
+            }
         }
 
         /// <summary>
@@ -151,6 +158,10 @@ namespace Neverway.Framework.PawnManagement
                     var widget = canvas.transform.GetChild(i).gameObject;
                     if (widget.name == _widgetName) return widget;
                 }
+            }
+            else
+            {
+                DevConsole.LogError($"Failed to find canvas in GetWidget, canvas returns '{canvas}'", "Game Instance");
             }
 
             return null;

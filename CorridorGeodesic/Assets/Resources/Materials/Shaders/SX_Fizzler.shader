@@ -95,7 +95,7 @@ Shader "Soulex/Effects/Fizzler"
 
                 TriplanarUV UVs = GetTriplanarUVs(i.worldPos, i.normal, _TriplanarSharpness, mod, _MainTex, _MainTex_ST);
 
-                PixelizeTriplanarUV(UVs, 128);
+                //PixelizeTriplanarUV(UVs, 128);
 
                 mod.uvScale = 0.125;
                 mod.uvOffset = _ScrollDirection * _Time.x * 0.25;
