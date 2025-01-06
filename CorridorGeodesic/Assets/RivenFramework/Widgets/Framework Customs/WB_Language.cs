@@ -36,7 +36,7 @@ namespace Neverway.Framework
         private void Start()
         {
             applicationSettings = FindObjectOfType<ApplicationSettings>();
-            buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
+            if (buttonBack) buttonBack.onClick.AddListener(() => { Destroy(gameObject); });
         }
 
 

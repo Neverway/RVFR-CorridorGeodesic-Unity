@@ -37,6 +37,9 @@ namespace Neverway.Framework.ApplicationManagement
         public bool showFramecounter;
 
         // Quality
+        [Range(0, 4)]
+        public int qualityPreset;
+        
         [Tooltip("0-25%, 1-50%, 2-75%, 3-100%, 4-200%")] [Range(0, 4)]
         public int resolutionScale;
 
@@ -124,6 +127,7 @@ namespace Neverway.Framework.ApplicationManagement
             fpsLimit = 60;
             showFramecounter = false;
 
+            qualityPreset = 3;
             resolutionScale = 3;
             shadowQuality = 2;
             effectsQuality = 2;
@@ -185,6 +189,7 @@ namespace Neverway.Framework.ApplicationManagement
             fpsLimit = other.fpsLimit;
             showFramecounter = other.showFramecounter;
 
+            qualityPreset = other.qualityPreset;
             resolutionScale = other.resolutionScale;
             shadowQuality = other.shadowQuality;
             effectsQuality = other.effectsQuality;

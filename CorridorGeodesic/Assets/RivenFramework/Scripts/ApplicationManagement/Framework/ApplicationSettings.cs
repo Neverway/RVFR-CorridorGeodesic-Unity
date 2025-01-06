@@ -30,8 +30,13 @@ namespace Neverway.Framework.ApplicationManagement
         [ReadOnly] [SerializeField] private ApplicationSettingsData defaultSettingsData;
         [Tooltip("The current, possibly unapplied, values for the settings")]
         public ApplicationSettingsData currentSettingsData;
-        [Tooltip("A list of which folders contain textures that are affected by the dynamic texture filters")] 
-        [SerializeField] private List<string> dynamicallyFilteredTexturePaths = new List<string> {"Materials/Textures/DynamicallyFiltered"};
+
+        [Tooltip("A list of which folders contain textures that are affected by the dynamic texture filters")]
+        [SerializeField]
+        private List<string> dynamicallyFilteredTexturePaths =
+            new List<string> { "Materials/Textures/DynamicallyFiltered" };
+
+        public bool debugForceEnableFirstTimeSetup;
 
 
         //=-----------------=
@@ -91,7 +96,7 @@ namespace Neverway.Framework.ApplicationManagement
         {
             DevConsole.Log("Initializing application settings...", "App Config");
             // If we have a config file...
-            if (File.Exists(configurationFilePath))
+            if (File.Exists(configurationFilePath) && !debugForceEnableFirstTimeSetup)
             {
                 var json = File.ReadAllText(configurationFilePath);
                 var data = JsonUtility.FromJson<ApplicationSettingsData>(json);

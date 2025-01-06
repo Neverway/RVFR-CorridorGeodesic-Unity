@@ -37,6 +37,7 @@ namespace Neverway.Framework.ApplicationManagement
         [SerializeField] private Toggle showFramecounter;
 
         // Quality
+        [SerializeField] public Button_Selector qualityPreset;
         [SerializeField] public Button_Selector resolutionScale;
         [SerializeField] public Button_Selector shadowQuality;
         [SerializeField] public Button_Selector effectsQuality;
@@ -64,6 +65,7 @@ namespace Neverway.Framework.ApplicationManagement
         {
             applicationSettings.currentSettingsData.windowMode = windowMode.currentIndex;
 
+            applicationSettings.currentSettingsData.qualityPreset = qualityPreset.currentIndex;
             applicationSettings.currentSettingsData.resolutionScale = resolutionScale.currentIndex;
             applicationSettings.currentSettingsData.shadowQuality = shadowQuality.currentIndex;
             applicationSettings.currentSettingsData.effectsQuality = effectsQuality.currentIndex;
@@ -88,6 +90,7 @@ namespace Neverway.Framework.ApplicationManagement
             fpslimit.value = applicationSettings.currentSettingsData.fpsLimit;
             showFramecounter.isOn = applicationSettings.currentSettingsData.showFramecounter;
 
+            qualityPreset.currentIndex = applicationSettings.currentSettingsData.qualityPreset;
             resolutionScale.currentIndex = applicationSettings.currentSettingsData.resolutionScale;
             shadowQuality.currentIndex = applicationSettings.currentSettingsData.shadowQuality;
             effectsQuality.currentIndex = applicationSettings.currentSettingsData.effectsQuality;
