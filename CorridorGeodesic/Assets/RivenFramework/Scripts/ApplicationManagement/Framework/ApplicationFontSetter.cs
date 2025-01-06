@@ -35,7 +35,7 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         private void Start()
         {
-            InvokeRepeating(nameof(UpdateFonts), 0, 1);
+            InvokeRepeating(nameof(UpdateFonts), 0, 0.25f);
         }
 
         private void UpdateFonts()
