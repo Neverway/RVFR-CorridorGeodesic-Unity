@@ -1,6 +1,7 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Physics doors seem to become offset from their root when sliced,
+// this forces them to always be at the same position offset from their parent
 // Notes:
 //
 //=============================================================================
@@ -9,12 +10,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class BuggyDoorPositionFix : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
-
+    [SerializeField] private Vector3 positionOffsetFromParent;
 
     //=-----------------=
     // Private Variables
@@ -36,7 +37,10 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void Update()
     {
-    
+        if (transform.localPosition != positionOffsetFromParent)
+        {
+            transform.localPosition = positionOffsetFromParent;
+        }
     }
 
     //=-----------------=

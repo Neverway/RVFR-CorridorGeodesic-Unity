@@ -1,11 +1,10 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: Adds logic functions to the tv props
 // Notes:
 //
 //=============================================================================
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -48,10 +47,6 @@ public class Actor_TV : LogicComponent
         
         tvOverlay.material = overlayUnpowered;
         OnUnpowered.Invoke();
-    }
-
-    private void Update()
-    {
     }
     
     public override void SourcePowerStateChanged(bool powered)

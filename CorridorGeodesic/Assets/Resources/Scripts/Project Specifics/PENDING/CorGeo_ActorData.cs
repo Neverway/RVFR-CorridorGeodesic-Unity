@@ -6,8 +6,6 @@
 //=============================================================================
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 
@@ -16,7 +14,7 @@ public class CorGeo_ActorData : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    [Tooltip("If enabled, this object will not be disabled in in fully collapsed null-space")]
+    [Tooltip("If enabled, this object will not be disabled in a fully collapsed null-space")]
     [SerializeField] public bool activeInNullSpace = false;
     [Tooltip("Uncheck this if the object has a special death animation")]
     public bool destroyedInKillTrigger=true;
@@ -109,7 +107,7 @@ public class CorGeo_ActorData : MonoBehaviour
     {
         if (rigidbody == null) return;
 
-          prevVelocity = rigidbody.velocity;
+        prevVelocity = rigidbody.velocity;
         rigidbody.isKinematic = true;
     }
 

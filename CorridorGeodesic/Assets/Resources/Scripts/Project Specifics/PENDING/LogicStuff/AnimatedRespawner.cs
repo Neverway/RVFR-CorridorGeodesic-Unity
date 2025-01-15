@@ -1,4 +1,4 @@
-//===================== (Neverway 2024) Written by Liz M. =====================
+//===================== (Neverway 2024) Written by Connorses =====================
 //
 // Purpose:
 // Notes:
@@ -7,11 +7,7 @@
 
 using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements.Experimental;
-using Neverway.Framework.LogicSystem;
 
 public class AnimatedRespawner : Prop_Respawner
 {
@@ -24,14 +20,13 @@ public class AnimatedRespawner : Prop_Respawner
     //=-----------------=
     // Private Variables
     //=-----------------=
-
     [SerializeField] private Transform animStartPos;
     [SerializeField] private Transform animEndPos;
     [SerializeField] private float animDuration;
     [SerializeField] private Ease animEaseCurve = Ease.InQuad;
     [SerializeField] private float spawnVelocity;
 
-    //This is the object that will be used for the tween animation, before the real object is spawned in.
+    [Tooltip("This is the object that will be used for the tween animation, before the real object is spawned in.")]
     [SerializeField] private GameObject animatedObject;
 
     [SerializeField] Animator anim;

@@ -36,6 +36,7 @@ GameObject:
   - component: {fileID: 7671813606931478154}
   - component: {fileID: 4134968938103219640}
   - component: {fileID: 3836919005447195509}
+  - component: {fileID: 705811765077282990}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -265,11 +266,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultSettingsData:
+    configurationFileCompatibilityVersion: 1
     targetResolution: 0
     windowMode: 0
     enableVysnc: 0
-    fpslimit: 60
+    fpsLimit: 60
     showFramecounter: 0
+    qualityPreset: 3
     resolutionScale: 3
     shadowQuality: 2
     effectsQuality: 2
@@ -311,11 +314,13 @@ MonoBehaviour:
     screenReader: 0
     localeID: 0
   currentSettingsData:
+    configurationFileCompatibilityVersion: 1
     targetResolution: 0
     windowMode: 0
     enableVysnc: 0
-    fpslimit: 60
+    fpsLimit: 60
     showFramecounter: 0
+    qualityPreset: 3
     resolutionScale: 3
     shadowQuality: 2
     effectsQuality: 2
@@ -356,7 +361,9 @@ MonoBehaviour:
     reduceStrobing: 0
     screenReader: 0
     localeID: 0
-  debugApply: 0
+  dynamicallyFilteredTexturePaths:
+  - Materials/Textures/DynamicallyFiltered
+  debugForceEnableFirstTimeSetup: 0
   audioMixer: {fileID: 24100000, guid: 549b84953554a157688e4ed0cb77d9a7, type: 2}
   cameraPrefab: {fileID: 1032958373095033568, guid: 94967e615899f4eb88f9883b59fd0167,
     type: 3}
@@ -1272,3 +1279,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   polkaDotTex: {fileID: 2800000, guid: 7da25098e4b705445a1c7f7e064bb119, type: 3}
   stripeTex: {fileID: 2800000, guid: df20f755ebc0b1f4a87e5ef738aac8a5, type: 3}
+--- !u!114 &705811765077282990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19ec269d0ad479b9fad4f91afd3aae32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
