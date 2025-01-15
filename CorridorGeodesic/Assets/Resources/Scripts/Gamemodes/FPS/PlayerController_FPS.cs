@@ -14,6 +14,7 @@ using Neverway.Framework;
 using Neverway.Framework.ApplicationManagement;
 using Neverway.Framework.LogicSystem;
 using Neverway.Framework.PawnManagement;
+using Debug = UnityEngine.Debug;
 using GameInstance = Neverway.Framework.PawnManagement.GameInstance;
 
 namespace Neverway
@@ -25,9 +26,12 @@ namespace Neverway
         //=-----------------=
         // Public Variables
         //=-----------------=
+        [Tooltip("How hard a physics prop is tossed when the player throws it")]
         [SerializeField] public float throwForce = 150;
+        [Tooltip("How many seconds after the player has stepped off a ledge can they still jump for")]
         [SerializeField] public float coyoteTime = 0.2f;
         [SerializeField] public float jumpInputBuffer = 0.2f;
+        [Tooltip("Debug parameter to allow the player to spam jump to fly around a level")]
         [SerializeField] public bool allowJumpCheat = true;
 
         //=-----------------=
@@ -43,6 +47,8 @@ namespace Neverway
         private bool ignoreGroundCheckToAvoidDoubleJump = false;
         private bool doJumpCheat = false;
 
+        private bool isCrouching;
+
         [HideInInspector] public float yRotation;
         [HideInInspector] public float xRotation;
 
@@ -54,11 +60,11 @@ namespace Neverway
         private Rigidbody rigidbody;
         private Camera viewCamera;
         private InputActions.FirstPersonShooterActions fpsActions;
+        private CapsuleCollider collider1;
+        private CapsuleCollider collider2;
 
-        [Tooltip(
-            "When the player presses the interact action this volume prefab is created and used similar to a raycast for detecting interactions")]
-        [SerializeField]
-        private GameObject interactionVolume;
+        [Tooltip("When the player presses the interact action this volume prefab is created and used similar to a raycast for detecting interactions")]
+        [SerializeField] private GameObject interactionVolume;
 
 
         //=-----------------=
@@ -102,6 +108,7 @@ namespace Neverway
             UpdateMovement(_pawn);
             UpdateRotation(_pawn);
             UpdateJumping(_pawn);
+            UpdateCrouching(_pawn);
 
             // Calculate Slope Movement
             slopMoveDirection = Vector3.ProjectOnPlane(moveDirection, _pawn.slopeHit.normal);
@@ -317,74 +324,83 @@ namespace Neverway
             }
         }
 
+        private void UpdateCrouching(Pawn _pawn)
+        {
+            // ensure we have references to our colliders
+            
+            
+            // if we are holding crouch and we aren't crouching
+            if (fpsActions.Crouch.IsPressed() && !isCrouching)
+            {
+                // set crouching
+                isCrouching = true;
+                // scale the collider down
+                
+                // adjust the collider offset
+                
+            }
+            // if we are not holding crouch and we are crouching
+            if (!fpsActions.Crouch.IsPressed() && isCrouching)
+            {
+                // set not crouching
+                isCrouching = false;
+                // scale the collider up
+                
+                // adjust the collider offset back
+                
+            }
+        }
+
         private void MovePlayer(Pawn _pawn)
         {
-            /*if (_pawn.IsGrounded3D() && !_pawn.IsGroundSloped3D())
+            var currentVelocity = rigidbody.velocity;
+            var desiredGroundDirection = moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier);
+            var desiredAirDirection = moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.airMovementMultiplier);
+            var accelerationRate = 0.1f;
+            Debug.Log($"C{currentVelocity}");
+            Debug.Log($"T{desiredGroundDirection}");
+            
+            // Ground Movement
+            if (_pawn.IsGrounded3D() && !_pawn.IsGroundSloped3D())
             {
-                rigidbody.AddForce(
-                    moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier),
-                    ForceMode.Acceleration);
+                // if current is less than target and target is positive, or current is greater than target and target is negative
+                if (currentVelocity.x < desiredGroundDirection.x && desiredGroundDirection.x > 0f || currentVelocity.x > desiredGroundDirection.x && desiredGroundDirection.x < 0f )
+                {
+                    rigidbody.velocity += new Vector3(desiredGroundDirection.x*accelerationRate, 0, 0);
+                }
+                if (currentVelocity.z < desiredGroundDirection.z && desiredGroundDirection.z > 0f || currentVelocity.z > desiredGroundDirection.z && desiredGroundDirection.z < 0f )
+                {
+                    rigidbody.velocity += new Vector3(0, 0, desiredGroundDirection.z*accelerationRate);
+                }
             }
+            // Air Movement
+            else
+            {
+                // if current is less than target and target is positive, or current is greater than target and target is negative
+                if (currentVelocity.x < desiredAirDirection.x && desiredAirDirection.x > 0f || currentVelocity.x > desiredAirDirection.x && desiredAirDirection.x < 0f )
+                {
+                    rigidbody.velocity += new Vector3(desiredAirDirection.x*accelerationRate, 0, 0);
+                }
+                if (currentVelocity.z < desiredAirDirection.z && desiredAirDirection.z > 0f || currentVelocity.z > desiredAirDirection.z && desiredAirDirection.z < 0f )
+                {
+                    rigidbody.velocity += new Vector3(0, 0, desiredAirDirection.z*accelerationRate);
+                }
+            }
+            // Slope Movement
+            /*
             else if (_pawn.IsGrounded3D() && _pawn.IsGroundSloped3D())
             {
                 rigidbody.AddForce(
                     slopMoveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier),
                     ForceMode.Acceleration);
             }
+            // Air Movement
             else
             {
                 rigidbody.AddForce(
                     moveDirection.normalized * (_pawn.currentState.movementSpeed * (_pawn.currentState.movementMultiplier * _pawn.currentState.airMovementMultiplier)),
                     ForceMode.Acceleration);
             }*/
-
-            //if (_pawn.IsGrounded3D ())
-            {
-                //horizontalVelocity represents the X and Z axis of the velocity. YVel is kept separate.
-                Vector2 horizonalVelocity = new Vector2(rigidbody.velocity.x, rigidbody.velocity.z);
-                float yVel = rigidbody.velocity.y;
-                float horizontalMagnitude = horizonalVelocity.magnitude;
-
-
-                float velocityClamp = _pawn.currentState.maxHorizontalMovementSpeed;
-                if (!_pawn.IsGrounded3D() || _pawn.IsGroundSteep3D())
-                {
-                    velocityClamp = _pawn.currentState.maxHorizontalAirSpeed;
-                }
-
-                if (horizonalVelocity.magnitude > velocityClamp)
-                {
-                    velocityClamp = horizonalVelocity.magnitude;
-                }
-
-                Vector2 horiMove = new Vector2(moveDirection.x, moveDirection.z);
-
-                float movementMult = _pawn.currentState.movementMultiplier;
-                if (!_pawn.IsGrounded3D() || _pawn.IsGroundSteep3D())
-                {
-                    movementMult = _pawn.currentState.airMovementMultiplier;
-                }
-
-                horizonalVelocity += horiMove.normalized * _pawn.currentState.movementSpeed * movementMult;
-
-                if (horizonalVelocity.magnitude > velocityClamp)
-                {
-                    horizonalVelocity = horizonalVelocity.normalized * velocityClamp;
-                    if (_pawn.IsGrounded3D())
-                    {
-                        horizonalVelocity *= 0.99f;
-                    }
-                }
-
-                if (_pawn.IsGrounded3D() && Mathf.Abs(moveDirection.x) < 0.2f && Mathf.Abs(moveDirection.z) < 0.2f)
-                {
-                    // if player isn't moving (beyond a dead zone), we add some friction on the ground.
-                    horizonalVelocity *= 0.8f;
-                }
-
-
-                rigidbody.velocity = new Vector3(horizonalVelocity.x, yVel, horizonalVelocity.y);
-            }
         }
 
         private void ControlDrag(Pawn _pawn)
