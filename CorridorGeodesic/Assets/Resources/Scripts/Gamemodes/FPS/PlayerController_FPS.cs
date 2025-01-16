@@ -354,36 +354,52 @@ namespace Neverway
         private void MovePlayer(Pawn _pawn)
         {
             var currentVelocity = rigidbody.velocity;
-            var desiredGroundDirection = moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier);
-            var desiredAirDirection = moveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.airMovementMultiplier);
-            var accelerationRate = 0.1f;
-            Debug.Log($"C{currentVelocity}");
-            Debug.Log($"T{desiredGroundDirection}");
+            var desiredGroundVelocity = moveDirection * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier);
+            var desiredSlopeVelocity = slopMoveDirection * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier);
+            var desiredAirVelocity = moveDirection * (_pawn.currentState.movementSpeed * (_pawn.currentState.movementMultiplier * _pawn.currentState.airMovementMultiplier));
+            var groundAccelerationRate = 0.1f;
+            var slopeAccelerationRate = 0.08f;
+            var airAccelerationRate = 0.2f;
+            //Debug.Log($"C{currentVelocity}");
+            Debug.Log($"T{desiredGroundVelocity}");
             
             // Ground Movement
             if (_pawn.IsGrounded3D() && !_pawn.IsGroundSloped3D())
             {
                 // if current is less than target and target is positive, or current is greater than target and target is negative
-                if (currentVelocity.x < desiredGroundDirection.x && desiredGroundDirection.x > 0f || currentVelocity.x > desiredGroundDirection.x && desiredGroundDirection.x < 0f )
+                if (currentVelocity.x < desiredGroundVelocity.x && desiredGroundVelocity.x > 0f || currentVelocity.x > desiredGroundVelocity.x && desiredGroundVelocity.x < 0f )
                 {
-                    rigidbody.velocity += new Vector3(desiredGroundDirection.x*accelerationRate, 0, 0);
+                    rigidbody.velocity += new Vector3(desiredGroundVelocity.x*groundAccelerationRate, 0, 0);
                 }
-                if (currentVelocity.z < desiredGroundDirection.z && desiredGroundDirection.z > 0f || currentVelocity.z > desiredGroundDirection.z && desiredGroundDirection.z < 0f )
+                if (currentVelocity.z < desiredGroundVelocity.z && desiredGroundVelocity.z > 0f || currentVelocity.z > desiredGroundVelocity.z && desiredGroundVelocity.z < 0f )
                 {
-                    rigidbody.velocity += new Vector3(0, 0, desiredGroundDirection.z*accelerationRate);
+                    rigidbody.velocity += new Vector3(0, 0, desiredGroundVelocity.z*groundAccelerationRate);
+                }
+            }
+            // Slope Movement
+            else if (_pawn.IsGrounded3D() && _pawn.IsGroundSloped3D())
+            {
+                // if current is less than target and target is positive, or current is greater than target and target is negative
+                if (currentVelocity.x < desiredSlopeVelocity.x && desiredSlopeVelocity.x > 0f || currentVelocity.x > desiredSlopeVelocity.x && desiredSlopeVelocity.x < 0f )
+                {
+                    rigidbody.velocity += new Vector3(desiredSlopeVelocity.x*slopeAccelerationRate, 0, 0);
+                }
+                if (currentVelocity.z < desiredSlopeVelocity.z && desiredSlopeVelocity.z > 0f || currentVelocity.z > desiredSlopeVelocity.z && desiredSlopeVelocity.z < 0f )
+                {
+                    rigidbody.velocity += new Vector3(0, 0, desiredSlopeVelocity.z*slopeAccelerationRate);
                 }
             }
             // Air Movement
             else
             {
                 // if current is less than target and target is positive, or current is greater than target and target is negative
-                if (currentVelocity.x < desiredAirDirection.x && desiredAirDirection.x > 0f || currentVelocity.x > desiredAirDirection.x && desiredAirDirection.x < 0f )
+                if (currentVelocity.x < desiredAirVelocity.x && desiredAirVelocity.x > 0f || currentVelocity.x > desiredAirVelocity.x && desiredAirVelocity.x < 0f )
                 {
-                    rigidbody.velocity += new Vector3(desiredAirDirection.x*accelerationRate, 0, 0);
+                    rigidbody.velocity += new Vector3(desiredAirVelocity.x*airAccelerationRate, 0, 0);
                 }
-                if (currentVelocity.z < desiredAirDirection.z && desiredAirDirection.z > 0f || currentVelocity.z > desiredAirDirection.z && desiredAirDirection.z < 0f )
+                if (currentVelocity.z < desiredAirVelocity.z && desiredAirVelocity.z > 0f || currentVelocity.z > desiredAirVelocity.z && desiredAirVelocity.z < 0f )
                 {
-                    rigidbody.velocity += new Vector3(0, 0, desiredAirDirection.z*accelerationRate);
+                    rigidbody.velocity += new Vector3(0, 0, desiredAirVelocity.z*airAccelerationRate);
                 }
             }
             // Slope Movement
@@ -417,6 +433,7 @@ namespace Neverway
 
         private void ControlSprinting(Pawn _pawn)
         {
+            /*
             if (fpsActions.ClearRift.IsPressed() && _pawn.IsGrounded3D())
             {
                 _pawn.currentState.movementSpeed = Mathf.Lerp(_pawn.currentState.movementSpeed,
@@ -429,6 +446,7 @@ namespace Neverway
                     _pawn.defaultState.movementSpeed,
                     _pawn.currentState.sprintAcceleration * Time.deltaTime);
             }
+           */
         }
 
         private void OnDeath(Pawn _pawn)
