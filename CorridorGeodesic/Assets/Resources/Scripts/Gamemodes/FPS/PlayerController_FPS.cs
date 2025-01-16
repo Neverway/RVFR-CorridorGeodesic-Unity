@@ -358,10 +358,10 @@ namespace Neverway
             var desiredSlopeVelocity = slopMoveDirection * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier);
             var desiredAirVelocity = moveDirection * (_pawn.currentState.movementSpeed * (_pawn.currentState.movementMultiplier * _pawn.currentState.airMovementMultiplier));
             var groundAccelerationRate = 0.1f;
-            var slopeAccelerationRate = 0.08f;
+            var slopeAccelerationRate = 0.25f;
             var airAccelerationRate = 0.2f;
             //Debug.Log($"C{currentVelocity}");
-            Debug.Log($"T{desiredGroundVelocity}");
+            //Debug.Log($"T{desiredGroundVelocity}");
             
             // Ground Movement
             if (_pawn.IsGrounded3D() && !_pawn.IsGroundSloped3D())
@@ -402,21 +402,6 @@ namespace Neverway
                     rigidbody.velocity += new Vector3(0, 0, desiredAirVelocity.z*airAccelerationRate);
                 }
             }
-            // Slope Movement
-            /*
-            else if (_pawn.IsGrounded3D() && _pawn.IsGroundSloped3D())
-            {
-                rigidbody.AddForce(
-                    slopMoveDirection.normalized * (_pawn.currentState.movementSpeed * _pawn.currentState.movementMultiplier),
-                    ForceMode.Acceleration);
-            }
-            // Air Movement
-            else
-            {
-                rigidbody.AddForce(
-                    moveDirection.normalized * (_pawn.currentState.movementSpeed * (_pawn.currentState.movementMultiplier * _pawn.currentState.airMovementMultiplier)),
-                    ForceMode.Acceleration);
-            }*/
         }
 
         private void ControlDrag(Pawn _pawn)
