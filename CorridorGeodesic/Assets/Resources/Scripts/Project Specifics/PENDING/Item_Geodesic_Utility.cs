@@ -45,6 +45,11 @@ public class Item_Geodesic_Utility : MonoBehaviour
         
     }
     
+    public virtual void ReleasePrimary()
+    {
+        
+    }
+    
     public virtual void UseSecondary()
     {
         

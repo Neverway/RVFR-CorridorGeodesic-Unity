@@ -94,6 +94,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private float minRiftTimer;
     private float maxRiftWidth = 50f;
 
+    private bool primaryHeld = false;
     private bool secondaryHeld = false;
 
     private bool isCutPreviewActive = false;
@@ -156,6 +157,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     public override void UsePrimary ()
     {
         DeployInfinityMarker ();
+        primaryHeld = true;
     }
 
     public override void UseSecondary ()
@@ -170,22 +172,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         secondaryHeld = true;
     }
 
-    /// <summary>
-    /// Pause actors to avoid them being bumped by innaccurate collision meshes
-    /// </summary>
-    private IEnumerator FreezeActors ()
+    public override void ReleasePrimary ()
     {
-        delayRiftCollapse = true;
-        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
-        {
-            actor.Freeze ();
-        }
-        yield return null;
-        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
-        {
-            actor.UnFreeze ();
-        }
-        delayRiftCollapse = false;
+        primaryHeld = false;
     }
 
     public override void ReleaseSecondary ()
@@ -234,7 +223,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             moveRiftBackwards = false;
             moveRift = true;
         }
-        else if (Input.GetKey (KeyCode.LeftAlt) && allowExpandingRift)
+        else if (primaryHeld && allowExpandingRift || primaryHeld && !allowExpandingRift && riftTimer > 0)
         {
             if (!isCollapseStarted)
             {
@@ -873,6 +862,24 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Pause actors to avoid them being bumped by innaccurate collision meshes
+    /// </summary>
+    private IEnumerator FreezeActors ()
+    {
+        delayRiftCollapse = true;
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+            actor.Freeze ();
+        }
+        yield return null;
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+            actor.UnFreeze ();
+        }
+        delayRiftCollapse = false;
     }
 
     private void SetupForConvergingMarkers ()

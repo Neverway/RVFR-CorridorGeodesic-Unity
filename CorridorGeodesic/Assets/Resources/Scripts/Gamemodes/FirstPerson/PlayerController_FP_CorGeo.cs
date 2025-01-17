@@ -197,6 +197,13 @@ namespace Neverway
                         _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).UsePrimary();
                     }
                 }
+                if (fpActions.PlaceMarker.WasReleasedThisFrame())
+                {
+                    if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
+                    {
+                        _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).ReleasePrimary();
+                    }
+                }
             }
             // Throw object
             else
