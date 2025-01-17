@@ -18,7 +18,6 @@ namespace Neverway.Framework.ApplicationManagement
         // Public Variables
         //=-----------------=
         public List<string> targetActionMaps;
-        public string b;
 
 
         //=-----------------=

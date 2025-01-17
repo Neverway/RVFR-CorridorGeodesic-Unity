@@ -26,7 +26,6 @@ namespace Neverway
         //=-----------------=
         // Reference Variables
         //=-----------------=
-        private InputActions.FirstPersonShooterActions fpsActions;
         private WorldLoader worldLoader;
 
 
@@ -35,9 +34,6 @@ namespace Neverway
         //=-----------------=
         private void Start()
         {
-            // Setup inputs
-            fpsActions = new InputActions().FirstPersonShooter;
-            fpsActions.Enable();
         }
 
         private void Update()

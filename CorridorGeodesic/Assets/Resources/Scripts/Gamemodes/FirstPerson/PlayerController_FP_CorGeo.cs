@@ -19,9 +19,9 @@ using GameInstance = Neverway.Framework.PawnManagement.GameInstance;
 
 namespace Neverway
 {
-    [CreateAssetMenu(fileName = "PlayerController_FirstPersonShooter",
-        menuName = "Neverway/ScriptableObjects/Pawns & Gamemodes/Controllers/PlayerController_FirstPersonShooter")]
-    public class PlayerController_FirstPersonShooter : PawnController
+    [CreateAssetMenu(fileName = "PlayerController_FP_CorGeo",
+        menuName = "Neverway/ScriptableObjects/Pawns & Gamemodes/Controllers/PlayerController_FirstPerson_CorGeo")]
+    public class PlayerController_FirstPerson_CorGeo : PawnController
     {
         //=-----------------=
         // Public Variables
@@ -59,7 +59,7 @@ namespace Neverway
         private GameInstance gameInstance;
         private Rigidbody rigidbody;
         private Camera viewCamera;
-        private InputActions.FirstPersonShooterActions fpsActions;
+        private InputActions.FirstPersonActions fpActions;
         private CapsuleCollider collider1;
         private CapsuleCollider collider2;
 
@@ -78,8 +78,8 @@ namespace Neverway
             viewCamera = _pawn.GetComponentInChildren<Camera>();
 
             // Setup inputs
-            fpsActions = new InputActions().FirstPersonShooter;
-            fpsActions.Enable();
+            fpActions = new InputActions().FirstPerson;
+            fpActions.Enable();
 
             // Assign initial values
             rigidbody.mass = _pawn.currentState.gravityMultiplier;
@@ -142,7 +142,7 @@ namespace Neverway
         private void UpdatePauseMenu(Pawn _pawn)
         {
             // Pause Game
-            if (fpsActions.Pause.WasPressedThisFrame()) gameInstance.UI_ShowPause();
+            if (fpActions.Pause.WasPressedThisFrame()) gameInstance.UI_ShowPause();
 
             // Lock mouse when unpaused, unlock when paused
             if (_pawn.isPaused)
@@ -164,7 +164,7 @@ namespace Neverway
         {
             // Item usage
             if (!_pawn.physObjectAttachmentPoint) return;
-            if (fpsActions.Secondary.IsPressed())
+            if (fpActions.CollapseRift.IsPressed())
             {
                 if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
                 {
@@ -172,15 +172,15 @@ namespace Neverway
                 }
             }
 
-            if (fpsActions.Secondary.WasReleasedThisFrame())
+            if (fpActions.CollapseRift.WasReleasedThisFrame())
             {
                 if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
                 {
                     _pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false).ReleaseSecondary();
                 }
             }
-
-            if (fpsActions.ClearRift.WasPressedThisFrame())
+            
+            if (fpActions.ClearMarker.WasPressedThisFrame())
             {
                 if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
                 {
@@ -190,7 +190,7 @@ namespace Neverway
 
             if (!_pawn.physObjectAttachmentPoint.heldObject)
             {
-                if (fpsActions.Primary.WasPressedThisFrame())
+                if (fpActions.PlaceMarker.WasPressedThisFrame())
                 {
                     if (_pawn.transform.GetComponentInChildren<Item_Geodesic_Utility>(false))
                     {
@@ -201,7 +201,7 @@ namespace Neverway
             // Throw object
             else
             {
-                if (fpsActions.Primary.WasPressedThisFrame())
+                if (fpActions.PlaceMarker.WasPressedThisFrame())
                 {
                     _pawn.physObjectAttachmentPoint.heldObject.GetComponent<Rigidbody>()
                         .AddForce(viewCamera.transform.forward * throwForce, ForceMode.Impulse);
@@ -210,7 +210,7 @@ namespace Neverway
             }
 
             // Interact
-            if (fpsActions.Interact.WasPressedThisFrame())
+            if (fpActions.Interact.WasPressedThisFrame())
             {
                 if (_pawn.physObjectAttachmentPoint.heldObject != null
                     && _pawn.physObjectAttachmentPoint.heldObject.TryGetComponent<Object_Grabbable>(out var grabbable)
@@ -230,8 +230,8 @@ namespace Neverway
         private void UpdateMovement(Pawn _pawn)
         {
             // Pawn movement
-            moveDirection = _pawn.transform.forward * fpsActions.Move.ReadValue<Vector2>().y +
-                            _pawn.transform.right * fpsActions.Move.ReadValue<Vector2>().x;
+            moveDirection = _pawn.transform.forward * fpActions.Move.ReadValue<Vector2>().y +
+                            _pawn.transform.right * fpActions.Move.ReadValue<Vector2>().x;
             ControlDrag(_pawn);
             ControlSprinting(_pawn);
         }
@@ -248,9 +248,9 @@ namespace Neverway
             // Determine the input method (mouse or joystick)
             // ReSharper disable once ReplaceWithSingleAssignment.False
             bool isUsingMouse = false;
-            if (fpsActions.LookAxis.IsInProgress())
+            if (fpActions.LookAxis.IsInProgress())
             {
-                if (fpsActions.LookAxis.activeControl.device.name == "Mouse")
+                if (fpActions.LookAxis.activeControl.device.name == "Mouse")
                 {
                     isUsingMouse = true;
                 }
@@ -258,9 +258,9 @@ namespace Neverway
 
             // Apply the appropriate multiplier
             var multiplier = isUsingMouse ? mouseMultiplier : joystickMultiplier;
-            yRotation += fpsActions.LookAxis.ReadValue<Vector2>().x *
+            yRotation += fpActions.LookAxis.ReadValue<Vector2>().x *
                          (20 * applicationSettings.currentSettingsData.horizontalLookSpeed) * multiplier;
-            xRotation -= fpsActions.LookAxis.ReadValue<Vector2>().y *
+            xRotation -= fpActions.LookAxis.ReadValue<Vector2>().y *
                          (20 * applicationSettings.currentSettingsData.verticalLookSpeed) * multiplier;
 
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
@@ -287,7 +287,7 @@ namespace Neverway
                 }
             }
 
-            if (fpsActions.Jump.WasPressedThisFrame())
+            if (fpActions.Jump.WasPressedThisFrame())
                 timeLastInputJump = Time.time;
 
             if (!ignoreGroundCheckToAvoidDoubleJump && _pawn.IsGrounded3D() && !_pawn.IsGroundSteep3D())
@@ -330,7 +330,7 @@ namespace Neverway
             
             
             // if we are holding crouch and we aren't crouching
-            if (fpsActions.Crouch.IsPressed() && !isCrouching)
+            if (fpActions.Crouch.IsPressed() && !isCrouching)
             {
                 // set crouching
                 isCrouching = true;
@@ -340,7 +340,7 @@ namespace Neverway
                 
             }
             // if we are not holding crouch and we are crouching
-            if (!fpsActions.Crouch.IsPressed() && isCrouching)
+            if (!fpActions.Crouch.IsPressed() && isCrouching)
             {
                 // set not crouching
                 isCrouching = false;
@@ -419,7 +419,7 @@ namespace Neverway
         private void ControlSprinting(Pawn _pawn)
         {
             /*
-            if (fpsActions.ClearRift.IsPressed() && _pawn.IsGrounded3D())
+            if (fpActions.ClearRift.IsPressed() && _pawn.IsGrounded3D())
             {
                 _pawn.currentState.movementSpeed = Mathf.Lerp(_pawn.currentState.movementSpeed,
                     _pawn.defaultState.movementSpeed * _pawn.currentState.sprintSpeedMultiplier,

@@ -46,7 +46,7 @@ namespace Neverway.Framework
         //=-----------------=
         //[SerializeField] private Rigidbody positionReference;
         [SerializeField] private Pawn pawn;
-        [SerializeField] private PlayerController_FirstPersonShooter pawnController;
+        [SerializeField] private PlayerController_FirstPerson_CorGeo pawnController;
 
 
         //=-----------------=
@@ -69,9 +69,9 @@ namespace Neverway.Framework
         
         private void GetInput()
         {
-            if (pawn.currentController as PlayerController_FirstPersonShooter)
+            if (pawn.currentController as PlayerController_FirstPerson_CorGeo)
             {
-                pawnController = pawn.currentController as PlayerController_FirstPersonShooter;
+                pawnController = pawn.currentController as PlayerController_FirstPerson_CorGeo;
                 currentLook = new Vector2(pawnController.yRotation, pawnController.xRotation); // Don't ask me why we have to swap these axis, but if we don't, the rotations don't match ~Liz
                 lookInput = currentLook - lastLook;
                 lastLook = currentLook;
