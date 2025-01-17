@@ -50,7 +50,7 @@ public class WB_NotificationBox : MonoBehaviour
     private IEnumerator DeathTimer()
     {
         yield return new WaitForSeconds(timeTillDeath);
-        Destroy(this);
+        //Destroy(gameObject);
     }
 
 

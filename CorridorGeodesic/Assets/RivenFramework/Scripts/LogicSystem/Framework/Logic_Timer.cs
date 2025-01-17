@@ -77,8 +77,7 @@ namespace Neverway.Framework.LogicSystem
 
         public override void OnEnable()
         {
-            if (runTimerOnStart)
-                base.OnEnable();
+            if (runTimerOnStart) base.OnEnable();
         }
 
         //=-----------------=
