@@ -275,13 +275,14 @@ MonoBehaviour:
     fpsLimit: 60
     showFramecounter: 0
     qualityPreset: 3
-    resolutionScale: 3
-    shadowQuality: 2
-    effectsQuality: 2
-    textureQuality: 4
-    postprocessingQuality: 2
-    antialiasing: 2
-    motionBlur: 1
+    quality:
+      resolutionScale: 3
+      shadowQuality: 2
+      effectsQuality: 2
+      textureQuality: 4
+      postprocessingQuality: 2
+    antialiasing: 0
+    motionBlur: 0
     ambientOcclusion: 2
     bloom: 2
     outputDevice: 0
@@ -315,6 +316,36 @@ MonoBehaviour:
     reduceStrobing: 0
     screenReader: 0
     localeID: 0
+  retroQuality:
+    resolutionScale: 0
+    shadowQuality: 0
+    effectsQuality: 0
+    textureQuality: 0
+    postprocessingQuality: 0
+  lowQuality:
+    resolutionScale: 1
+    shadowQuality: 1
+    effectsQuality: 1
+    textureQuality: 1
+    postprocessingQuality: 1
+  mediumQuality:
+    resolutionScale: 2
+    shadowQuality: 2
+    effectsQuality: 2
+    textureQuality: 3
+    postprocessingQuality: 2
+  highQuality:
+    resolutionScale: 3
+    shadowQuality: 3
+    effectsQuality: 3
+    textureQuality: 4
+    postprocessingQuality: 3
+  fantasticQuality:
+    resolutionScale: 4
+    shadowQuality: 4
+    effectsQuality: 4
+    textureQuality: 4
+    postprocessingQuality: 4
   currentSettingsData:
     configurationFileCompatibilityVersion: 1
     targetResolution: 0
@@ -323,13 +354,63 @@ MonoBehaviour:
     fpsLimit: 60
     showFramecounter: 0
     qualityPreset: 3
-    resolutionScale: 3
-    shadowQuality: 2
-    effectsQuality: 2
-    textureQuality: 2
-    postprocessingQuality: 2
-    antialiasing: 2
-    motionBlur: 1
+    quality:
+      resolutionScale: 3
+      shadowQuality: 2
+      effectsQuality: 2
+      textureQuality: 4
+      postprocessingQuality: 2
+    antialiasing: 0
+    motionBlur: 0
+    ambientOcclusion: 2
+    bloom: 2
+    outputDevice: 0
+    inputDevice: 0
+    inputVolume: 100
+    masterVolume: 100
+    musicVolume: 100
+    soundVolume: 100
+    voiceVolume: 100
+    chatterVolume: 100
+    ambientVolume: 100
+    menuVolume: 100
+    visualizeSoundEffects: 0
+    closedCaptioning: 0
+    minVolume: 0
+    maxVolume: 140
+    minFrequency: 17
+    invertHorizontalView: 0
+    invertVerticalView: 0
+    horizontalLookSpeed: 1
+    verticalLookSpeed: 0.75
+    joystickLookSensitivity: 0.7
+    mouseLookSensitivity: 0.7
+    cameraFov: 90
+    hideTextChat: 0
+    enablePushToTalk: 0
+    brightness: 1
+    colorBlindIntensity: 1
+    colorBlindFilter: 0
+    dyslexicFriendlyFont: 0
+    reduceStrobing: 0
+    screenReader: 0
+    localeID: 0
+  bufferedSettingsData:
+    configurationFileCompatibilityVersion: 1
+    targetResolution: 0
+    windowMode: 0
+    enableVysnc: 0
+    fpsLimit: 60
+    showFramecounter: 0
+    qualityPreset: 3
+    quality:
+      resolutionScale: 3
+      shadowQuality: 2
+      effectsQuality: 2
+      textureQuality: 4
+      postprocessingQuality: 2
+    antialiasing: 0
+    motionBlur: 0
     ambientOcclusion: 2
     bloom: 2
     outputDevice: 0

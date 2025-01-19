@@ -139,7 +139,7 @@ namespace Neverway.Framework.PawnManagement
             }
             else
             {
-                DevConsole.LogError($"Failed to find canvas in AddWidget, canvas returns '{canvas}'", "Game Instance");
+                //DevConsole.LogError($"Failed to find canvas in AddWidget, canvas returns '{canvas}'", "Game Instance");
             }
         }
 
@@ -161,7 +161,7 @@ namespace Neverway.Framework.PawnManagement
             }
             else
             {
-                DevConsole.LogError($"Failed to find canvas in GetWidget, canvas returns '{canvas}'", "Game Instance");
+                //DevConsole.LogError($"Failed to find canvas in GetWidget, canvas returns '{canvas}'", "Game Instance");
             }
 
             return null;

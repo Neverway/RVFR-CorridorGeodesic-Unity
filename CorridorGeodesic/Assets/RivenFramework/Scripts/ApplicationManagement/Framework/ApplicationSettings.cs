@@ -10,7 +10,6 @@ using System.Collections;
 using System.Collections.Generic;
 using FMODUnity;
 using System.IO;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Localization.Settings;
@@ -26,10 +25,13 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         // Public Variables
         //=-----------------=
-        [Tooltip("The default values for the settings (pulled from the constructor in ApplicationSettingsData)")]
-        [ReadOnly] [SerializeField] private ApplicationSettingsData defaultSettingsData;
-        [Tooltip("The current, possibly unapplied, values for the settings")]
+        [Tooltip("The default values for the settings (pulled from the constructor in ApplicationSettingsData, overridden here)")]
+        [SerializeField] private ApplicationSettingsData defaultSettingsData;
+        public ApplicationSettingsData_Quality retroQuality, lowQuality, mediumQuality, highQuality, fantasticQuality;
+        [Tooltip("The current values for the settings")]
         public ApplicationSettingsData currentSettingsData;
+        [Tooltip("The unapplied values for the settings, current settings gets set to these values right before applying")]
+        public ApplicationSettingsData bufferedSettingsData;
 
         [Tooltip("A list of which folders contain textures that are affected by the dynamic texture filters")]
         [SerializeField]
@@ -197,7 +199,7 @@ namespace Neverway.Framework.ApplicationManagement
         {
             foreach (var texturePath in dynamicallyFilteredTexturePaths)
             {
-                switch (currentSettingsData.textureQuality)
+                switch (currentSettingsData.quality.textureQuality)
                 {
                     case 0:
                         foreach (var texture in Resources.LoadAll<Texture>(texturePath))
@@ -281,6 +283,8 @@ namespace Neverway.Framework.ApplicationManagement
 
         public void ApplySettings()
         {
+            currentSettingsData = new ApplicationSettingsData(bufferedSettingsData);
+            
             // Resolution
             Screen.SetResolution(resolutions[currentSettingsData.targetResolution].width,
                 resolutions[currentSettingsData.targetResolution].height, GetFullscreenMode());
@@ -325,7 +329,7 @@ namespace Neverway.Framework.ApplicationManagement
             }
 
             // Resolution Scale
-            switch (currentSettingsData.resolutionScale)
+            switch (currentSettingsData.quality.resolutionScale)
             {
                 case 0:
                     ScalableBufferManager.ResizeBuffers(0.25f, 0.25f);
@@ -345,7 +349,7 @@ namespace Neverway.Framework.ApplicationManagement
             }
 
             // Shadow Quality
-            switch (currentSettingsData.shadowQuality)
+            switch (currentSettingsData.quality.shadowQuality)
             {
                 case 0:
                     QualitySettings.shadows = ShadowQuality.Disable; // Real-time shadows (off)
@@ -380,7 +384,7 @@ namespace Neverway.Framework.ApplicationManagement
             }
 
             // Effects Quality
-            switch (currentSettingsData.effectsQuality)
+            switch (currentSettingsData.quality.effectsQuality)
             {
                 case 0:
                     QualitySettings.softParticles = false;
@@ -405,7 +409,7 @@ namespace Neverway.Framework.ApplicationManagement
             }
 
             // Texture Quality
-            switch (currentSettingsData.textureQuality)
+            switch (currentSettingsData.quality.textureQuality)
             {
                 case 0:
                     QualitySettings.globalTextureMipmapLimit = 12;

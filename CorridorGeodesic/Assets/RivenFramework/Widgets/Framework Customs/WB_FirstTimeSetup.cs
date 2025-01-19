@@ -18,11 +18,20 @@ public class WB_FirstTimeSetup : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-    public GameObject[] setupScreens;
+    [Tooltip("A list of the screens to toggle for the setup menu")]
+    [SerializeField] public GameObject[] setupScreens;
+    [Tooltip("A list of game objects to toggle in correlation with the current screen")]
+    [SerializeField] public GameObject[] screenObjects;
     [Header("Language")]
     [SerializeField] private Toggle dyslexicFriendlyFont;
     [Header("Graphics")]
     [SerializeField] public Button_Selector qualityPreset;
+    [SerializeField] public Image qualityPreview;
+    [SerializeField] public Sprite[] qualityPreviews;
+    [Header("Audio")]
+    [SerializeField] private Slider masterVolume;
+    [Header("Brightness")]
+    [SerializeField] public Slider brightness;
 
 
     //=-----------------=
@@ -54,14 +63,16 @@ public class WB_FirstTimeSetup : MonoBehaviour
             if (i == currentScreen)
             {
                 setupScreens[i].SetActive(true);
+                if (screenObjects[i]) screenObjects[i].SetActive(true);
             }
             else
             {
                 setupScreens[i].SetActive(false);
+                if (screenObjects[i]) screenObjects[i].SetActive(false);
             }
         }
         
-        applicationSettings.currentSettingsData.qualityPreset = qualityPreset.currentIndex;
+        //applicationSettings.currentSettingsData.qualityPreset = qualityPreset.currentIndex;
         applicationSettings.ApplySettings();
     }
 
@@ -70,7 +81,7 @@ public class WB_FirstTimeSetup : MonoBehaviour
     //=-----------------=
     private IEnumerator FinishFirstTimeSetup()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
     
@@ -78,6 +89,8 @@ public class WB_FirstTimeSetup : MonoBehaviour
     {
         dyslexicFriendlyFont.isOn = applicationSettings.currentSettingsData.dyslexicFriendlyFont;
         qualityPreset.currentIndex = applicationSettings.currentSettingsData.qualityPreset;
+        masterVolume.value = applicationSettings.currentSettingsData.masterVolume;
+        brightness.value = applicationSettings.currentSettingsData.brightness * 100;
     }
 
     private void InitEventListeners()
@@ -85,6 +98,18 @@ public class WB_FirstTimeSetup : MonoBehaviour
         dyslexicFriendlyFont.onValueChanged.AddListener(delegate
         {
             applicationSettings.currentSettingsData.dyslexicFriendlyFont = dyslexicFriendlyFont.isOn;
+        });
+        qualityPreset.onValueChanged.AddListener(delegate
+        {
+            qualityPreview.sprite = qualityPreviews[qualityPreset.currentIndex];
+        });
+        masterVolume.onValueChanged.AddListener(delegate
+        {
+            applicationSettings.currentSettingsData.masterVolume = Mathf.RoundToInt(masterVolume.value);
+        });
+        brightness.onValueChanged.AddListener(delegate
+        {
+            applicationSettings.currentSettingsData.brightness = brightness.value / 100;
         });
     }
 

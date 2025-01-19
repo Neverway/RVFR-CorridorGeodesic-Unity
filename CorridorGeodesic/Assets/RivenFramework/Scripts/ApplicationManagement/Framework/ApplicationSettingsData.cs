@@ -39,21 +39,7 @@ namespace Neverway.Framework.ApplicationManagement
         // Quality
         [Range(0, 4)]
         public int qualityPreset;
-        
-        [Tooltip("0-25%, 1-50%, 2-75%, 3-100%, 4-200%")] [Range(0, 4)]
-        public int resolutionScale;
-
-        [Tooltip("0-Lowest, 4-Highest")] [Range(0, 4)]
-        public int shadowQuality;
-
-        [Tooltip("0-Lowest, 4-Highest")] [Range(0, 4)]
-        public int effectsQuality;
-
-        [Tooltip("0-Lowest, 4-Highest")] [Range(0, 4)]
-        public int textureQuality;
-
-        [Tooltip("0-Lowest, 4-Highest")] [Range(0, 4)]
-        public int postprocessingQuality;
+        public ApplicationSettingsData_Quality quality;
 
         // Effects
         [Tooltip("0-Off")] [Range(0, 4)] public int antialiasing;
@@ -128,11 +114,7 @@ namespace Neverway.Framework.ApplicationManagement
             showFramecounter = false;
 
             qualityPreset = 3;
-            resolutionScale = 3;
-            shadowQuality = 2;
-            effectsQuality = 2;
-            textureQuality = 5;
-            postprocessingQuality = 2;
+            quality = new ApplicationSettingsData_Quality();
 
             antialiasing = 0;
             motionBlur = 0;
@@ -190,11 +172,7 @@ namespace Neverway.Framework.ApplicationManagement
             showFramecounter = other.showFramecounter;
 
             qualityPreset = other.qualityPreset;
-            resolutionScale = other.resolutionScale;
-            shadowQuality = other.shadowQuality;
-            effectsQuality = other.effectsQuality;
-            textureQuality = other.textureQuality;
-            postprocessingQuality = other.postprocessingQuality;
+            quality = other.quality;
 
             antialiasing = other.antialiasing;
             motionBlur = other.motionBlur;
@@ -238,6 +216,45 @@ namespace Neverway.Framework.ApplicationManagement
             screenReader = other.screenReader;
 
             localeID = other.localeID;
+        }
+    }
+
+    [Serializable]
+    public class ApplicationSettingsData_Quality
+    {
+        [Tooltip("0-25%, 1-50%, 2-75%, 3-100%, 4-200%")] [Range(0, 4)]
+        public int resolutionScale;
+
+        [Tooltip("0-Lowest, 4-Highest")] [Range(0, 4)]
+        public int shadowQuality;
+
+        [Tooltip("0-Lowest, 4-Highest")] [Range(0, 4)]
+        public int effectsQuality;
+
+        [Tooltip("0-Lowest, 4-Highest")] [Range(0, 4)]
+        public int textureQuality;
+
+        [Tooltip("0-Lowest, 4-Highest")] [Range(0, 4)]
+        public int postprocessingQuality;
+        
+        // Default Constructor
+        public ApplicationSettingsData_Quality()
+        {
+            resolutionScale = 3;
+            shadowQuality = 2;
+            effectsQuality = 2;
+            textureQuality = 4;
+            postprocessingQuality = 2;
+        }
+        
+        // Clone Constructor
+        public ApplicationSettingsData_Quality(ApplicationSettingsData_Quality other)
+        {
+            resolutionScale = other.resolutionScale;
+            shadowQuality = other.shadowQuality;
+            effectsQuality = other.effectsQuality;
+            textureQuality = other.textureQuality;
+            postprocessingQuality = other.postprocessingQuality;
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Neverway.Framework.ApplicationManagement
 
         private void Update()
         {
-            applicationSettings.currentSettingsData.colorBlindFilter = colorBlindFilter.currentIndex;
+            applicationSettings.bufferedSettingsData.colorBlindFilter = colorBlindFilter.currentIndex;
         }
 
         //=-----------------=
@@ -65,63 +65,64 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         public void InitButtonValues()
         {
-            invertHorizontalView.isOn = applicationSettings.currentSettingsData.invertHorizontalView;
-            invertVerticalView.isOn = applicationSettings.currentSettingsData.invertVerticalView;
-            horizontalLookSpeed.value = applicationSettings.currentSettingsData.horizontalLookSpeed * 10;
-            verticalLookSpeed.value = applicationSettings.currentSettingsData.verticalLookSpeed * 10;
-            joystickLookSensitivity.value = applicationSettings.currentSettingsData.joystickLookSensitivity * 10;
-            mouseLookSensitivity.value = applicationSettings.currentSettingsData.mouseLookSensitivity * 10;
-            cameraFov.value = applicationSettings.currentSettingsData.cameraFov;
+            applicationSettings.bufferedSettingsData = new ApplicationSettingsData(applicationSettings.currentSettingsData);
+            invertHorizontalView.isOn = applicationSettings.bufferedSettingsData.invertHorizontalView;
+            invertVerticalView.isOn = applicationSettings.bufferedSettingsData.invertVerticalView;
+            horizontalLookSpeed.value = applicationSettings.bufferedSettingsData.horizontalLookSpeed * 10;
+            verticalLookSpeed.value = applicationSettings.bufferedSettingsData.verticalLookSpeed * 10;
+            joystickLookSensitivity.value = applicationSettings.bufferedSettingsData.joystickLookSensitivity * 10;
+            mouseLookSensitivity.value = applicationSettings.bufferedSettingsData.mouseLookSensitivity * 10;
+            cameraFov.value = applicationSettings.bufferedSettingsData.cameraFov;
 
-            brightness.value = applicationSettings.currentSettingsData.brightness * 100;
-            colorBlindIntensity.value = applicationSettings.currentSettingsData.colorBlindIntensity * 100;
-            dyslexicFriendlyFont.isOn = applicationSettings.currentSettingsData.dyslexicFriendlyFont;
-            colorBlindFilter.currentIndex = applicationSettings.currentSettingsData.colorBlindFilter;
+            brightness.value = applicationSettings.bufferedSettingsData.brightness * 100;
+            colorBlindIntensity.value = applicationSettings.bufferedSettingsData.colorBlindIntensity * 100;
+            dyslexicFriendlyFont.isOn = applicationSettings.bufferedSettingsData.dyslexicFriendlyFont;
+            colorBlindFilter.currentIndex = applicationSettings.bufferedSettingsData.colorBlindFilter;
         }
 
         private void InitEventListeners()
         {
             invertHorizontalView.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.invertHorizontalView = invertHorizontalView.isOn;
+                applicationSettings.bufferedSettingsData.invertHorizontalView = invertHorizontalView.isOn;
             });
             invertVerticalView.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.invertVerticalView = invertVerticalView.isOn;
+                applicationSettings.bufferedSettingsData.invertVerticalView = invertVerticalView.isOn;
             });
             horizontalLookSpeed.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.horizontalLookSpeed = (horizontalLookSpeed.value / 10);
+                applicationSettings.bufferedSettingsData.horizontalLookSpeed = (horizontalLookSpeed.value / 10);
             });
             verticalLookSpeed.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.verticalLookSpeed = (verticalLookSpeed.value / 10);
+                applicationSettings.bufferedSettingsData.verticalLookSpeed = (verticalLookSpeed.value / 10);
             });
             joystickLookSensitivity.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.joystickLookSensitivity =
+                applicationSettings.bufferedSettingsData.joystickLookSensitivity =
                     (joystickLookSensitivity.value / 10);
             });
             mouseLookSensitivity.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.mouseLookSensitivity = (mouseLookSensitivity.value / 10);
+                applicationSettings.bufferedSettingsData.mouseLookSensitivity = (mouseLookSensitivity.value / 10);
             });
             cameraFov.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.cameraFov = Mathf.RoundToInt(cameraFov.value);
+                applicationSettings.bufferedSettingsData.cameraFov = Mathf.RoundToInt(cameraFov.value);
             });
 
             brightness.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.brightness = brightness.value / 100;
+                applicationSettings.bufferedSettingsData.brightness = brightness.value / 100;
             });
             colorBlindIntensity.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.colorBlindIntensity = (colorBlindIntensity.value / 100);
+                applicationSettings.bufferedSettingsData.colorBlindIntensity = (colorBlindIntensity.value / 100);
             });
             dyslexicFriendlyFont.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.dyslexicFriendlyFont = dyslexicFriendlyFont.isOn;
+                applicationSettings.bufferedSettingsData.dyslexicFriendlyFont = dyslexicFriendlyFont.isOn;
             });
         }
 
