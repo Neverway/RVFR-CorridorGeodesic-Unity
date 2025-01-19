@@ -26,9 +26,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [Tooltip("Allows rifts to expand past the start position")]
     public bool allowExpandingRift;
     [Tooltip("Allows the player to slam rifts closed, creating a vacuum that flings things out of rifts")]
-    public bool allowSlamingRift;
-    [Tooltip("Allows the player to slam rifts closed, creating a vacuum that flings things out of rifts")]
-    public bool allowMarkerDragging;
+    public bool allowSlammingRift;
     [Tooltip("Debug parameter to... well, you get it")]
     public bool allowMarkerPlacementAnywhere;
     
@@ -37,6 +35,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     public LayerMask viewRaycastMask;
     [Tooltip("Used by the crosshair to visualize if the gun is pointing at a valid target")]
     public bool isValidTarget;
+    
     public int maxAmmo = 2;
     public int currentAmmo = 2;
 
@@ -45,31 +44,29 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //=-----------------=
     private Vector3 previousPlanePosition;
     private AudioSource_PitchVarienceModulator audioSource;
-    private RaycastHit viewPoint; //For aiming projectiles
-
+    private RaycastHit viewPoint; // For aiming projectiles
 
     //=-----------------=
     // Reference Variables
     //=-----------------=
     [Header("Reference Variables")]
-    //[SerializeField] private AudioClip projectileTravel, projectileFire;
+    // TODO: ADD COMMENTS TO THESE VARIABLES vvv
     [SerializeField] private Transform barrelTransform;
     [SerializeField] private Transform centerViewTransform;
     [SerializeField] private GameObject debugObject;
-    [FormerlySerializedAs ("vacuumProjectile")][SerializeField] private Projectile_Vacumm projectileVacumm;
+    [SerializeField] private Projectile_Vacumm projectileVacuum;
     [SerializeField] private GameObject riftObject;
     [SerializeField] private GameObject cutPreviewPrefab;
     public GameObject[] cutPreviews;
-    [SerializeField] private Rift_Audio riftAudioPrefab;
-    //private Rift_Audio[] riftAudioList = new Rift_Audio[2];
-    private Rift_Audio activeRiftAudio;
     [SerializeField] private float projectileForce;
     [SerializeField] private CrushDetector crushDetector;
     [SerializeField] private Animator anims;
-
+    [SerializeField] private Rift_Audio riftAudioPrefab;
+    private Rift_Audio activeRiftAudio;
     public List<Projectile_Vacumm> deployedInfinityMarkers = new List<Projectile_Vacumm> ();
     [IsDomainReloaded] public static GameObject deployedRift;
     private Mesh_Slicable[] meshSlicers;
+    // TODO: ADD COMMENTS TO THESE VARIABLES ^^^
 
     [Header("ALTMeshSlicer Static Reference Variables")]
     //Statics for ALTMeshSlicer to use
@@ -81,9 +78,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [IsDomainReloaded] public static List<GameObject> slicedMeshes = new List<GameObject> ();
     [IsDomainReloaded] public static List<CorGeo_ActorData> CorGeo_ActorDatas = new List<CorGeo_ActorData> ();
 
-    //Object groups for resetting
+    //Object groups for resetting <= I think this has been misplaced. ~Liz
 
-    //Rift collapse lerp 
+    // TODO: ADD COMMENTS TO THESE VARIABLES vvv
+    // Rift collapse lerp <= What is this for?? ~Liz
     private Vector3 riftNormal;
     private Vector3 planeBStartPos;
     private float riftTimer = 0f;
@@ -93,17 +91,25 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [IsDomainReloaded] public static float riftWidth;
     private float minRiftTimer;
     private float maxRiftWidth = 50f;
+    // TODO: ADD COMMENTS TO THESE VARIABLES ^^^
 
+    // Used to track when the primary or secondary fire of the GeoGun is being held
+    // (Used to expand and contract the rift)
     private bool primaryHeld = false;
     private bool secondaryHeld = false;
 
+    // TODO: ADD COMMENTS TO THESE VARIABLES vvv
     private bool isCutPreviewActive = false;
     private bool isCollapseStarted = false;
     [IsDomainReloaded] public static bool delayRiftCollapse = false;
     private bool forceTweenRift = false;
+    // TODO: ADD COMMENTS TO THESE VARIABLES ^^^
+    
+    // A set of variables used for handling backing the rift off when the player has been crushed 
     private bool expandingRiftDueToCrush = false;
     private bool ignoreRiftInputAfterCrush = false;
 
+    // TODO: ADD COMMENTS TO THESE VARIABLES vvv
     private float timeRiftHeld = 0f;
     private float maxRiftSpeedMod = 2.5f;
     private float secondsToMaxSpeedMod = 1.3f;
@@ -111,42 +117,40 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private float slowDistance = 1.5f;
     [Tooltip("This should match the mask on Projectile_Vacumm, You're welcome future me you idiot ~Liz")]
     [SerializeField] private LayerMask validTargetMask;
-
     [IsDomainReloaded] public static RiftState previousState = RiftState.None;
     [IsDomainReloaded] public static RiftState currentState = RiftState.None;
+    // TODO: ADD COMMENTS TO THESE VARIABLES ^^^
 
+    // As far as I can tell, this is only used for Graphics_RiftPreviewEffects.cs to flash the rift previews when the rift is moved ~Liz
+    // ToDo: What does Graphics_RiftPreviewEffects.cs actually do? It looks like it handles more than just that one effect. ~Liz
     public delegate void StateChanged();
     [IsDomainReloaded] public static event StateChanged OnStateChanged;
-    //public static UnityEvent onStateChanged = new UnityEvent ();
 
+    
     //=-----------------=
     // Mono Functions
     //=-----------------=
     private void Start ()
     {
+        // Gather a list of all sliceable objects currently loaded
         meshSlicers = FindObjectsByType<Mesh_Slicable> (FindObjectsSortMode.None);
-
+        
+        // Creates the big planes with the fancy shaders that represent the boundaries of the rift
         CreateCutPreviews ();
-        //audioSource = GetComponent<AudioSource_PitchVarienceModulator> ();
-
+        
+        // Assign the listener so if the player gets crushed the rift will backoff slightly
         crushDetector.onCrushed.AddListener (() => StartCoroutine (InterruptRiftCollapse (0.1f)));
-
-        //for (int i = 0; i < 2; i++)
-        //{
-        //    riftAudioList[i] = Instantiate (riftAudioPrefab);
-        //    riftAudioList[i].OnSetup (i == 0);
-        //}
-
+        
+        // Create the object that plays the audio for the rift
         activeRiftAudio = Instantiate (riftAudioPrefab);
     }
 
-    //Used for stopping rift collapse when getting crushed
+    // Used for stopping rift collapse when getting crushed
     private IEnumerator InterruptRiftCollapse (float delay)
     {
-        if (!secondaryHeld)
-            yield break;
+        if (!secondaryHeld) yield break;
 
-        secondaryHeld = false; //release close rift input
+        secondaryHeld = false; // release close rift input
         ignoreRiftInputAfterCrush = true;
 
         expandingRiftDueToCrush = true;
@@ -154,12 +158,14 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         expandingRiftDueToCrush = false;
     }
 
+    // Fire marker / Start expand
     public override void UsePrimary ()
     {
         DeployInfinityMarker ();
         primaryHeld = true;
     }
 
+    // Start collapse
     public override void UseSecondary ()
     {
         if (ignoreRiftInputAfterCrush)
@@ -172,29 +178,29 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         secondaryHeld = true;
     }
 
+    // Stop expand
     public override void ReleasePrimary ()
     {
         primaryHeld = false;
     }
 
+    // Stop collapse
     public override void ReleaseSecondary ()
     {
         ignoreRiftInputAfterCrush = false;
         secondaryHeld = false;
     }
 
+    // Clear the rift
     public override void UseSpecial ()
     {
         StartRecallInfinityMarkers ();
     }
 
+    // Used to clear the audio played by an open rift
     public void OnDestroy ()
     {
         Destroy(activeRiftAudio);
-        //foreach (var audio in riftAudioList)
-        //{
-        //    Destroy (audio);
-        //}
     }
 
     public void FixedUpdate ()
@@ -276,6 +282,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
         }
     }
+    
     //Added by Errynei to get closed rift previews to work right
     private void LateUpdate()
     {
@@ -300,6 +307,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         isValidTarget = GetValidTarget();
     }
 
+
+    //=-----------------=
+    // Internal Functions
+    //=-----------------=
     bool GetValidTarget()
     {
         
@@ -340,6 +351,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             
         return false;
     }
+    
     int GetSubMeshIndex(Mesh mesh, int triIndex)
     {
         int triangleCounter = 0;
@@ -354,7 +366,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         return -1;
     }
 
-    //Added by Errynei to get closed rift previews to work right
+    // Added by Errynei to get closed rift previews to work right
     private void SetClosedPreview()
     {
         Transform player = Camera.main.transform;
@@ -367,7 +379,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         UpdateRiftOffset(0.05f);
     }
 
-    //Added by Errynei to get closed rift previews to work right
+    // Added by Errynei to get closed rift previews to work right
     private void UpdateRiftOffset(float offset)
     {
         Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * offset;
@@ -645,7 +657,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         planeB = new Plane (-riftNormal, pos2);
 
 
-        // TODO make this neater tomorrow
+        // TODO make this neater tomorrow <= (This statement stays true until it's edited, how sneaky!) ~Liz
         if (!cutPreviews[0])
         {
             CreateCutPreviews ();
@@ -670,11 +682,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         UpdateState(RiftState.Preview);
     }
-
-
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
+    
+    // Creates the big planes with the fancy shaders that represent the boundaries of the rift
     private void CreateCutPreviews ()
     {
         cutPreviews = new GameObject[2];
@@ -686,6 +695,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
     }
 
+    // I'm not sure why this exists, it's just called directly by the recall button and directly calls RecallInfinityMarkers
+    // Best guess, this originally prevented destroying a rift if the gun wasn't equipped ~Present/Future Liz
+    // ALSO WHY IS THIS ONE PUBLIC?!?!?! ANSWER ME PAST ME, WHAT DID YOU KNOW!!!??
     public void StartRecallInfinityMarkers ()
     {
         if (gameObject.activeInHierarchy)
@@ -694,6 +706,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
     }
 
+    // Handles all the scary and confusing logic to undo the effects of a rift and erase the markers that generated it
     private IEnumerator RecallInfinityMarkers ()
     {
         if (currentAmmo >= 2) yield break;
@@ -793,13 +806,14 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         lerpAmount = 0f;
     }
 
+    // No idea what this does tbh. Maybe it handles returning phys actors (like ones with rigidbodies) back when clearing rifts?
     private void RecallDynamicActor (CorGeo_ActorData _actor)
     {
         if (_actor.space == CorGeo_ActorData.Space.Null)
         {
             _actor.transform.SetParent (_actor.homeParent, true);
             _actor.transform.localScale = _actor.homeScale;
-            //Moves an actor to keep them in the same relative position to the map when the rift is recalled.
+            // Moves an actor to keep them in the same relative position to the map when the rift is recalled.
             float scaledRiftWidth = deployedRift.transform.localScale.z * riftWidth;
             float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
             float oldDistance = scaledRiftWidth * percent;
@@ -825,12 +839,14 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
     }
 
+    // Another one of life's great mysteries
     private IEnumerator DestroyWorker (GameObject _gameObject)
     {
         yield return new WaitForEndOfFrame ();
         Destroy (_gameObject);
     }
 
+    // The function that actually shoots the markers
     private void DeployInfinityMarker ()
     {
         if (currentAmmo <= 0) return;
@@ -840,16 +856,17 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         Audio_FMODAudioManager.PlayOneShot (Audio_FMODEvents.Instance.nixieCrossShoot);
 
-        var projectile = Instantiate (projectileVacumm, centerViewTransform.transform.position, centerViewTransform.rotation, null);
+        var projectile = Instantiate (projectileVacuum, centerViewTransform.transform.position, centerViewTransform.rotation, null);
         projectile.InitializeProjectile (projectileForce, barrelTransform.position, viewPoint.distance);
         projectile.geoGun = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
         projectile.allowMarkerPlacementAnywhere = allowMarkerPlacementAnywhere;
         deployedInfinityMarkers.Add (projectile);
     }
 
+    // Checks to see if we have two validly placed markers to generate a rift between
     private bool AreMarkersPinned ()
     {
-        //Return true if 2 vacuum tubes are deployed and pinned.
+        // Return true if 2 vacuum tubes are deployed and pinned.
         if (deployedInfinityMarkers.Count >= 2)
         {
             foreach (var marker in deployedInfinityMarkers)
@@ -1053,6 +1070,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
     }
 
+    // Ensures that the actual point in which projectiles are fired from is facing where the player's crosshair is aimed
     private void AimTowardsCenterOfView ()
     {
         viewPoint = new RaycastHit ();
@@ -1064,6 +1082,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         }
     }
 
+    // Destroy all the random empty "newGameObjects" that are created when using the rifts
     private IEnumerator WitchHunt ()
     {
         var everything = FindObjectsOfType<GameObject> ();
