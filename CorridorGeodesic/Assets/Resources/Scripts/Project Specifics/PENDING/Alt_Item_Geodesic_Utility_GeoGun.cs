@@ -36,6 +36,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [Tooltip("Used by the crosshair to visualize if the gun is pointing at a valid target")]
     public bool isValidTarget;
     
+    public Material riftMaterial;
+    public Color riftColorShallowStable, riftColorDeepStable;
+    public Color riftColorShallowUnstable, riftColorDeepUnstable;
+    
     public int maxAmmo = 2;
     public int currentAmmo = 2;
 
@@ -84,7 +88,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     // Rift collapse lerp <= What is this for?? ~Liz
     private Vector3 riftNormal;
     private Vector3 planeBStartPos;
+    
+    // The value to keep track of how expanded or collapsed the rift is (RiftExpand 1 <--0--> -1 RiftCollapse)
     private float riftTimer = 0f;
+    
     private float maxRiftTimer;
     [IsDomainReloaded] public static float lerpAmount;
     [SerializeField] private float riftSecondsPerUnit = 1.8f;
@@ -102,7 +109,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private bool isCutPreviewActive = false;
     private bool isCollapseStarted = false;
     [IsDomainReloaded] public static bool delayRiftCollapse = false;
-    private bool forceTweenRift = false;
+    private bool clearingRift = false;
     // TODO: ADD COMMENTS TO THESE VARIABLES ^^^
     
     // A set of variables used for handling backing the rift off when the player has been crushed 
@@ -115,7 +122,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private float secondsToMaxSpeedMod = 1.3f;
     private float timeMoveRiftButtonHeld = 0f;
     private float slowDistance = 1.5f;
-    [Tooltip("This should match the mask on Projectile_Vacumm, You're welcome future me you idiot ~Liz")]
+    [Tooltip("This should match the mask on Projectile_Vacuum, You're welcome future me you idiot ~Liz")]
     [SerializeField] private LayerMask validTargetMask;
     [IsDomainReloaded] public static RiftState previousState = RiftState.None;
     [IsDomainReloaded] public static RiftState currentState = RiftState.None;
@@ -221,7 +228,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         {
             CheckForActorSpaceChanges ();
         }
-
+    
         bool moveRiftBackwards = false;
         bool moveRift = false;
         if (secondaryHeld)
@@ -239,23 +246,41 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             moveRift = true;
         }
 
+        if (riftTimer < 0)
+        {
+            var calculatedLerpValue = (riftTimer / minRiftTimer);
+            print(calculatedLerpValue);
+            var lerpedRiftColorShallow = Color.Lerp(riftColorShallowStable, riftColorShallowUnstable, calculatedLerpValue);
+            var lerpedRiftColorDeep = Color.Lerp(riftColorDeepStable, riftColorDeepUnstable, calculatedLerpValue);
+            
+            // current/maximum= (0-1)
+            
+            riftMaterial.SetColor("_ShallowColor", lerpedRiftColorShallow);
+            riftMaterial.SetColor("_DeepColor", lerpedRiftColorDeep);
+        }
+        if (riftTimer >= 0)
+        {
+            riftMaterial.SetColor("_ShallowColor", riftColorShallowStable);
+            riftMaterial.SetColor("_DeepColor", riftColorDeepStable);
+        }
+
         if (expandingRiftDueToCrush)
         {
             moveRiftBackwards = true;
             moveRift = true;
         }
 
-        if (!moveRift && !forceTweenRift)
+        if (!moveRift && !clearingRift)
         {
             timeMoveRiftButtonHeld = 0f;
         }
 
-        if (forceTweenRift && riftTimer < 0)
+        if (clearingRift && riftTimer < 0)
         {
             MoveRift (false);
             return;
         }
-        if (forceTweenRift && riftTimer > 0)
+        if (clearingRift && riftTimer > 0)
         {
             MoveRift (true);
             return;
@@ -395,7 +420,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         float cutPreviewDistance = Vector3.Distance (cutPreviews[0].transform.position, cutPreviews[1].transform.position);
 
-        //Calculate speed based on how long we've held the button down.
+        // Calculate speed based on how long we've held the button down.
         if (timeMoveRiftButtonHeld < secondsToMaxSpeedMod)
         {
             //Scales speed up from 1 to maxRiftSpeedMod based on how long button was held
@@ -406,13 +431,16 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             }
         }
         speedMod = (timeMoveRiftButtonHeld / secondsToMaxSpeedMod) * (maxRiftSpeedMod - 1) + 1;
-
-        if (forceTweenRift) //if rift is being reset, increase the speed modifier.
-        {
+        
+        if (clearingRift)
+        { 
+            // if rift is being reset, increase the speed modifier.
             speedMod *= 2.5f;
+            
+            HandleUnstableRiftVacuum();
         }
 
-        if (!forceTweenRift && !moveRiftBackwards && cutPreviewDistance < slowDistance)
+        if (!clearingRift && !moveRiftBackwards && cutPreviewDistance < slowDistance)
         {
             speedMod = 0.8f;
         }
@@ -457,7 +485,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             UpdateState (RiftState.Expanding);
 
             riftTimer -= Time.fixedDeltaTime * speedMod;
-            if (forceTweenRift && riftTimer < 0)
+            if (clearingRift && riftTimer < 0)
             {
                 riftTimer = 0;
             }
@@ -474,7 +502,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
             UpdateState (RiftState.Collapsing);
             riftTimer += Time.fixedDeltaTime * speedMod;
-            if (forceTweenRift && riftTimer > 0)
+            if (clearingRift && riftTimer > 0)
             {
                 riftTimer = 0;
             }
@@ -715,10 +743,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         while (riftTimer != 0)
         {
-            forceTweenRift = true;
+            clearingRift = true;
             yield return null;
         }
-        forceTweenRift = false;
+        clearingRift = false;
 
         foreach (var projectile in deployedInfinityMarkers)
         {
@@ -807,6 +835,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     }
 
     // No idea what this does tbh. Maybe it handles returning phys actors (like ones with rigidbodies) back when clearing rifts?
+    // Sir Connorses has confirmed that this function is for handling phys actors
     private void RecallDynamicActor (CorGeo_ActorData _actor)
     {
         if (_actor.space == CorGeo_ActorData.Space.Null)
@@ -835,6 +864,32 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 _actor.transform.position += Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform.forward *
                                         Alt_Item_Geodesic_Utility_GeoGun.riftWidth *
                                         (Alt_Item_Geodesic_Utility_GeoGun.lerpAmount);
+            }
+        }
+    }
+    
+    // When the rift is expanded and then cleared, create a force to pull objects towards the center plane of the rift
+    private void HandleUnstableRiftVacuum()
+    {
+        if (riftTimer >= 0) return;
+
+        var vacuumForce = 10;
+        var riftInstability = (riftTimer / minRiftTimer);
+        var vacuumRange = 10;
+        
+        foreach (CorGeo_ActorData _actor in CorGeo_ActorDatas)
+        {
+            if (_actor.dynamic)
+            {
+                // Check if they are within range of the vacuum
+                var distanceToPlane0 = Vector3.Distance(_actor.transform.position, cutPreviews[0].transform.position);
+                var distanceToPlane1 = Vector3.Distance(_actor.transform.position, cutPreviews[1].transform.position);
+                if (distanceToPlane0 <= vacuumRange || distanceToPlane1 <= vacuumRange)
+                {
+                    // Apply a force that pushes them towards the center plane
+                    //_actor.GetComponent<Rigidbody>().velocity += (* vacuumForce * riftInstability);
+                    // TODO: I need to figure out some way of multiplying the full vacuum force in a way that pulls actors towards the center PLANE (not point) of the rift
+                }
             }
         }
     }

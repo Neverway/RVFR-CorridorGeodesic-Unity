@@ -134,6 +134,10 @@ namespace Neverway.Framework.ApplicationManagement
                 return;
             }
             DevConsole.Log("Continuing with first-time setup", "App Config");
+            // Set the resolution to the highest supported by the display
+            bufferedSettingsData.targetResolution = resolutions.Length-1;
+            DevConsole.Log($"Setting the display resolution to {resolutions[resolutions.Length-1].width}x{resolutions[resolutions.Length-1].height}", "App Config");
+            ApplySettings();
         }
 
         private void GetCurrentResolutionFromList()
@@ -706,6 +710,48 @@ namespace Neverway.Framework.ApplicationManagement
 
             SaveSettings();
             UpdateActiveWindowButtons();
+        }
+
+        public void SetQualityPreset(int _qualityPreset)
+        {
+            switch (_qualityPreset)
+            {
+                case 0:
+                    bufferedSettingsData.quality.resolutionScale = retroQuality.resolutionScale;
+                    bufferedSettingsData.quality.shadowQuality = retroQuality.shadowQuality;
+                    bufferedSettingsData.quality.effectsQuality = retroQuality.effectsQuality;
+                    bufferedSettingsData.quality.textureQuality = retroQuality.textureQuality;
+                    bufferedSettingsData.quality.postprocessingQuality = retroQuality.postprocessingQuality;
+                    break;
+                case 1:
+                    bufferedSettingsData.quality.resolutionScale = lowQuality.resolutionScale;
+                    bufferedSettingsData.quality.shadowQuality = lowQuality.shadowQuality;
+                    bufferedSettingsData.quality.effectsQuality = lowQuality.effectsQuality;
+                    bufferedSettingsData.quality.textureQuality = lowQuality.textureQuality;
+                    bufferedSettingsData.quality.postprocessingQuality = lowQuality.postprocessingQuality;
+                    break;
+                case 2:
+                    bufferedSettingsData.quality.resolutionScale = mediumQuality.resolutionScale;
+                    bufferedSettingsData.quality.shadowQuality = mediumQuality.shadowQuality;
+                    bufferedSettingsData.quality.effectsQuality = mediumQuality.effectsQuality;
+                    bufferedSettingsData.quality.textureQuality = mediumQuality.textureQuality;
+                    bufferedSettingsData.quality.postprocessingQuality = mediumQuality.postprocessingQuality;
+                    break;
+                case 3:
+                    bufferedSettingsData.quality.resolutionScale = highQuality.resolutionScale;
+                    bufferedSettingsData.quality.shadowQuality = highQuality.shadowQuality;
+                    bufferedSettingsData.quality.effectsQuality = highQuality.effectsQuality;
+                    bufferedSettingsData.quality.textureQuality = highQuality.textureQuality;
+                    bufferedSettingsData.quality.postprocessingQuality = highQuality.postprocessingQuality;
+                    break;
+                case 4:
+                    bufferedSettingsData.quality.resolutionScale = fantasticQuality.resolutionScale;
+                    bufferedSettingsData.quality.shadowQuality = fantasticQuality.shadowQuality;
+                    bufferedSettingsData.quality.effectsQuality = fantasticQuality.effectsQuality;
+                    bufferedSettingsData.quality.textureQuality = fantasticQuality.textureQuality;
+                    bufferedSettingsData.quality.postprocessingQuality = fantasticQuality.postprocessingQuality;
+                    break;
+            }
         }
 
         public FullScreenMode GetFullscreenMode()

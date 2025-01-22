@@ -73,7 +73,6 @@ public class WB_FirstTimeSetup : MonoBehaviour
         }
         
         //applicationSettings.currentSettingsData.qualityPreset = qualityPreset.currentIndex;
-        applicationSettings.ApplySettings();
     }
 
     //=-----------------=
@@ -83,6 +82,7 @@ public class WB_FirstTimeSetup : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        applicationSettings.ApplySettings();
     }
     
     private void InitButtonValues()
@@ -97,19 +97,25 @@ public class WB_FirstTimeSetup : MonoBehaviour
     {
         dyslexicFriendlyFont.onValueChanged.AddListener(delegate
         {
-            applicationSettings.currentSettingsData.dyslexicFriendlyFont = dyslexicFriendlyFont.isOn;
+            applicationSettings.bufferedSettingsData.dyslexicFriendlyFont = dyslexicFriendlyFont.isOn;
+            applicationSettings.ApplySettings();
         });
         qualityPreset.onValueChanged.AddListener(delegate
         {
+            applicationSettings.bufferedSettingsData.qualityPreset = qualityPreset.currentIndex;
             qualityPreview.sprite = qualityPreviews[qualityPreset.currentIndex];
+            applicationSettings.SetQualityPreset(qualityPreset.currentIndex);
+            applicationSettings.ApplySettings();
         });
         masterVolume.onValueChanged.AddListener(delegate
         {
-            applicationSettings.currentSettingsData.masterVolume = Mathf.RoundToInt(masterVolume.value);
+            applicationSettings.bufferedSettingsData.masterVolume = Mathf.RoundToInt(masterVolume.value);
+            applicationSettings.ApplySettings();
         });
         brightness.onValueChanged.AddListener(delegate
         {
-            applicationSettings.currentSettingsData.brightness = brightness.value / 100;
+            applicationSettings.bufferedSettingsData.brightness = brightness.value / 100;
+            applicationSettings.ApplySettings();
         });
     }
 

@@ -50,7 +50,7 @@ namespace Neverway.Framework
         //=-----------------=
         public void SetLocaleID(int _localeID)
         {
-            applicationSettings.currentSettingsData.localeID = _localeID;
+            applicationSettings.bufferedSettingsData.localeID = _localeID;
             applicationSettings.ApplySettings();
         }
     }
