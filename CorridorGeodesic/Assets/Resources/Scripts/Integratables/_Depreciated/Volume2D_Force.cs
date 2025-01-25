@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
-
+/*
 public class Volume2D_Force : Volume
-{/*
+{
     //=-----------------=
     // Public Variables
     //=-----------------=
@@ -27,8 +27,8 @@ public class Volume2D_Force : Volume
     //=-----------------=
     // Private Variables
     //=-----------------=
-    
-    
+
+
     //=-----------------=
     // Reference Variables
     //=-----------------=
@@ -81,6 +81,6 @@ public class Volume2D_Force : Volume
 
     //=-----------------=
     // External Functions
-    //=-----------------=*/
-}
+    //=-----------------=
+}*/
 

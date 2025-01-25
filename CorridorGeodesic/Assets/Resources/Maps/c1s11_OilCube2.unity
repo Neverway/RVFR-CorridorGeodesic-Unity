@@ -130,7 +130,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -139,7 +139,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (10)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -164,17 +164,17 @@ PrefabInstance:
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -397,7 +397,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -414,7 +414,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (4)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -488,7 +488,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -497,7 +497,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (8)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -891,12 +891,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 607697099}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 3185545076789109857, guid: 3d84aeb193a64f847a443d45440ee7c1,
         type: 3}
       propertyPath: m_Name
-      value: CubicWoodBeam
+      value: Prop_WoodBeam4
       objectReference: {fileID: 0}
     - target: {fileID: 7183515365487232545, guid: 3d84aeb193a64f847a443d45440ee7c1,
         type: 3}
@@ -965,7 +965,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 607697099}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 1864606904058409016, guid: 85c933c89176f03429af090720bd87da,
         type: 3}
@@ -1020,7 +1020,7 @@ PrefabInstance:
     - target: {fileID: 3923307480404363941, guid: 85c933c89176f03429af090720bd87da,
         type: 3}
       propertyPath: m_Name
-      value: MaterialPanel
+      value: Prop_Panel
       objectReference: {fileID: 0}
     - target: {fileID: 7154636270133462566, guid: 85c933c89176f03429af090720bd87da,
         type: 3}
@@ -2077,7 +2077,7 @@ GameObject:
   - component: {fileID: 607697099}
   m_Layer: 0
   m_Name: '[Structures]'
-  m_TagString: Untagged
+  m_TagString: StructureContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2099,11 +2099,6 @@ Transform:
   - {fileID: 608844133}
   - {fileID: 459825123}
   - {fileID: 2084213807}
-  - {fileID: 1367457660}
-  - {fileID: 1795681402}
-  - {fileID: 626046195}
-  - {fileID: 416847576}
-  - {fileID: 421990348}
   m_Father: {fileID: 150366772}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &608844132
@@ -6094,12 +6089,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 607697099}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 6311026345417112622, guid: 483c73f9560fcba499ee36a5357f49b7,
         type: 3}
       propertyPath: m_Name
-      value: StairUpOne
+      value: Prop_StairUpOne
       objectReference: {fileID: 0}
     - target: {fileID: 6691950655911208596, guid: 483c73f9560fcba499ee36a5357f49b7,
         type: 3}
@@ -6247,7 +6242,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6256,7 +6251,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (2)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -6330,7 +6325,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6339,7 +6334,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (1)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -6478,7 +6473,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6487,7 +6482,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (9)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -6512,17 +6507,17 @@ PrefabInstance:
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -6941,7 +6936,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6950,7 +6945,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (6)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -7269,7 +7264,7 @@ GameObject:
   - component: {fileID: 975131431}
   m_Layer: 0
   m_Name: '[Actors]'
-  m_TagString: AssetContainer
+  m_TagString: ActorContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7295,8 +7290,6 @@ Transform:
   - {fileID: 1822705792}
   - {fileID: 630208596}
   - {fileID: 1782717876}
-  - {fileID: 620935951}
-  - {fileID: 1158471644}
   - {fileID: 914885992}
   - {fileID: 2060508714}
   m_Father: {fileID: 150366772}
@@ -7509,7 +7502,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1053848651}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7523,7 +7516,7 @@ Transform:
   - {fileID: 1468944395}
   - {fileID: 848297382}
   - {fileID: 2088524384}
-  m_Father: {fileID: 1356774231}
+  m_Father: {fileID: 1699972437}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1103213409
 PrefabInstance:
@@ -7531,7 +7524,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 975131431}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 997694116984828958, guid: c13747f605dd92dc9b1ca8f7d972473b,
         type: 3}
@@ -7870,7 +7863,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 975131431}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 3873715669702343485, guid: b8e581c4c818d0ca6bf88a038260fe2d,
         type: 3}
@@ -7995,7 +7988,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8004,7 +7997,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (5)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -8078,7 +8071,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8087,7 +8080,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (7)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -8166,7 +8159,7 @@ GameObject:
   - component: {fileID: 1356774231}
   m_Layer: 0
   m_Name: '[Lights]'
-  m_TagString: AssetContainer
+  m_TagString: LightContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8183,19 +8176,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1053848652}
-  - {fileID: 1512862263}
-  - {fileID: 308147641}
-  - {fileID: 1934901073}
-  - {fileID: 208207861}
-  - {fileID: 695425665}
-  - {fileID: 641851935}
-  - {fileID: 1234623148}
-  - {fileID: 925049100}
-  - {fileID: 1273323046}
-  - {fileID: 707765610}
-  - {fileID: 77758580}
+  m_Children: []
   m_Father: {fileID: 150366772}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1367457659
@@ -8204,7 +8185,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 607697099}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 353368571600144102, guid: c8306f247a5659e4cb67ded5e90781b3,
         type: 3}
@@ -22390,7 +22371,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -22399,7 +22380,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
@@ -22673,72 +22654,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.size
-      value: 94
-      objectReference: {fileID: 0}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[89].keybindID
-      value: Delta
-      objectReference: {fileID: 0}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[90].keybindID
-      value: leftButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[91].keybindID
-      value: rightButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[92].keybindID
-      value: shift
-      objectReference: {fileID: 0}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[93].keybindID
-      value: ctrl
-      objectReference: {fileID: 0}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[26].keybindSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 503c65fe7be8795f68fb76d9e41d4948,
-        type: 3}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[89].keybindSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: fffccea5acecbf8ff923edd2a21fcc76,
-        type: 3}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[90].keybindSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 9e9f807e9abab95feaaafc6fb25cf2ca,
-        type: 3}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[91].keybindSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 91823543c83b4f42fae6465007f94225,
-        type: 3}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[92].keybindSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 7c89294ecabd3402a913a8d7c6edbde4,
-        type: 3}
-    - target: {fileID: 1729050732691396800, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: keyboardList.Array.data[93].keybindSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b571c0032916afc2e8ad7eec55e3c3f5,
-        type: 3}
     - target: {fileID: 2652268917058259988, guid: 0a5db751fef68c1fb9a9832cce7340c7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -22793,11 +22708,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameInstance
-      objectReference: {fileID: 0}
-    - target: {fileID: 6048128124110562263, guid: 0a5db751fef68c1fb9a9832cce7340c7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22948,7 +22858,7 @@ GameObject:
   - component: {fileID: 1699972437}
   m_Layer: 0
   m_Name: '[Assets]'
-  m_TagString: Untagged
+  m_TagString: AssetContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22967,6 +22877,25 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 386808616}
+  - {fileID: 620935951}
+  - {fileID: 1158471644}
+  - {fileID: 1053848652}
+  - {fileID: 1512862263}
+  - {fileID: 308147641}
+  - {fileID: 1934901073}
+  - {fileID: 208207861}
+  - {fileID: 695425665}
+  - {fileID: 641851935}
+  - {fileID: 1234623148}
+  - {fileID: 925049100}
+  - {fileID: 1273323046}
+  - {fileID: 707765610}
+  - {fileID: 77758580}
+  - {fileID: 1367457660}
+  - {fileID: 1795681402}
+  - {fileID: 626046195}
+  - {fileID: 416847576}
+  - {fileID: 421990348}
   m_Father: {fileID: 150366772}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1753999869
@@ -23229,7 +23158,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 607697099}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 821083979247770304, guid: c80fd6221a86de3469daeb992dd320e0,
         type: 3}
@@ -24272,7 +24201,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1356774231}
+    m_TransformParent: {fileID: 1699972437}
     m_Modifications:
     - target: {fileID: 9706981129275064, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -24281,7 +24210,7 @@ PrefabInstance:
     - target: {fileID: 166460456660192299, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}
       propertyPath: m_Name
-      value: Light3DPointModel (3)
+      value: Prop_Lamp
       objectReference: {fileID: 0}
     - target: {fileID: 385162494819445021, guid: 6e3ab6ef9d064bd4fac83a0f0da899dd,
         type: 3}

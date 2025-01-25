@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Neverway.Framework;
+using Neverway.Framework.PawnManagement;
 
 public class Game_LevelStartIdentifier : MonoBehaviour
 {
