@@ -126,7 +126,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: aebf47cf266dccf4d9565f5b65370d7e,
         type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: PhysProp
       objectReference: {fileID: 0}
     - target: {fileID: 2348808194880728483, guid: aebf47cf266dccf4d9565f5b65370d7e,
         type: 3}
@@ -307,6 +307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actorId: Phys_Buddy
   scriptDataList: []
+  isHeld: 0
   storedVariableData: []
 --- !u!114 &2614947172120166242
 MonoBehaviour:
@@ -320,6 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367cf4c15f22858f483045613783edcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  breakAwayDistance: 2
   isHeld: 0
   targetPawn: {fileID: 0}
   lastFaceDirection: {x: 0, y: 0, z: 0}

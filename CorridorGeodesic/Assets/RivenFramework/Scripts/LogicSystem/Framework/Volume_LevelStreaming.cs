@@ -5,8 +5,6 @@
 //
 //=============================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Neverway.Framework.PawnManagement;
@@ -34,6 +32,10 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         // Mono Functions
         //=-----------------=
+        private void Start()
+        {
+        }
+
         private new void OnTriggerEnter2D(Collider2D _other)
         {
             worldLoader = FindObjectOfType<WorldLoader>();

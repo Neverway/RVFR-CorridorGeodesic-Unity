@@ -116,7 +116,12 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1292041bfbba8d042acdf9695e840f1b,
         type: 3}
       propertyPath: m_Name
-      value: Phys_SoulexBuddy
+      value: Phys_BuddySoulex
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1292041bfbba8d042acdf9695e840f1b,
+        type: 3}
+      propertyPath: m_TagString
+      value: PhysProp
       objectReference: {fileID: 0}
     - target: {fileID: 3444597308181563247, guid: 1292041bfbba8d042acdf9695e840f1b,
         type: 3}
@@ -200,6 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367cf4c15f22858f483045613783edcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  breakAwayDistance: 2
   isHeld: 0
   targetPawn: {fileID: 0}
   lastFaceDirection: {x: 0, y: 0, z: 0}
@@ -270,6 +276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actorId: Phys_Buddy
   scriptDataList: []
+  isHeld: 0
   storedVariableData: []
 --- !u!114 &1122839109928244298
 MonoBehaviour:
