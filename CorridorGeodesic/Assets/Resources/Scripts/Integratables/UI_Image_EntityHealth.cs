@@ -59,8 +59,7 @@ namespace Neverway.Framework.PawnManagement
                 if (targetPawn.currentState.health != previousHealth)
                 {
                     image.DOKill();
-                    //image.DoFillAmount((targetPawn.currentState.health / targetPawn.defaultState.health) * 100 * 0.01f, 0.3f);
-                    image.fillAmount=((targetPawn.currentState.health / targetPawn.defaultState.health) * 100 * 0.01f);
+                    image.DOFillAmount((targetPawn.currentState.health / targetPawn.defaultState.health) * 100 * 0.01f, 0.3f);
                 }
                 previousHealth = targetPawn.currentState.health;
             }

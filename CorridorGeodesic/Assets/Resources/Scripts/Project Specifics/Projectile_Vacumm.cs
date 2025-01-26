@@ -48,9 +48,9 @@ public class Projectile_Vacumm : Projectile
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    public override void OnProjectileCollision(RaycastHit hit)
+    public override void OnCollision(RaycastHit hit)
     {
-        base.OnProjectileCollision(hit);
+        base.OnCollision(hit);
 
         bool killScheduled = false;
 
@@ -160,7 +160,6 @@ public class Projectile_Vacumm : Projectile
         {
             GameObject shatteredGlass = Instantiate(shatteredGlassEffect, transform.position, transform.rotation);
             shatteredGlass.SetActive(true);
-            shatteredGlass.GetComponent<Opt_Lifetime>().enabled = true;
 
             foreach(Rigidbody rb in shatteredGlass.GetComponentsInChildren<Rigidbody>())
             {

@@ -5,7 +5,6 @@
 //
 //=============================================================================
 
-using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,7 +24,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     public bool allowNoLinearSlicing;
     public LayerMask viewCastMask;
     public bool allowExpandingRift = false;
-    public bool isValidTarget;
 
     //=-----------------=
     // Private Variables
@@ -60,6 +58,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     //Statics for ALTMeshSlicer to use
     [IsDomainReloaded] public static Plane planeA;
     [IsDomainReloaded] public static Plane planeB;
+    [IsDomainReloaded] public static Vector3 planeAPos;
+    [IsDomainReloaded] public static Vector3 planeBPos;
     [IsDomainReloaded] public static List<GameObject> nullSlices;
     [IsDomainReloaded] public static GameObject planeBMeshes;
     [IsDomainReloaded] public static List<Mesh_Slicable> originalSliceableObjects = new List<Mesh_Slicable> ();
@@ -93,14 +93,14 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     private float secondsToMaxSpeedMod = 1.3f;
     private float timeMoveRiftButtonHeld = 0f;
     private float slowDistance = 1.5f;
-    [Tooltip("This should match the mask on Projectile_Vacumm, You're welcome future me you idiot ~Liz")]
-    [SerializeField] private LayerMask validTargetMask;
 
     [IsDomainReloaded] public static RiftState previousState = RiftState.None;
     [IsDomainReloaded] public static RiftState currentState = RiftState.None;
 
     public delegate void StateChanged();
     [IsDomainReloaded] public static event StateChanged OnStateChanged;
+    public delegate void RiftCreated ();
+    [IsDomainReloaded] public static event RiftCreated OnRiftCreated;
     //public static UnityEvent onStateChanged = new UnityEvent ();
 
     //=-----------------=
@@ -292,62 +292,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
             UpdateRiftOffset(offset);
         }
-
-        isValidTarget = GetValidTarget();
-    }
-
-    bool GetValidTarget()
-    {
-        
-        // Get weather the gun is pointed at a valid target (for crosshair)
-        if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out RaycastHit hit, Mathf.Infinity, validTargetMask))
-        {
-            if (hit.collider.gameObject.TryGetComponent<BulbCollisionBehaviour>(out var bulbBehaviourObj))
-            {
-                return true;
-            }
-            
-            else if (hit.collider.gameObject.TryGetComponent<Mesh_Slicable>(out var _out))
-            {
-                if (hit.collider is not MeshCollider)
-                {
-                    return false;
-                }
-                MeshCollider mCollider = (MeshCollider)hit.collider;
-
-                Mesh colMesh = mCollider.sharedMesh;
-
-                int triIndex = hit.triangleIndex;
-
-                //todo: Commented out this line of code, actually ended up throwing an IndexOutOfRangeException
-                //DisplayDebugTriangle(colMesh, triIndex, hit.collider.transform);
-
-                if (hit.collider.gameObject.TryGetComponent(out Renderer rend))
-                {
-                    int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
-                    if (subMeshIndex != -1 && !CorGeo_ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
-                    {
-                        return false;
-                    }
-                    return true;
-                }
-            }
-        }
-            
-        return false;
-    }
-    int GetSubMeshIndex(Mesh mesh, int triIndex)
-    {
-        int triangleCounter = 0;
-        for (int i = 0; i < mesh.subMeshCount; i++)
-        {
-            triangleCounter += mesh.GetSubMesh(i).indexCount / 3;
-            if (triIndex < triangleCounter)
-            {
-                return i;
-            }
-        }
-        return -1;
     }
 
     //Added by Errynei to get closed rift previews to work right
@@ -412,13 +356,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 {
                     try
                     {
-                        deployedRift.transform.GetChild (i).gameObject.SetActive (true);
+                        deployedRift.transform.GetChild (i).gameObject.SetActive (true); //todo: decide how to stop actors from enabling here, if they weren't before.
                     }
-                    catch
-                    {
-                        Console.WriteLine("A known error occured");
-                        throw;
-                    }
+                    catch { }
                 }
                 foreach (var plane in cutPreviews)
                 {
@@ -485,6 +425,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         // Move meshes relative to planeB/B-Space
         planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
+        planeBPos = planeBMeshes.transform.position;
 
         // Move actors relative to planeB/B-Space
         Vector3 moveInB = cutPreviews[1].transform.position - previousPlanePosition;
@@ -585,7 +526,13 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         currentState = _newState;
 
         OnStateChanged?.Invoke();
-        //Debug.Log("RiftState: " + currentState);
+        Debug.Log("RiftState: " + currentState);
+
+        if (currentState != RiftState.None && currentState != RiftState.Preview && previousState == RiftState.Preview)
+        {
+            OnRiftCreated?.Invoke ();
+            Debug.Log ("On rift created.");
+        }
     }
 
     private void DeployRiftAndPreview ()
@@ -637,8 +584,10 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
         deployedRift.transform.position = pos1;
 
-        planeA = new Plane (riftNormal, pos1);
-        planeB = new Plane (-riftNormal, pos2);
+        planeAPos = pos1;
+        planeA = new Plane (riftNormal, planeAPos);
+        planeBPos = pos2;
+        planeB = new Plane (-riftNormal, planeBPos);
 
 
         // TODO make this neater tomorrow
@@ -751,6 +700,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             if (_gameObject) Destroy (_gameObject);
         }
         slicedMeshes.Clear ();
+        Graphics_SliceableObjectManager.Instance.CancelSlice ();
         foreach (Mesh_Slicable _gameObject in originalSliceableObjects)
         {
             if (_gameObject) _gameObject.GoHome ();
@@ -870,6 +820,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 nullSlices = new List<GameObject> ();
                 planeBMeshes = Instantiate (new GameObject ());
                 planeBMeshes.name = "planeBMeshes";
+                planeBMeshes.transform.position = planeBPos;
                 planeBStartPos = planeBMeshes.transform.position;
                 // Find all slice-able meshes
                 foreach (var sliceableMesh in meshSlicers)
@@ -899,6 +850,8 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                     minRiftTimer = -(maxRiftTimer * ((maxRiftWidth - riftWidth) / riftWidth));
                 }
                 previousPlanePosition = cutPreviews[1].transform.position;
+
+                //todo
             }
         }
     }
@@ -1103,5 +1056,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         previousState = RiftState.None;
         currentState = RiftState.None;
         OnStateChanged = null;
+        OnRiftCreated = null;
     }
 }
