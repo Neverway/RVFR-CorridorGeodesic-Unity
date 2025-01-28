@@ -66381,7 +66381,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shouldHaveGeoGun: 1
-  shouldHaveUpgradedGeoGund: 0
+  shouldHaveUpgradedGeoGun: 0
+  debugMarkerPlacementAnywhere: 0
 --- !u!43 &1074376397
 Mesh:
   m_ObjectHideFlags: 0
@@ -92021,6 +92022,11 @@ PrefabInstance:
       propertyPath: m_Range
       value: 15.29
       objectReference: {fileID: 0}
+    - target: {fileID: 1556991911785720785, guid: de2c7c0fd33427460b535348d7f15e3b,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3544973753282108155, guid: de2c7c0fd33427460b535348d7f15e3b,
         type: 3}
       propertyPath: m_Name
@@ -97877,6 +97883,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableUnparent: 0
   onlyIfNecessaryForCorGeoActorDataOrMeshSliceable: 0
 --- !u!33 &5123076803828341355
 MeshFilter:
@@ -97925,6 +97932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e8963dae896bd449bb1ab3887ff30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableUnparent: 0
   onlyIfNecessaryForCorGeoActorDataOrMeshSliceable: 0
 --- !u!4 &5284560602828592637
 Transform:

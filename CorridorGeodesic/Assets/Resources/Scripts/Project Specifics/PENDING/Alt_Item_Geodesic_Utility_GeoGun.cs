@@ -876,6 +876,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         var vacuumForce = 10;
         var riftInstability = (riftTimer / minRiftTimer);
         var vacuumRange = 10;
+        var vacuumDirection = new Vector3(0,1,0);
         
         foreach (CorGeo_ActorData _actor in CorGeo_ActorDatas)
         {
@@ -887,7 +888,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 if (distanceToPlane0 <= vacuumRange || distanceToPlane1 <= vacuumRange)
                 {
                     // Apply a force that pushes them towards the center plane
-                    //_actor.GetComponent<Rigidbody>().velocity += (* vacuumForce * riftInstability);
+                    _actor.GetComponent<Rigidbody>().velocity += (vacuumDirection * vacuumForce * riftInstability);
                     // TODO: I need to figure out some way of multiplying the full vacuum force in a way that pulls actors towards the center PLANE (not point) of the rift
                 }
             }
@@ -937,7 +938,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     }
 
     /// <summary>
-    /// Pause actors to avoid them being bumped by innaccurate collision meshes
+    /// Pause actors to avoid them being bumped by inaccurate collision meshes
     /// </summary>
     private IEnumerator FreezeActors ()
     {
