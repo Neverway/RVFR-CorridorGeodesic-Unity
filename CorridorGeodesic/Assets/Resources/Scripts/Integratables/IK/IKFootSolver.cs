@@ -30,6 +30,8 @@ public class IKFootSolver : MonoBehaviour
     [SerializeField] private float forwardSpacing;
     [Tooltip("How far up to shift the raycast from the 'body' origin")]
     [SerializeField] private float raycastOffset;
+    [Tooltip("How far down to fire the raycast from the 'body' origin")]
+    [SerializeField] private float raycastDistance;
     [Tooltip("What layers can trigger raycasts for the feet positions")]
     [SerializeField] private LayerMask layerMask;
     [Tooltip("Offset for the final position to place the targets")]
@@ -94,7 +96,7 @@ public class IKFootSolver : MonoBehaviour
         
         // Update the new target position
         Ray ray = new Ray(body.position + (body.right * footSpacing) + (body.forward * forwardSpacing) + (body.up * raycastOffset), Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hit, 10, layerMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance, layerMask))
         {
             // If the current foot position is too far from our new target, move the foot
             if (Vector3.Distance(currentPosition, hit.point+moveDirection) >= stepDistance && stepTimeLerp >= 1)
@@ -105,26 +107,35 @@ public class IKFootSolver : MonoBehaviour
                     UpdateFootPosition(hit);
                 }
             }
-        }
         
-        // Swing the leg to the new point if it's moving
-        if (stepTimeLerp < 1)
-        {
-            Vector3 swingingPosition = Vector3.Lerp(oldPosition, newPosition, stepTimeLerp);
-            swingingPosition.y += Mathf.Sin(stepTimeLerp * Mathf.PI) * stepHeight;
-            currentPosition = swingingPosition;
-            currentRotation = Vector3.Lerp(oldRotation, newRotation, stepTimeLerp);
-            stepTimeLerp += Time.deltaTime * stepSpeed;
+            // Swing the leg to the new point if it's moving
+            if (stepTimeLerp < 1)
+            {
+                Vector3 swingingPosition = Vector3.Lerp(oldPosition, newPosition, stepTimeLerp);
+                swingingPosition.y += Mathf.Sin(stepTimeLerp * Mathf.PI) * stepHeight;
+                currentPosition = swingingPosition;
+                currentRotation = Vector3.Lerp(oldRotation, newRotation, stepTimeLerp);
+                stepTimeLerp += Time.deltaTime * stepSpeed;
+            }
+            else
+            {
+                oldPosition = newPosition;
+                oldRotation = newRotation;
+            }
+
+            // Update the position the calculated current position
+            transform.position = currentPosition;
+            lastBodyPosition = body.position;
         }
         else
         {
-            oldPosition = newPosition;
-            oldRotation = newRotation;
+            stepTimeLerp = 1;
+            transform.position = body.position + (body.right * footSpacing) + (body.forward * forwardSpacing) + placementOffset;
+            lastBodyPosition = body.position;
+            oldPosition = transform.position;
+            currentPosition = transform.position;
+            newPosition = transform.position;
         }
-
-        // Update the position the calculated current position
-        transform.position = currentPosition;
-        lastBodyPosition = body.position;
     }
 
     private void OnDrawGizmos()

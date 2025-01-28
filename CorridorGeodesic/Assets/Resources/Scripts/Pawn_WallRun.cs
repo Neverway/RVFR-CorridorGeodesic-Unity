@@ -47,7 +47,7 @@ namespace Neverway
         // Reference Variables
         //=-----------------=
         private Rigidbody objectRigidbody;
-        private InputActions.FirstPersonShooterActions fpsActions;
+        private InputActions.FirstPersonActions fpsActions;
         private ApplicationSettings applicationSettings;
         [SerializeField] private Camera viewCamera;
         [SerializeField] private LayerMask layerMask;
@@ -59,7 +59,7 @@ namespace Neverway
         private void Start()
         {
             objectRigidbody = GetComponent<Rigidbody>();
-            fpsActions = new InputActions().FirstPersonShooter;
+            fpsActions = new InputActions().FirstPerson;
             fpsActions.Enable();
 
             applicationSettings = FindObjectOfType<ApplicationSettings>();

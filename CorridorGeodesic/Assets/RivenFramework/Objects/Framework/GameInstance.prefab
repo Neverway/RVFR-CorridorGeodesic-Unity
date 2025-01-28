@@ -36,6 +36,8 @@ GameObject:
   - component: {fileID: 7671813606931478154}
   - component: {fileID: 4134968938103219640}
   - component: {fileID: 3836919005447195509}
+  - component: {fileID: 705811765077282990}
+  - component: {fileID: 4256956647280126110}
   m_Layer: 0
   m_Name: GameInstance
   m_TagString: Untagged
@@ -93,10 +95,11 @@ MonoBehaviour:
   - {fileID: 1985048443619682036, guid: d7a6a9f14009a7035a7398092fcf75cd, type: 3}
   - {fileID: 5675289539813747590, guid: f951f1626e8a081628c8e41d018c0094, type: 3}
   - {fileID: 2655442103756179889, guid: d88457d141bdcea49ad0746d72aec216, type: 3}
+  - {fileID: 8734877188125155707, guid: 0b1c9bd7257566a6abc19592203a7896, type: 3}
   PlayerControllerClasses:
   - {fileID: 11400000, guid: 02844299f83062e3688fb3e76ac2692a, type: 2}
   - {fileID: 11400000, guid: 39e9830e6bc5e60ee9bf7a0a613f8d82, type: 2}
-  - {fileID: 11400000, guid: b1246c8f7c44fe24c8a9e9f371b89f1c, type: 2}
+  - {fileID: 11400000, guid: 314f2a4646d5a93c8a6f0a8e2a365250, type: 2}
   localPlayerCharacter: {fileID: 0}
 --- !u!114 &596141195047680743
 MonoBehaviour:
@@ -265,64 +268,100 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultSettingsData:
+    configurationFileCompatibilityVersion: 1
     targetResolution: 0
     windowMode: 0
     enableVysnc: 0
-    fpslimit: 60
+    fpsLimit: 60
     showFramecounter: 0
-    resolutionScale: 3
+    qualityPreset: 3
+    quality:
+      resolutionScale: 3
+      shadowQuality: 2
+      effectsQuality: 2
+      textureQuality: 4
+      postprocessingQuality: 2
+    antialiasing: 0
+    motionBlur: 0
+    ambientOcclusion: 2
+    bloom: 2
+    outputDevice: 0
+    inputDevice: 0
+    inputVolume: 100
+    masterVolume: 100
+    musicVolume: 100
+    soundVolume: 100
+    voiceVolume: 100
+    chatterVolume: 100
+    ambientVolume: 100
+    menuVolume: 100
+    visualizeSoundEffects: 0
+    closedCaptioning: 0
+    minVolume: 0
+    maxVolume: 140
+    minFrequency: 17
+    invertHorizontalView: 0
+    invertVerticalView: 0
+    horizontalLookSpeed: 1
+    verticalLookSpeed: 0.75
+    joystickLookSensitivity: 0.7
+    mouseLookSensitivity: 0.7
+    cameraFov: 90
+    hideTextChat: 0
+    enablePushToTalk: 0
+    brightness: 1
+    colorBlindIntensity: 1
+    colorBlindFilter: 0
+    dyslexicFriendlyFont: 0
+    reduceStrobing: 0
+    screenReader: 0
+    localeID: 0
+  retroQuality:
+    resolutionScale: 0
+    shadowQuality: 0
+    effectsQuality: 0
+    textureQuality: 0
+    postprocessingQuality: 0
+  lowQuality:
+    resolutionScale: 1
+    shadowQuality: 1
+    effectsQuality: 1
+    textureQuality: 1
+    postprocessingQuality: 1
+  mediumQuality:
+    resolutionScale: 2
     shadowQuality: 2
     effectsQuality: 2
+    textureQuality: 3
+    postprocessingQuality: 2
+  highQuality:
+    resolutionScale: 3
+    shadowQuality: 3
+    effectsQuality: 3
     textureQuality: 4
-    postprocessingQuality: 2
-    antialiasing: 2
-    motionBlur: 1
-    ambientOcclusion: 2
-    bloom: 2
-    outputDevice: 0
-    inputDevice: 0
-    inputVolume: 100
-    masterVolume: 100
-    musicVolume: 100
-    soundVolume: 100
-    voiceVolume: 100
-    chatterVolume: 100
-    ambientVolume: 100
-    menuVolume: 100
-    visualizeSoundEffects: 0
-    closedCaptioning: 0
-    minVolume: 0
-    maxVolume: 140
-    minFrequency: 17
-    invertHorizontalView: 0
-    invertVerticalView: 0
-    horizontalLookSpeed: 1
-    verticalLookSpeed: 0.75
-    joystickLookSensitivity: 0.7
-    mouseLookSensitivity: 0.7
-    cameraFov: 90
-    hideTextChat: 0
-    enablePushToTalk: 0
-    brightness: 1
-    colorBlindIntensity: 1
-    colorBlindFilter: 0
-    dyslexicFriendlyFont: 0
-    reduceStrobing: 0
-    screenReader: 0
-    localeID: 0
+    postprocessingQuality: 3
+  fantasticQuality:
+    resolutionScale: 4
+    shadowQuality: 4
+    effectsQuality: 4
+    textureQuality: 4
+    postprocessingQuality: 4
   currentSettingsData:
+    configurationFileCompatibilityVersion: 1
     targetResolution: 0
     windowMode: 0
     enableVysnc: 0
-    fpslimit: 60
+    fpsLimit: 60
     showFramecounter: 0
-    resolutionScale: 3
-    shadowQuality: 2
-    effectsQuality: 2
-    textureQuality: 2
-    postprocessingQuality: 2
-    antialiasing: 2
-    motionBlur: 1
+    qualityPreset: 3
+    quality:
+      resolutionScale: 3
+      shadowQuality: 2
+      effectsQuality: 2
+      textureQuality: 4
+      postprocessingQuality: 2
+    antialiasing: 0
+    motionBlur: 0
     ambientOcclusion: 2
     bloom: 2
     outputDevice: 0
@@ -356,7 +395,58 @@ MonoBehaviour:
     reduceStrobing: 0
     screenReader: 0
     localeID: 0
-  debugApply: 0
+  bufferedSettingsData:
+    configurationFileCompatibilityVersion: 1
+    targetResolution: 0
+    windowMode: 0
+    enableVysnc: 0
+    fpsLimit: 60
+    showFramecounter: 0
+    qualityPreset: 3
+    quality:
+      resolutionScale: 3
+      shadowQuality: 2
+      effectsQuality: 2
+      textureQuality: 4
+      postprocessingQuality: 2
+    antialiasing: 0
+    motionBlur: 0
+    ambientOcclusion: 2
+    bloom: 2
+    outputDevice: 0
+    inputDevice: 0
+    inputVolume: 100
+    masterVolume: 100
+    musicVolume: 100
+    soundVolume: 100
+    voiceVolume: 100
+    chatterVolume: 100
+    ambientVolume: 100
+    menuVolume: 100
+    visualizeSoundEffects: 0
+    closedCaptioning: 0
+    minVolume: 0
+    maxVolume: 140
+    minFrequency: 17
+    invertHorizontalView: 0
+    invertVerticalView: 0
+    horizontalLookSpeed: 1
+    verticalLookSpeed: 0.75
+    joystickLookSensitivity: 0.7
+    mouseLookSensitivity: 0.7
+    cameraFov: 90
+    hideTextChat: 0
+    enablePushToTalk: 0
+    brightness: 1
+    colorBlindIntensity: 1
+    colorBlindFilter: 0
+    dyslexicFriendlyFont: 0
+    reduceStrobing: 0
+    screenReader: 0
+    localeID: 0
+  dynamicallyFilteredTexturePaths:
+  - Materials/Textures/DynamicallyFiltered
+  debugForceEnableFirstTimeSetup: 0
   audioMixer: {fileID: 24100000, guid: 549b84953554a157688e4ed0cb77d9a7, type: 2}
   cameraPrefab: {fileID: 1032958373095033568, guid: 94967e615899f4eb88f9883b59fd0167,
     type: 3}
@@ -565,7 +655,7 @@ MonoBehaviour:
   - keybindID: ctrl
     keybindSprite: {fileID: 21300000, guid: b571c0032916afc2e8ad7eec55e3c3f5, type: 3}
   - keybindID: escape
-    keybindSprite: {fileID: 21300000, guid: b571c0032916afc2e8ad7eec55e3c3f5, type: 3}
+    keybindSprite: {fileID: 21300000, guid: f4f8a5bf53891ca2d83d0fd3e1ed5254, type: 3}
   controllerList:
   - keybindID: buttonNorth
     keybindSprite: {fileID: 21300000, guid: 1c1753620a1d0d642a2b44519d6faa3e, type: 3}
@@ -687,7 +777,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6048128124110562263}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cdd9c40f986991d98a3f911116508210, type: 3}
   m_Name: 
@@ -1272,3 +1362,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   polkaDotTex: {fileID: 2800000, guid: 7da25098e4b705445a1c7f7e064bb119, type: 3}
   stripeTex: {fileID: 2800000, guid: df20f755ebc0b1f4a87e5ef738aac8a5, type: 3}
+--- !u!114 &705811765077282990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19ec269d0ad479b9fad4f91afd3aae32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4256956647280126110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048128124110562263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24d56ab7607180cbb7ff51ee3bd052e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notificationBoxWidget: {fileID: 8734877188125155707, guid: 0b1c9bd7257566a6abc19592203a7896,
+    type: 3}

@@ -64,7 +64,7 @@ namespace Neverway.Framework
 
         private void Update()
         {
-            applicationSettings.currentSettingsData.closedCaptioning = closedCaptioning.currentIndex;
+            applicationSettings.bufferedSettingsData.closedCaptioning = closedCaptioning.currentIndex;
         }
 
         //=-----------------=
@@ -72,84 +72,85 @@ namespace Neverway.Framework
         //=-----------------=
         public void InitButtonValues()
         {
-            outputDevice.value = applicationSettings.currentSettingsData.outputDevice;
-            inputDevice.value = applicationSettings.currentSettingsData.inputDevice;
-            inputVolume.value = applicationSettings.currentSettingsData.inputVolume;
+            applicationSettings.bufferedSettingsData = new ApplicationSettingsData(applicationSettings.currentSettingsData);
+            outputDevice.value = applicationSettings.bufferedSettingsData.outputDevice;
+            inputDevice.value = applicationSettings.bufferedSettingsData.inputDevice;
+            inputVolume.value = applicationSettings.bufferedSettingsData.inputVolume;
 
-            masterVolume.value = applicationSettings.currentSettingsData.masterVolume;
-            musicVolume.value = applicationSettings.currentSettingsData.musicVolume;
-            soundVolume.value = applicationSettings.currentSettingsData.soundVolume;
-            voiceVolume.value = applicationSettings.currentSettingsData.voiceVolume;
-            chatterVolume.value = applicationSettings.currentSettingsData.chatterVolume;
-            ambientVolume.value = applicationSettings.currentSettingsData.ambientVolume;
-            menuVolume.value = applicationSettings.currentSettingsData.menuVolume;
+            masterVolume.value = applicationSettings.bufferedSettingsData.masterVolume;
+            musicVolume.value = applicationSettings.bufferedSettingsData.musicVolume;
+            soundVolume.value = applicationSettings.bufferedSettingsData.soundVolume;
+            voiceVolume.value = applicationSettings.bufferedSettingsData.voiceVolume;
+            chatterVolume.value = applicationSettings.bufferedSettingsData.chatterVolume;
+            ambientVolume.value = applicationSettings.bufferedSettingsData.ambientVolume;
+            menuVolume.value = applicationSettings.bufferedSettingsData.menuVolume;
 
-            visualizeSoundEffects.isOn = applicationSettings.currentSettingsData.visualizeSoundEffects;
-            closedCaptioning.currentIndex = applicationSettings.currentSettingsData.closedCaptioning;
-            minVolume.value = applicationSettings.currentSettingsData.minVolume;
-            maxVolume.value = applicationSettings.currentSettingsData.maxVolume;
-            minFrequency.value = applicationSettings.currentSettingsData.minFrequency;
+            visualizeSoundEffects.isOn = applicationSettings.bufferedSettingsData.visualizeSoundEffects;
+            closedCaptioning.currentIndex = applicationSettings.bufferedSettingsData.closedCaptioning;
+            minVolume.value = applicationSettings.bufferedSettingsData.minVolume;
+            maxVolume.value = applicationSettings.bufferedSettingsData.maxVolume;
+            minFrequency.value = applicationSettings.bufferedSettingsData.minFrequency;
         }
 
         private void InitEventListeners()
         {
             outputDevice.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.outputDevice = outputDevice.value;
+                applicationSettings.bufferedSettingsData.outputDevice = outputDevice.value;
             });
             inputDevice.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.inputDevice = inputDevice.value;
+                applicationSettings.bufferedSettingsData.inputDevice = inputDevice.value;
             });
             inputVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.inputVolume = Mathf.RoundToInt(inputVolume.value);
+                applicationSettings.bufferedSettingsData.inputVolume = Mathf.RoundToInt(inputVolume.value);
             });
 
             masterVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.masterVolume = Mathf.RoundToInt(masterVolume.value);
+                applicationSettings.bufferedSettingsData.masterVolume = Mathf.RoundToInt(masterVolume.value);
             });
             musicVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.musicVolume = Mathf.RoundToInt(musicVolume.value);
+                applicationSettings.bufferedSettingsData.musicVolume = Mathf.RoundToInt(musicVolume.value);
             });
             soundVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.soundVolume = Mathf.RoundToInt(soundVolume.value);
+                applicationSettings.bufferedSettingsData.soundVolume = Mathf.RoundToInt(soundVolume.value);
             });
             voiceVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.voiceVolume = Mathf.RoundToInt(voiceVolume.value);
+                applicationSettings.bufferedSettingsData.voiceVolume = Mathf.RoundToInt(voiceVolume.value);
             });
             chatterVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.chatterVolume = Mathf.RoundToInt(chatterVolume.value);
+                applicationSettings.bufferedSettingsData.chatterVolume = Mathf.RoundToInt(chatterVolume.value);
             });
             ambientVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.ambientVolume = Mathf.RoundToInt(ambientVolume.value);
+                applicationSettings.bufferedSettingsData.ambientVolume = Mathf.RoundToInt(ambientVolume.value);
             });
             menuVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.menuVolume = Mathf.RoundToInt(menuVolume.value);
+                applicationSettings.bufferedSettingsData.menuVolume = Mathf.RoundToInt(menuVolume.value);
             });
 
             visualizeSoundEffects.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.visualizeSoundEffects = visualizeSoundEffects.isOn;
+                applicationSettings.bufferedSettingsData.visualizeSoundEffects = visualizeSoundEffects.isOn;
             });
             minVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.minVolume = Mathf.RoundToInt(minVolume.value);
+                applicationSettings.bufferedSettingsData.minVolume = Mathf.RoundToInt(minVolume.value);
             });
             maxVolume.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.maxVolume = Mathf.RoundToInt(maxVolume.value);
+                applicationSettings.bufferedSettingsData.maxVolume = Mathf.RoundToInt(maxVolume.value);
             });
             minFrequency.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.minFrequency = Mathf.RoundToInt(minFrequency.value);
+                applicationSettings.bufferedSettingsData.minFrequency = Mathf.RoundToInt(minFrequency.value);
             });
         }
 

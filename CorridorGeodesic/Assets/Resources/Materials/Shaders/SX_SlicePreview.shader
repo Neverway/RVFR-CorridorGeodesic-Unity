@@ -113,7 +113,7 @@ Shader "Soulex/Effects/SlicePreview"
                 //Distortion
                 TriplanarUV UVs = GetTriplanarUVs(i.worldPos, i.normal, 64, mod, _MainTex, _MainTex_ST);
 
-                PixelizeTriplanarUV(UVs, 128);
+                //PixelizeTriplanarUV(UVs, 128);
 
                 mod.uvScale = _DistortionScale;
                 mod.uvOffset = _Time.x * 0.2;

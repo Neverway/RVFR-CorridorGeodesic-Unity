@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Neverway.Framework
@@ -31,7 +32,7 @@ namespace Neverway.Framework
         //=-----------------=
         // Reference Variables
         //=-----------------=
-        public event Action onValueChanged;
+        public UnityEvent onValueChanged;
         [SerializeField] private Button left, right;
         [SerializeField] private GameObject indicator, indicatorSelected, indicatorRoot;
         [SerializeField] private TMP_Text text;
@@ -45,18 +46,20 @@ namespace Neverway.Framework
         {
             left.onClick.AddListener(delegate
             {
-                onValueChanged?.Invoke();
                 if (currentIndex - 1 >= 0)
                 {
                     currentIndex--;
+                    print(currentIndex);
+                    onValueChanged?.Invoke();
                 }
             });
             right.onClick.AddListener(delegate
             {
-                onValueChanged?.Invoke();
-                if (currentIndex + 1 <= selectorOptions.Count - 1)
+                if (currentIndex + 1 <= selectorOptions.Count-1)
                 {
                     currentIndex++;
+                    print(currentIndex);
+                    onValueChanged?.Invoke();
                 }
             });
             // Create indicators

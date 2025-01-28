@@ -37,6 +37,7 @@ namespace Neverway.Framework.ApplicationManagement
         [SerializeField] private Toggle showFramecounter;
 
         // Quality
+        [SerializeField] public Button_Selector qualityPreset;
         [SerializeField] public Button_Selector resolutionScale;
         [SerializeField] public Button_Selector shadowQuality;
         [SerializeField] public Button_Selector effectsQuality;
@@ -62,18 +63,19 @@ namespace Neverway.Framework.ApplicationManagement
 
         private void Update()
         {
-            applicationSettings.currentSettingsData.windowMode = windowMode.currentIndex;
+            applicationSettings.bufferedSettingsData.windowMode = windowMode.currentIndex;
 
-            applicationSettings.currentSettingsData.resolutionScale = resolutionScale.currentIndex;
-            applicationSettings.currentSettingsData.shadowQuality = shadowQuality.currentIndex;
-            applicationSettings.currentSettingsData.effectsQuality = effectsQuality.currentIndex;
-            applicationSettings.currentSettingsData.textureQuality = textureQuality.currentIndex;
-            applicationSettings.currentSettingsData.postprocessingQuality = postprocessingQuality.currentIndex;
+            applicationSettings.bufferedSettingsData.qualityPreset = qualityPreset.currentIndex;
+            applicationSettings.bufferedSettingsData.quality.resolutionScale = resolutionScale.currentIndex;
+            applicationSettings.bufferedSettingsData.quality.shadowQuality = shadowQuality.currentIndex;
+            applicationSettings.bufferedSettingsData.quality.effectsQuality = effectsQuality.currentIndex;
+            applicationSettings.bufferedSettingsData.quality.textureQuality = textureQuality.currentIndex;
+            applicationSettings.bufferedSettingsData.quality.postprocessingQuality = postprocessingQuality.currentIndex;
 
-            applicationSettings.currentSettingsData.antialiasing = antialiasing.currentIndex;
-            applicationSettings.currentSettingsData.motionBlur = motionBlur.currentIndex;
-            applicationSettings.currentSettingsData.ambientOcclusion = ambientOcclusion.currentIndex;
-            applicationSettings.currentSettingsData.bloom = bloom.currentIndex;
+            applicationSettings.bufferedSettingsData.antialiasing = antialiasing.currentIndex;
+            applicationSettings.bufferedSettingsData.motionBlur = motionBlur.currentIndex;
+            applicationSettings.bufferedSettingsData.ambientOcclusion = ambientOcclusion.currentIndex;
+            applicationSettings.bufferedSettingsData.bloom = bloom.currentIndex;
         }
 
         //=-----------------=
@@ -81,38 +83,81 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         public void InitButtonValues()
         {
+            applicationSettings.bufferedSettingsData = new ApplicationSettingsData(applicationSettings.currentSettingsData);
             PopulateTargetResolutionDropdown();
-            targetResolution.value = applicationSettings.currentSettingsData.targetResolution;
-            windowMode.currentIndex = applicationSettings.currentSettingsData.windowMode;
-            enableVsync.isOn = applicationSettings.currentSettingsData.enableVysnc;
-            fpslimit.value = applicationSettings.currentSettingsData.fpslimit;
-            showFramecounter.isOn = applicationSettings.currentSettingsData.showFramecounter;
+            targetResolution.value = applicationSettings.bufferedSettingsData.targetResolution;
+            windowMode.currentIndex = applicationSettings.bufferedSettingsData.windowMode;
+            enableVsync.isOn = applicationSettings.bufferedSettingsData.enableVysnc;
+            fpslimit.value = applicationSettings.bufferedSettingsData.fpsLimit;
+            showFramecounter.isOn = applicationSettings.bufferedSettingsData.showFramecounter;
 
-            resolutionScale.currentIndex = applicationSettings.currentSettingsData.resolutionScale;
-            shadowQuality.currentIndex = applicationSettings.currentSettingsData.shadowQuality;
-            effectsQuality.currentIndex = applicationSettings.currentSettingsData.effectsQuality;
-            textureQuality.currentIndex = applicationSettings.currentSettingsData.textureQuality;
-            postprocessingQuality.currentIndex = applicationSettings.currentSettingsData.postprocessingQuality;
+            qualityPreset.currentIndex = applicationSettings.bufferedSettingsData.qualityPreset;
+            resolutionScale.currentIndex = applicationSettings.bufferedSettingsData.quality.resolutionScale;
+            shadowQuality.currentIndex = applicationSettings.bufferedSettingsData.quality.shadowQuality;
+            effectsQuality.currentIndex = applicationSettings.bufferedSettingsData.quality.effectsQuality;
+            textureQuality.currentIndex = applicationSettings.bufferedSettingsData.quality.textureQuality;
+            postprocessingQuality.currentIndex = applicationSettings.bufferedSettingsData.quality.postprocessingQuality;
 
-            antialiasing.currentIndex = applicationSettings.currentSettingsData.antialiasing;
-            motionBlur.currentIndex = applicationSettings.currentSettingsData.motionBlur;
-            ambientOcclusion.currentIndex = applicationSettings.currentSettingsData.ambientOcclusion;
-            bloom.currentIndex = applicationSettings.currentSettingsData.bloom;
+            antialiasing.currentIndex = applicationSettings.bufferedSettingsData.antialiasing;
+            motionBlur.currentIndex = applicationSettings.bufferedSettingsData.motionBlur;
+            ambientOcclusion.currentIndex = applicationSettings.bufferedSettingsData.ambientOcclusion;
+            bloom.currentIndex = applicationSettings.bufferedSettingsData.bloom;
         }
 
         private void InitEventListeners()
         {
             targetResolution.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.targetResolution = targetResolution.value;
+                applicationSettings.bufferedSettingsData.targetResolution = targetResolution.value;
             });
             fpslimit.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.fpslimit = Mathf.RoundToInt(fpslimit.value);
+                applicationSettings.bufferedSettingsData.fpsLimit = Mathf.RoundToInt(fpslimit.value);
             });
             showFramecounter.onValueChanged.AddListener(delegate
             {
-                applicationSettings.currentSettingsData.showFramecounter = showFramecounter.isOn;
+                applicationSettings.bufferedSettingsData.showFramecounter = showFramecounter.isOn;
+            });
+            qualityPreset.onValueChanged.AddListener(() => 
+            {
+                switch (qualityPreset.currentIndex)
+                {
+                    case 0:
+                        resolutionScale.currentIndex = applicationSettings.retroQuality.resolutionScale;
+                        shadowQuality.currentIndex = applicationSettings.retroQuality.shadowQuality;
+                        effectsQuality.currentIndex = applicationSettings.retroQuality.effectsQuality;
+                        textureQuality.currentIndex = applicationSettings.retroQuality.textureQuality;
+                        postprocessingQuality.currentIndex = applicationSettings.retroQuality.postprocessingQuality;
+                        break;
+                    case 1:
+                        resolutionScale.currentIndex = applicationSettings.lowQuality.resolutionScale;
+                        shadowQuality.currentIndex = applicationSettings.lowQuality.shadowQuality;
+                        effectsQuality.currentIndex = applicationSettings.lowQuality.effectsQuality;
+                        textureQuality.currentIndex = applicationSettings.lowQuality.textureQuality;
+                        postprocessingQuality.currentIndex = applicationSettings.lowQuality.postprocessingQuality;
+                        break;
+                    case 2:
+                        resolutionScale.currentIndex = applicationSettings.mediumQuality.resolutionScale;
+                        shadowQuality.currentIndex = applicationSettings.mediumQuality.shadowQuality;
+                        effectsQuality.currentIndex = applicationSettings.mediumQuality.effectsQuality;
+                        textureQuality.currentIndex = applicationSettings.mediumQuality.textureQuality;
+                        postprocessingQuality.currentIndex = applicationSettings.mediumQuality.postprocessingQuality;
+                        break;
+                    case 3:
+                        resolutionScale.currentIndex = applicationSettings.highQuality.resolutionScale;
+                        shadowQuality.currentIndex = applicationSettings.highQuality.shadowQuality;
+                        effectsQuality.currentIndex = applicationSettings.highQuality.effectsQuality;
+                        textureQuality.currentIndex = applicationSettings.highQuality.textureQuality;
+                        postprocessingQuality.currentIndex = applicationSettings.highQuality.postprocessingQuality;
+                        break;
+                    case 4:
+                        resolutionScale.currentIndex = applicationSettings.fantasticQuality.resolutionScale;
+                        shadowQuality.currentIndex = applicationSettings.fantasticQuality.shadowQuality;
+                        effectsQuality.currentIndex = applicationSettings.fantasticQuality.effectsQuality;
+                        textureQuality.currentIndex = applicationSettings.fantasticQuality.textureQuality;
+                        postprocessingQuality.currentIndex = applicationSettings.fantasticQuality.postprocessingQuality;
+                        break;
+                }
             });
         }
 

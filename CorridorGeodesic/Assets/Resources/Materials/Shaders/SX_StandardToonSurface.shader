@@ -2,12 +2,14 @@ Shader "Soulex/Surface/Standard Toon"
 {
     Properties
     {
+        [Header(Material Settings)][Space]
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode ("Cull Mode", Float) = 2
         [KeywordEnum(TruePBR, StylizedPBR)] _SpecularMode ("Specular Mode", Float) = 0
         _AlphaClip ("Alpha Clip", Range(0, 1)) = 0.5
 
         _Color ("Color", Color) = (1,1,1,1)
 
+        [Header(Main Texture Properties)][Space]
         _RampSmoothness ("Ramp Smoothness", Range(0.1, 1.0)) = 0.1
 
         [NoScaleOffset] _MainTex ("Albedo", 2D) = "white" {}
@@ -25,18 +27,22 @@ Shader "Soulex/Surface/Standard Toon"
         [NoScaleOffset] _ParallaxMap ("Height Map", 2D) = "black" {}
 
         [NoScaleOffset] _OcclusionMap ("Occlusion", 2D) = "white" {}
+        
+        _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
+        _Offset ("Offset", Vector) = (0, 0, 0, 0)
 
+        [Header(Emission Properties)][Space]
         _EmissionColor ("Emission Color", Color) = (0, 0, 0, 0)
         [NoScaleOffset] _EmissionMap ("Emission", 2D) = "white" {}
 
+        [Header(Detail Layer)][Space]
         _DetailAlbedoMap ("Detail Texture", 2D) = "black" {}
         _DetailProminence ("Detail Prominence", Range(0, 1)) = 0.2
         _DetailColor ("Detail Color", Color) = (0, 0, 0, 0)
 
-        _Tiling ("Tiling", Vector) = (1, 1, 0, 0)
-        _Offset ("Offset", Vector) = (0, 0, 0, 0)
-
+        [Header(Debug Parameters)][Space]
         [Toggle] _UseSlice ("Use Slice", Float) = 0
+        [Toggle] _ColorOnly ("Color Only", Float) = 0
         [HideInInspector] _SliceCenterOne ("Slice Center One", Vector) = (0, 0, 0, 0)
         [HideInInspector] _SliceCenterTwo ("Slice Center Two", Vector) = (0, 0, 0, 0)
 
@@ -109,6 +115,7 @@ Shader "Soulex/Surface/Standard Toon"
         fixed4 _Color;
 
         float _UseSlice;
+        float _ColorOnly;
 
         float3 _SliceCenterOne;
         float3 _SliceCenterTwo;
@@ -237,17 +244,24 @@ Shader "Soulex/Surface/Standard Toon"
 
             o.Albedo = lerp(col.rgb, detailCol.rgb * _DetailColor, detailMask);
 
-            o.Normal = UnpackScaleNormal(tex2D(_BumpMap, uv), _BumpScale);
+            if (_ColorOnly == 0)
+            {
+                o.Normal = UnpackScaleNormal(tex2D(_BumpMap, uv), _BumpScale);
 
-            o.Metallic = tex2D(_MetallicGlossMap, uv).r * _Metallic;
+                o.Metallic = tex2D(_MetallicGlossMap, uv).r * _Metallic;
 
-            o.Roughness = tex2D(_SpecGlossMap, uv).r * _Glossiness;
+                o.Roughness = tex2D(_SpecGlossMap, uv).r * _Glossiness;
 
-            o.Occlusion = tex2D(_OcclusionMap, uv).r;
+                o.Occlusion = tex2D(_OcclusionMap, uv).r;
 
-            o.Emission = tex2D(_EmissionMap, uv) * _EmissionColor;
+                o.Emission = tex2D(_EmissionMap, uv) * _EmissionColor;
 
-            o.Alpha = col.a;
+                o.Alpha = col.a;
+            }
+            else
+            {
+                o.Roughness = tex2D(_SpecGlossMap, uv).r * _Glossiness;
+            }
 
             float sliceA = dot(_SliceNormalOne, IN.worldPos - _SliceCenterOne);
             float sliceB = dot(_SliceNormalTwo, IN.worldPos - _SliceCenterTwo);

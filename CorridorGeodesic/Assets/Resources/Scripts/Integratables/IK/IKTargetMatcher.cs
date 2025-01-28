@@ -16,6 +16,8 @@ public class IKTargetMatcher : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
+    [SerializeField] private bool enablePositionMatch;
+    [SerializeField] private bool enableRotationMatch;
 
 
     //=-----------------=
@@ -39,7 +41,10 @@ public class IKTargetMatcher : MonoBehaviour
 
     private void Update()
     {
-        transform.position = target.transform.position;
+        if (!target) return;
+        if (!target.gameObject.activeInHierarchy) return;
+        if (enablePositionMatch) transform.position = target.transform.position;
+        if (enableRotationMatch) transform.rotation = target.transform.rotation;
     }
 
     //=-----------------=

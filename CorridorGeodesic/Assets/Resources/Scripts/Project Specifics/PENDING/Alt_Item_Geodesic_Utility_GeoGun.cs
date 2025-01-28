@@ -1,0 +1,1205 @@
+//===================== (Neverway 2024) Written by Liz M. & Connorses =====================
+//
+// Purpose: |  V  |   ->   M
+// Notes:
+//
+//=============================================================================
+
+using System;
+using DG.Tweening;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
+using UnityEngine.UIElements;
+using Neverway.Framework.AudioManagement;
+
+public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
+{
+    //=-----------------=
+    // Public Variables
+    //=-----------------=
+    [Header("GeoGun Upgrades")]
+    [Tooltip("Allows rifts to be placed on walls")]
+    public bool allowNonLinearSlicing;
+    [Tooltip("Allows rifts to expand past the start position")]
+    public bool allowExpandingRift;
+    [Tooltip("Allows the player to slam rifts closed, creating a vacuum that flings things out of rifts")]
+    public bool allowSlammingRift;
+    [Tooltip("Debug parameter to... well, you get it")]
+    public bool allowMarkerPlacementAnywhere;
+    
+    [Header("Other Variables")]
+    [Tooltip("Used in the view raycast to aim the barrel transform of the gun towards the proper point")]
+    public LayerMask viewRaycastMask;
+    [Tooltip("Used by the crosshair to visualize if the gun is pointing at a valid target")]
+    public bool isValidTarget;
+    
+    public Material riftMaterial;
+    public Color riftColorShallowStable, riftColorDeepStable;
+    public Color riftColorShallowUnstable, riftColorDeepUnstable;
+    
+    public int maxAmmo = 2;
+    public int currentAmmo = 2;
+
+    //=-----------------=
+    // Private Variables
+    //=-----------------=
+    private Vector3 previousPlanePosition;
+    private AudioSource_PitchVarienceModulator audioSource;
+    private RaycastHit viewPoint; // For aiming projectiles
+
+    //=-----------------=
+    // Reference Variables
+    //=-----------------=
+    [Header("Reference Variables")]
+    // TODO: ADD COMMENTS TO THESE VARIABLES vvv
+    [SerializeField] private Transform barrelTransform;
+    [SerializeField] private Transform centerViewTransform;
+    [SerializeField] private GameObject debugObject;
+    [SerializeField] private Projectile_Vacumm projectileVacuum;
+    [SerializeField] private GameObject riftObject;
+    [SerializeField] private GameObject cutPreviewPrefab;
+    public GameObject[] cutPreviews;
+    [SerializeField] private float projectileForce;
+    [SerializeField] private CrushDetector crushDetector;
+    [SerializeField] private Animator anims;
+    [SerializeField] private Rift_Audio riftAudioPrefab;
+    private Rift_Audio activeRiftAudio;
+    public List<Projectile_Vacumm> deployedInfinityMarkers = new List<Projectile_Vacumm> ();
+    [IsDomainReloaded] public static GameObject deployedRift;
+    private Mesh_Slicable[] meshSlicers;
+    // TODO: ADD COMMENTS TO THESE VARIABLES ^^^
+
+    [Header("ALTMeshSlicer Static Reference Variables")]
+    //Statics for ALTMeshSlicer to use
+    [IsDomainReloaded] public static Plane planeA;
+    [IsDomainReloaded] public static Plane planeB;
+    [IsDomainReloaded] public static List<GameObject> nullSlices;
+    [IsDomainReloaded] public static GameObject planeBMeshes;
+    [IsDomainReloaded] public static List<Mesh_Slicable> originalSliceableObjects = new List<Mesh_Slicable> ();
+    [IsDomainReloaded] public static List<GameObject> slicedMeshes = new List<GameObject> ();
+    [IsDomainReloaded] public static List<CorGeo_ActorData> CorGeo_ActorDatas = new List<CorGeo_ActorData> ();
+
+    //Object groups for resetting <= I think this has been misplaced. ~Liz
+
+    // TODO: ADD COMMENTS TO THESE VARIABLES vvv
+    // Rift collapse lerp <= What is this for?? ~Liz
+    private Vector3 riftNormal;
+    private Vector3 planeBStartPos;
+    
+    // The value to keep track of how expanded or collapsed the rift is (RiftExpand 1 <--0--> -1 RiftCollapse)
+    private float riftTimer = 0f;
+    
+    private float maxRiftTimer;
+    [IsDomainReloaded] public static float lerpAmount;
+    [SerializeField] private float riftSecondsPerUnit = 1.8f;
+    [IsDomainReloaded] public static float riftWidth;
+    private float minRiftTimer;
+    private float maxRiftWidth = 50f;
+    // TODO: ADD COMMENTS TO THESE VARIABLES ^^^
+
+    // Used to track when the primary or secondary fire of the GeoGun is being held
+    // (Used to expand and contract the rift)
+    private bool primaryHeld = false;
+    private bool secondaryHeld = false;
+
+    // TODO: ADD COMMENTS TO THESE VARIABLES vvv
+    private bool isCutPreviewActive = false;
+    private bool isCollapseStarted = false;
+    [IsDomainReloaded] public static bool delayRiftCollapse = false;
+    private bool clearingRift = false;
+    // TODO: ADD COMMENTS TO THESE VARIABLES ^^^
+    
+    // A set of variables used for handling backing the rift off when the player has been crushed 
+    private bool expandingRiftDueToCrush = false;
+    private bool ignoreRiftInputAfterCrush = false;
+
+    // TODO: ADD COMMENTS TO THESE VARIABLES vvv
+    private float timeRiftHeld = 0f;
+    private float maxRiftSpeedMod = 2.5f;
+    private float secondsToMaxSpeedMod = 1.3f;
+    private float timeMoveRiftButtonHeld = 0f;
+    private float slowDistance = 1.5f;
+    [Tooltip("This should match the mask on Projectile_Vacuum, You're welcome future me you idiot ~Liz")]
+    [SerializeField] private LayerMask validTargetMask;
+    [IsDomainReloaded] public static RiftState previousState = RiftState.None;
+    [IsDomainReloaded] public static RiftState currentState = RiftState.None;
+    // TODO: ADD COMMENTS TO THESE VARIABLES ^^^
+
+    // As far as I can tell, this is only used for Graphics_RiftPreviewEffects.cs to flash the rift previews when the rift is moved ~Liz
+    // ToDo: What does Graphics_RiftPreviewEffects.cs actually do? It looks like it handles more than just that one effect. ~Liz
+    public delegate void StateChanged();
+    [IsDomainReloaded] public static event StateChanged OnStateChanged;
+
+    
+    //=-----------------=
+    // Mono Functions
+    //=-----------------=
+    private void Start ()
+    {
+        // Gather a list of all sliceable objects currently loaded
+        meshSlicers = FindObjectsByType<Mesh_Slicable> (FindObjectsSortMode.None);
+        
+        // Creates the big planes with the fancy shaders that represent the boundaries of the rift
+        CreateCutPreviews ();
+        
+        // Assign the listener so if the player gets crushed the rift will backoff slightly
+        crushDetector.onCrushed.AddListener (() => StartCoroutine (InterruptRiftCollapse (0.1f)));
+        
+        // Create the object that plays the audio for the rift
+        activeRiftAudio = Instantiate (riftAudioPrefab);
+    }
+
+    // Used for stopping rift collapse when getting crushed
+    private IEnumerator InterruptRiftCollapse (float delay)
+    {
+        if (!secondaryHeld) yield break;
+
+        secondaryHeld = false; // release close rift input
+        ignoreRiftInputAfterCrush = true;
+
+        expandingRiftDueToCrush = true;
+        yield return new WaitForSeconds (delay);
+        expandingRiftDueToCrush = false;
+    }
+
+    // Fire marker / Start expand
+    public override void UsePrimary ()
+    {
+        DeployInfinityMarker ();
+        primaryHeld = true;
+    }
+
+    // Start collapse
+    public override void UseSecondary ()
+    {
+        if (ignoreRiftInputAfterCrush)
+            return;
+
+        if (!isCollapseStarted)
+        {
+            SetupForConvergingMarkers ();
+        }
+        secondaryHeld = true;
+    }
+
+    // Stop expand
+    public override void ReleasePrimary ()
+    {
+        primaryHeld = false;
+    }
+
+    // Stop collapse
+    public override void ReleaseSecondary ()
+    {
+        ignoreRiftInputAfterCrush = false;
+        secondaryHeld = false;
+    }
+
+    // Clear the rift
+    public override void UseSpecial ()
+    {
+        StartRecallInfinityMarkers ();
+    }
+
+    // Used to clear the audio played by an open rift
+    public void OnDestroy ()
+    {
+        Destroy(activeRiftAudio);
+    }
+
+    public void FixedUpdate ()
+    {
+        AimTowardsCenterOfView ();
+
+        anims.SetBool("Empty", currentAmmo <= 0);
+
+        if (!isCutPreviewActive)
+        {
+            if (AreMarkersPinned ())
+            {
+                DeployRiftAndPreview ();
+            }
+        }
+
+        if (deployedRift)
+        {
+            CheckForActorSpaceChanges ();
+        }
+    
+        bool moveRiftBackwards = false;
+        bool moveRift = false;
+        if (secondaryHeld)
+        {
+            moveRiftBackwards = false;
+            moveRift = true;
+        }
+        else if (primaryHeld && allowExpandingRift || primaryHeld && !allowExpandingRift && riftTimer > 0)
+        {
+            if (!isCollapseStarted)
+            {
+                SetupForConvergingMarkers ();
+            }
+            moveRiftBackwards = true;
+            moveRift = true;
+        }
+
+        if (riftTimer < 0)
+        {
+            var calculatedLerpValue = (riftTimer / minRiftTimer);
+            print(calculatedLerpValue);
+            var lerpedRiftColorShallow = Color.Lerp(riftColorShallowStable, riftColorShallowUnstable, calculatedLerpValue);
+            var lerpedRiftColorDeep = Color.Lerp(riftColorDeepStable, riftColorDeepUnstable, calculatedLerpValue);
+            
+            // current/maximum= (0-1)
+            
+            riftMaterial.SetColor("_ShallowColor", lerpedRiftColorShallow);
+            riftMaterial.SetColor("_DeepColor", lerpedRiftColorDeep);
+        }
+        if (riftTimer >= 0)
+        {
+            riftMaterial.SetColor("_ShallowColor", riftColorShallowStable);
+            riftMaterial.SetColor("_DeepColor", riftColorDeepStable);
+        }
+
+        if (expandingRiftDueToCrush)
+        {
+            moveRiftBackwards = true;
+            moveRift = true;
+        }
+
+        if (!moveRift && !clearingRift)
+        {
+            timeMoveRiftButtonHeld = 0f;
+        }
+
+        if (clearingRift && riftTimer < 0)
+        {
+            MoveRift (false);
+            return;
+        }
+        if (clearingRift && riftTimer > 0)
+        {
+            MoveRift (true);
+            return;
+        }
+
+        if (isCollapseStarted && deployedRift && riftTimer <= maxRiftTimer)
+        {
+            if (moveRift && !delayRiftCollapse)
+            {
+                MoveRift (moveRiftBackwards);
+                return;
+            }
+        }
+
+        if (!deployedRift)
+        {
+            UpdateState (RiftState.None);
+        }
+        else
+        {
+            if (currentState != RiftState.Closed && currentState != RiftState.Preview)
+            {
+                UpdateState (RiftState.Idle);
+            }
+        }
+    }
+    
+    //Added by Errynei to get closed rift previews to work right
+    private void LateUpdate()
+    {
+        if (currentState == RiftState.Closed)
+        {
+            SetClosedPreview();
+        }
+        else if(deployedInfinityMarkers.Count > 1) //Check if there is any markers deployed
+        {
+            float offset = 0.25f;
+            Vector3 markerPos1 = deployedInfinityMarkers[0].transform.position;
+            Vector3 markerPos2 = deployedInfinityMarkers[1].transform.position;
+            float markerDistance = Vector3.Distance(markerPos1, markerPos2);
+            if (markerDistance < offset * 2)
+            {
+                offset = markerDistance / 2;
+            }
+
+            UpdateRiftOffset(offset);
+        }
+
+        isValidTarget = GetValidTarget();
+    }
+
+
+    //=-----------------=
+    // Internal Functions
+    //=-----------------=
+    bool GetValidTarget()
+    {
+        
+        // Get weather the gun is pointed at a valid target (for crosshair)
+        if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out RaycastHit hit, Mathf.Infinity, validTargetMask))
+        {
+            if (hit.collider.gameObject.TryGetComponent<BulbCollisionBehaviour>(out var bulbBehaviourObj))
+            {
+                return true;
+            }
+            
+            else if (hit.collider.gameObject.TryGetComponent<Mesh_Slicable>(out var _out))
+            {
+                if (hit.collider is not MeshCollider)
+                {
+                    return false;
+                }
+                MeshCollider mCollider = (MeshCollider)hit.collider;
+
+                Mesh colMesh = mCollider.sharedMesh;
+
+                int triIndex = hit.triangleIndex;
+
+                //todo: Commented out this line of code, actually ended up throwing an IndexOutOfRangeException
+                //DisplayDebugTriangle(colMesh, triIndex, hit.collider.transform);
+
+                if (hit.collider.gameObject.TryGetComponent(out Renderer rend))
+                {
+                    int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
+                    if (subMeshIndex != -1 && !CorGeo_ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+            
+        return false;
+    }
+    
+    int GetSubMeshIndex(Mesh mesh, int triIndex)
+    {
+        int triangleCounter = 0;
+        for (int i = 0; i < mesh.subMeshCount; i++)
+        {
+            triangleCounter += mesh.GetSubMesh(i).indexCount / 3;
+            if (triIndex < triangleCounter)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // Added by Errynei to get closed rift previews to work right
+    private void SetClosedPreview()
+    {
+        Transform player = Camera.main.transform;
+        float distanceToPlane0 = Vector3.Distance(player.position, cutPreviews[0].transform.GetChild(0).position);
+        float distanceToPlane1 = Vector3.Distance(player.position, cutPreviews[1].transform.GetChild(0).position);
+        bool plane0isClosest = distanceToPlane0 < distanceToPlane1;
+        cutPreviews[0].SetActive(plane0isClosest);
+        cutPreviews[1].SetActive(!plane0isClosest);
+
+        UpdateRiftOffset(0.05f);
+    }
+
+    // Added by Errynei to get closed rift previews to work right
+    private void UpdateRiftOffset(float offset)
+    {
+        Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * offset;
+        Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * offset;
+        cutPreviews[0].transform.GetChild(0).position = pos1;
+        cutPreviews[1].transform.GetChild(0).position = pos2;
+    }
+
+    private void MoveRift (bool moveRiftBackwards = false) //todo: moveRiftBackwards doesn't completely work, we need to re-activate things that were trapped inside of it.
+    {
+
+        float speedMod = 1f;
+
+        float cutPreviewDistance = Vector3.Distance (cutPreviews[0].transform.position, cutPreviews[1].transform.position);
+
+        // Calculate speed based on how long we've held the button down.
+        if (timeMoveRiftButtonHeld < secondsToMaxSpeedMod)
+        {
+            //Scales speed up from 1 to maxRiftSpeedMod based on how long button was held
+            timeMoveRiftButtonHeld += Time.fixedDeltaTime;
+            if (timeMoveRiftButtonHeld > secondsToMaxSpeedMod)
+            {
+                timeMoveRiftButtonHeld = secondsToMaxSpeedMod;
+            }
+        }
+        speedMod = (timeMoveRiftButtonHeld / secondsToMaxSpeedMod) * (maxRiftSpeedMod - 1) + 1;
+        
+        if (clearingRift)
+        { 
+            // if rift is being reset, increase the speed modifier.
+            speedMod *= 2.5f;
+            
+            HandleUnstableRiftVacuum();
+        }
+
+        if (!clearingRift && !moveRiftBackwards && cutPreviewDistance < slowDistance)
+        {
+            speedMod = 0.8f;
+        }
+        //Debug.Log ("Sped" + speedMod);
+
+        // If converging, increase the riftTimer and relocate actors and meshes
+        if (moveRiftBackwards)
+        {
+            if (riftTimer >= maxRiftTimer)
+            {
+                //Un-collapse things in the rift.
+                for (int i = 0; i < deployedRift.transform.childCount; i++)
+                {
+                    try
+                    {
+                        deployedRift.transform.GetChild (i).gameObject.SetActive (true);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("A known error occured");
+                        throw;
+                    }
+                }
+                foreach (var plane in cutPreviews)
+                {
+                    plane.SetActive (true);
+                }
+            }
+            foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+            {
+                if (actor.space == CorGeo_ActorData.Space.Null)
+                {
+                    actor.gameObject.SetActive (true);
+                }
+            }
+
+            if (riftTimer <= minRiftTimer)
+            {
+                UpdateState (RiftState.Idle);
+                return;
+            }
+            UpdateState (RiftState.Expanding);
+
+            riftTimer -= Time.fixedDeltaTime * speedMod;
+            if (clearingRift && riftTimer < 0)
+            {
+                riftTimer = 0;
+            }
+            //Debug.Log (riftTimer);
+        }
+        else
+        {
+            //Move rift forwards
+            if (riftTimer >= maxRiftTimer)
+            {
+                UpdateState (RiftState.Closed);
+                return;
+            }
+
+            UpdateState (RiftState.Collapsing);
+            riftTimer += Time.fixedDeltaTime * speedMod;
+            if (clearingRift && riftTimer > 0)
+            {
+                riftTimer = 0;
+            }
+
+            //If rift is smaller than 0.4f then close it completely.
+            if (cutPreviewDistance < 0.4f)
+            {
+                riftTimer = maxRiftTimer;
+            }
+
+            //Debug.Log (riftTimer);
+        }
+
+        riftTimer = Mathf.Clamp (riftTimer, minRiftTimer, maxRiftTimer);
+
+        lerpAmount = riftTimer / maxRiftTimer;
+
+        float prevRiftWidth = deployedRift.transform.localScale.z * riftWidth;
+
+        // Squish null-space parent by scaling it
+        deployedRift.transform.localScale = new Vector3 (1, 1, 1 - lerpAmount);
+
+        float newRiftWidth = deployedRift.transform.localScale.z * riftWidth;
+
+        // Move meshes relative to planeB/B-Space
+        planeBMeshes.transform.position = planeBStartPos + (riftNormal * newRiftWidth - riftNormal * riftWidth);
+
+        // Move actors relative to planeB/B-Space
+        Vector3 moveInB = cutPreviews[1].transform.position - previousPlanePosition;
+        foreach (CorGeo_ActorData obj in CorGeo_ActorDatas)
+        {
+            if (obj.space == CorGeo_ActorData.Space.B)
+            {
+
+                if (obj.TryGetComponent<Rigidbody> (out var objRigidBody) && obj.isHeld == false)
+                {
+                    objRigidBody.MovePosition (obj.transform.position + moveInB);
+                }
+                else
+                {
+                    obj.transform.position += moveInB;
+                }
+            }
+
+            if (obj.space == CorGeo_ActorData.Space.Null && obj.dynamic && !obj.crushInNullSpace)
+            {
+                //Get object's position relative to the rift, then move the object based on the new size of the rift.
+                if (prevRiftWidth == 0) continue;
+                float percent = planeA.GetDistanceToPoint (obj.transform.position) / prevRiftWidth;
+                float oldDistance = prevRiftWidth * percent;
+                float newDistance = newRiftWidth * percent;
+
+                Vector3 move = riftNormal * (newDistance - oldDistance);
+                if (move.x != float.NaN && move.y != float.NaN && move.z != float.NaN)
+                {
+                    if (obj.TryGetComponent<Rigidbody> (out var objRigidBody) && obj.isHeld == false)
+                    {
+                        objRigidBody.MovePosition (obj.transform.position + move);
+                    }
+                    else
+                    {
+                        obj.transform.position += move;
+                    }
+                }
+            }
+        }
+
+        planeB = new Plane (-riftNormal, cutPreviews[1].transform.position);
+
+        previousPlanePosition = cutPreviews[1].transform.position;
+
+
+        // If we've converged the rift all the way, deactivate null-space actors and meshes
+        if (riftTimer >= maxRiftTimer)
+        {
+            for (int i = 0; i < deployedRift.transform.childCount; i++)
+            {
+                if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
+                {
+                    if (actor.activeInNullSpace)
+                    {
+                        continue;
+                    }
+                }
+                deployedRift.transform.GetChild (i).gameObject.SetActive (false);
+            }
+
+            SetClosedPreview();
+            //foreach (var plane in cutPreviews)
+            //{
+            //    plane.SetActive (false);
+            //}
+        }
+        else
+        {
+            for (int i = 0; i < deployedRift.transform.childCount; i++)
+            {
+                if (deployedRift.transform.GetChild (i).TryGetComponent<CorGeo_ActorData> (out var actor))
+                {
+                    if (actor.activeInNullSpace)
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (deployedRift.transform.GetChild (i).GetComponents<MeshCollider> ().Length > 1)
+                    {
+                        Destroy (deployedRift.transform.GetChild (i).GetComponents<MeshCollider> ()[0]);
+                    }
+                }
+            }
+        }
+    }
+
+    private void UpdateState (RiftState _newState)
+    {
+        if (currentState == _newState)
+        {
+            return;
+        }
+        previousState = currentState;
+
+        currentState = _newState;
+
+        OnStateChanged?.Invoke();
+        //Debug.Log("RiftState: " + currentState);
+    }
+
+    private void DeployRiftAndPreview ()
+    {
+        Vector3 markerPos1 = deployedInfinityMarkers[0].transform.position;
+        Vector3 markerPos2 = deployedInfinityMarkers[1].transform.position;
+        float markerDistance = Vector3.Distance (markerPos1, markerPos2);
+
+        if (Mathf.Approximately (markerDistance, 0f))
+        {
+            deployedInfinityMarkers[1].KillProjectile (true);
+            return;
+        }
+
+        if (markerDistance < .51f)
+        {
+            return;
+        }
+
+        //riftNormal should point from marker 0 to marker 1
+
+        deployedRift = Instantiate (new GameObject ());
+        deployedRift.name = "Rift";
+        deployedRift.transform.position = deployedInfinityMarkers[0].transform.position;
+        deployedRift.transform.LookAt (deployedInfinityMarkers[1].transform);
+        if (allowNonLinearSlicing) deployedRift.transform.rotation = new Quaternion (deployedRift.transform.rotation.x, deployedRift.transform.rotation.y, deployedRift.transform.rotation.z, deployedRift.transform.rotation.w);
+        else deployedRift.transform.rotation = new Quaternion (0, deployedRift.transform.rotation.y, 0, deployedRift.transform.rotation.w);
+
+        riftNormal = deployedRift.transform.forward;
+
+        float planeOffset = .25f;
+
+        if (markerDistance < planeOffset * 2)
+        {
+            planeOffset = markerDistance / 2;
+        }
+
+        Vector3 pos1 = deployedInfinityMarkers[0].transform.position + riftNormal * planeOffset;
+        Vector3 pos2 = deployedInfinityMarkers[1].transform.position - riftNormal * planeOffset;
+
+        if (allowNonLinearSlicing)
+        {
+            riftWidth = Vector3.Distance (pos1, pos2);
+        }
+        else
+        {
+            riftWidth = Vector3.Distance (new Vector3 (pos1.x, 0, pos1.z), new Vector3 (pos2.x, 0, pos2.z));
+        }
+
+        deployedRift.transform.position = pos1;
+
+        planeA = new Plane (riftNormal, pos1);
+        planeB = new Plane (-riftNormal, pos2);
+
+
+        // TODO make this neater tomorrow <= (This statement stays true until it's edited, how sneaky!) ~Liz
+        if (!cutPreviews[0])
+        {
+            CreateCutPreviews ();
+        }
+
+        cutPreviews[0].SetActive (true);
+        cutPreviews[1].SetActive (true);
+        cutPreviews[0].transform.position = pos1;
+        cutPreviews[1].transform.position = pos2;
+        cutPreviews[0].transform.rotation = deployedRift.transform.rotation;
+        cutPreviews[1].transform.rotation = deployedRift.transform.rotation;
+        isCutPreviewActive = true;
+
+        lerpAmount = 0f;
+
+        foreach (GameObject g in cutPreviews)
+        {
+            g.transform.DOKill ();
+            g.transform.localScale = Vector3.zero;
+            g.transform.DOScale (1f, 10f);
+        }
+
+        UpdateState(RiftState.Preview);
+    }
+    
+    // Creates the big planes with the fancy shaders that represent the boundaries of the rift
+    private void CreateCutPreviews ()
+    {
+        cutPreviews = new GameObject[2];
+        for (int i = 0; i < cutPreviews.Length; i++)
+        {
+            cutPreviews[i] = Instantiate (cutPreviewPrefab);
+            cutPreviews[i].GetComponent<CutPreviewTracker> ().cutPreviewID = i; // Label them so we know whether they are a or b space's side preview
+            cutPreviews[i].SetActive (false);
+        }
+    }
+
+    // I'm not sure why this exists, it's just called directly by the recall button and directly calls RecallInfinityMarkers
+    // Best guess, this originally prevented destroying a rift if the gun wasn't equipped ~Present/Future Liz
+    // ALSO WHY IS THIS ONE PUBLIC?!?!?! ANSWER ME PAST ME, WHAT DID YOU KNOW!!!??
+    public void StartRecallInfinityMarkers ()
+    {
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine (RecallInfinityMarkers ());
+        }
+    }
+
+    // Handles all the scary and confusing logic to undo the effects of a rift and erase the markers that generated it
+    private IEnumerator RecallInfinityMarkers ()
+    {
+        if (currentAmmo >= 2) yield break;
+
+        timeMoveRiftButtonHeld = 0f;
+
+        while (riftTimer != 0)
+        {
+            clearingRift = true;
+            yield return null;
+        }
+        clearingRift = false;
+
+        foreach (var projectile in deployedInfinityMarkers)
+        {
+            projectile.GetComponent<Projectile_Vacumm> ().KillProjectile (false);
+        }
+        deployedInfinityMarkers.Clear ();
+        currentAmmo = maxAmmo;
+
+        anims.SetBool("Empty", false);
+
+
+        if (cutPreviews[0])
+        {
+            cutPreviews[0].transform.SetParent (null);
+            cutPreviews[0].SetActive (false);
+        }
+        if (cutPreviews[1])
+        {
+            cutPreviews[1].transform.SetParent (null);
+            cutPreviews[1].SetActive (false);
+        }
+        isCutPreviewActive = false;
+
+        isCutPreviewActive = false;
+
+        isCollapseStarted = false;
+
+        foreach (CorGeo_ActorData _actor in CorGeo_ActorDatas)
+        {
+            if (_actor)
+            {
+                if (riftTimer < maxRiftTimer && _actor.dynamic)
+                {
+                    RecallDynamicActor (_actor);
+                }
+                else
+                {
+                    _actor.GoHome ();
+                }
+            }
+        }
+
+        currentAmmo = maxAmmo;
+
+        foreach (var _gameObject in slicedMeshes)
+        {
+            if (_gameObject) Destroy (_gameObject);
+        }
+        slicedMeshes.Clear ();
+        foreach (Mesh_Slicable _gameObject in originalSliceableObjects)
+        {
+            if (_gameObject) _gameObject.GoHome ();
+        }
+
+        Destroy (planeBMeshes);
+        if (deployedRift)
+        {
+            if (nullSlices != null)
+            {
+                foreach (var _gameObject in nullSlices)
+                {
+                    if (_gameObject)
+                    {
+                        _gameObject.GetComponent<Mesh_Slicable> ().GoHome ();
+                    }
+                }
+            }
+            StartCoroutine (DestroyWorker (deployedRift));
+        }
+        // Reset the value used to track if an actor is in null space
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+            actor.space = CorGeo_ActorData.Space.None;
+        }
+
+        anims.SetTrigger("Clear");
+
+        if (isCollapseStarted == false && deployedRift)
+        {
+            Destroy (deployedRift.gameObject);
+            yield break;
+        }
+
+        StartCoroutine (WitchHunt ());
+        lerpAmount = 0f;
+    }
+
+    // No idea what this does tbh. Maybe it handles returning phys actors (like ones with rigidbodies) back when clearing rifts?
+    // Sir Connorses has confirmed that this function is for handling phys actors
+    private void RecallDynamicActor (CorGeo_ActorData _actor)
+    {
+        if (_actor.space == CorGeo_ActorData.Space.Null)
+        {
+            _actor.transform.SetParent (_actor.homeParent, true);
+            _actor.transform.localScale = _actor.homeScale;
+            // Moves an actor to keep them in the same relative position to the map when the rift is recalled.
+            float scaledRiftWidth = deployedRift.transform.localScale.z * riftWidth;
+            float percent = planeA.GetDistanceToPoint (_actor.transform.position) / scaledRiftWidth;
+            float oldDistance = scaledRiftWidth * percent;
+            float newDistance = riftWidth * percent;
+            if (_actor.isHeld == false)
+            {
+                _actor.transform.position += riftNormal * (newDistance - oldDistance);
+            }
+            return;
+        }
+
+        if (_actor.space != CorGeo_ActorData.Space.Null && Alt_Item_Geodesic_Utility_GeoGun.planeA.GetDistanceToPoint (_actor.transform.position) > 0)
+        {
+            if (!Alt_Item_Geodesic_Utility_GeoGun.deployedRift) return;
+
+            if (_actor.isHeld == false)
+            {
+                //move actor away from collapse direction scaled by the rift timer's progress
+                _actor.transform.position += Alt_Item_Geodesic_Utility_GeoGun.deployedRift.transform.forward *
+                                        Alt_Item_Geodesic_Utility_GeoGun.riftWidth *
+                                        (Alt_Item_Geodesic_Utility_GeoGun.lerpAmount);
+            }
+        }
+    }
+    
+    // When the rift is expanded and then cleared, create a force to pull objects towards the center plane of the rift
+    private void HandleUnstableRiftVacuum()
+    {
+        if (riftTimer >= 0) return;
+
+        var vacuumForce = 10;
+        var riftInstability = (riftTimer / minRiftTimer);
+        var vacuumRange = 10;
+        var vacuumDirection = new Vector3(0,1,0);
+        
+        foreach (CorGeo_ActorData _actor in CorGeo_ActorDatas)
+        {
+            if (_actor.dynamic)
+            {
+                // Check if they are within range of the vacuum
+                var distanceToPlane0 = Vector3.Distance(_actor.transform.position, cutPreviews[0].transform.position);
+                var distanceToPlane1 = Vector3.Distance(_actor.transform.position, cutPreviews[1].transform.position);
+                if (distanceToPlane0 <= vacuumRange || distanceToPlane1 <= vacuumRange)
+                {
+                    // Apply a force that pushes them towards the center plane
+                    _actor.GetComponent<Rigidbody>().velocity += (vacuumDirection * vacuumForce * riftInstability);
+                    // TODO: I need to figure out some way of multiplying the full vacuum force in a way that pulls actors towards the center PLANE (not point) of the rift
+                }
+            }
+        }
+    }
+
+    // Another one of life's great mysteries
+    private IEnumerator DestroyWorker (GameObject _gameObject)
+    {
+        yield return new WaitForEndOfFrame ();
+        Destroy (_gameObject);
+    }
+
+    // The function that actually shoots the markers
+    private void DeployInfinityMarker ()
+    {
+        if (currentAmmo <= 0) return;
+        currentAmmo--;
+
+        anims.SetTrigger("Shoot");
+
+        Audio_FMODAudioManager.PlayOneShot (Audio_FMODEvents.Instance.nixieCrossShoot);
+
+        var projectile = Instantiate (projectileVacuum, centerViewTransform.transform.position, centerViewTransform.rotation, null);
+        projectile.InitializeProjectile (projectileForce, barrelTransform.position, viewPoint.distance);
+        projectile.geoGun = this; // Get a reference to the gun that spawned the projectile, so we know who to give ammo to on a lifetime expiration
+        projectile.allowMarkerPlacementAnywhere = allowMarkerPlacementAnywhere;
+        deployedInfinityMarkers.Add (projectile);
+    }
+
+    // Checks to see if we have two validly placed markers to generate a rift between
+    private bool AreMarkersPinned ()
+    {
+        // Return true if 2 vacuum tubes are deployed and pinned.
+        if (deployedInfinityMarkers.Count >= 2)
+        {
+            foreach (var marker in deployedInfinityMarkers)
+            {
+                if (!marker.GetComponent<Projectile_Vacumm> ().pinned)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Pause actors to avoid them being bumped by inaccurate collision meshes
+    /// </summary>
+    private IEnumerator FreezeActors ()
+    {
+        delayRiftCollapse = true;
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+            actor.Freeze ();
+        }
+        yield return null;
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+            actor.UnFreeze ();
+        }
+        delayRiftCollapse = false;
+    }
+
+    private void SetupForConvergingMarkers ()
+    {
+        if (AreMarkersPinned ())
+        {
+            if (deployedRift)
+            {
+                StartCoroutine (FreezeActors ());
+                meshSlicers = FindObjectsOfType<Mesh_Slicable> ();
+                nullSlices = new List<GameObject> ();
+                planeBMeshes = Instantiate (new GameObject ());
+                planeBMeshes.name = "planeBMeshes";
+                planeBStartPos = planeBMeshes.transform.position;
+                // Find all slice-able meshes
+                foreach (var sliceableMesh in meshSlicers)
+                {
+                    sliceableMesh.ApplyCuts ();
+                }
+                foreach (GameObject obj in nullSlices)
+                {
+                    obj.transform.SetParent (deployedRift.transform, true);
+                    //remove extra meshes (there were un-sliced meshes sticking around)
+                    var meshColliders = GetComponents<MeshCollider> ();
+                    if (meshColliders.Length > 1)
+                    {
+                        Destroy (meshColliders[0]);
+                    }
+                }
+                AssignInitialActorRiftSpace ();
+                isCollapseStarted = true;
+                riftTimer = 0f;
+                maxRiftTimer = riftWidth * riftSecondsPerUnit;
+                if (riftWidth > maxRiftWidth)
+                {
+                    minRiftTimer = 0;
+                }
+                else
+                {
+                    minRiftTimer = -(maxRiftTimer * ((maxRiftWidth - riftWidth) / riftWidth));
+                }
+                previousPlanePosition = cutPreviews[1].transform.position;
+            }
+        }
+    }
+
+    private void AssignInitialActorRiftSpace ()
+    {
+        if (!deployedRift) return;
+        // Reposition objects in A & B space to match the change in distance between the markers
+
+        foreach (var actor in CorGeo_ActorDatas)
+        {
+            float distance1 = planeA.GetDistanceToPoint (actor.transform.position);
+
+            if (distance1 < 0)
+            {
+                actor.space = CorGeo_ActorData.Space.A;
+                continue;
+            }
+
+            float distance2 = planeB.GetDistanceToPoint (actor.transform.position);
+
+            if (distance2 < 0)
+            {
+                actor.space = CorGeo_ActorData.Space.B;
+                actor.homePosition = actor.transform.position;
+                continue;
+            }
+
+            //if both distances are >= 0, we are in null space.
+            actor.space = CorGeo_ActorData.Space.Null;
+        }
+
+        foreach (CorGeo_ActorData actor in CorGeo_ActorDatas)
+        {
+            if (actor.space == CorGeo_ActorData.Space.Null)
+            {
+                if (!actor.crushInNullSpace) continue;
+                actor.homePosition = actor.transform.position;
+                actor.transform.SetParent (deployedRift.transform);
+            }
+        }
+        cutPreviews[1].transform.SetParent (planeBMeshes.transform);
+    }
+
+    private void CheckForActorSpaceChanges ()
+    {
+        // Check A-Space entities to see if they have exited A-Space
+        // Check B-Space entities to see if they have exited B-Space
+        // Check Null-Space entities to see if they have exited Null-Space (This one sucks!)
+        if (!deployedRift) return;
+        foreach (var actor in CorGeo_ActorDatas)
+        {
+            if (!actor.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+            if (!actor.dynamic)
+            {
+                continue;
+            }
+            switch (GetActorRiftSpace (actor))
+            {
+                case CorGeo_ActorData.Space.A:
+                    if (actor.space == CorGeo_ActorData.Space.Null)
+                    {
+                        //Debug.Log ($"{actor.gameObject.name} moved [Null] -> [A]");
+                        if (actor.crushInNullSpace)
+                        {
+                            actor.transform.SetParent (actor.homeParent);
+                            actor.transform.localScale = actor.homeScale;
+                        }
+                        actor.space = CorGeo_ActorData.Space.A;
+                        continue;
+                    }
+                    if (actor.space == CorGeo_ActorData.Space.B)
+                    {
+                        //Debug.Log ($"{actor.gameObject.name} moved [B] -> [A]");
+                        actor.space = CorGeo_ActorData.Space.A;
+                        continue;
+                    }
+                    actor.space = CorGeo_ActorData.Space.A;
+                    continue;
+                case CorGeo_ActorData.Space.B:
+                    if (actor.space == CorGeo_ActorData.Space.Null)
+                    {
+                        if (actor.crushInNullSpace)
+                        {
+                            actor.transform.SetParent (actor.homeParent);
+                            actor.transform.localScale = actor.homeScale;
+                        }
+                        actor.space = CorGeo_ActorData.Space.B;
+                        //Debug.Log ($"{actor.gameObject.name} moved [Null] -> [B]");
+                        continue;
+                    }
+                    if (actor.space == CorGeo_ActorData.Space.A)
+                    {
+                        actor.space = CorGeo_ActorData.Space.B;
+                        //Debug.Log ($"{actor.gameObject.name} moved [A] -> [B]");
+                        continue;
+                    }
+                    actor.space = CorGeo_ActorData.Space.B;
+                    continue;
+                case CorGeo_ActorData.Space.Null:
+                    if (actor.space == CorGeo_ActorData.Space.A)
+                    {
+                        actor.homePosition = actor.transform.position;
+                        if (actor.crushInNullSpace)
+                        {
+                            actor.transform.SetParent (deployedRift.transform);
+                        }
+                        actor.space = CorGeo_ActorData.Space.Null;
+                        //Debug.Log ($"{actor.gameObject.name} moved [A] -> [Null]");
+                        continue;
+                    }
+                    if (actor.space == CorGeo_ActorData.Space.B)
+                    {
+                        actor.homePosition = actor.transform.position;
+                        if (actor.crushInNullSpace)
+                        {
+                            actor.transform.SetParent (deployedRift.transform);
+                        }
+                        actor.space = CorGeo_ActorData.Space.Null;
+                        //Debug.Log ($"{actor.gameObject.name} moved [B] -> [Null]");
+                        continue;
+                    }
+                    actor.space = CorGeo_ActorData.Space.Null;
+                    continue;
+            }
+        }
+    }
+
+    // Ensures that the actual point in which projectiles are fired from is facing where the player's crosshair is aimed
+    private void AimTowardsCenterOfView ()
+    {
+        viewPoint = new RaycastHit ();
+        // Perform the raycast, ignoring the trigger layer
+        if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out viewPoint, Mathf.Infinity, viewRaycastMask))
+        {
+            // If the raycast hits something, aim the barrel towards the hit point
+            barrelTransform.LookAt (viewPoint.point);
+        }
+    }
+
+    // Destroy all the random empty "newGameObjects" that are created when using the rifts
+    private IEnumerator WitchHunt ()
+    {
+        var everything = FindObjectsOfType<GameObject> ();
+        foreach (GameObject obj in everything)
+        {
+            yield return new WaitForEndOfFrame ();
+            if (obj && obj.name == "New Game Object")
+            {
+                Destroy (obj);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns weather an actor is in A-Space, B-Space, or Null-Space
+    /// </summary>
+    /// <returns></returns>
+    private CorGeo_ActorData.Space GetActorRiftSpace (CorGeo_ActorData _actor)
+    {
+        float distance1 = planeA.GetDistanceToPoint (_actor.transform.position);
+        float distance2 = planeB.GetDistanceToPoint (_actor.transform.position);
+
+        if (_actor.debugLogData)
+        {
+
+        }//print ($"{_actor.gameObject.name}: A{distance1} | B{distance2}");
+
+        if (distance1 < 0)
+        {
+            return CorGeo_ActorData.Space.A;
+        }
+
+        if (distance2 < 0)
+        {
+            return CorGeo_ActorData.Space.B;
+        }
+
+        return CorGeo_ActorData.Space.Null;
+    }
+
+    //=-----------------=
+    // External Functions
+    //=-----------------=
+
+
+    //=----Reload Static Fields----=
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeStaticFields()
+    {
+        deployedRift = null;
+        nullSlices = null;
+        planeBMeshes = null;
+        originalSliceableObjects = new List<Mesh_Slicable>();
+        slicedMeshes = new List<GameObject>();
+        CorGeo_ActorDatas = new List<CorGeo_ActorData>();
+        lerpAmount = 0;
+        riftWidth = 0;
+        delayRiftCollapse = false;
+        delayRiftCollapse = false;
+        previousState = RiftState.None;
+        currentState = RiftState.None;
+        OnStateChanged = null;
+    }
+}

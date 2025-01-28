@@ -16,7 +16,8 @@ namespace Neverway
         // Public Variables
         //=-----------------=
         public bool shouldHaveGeoGun = true;
-        public bool shouldHaveUpgradedGeoGund = false;
+        public bool shouldHaveUpgradedGeoGun = false;
+        public bool debugMarkerPlacementAnywhere = false;
 
 
         //=-----------------=
@@ -60,8 +61,11 @@ namespace Neverway
             if (shouldHaveGeoGun)
                 weaponInventory.GiveGeoGun();
 
-            if (shouldHaveUpgradedGeoGund)
+            if (shouldHaveUpgradedGeoGun)
                 weaponInventory.UpgradeGeoGun();
+
+            if (FindObjectOfType<Alt_Item_Geodesic_Utility_GeoGun>())
+                FindObjectOfType<Alt_Item_Geodesic_Utility_GeoGun>().allowMarkerPlacementAnywhere = debugMarkerPlacementAnywhere;
         }
 
 

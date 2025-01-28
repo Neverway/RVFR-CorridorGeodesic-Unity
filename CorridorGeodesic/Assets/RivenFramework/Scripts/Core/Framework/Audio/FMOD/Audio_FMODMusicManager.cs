@@ -35,9 +35,6 @@ public class Audio_FMODMusicManager : MonoBehaviour
     {
         Instance = this;
         Audio_FMODAudioManager.SetGlobalParameter("MusicPlaying", 0);
-
-        print("im doing things");
-        print(Instance);
     }
     void FixedUpdate()
     {

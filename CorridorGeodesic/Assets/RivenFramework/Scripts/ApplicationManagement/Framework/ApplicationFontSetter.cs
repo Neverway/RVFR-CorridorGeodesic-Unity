@@ -35,7 +35,7 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         private void Start()
         {
-            InvokeRepeating(nameof(UpdateFonts), 0, 1);
+            InvokeRepeating(nameof(UpdateFonts), 0, 0.25f);
         }
 
         private void UpdateFonts()
@@ -56,6 +56,7 @@ namespace Neverway.Framework.ApplicationManagement
 
             foreach (var textElement in FindObjectsOfType<TMP_Text>())
             {
+                if (textElement.gameObject.GetComponent(typeof(Text_DontOverideFont))) continue;
                 textElement.font = targetFont;
             }
         }

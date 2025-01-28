@@ -65,9 +65,12 @@ namespace Neverway.Framework
                     return null;
                 }*/
 
-                if (cam.isActiveAndEnabled && cam.targetTexture == null)
+                if (cam)
                 {
-                    return cam;
+                    if (cam.isActiveAndEnabled && cam.targetTexture == null)
+                    {
+                        return cam;
+                    }
                 }
             }
 
