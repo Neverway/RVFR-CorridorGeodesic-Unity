@@ -105,7 +105,7 @@ namespace Neverway.Framework.ApplicationManagement
         // Default constructor
         public ApplicationSettingsData()
         {
-            configurationFileCompatibilityVersion = 1;
+            configurationFileCompatibilityVersion = 3;
             
             targetResolution = 0;
             windowMode = 0;
