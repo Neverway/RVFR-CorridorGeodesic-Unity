@@ -25,6 +25,9 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         // Public Variables
         //=-----------------=
+        [Tooltip(
+            "If you have changed the application data structure, update this number so that the game knows to make a new config file for the new version")]
+        public int configVersion = 1;
         [Tooltip("The default values for the settings (pulled from the constructor in ApplicationSettingsData, overridden here)")]
         [SerializeField] private ApplicationSettingsData defaultSettingsData;
         public ApplicationSettingsData_Quality retroQuality, lowQuality, mediumQuality, highQuality, fantasticQuality;
@@ -104,10 +107,10 @@ namespace Neverway.Framework.ApplicationManagement
                 var json = File.ReadAllText(configurationFilePath);
                 var data = JsonUtility.FromJson<ApplicationSettingsData>(json);
                 // Ensure the config version has not changed...
-                if (data.configurationFileCompatibilityVersion == defaultSettingsData.configurationFileCompatibilityVersion)
+                if (data.configurationFileCompatibilityVersion == configVersion)
                 {
                     // Everything checks out, let's apply those settings!
-                    currentSettingsData = data;
+                    bufferedSettingsData = data;
                     GetCurrentResolutionFromList();
                     ApplySettings();
                     
@@ -123,7 +126,8 @@ namespace Neverway.Framework.ApplicationManagement
             }
             
             // Force create a new empty configuration file
-            currentSettingsData = new ApplicationSettingsData(defaultSettingsData);
+            bufferedSettingsData = new ApplicationSettingsData(defaultSettingsData);
+            bufferedSettingsData.configurationFileCompatibilityVersion = configVersion;
             GetCurrentResolutionFromList();
             ApplySettings();
             DevConsole.Log("No valid config file found, default config created", "App Config");
