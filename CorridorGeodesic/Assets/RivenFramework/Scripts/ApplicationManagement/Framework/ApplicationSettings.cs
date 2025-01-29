@@ -71,7 +71,6 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         private void Start()
         {
-            Debug.Log("222");
             // Get the default file path to save the application settings config
             configurationFilePath = $"{UnityEngine.Application.persistentDataPath}/settings.json";
             InitializeReferenceVariables();

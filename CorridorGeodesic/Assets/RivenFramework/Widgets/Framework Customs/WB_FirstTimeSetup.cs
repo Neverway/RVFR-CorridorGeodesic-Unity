@@ -38,6 +38,8 @@ public class WB_FirstTimeSetup : MonoBehaviour
     // Private Variables
     //=-----------------=
     private int currentScreen = 0;
+    // Used to delay the appearance of the first time setup screen until after the game instance has decided that we are actually going to need it
+    private bool initialized; 
 
 
     //=-----------------=
@@ -54,10 +56,12 @@ public class WB_FirstTimeSetup : MonoBehaviour
         applicationSettings = FindObjectOfType<ApplicationSettings>();
         InitButtonValues();
         InitEventListeners();
+        StartCoroutine(WaitForGameInstance());
     }
 
     private void Update()
     {
+        if (!initialized) return;
         for (int i = 0; i < setupScreens.Length; i++)
         {
             if (i == currentScreen)
@@ -78,9 +82,15 @@ public class WB_FirstTimeSetup : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    private IEnumerator FinishFirstTimeSetup()
+    private IEnumerator WaitForGameInstance()
     {
         yield return new WaitForSeconds(0.5f);
+        initialized = true;
+    }
+    
+    private IEnumerator FinishFirstTimeSetup()
+    {
+        yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         applicationSettings.ApplySettings();
     }
