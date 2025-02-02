@@ -12,7 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _SPECULARMODE_STYLIZEDPBR
+  - _SPECULARMODE_TRUEPBR
   m_InvalidKeywords:
   - _NORMALMAP
   - _PARALLAXMAP
@@ -96,7 +96,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
-        m_Texture: {fileID: 2800000, guid: c569b9e90184110468adba28ac199580, type: 3}
+        m_Texture: {fileID: 2800000, guid: ba0e601838abfee638025802e97cf98b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -118,11 +118,11 @@ Material:
     - _NormalPower: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.025
-    - _RampSmoothness: 0.1
+    - _RampSmoothness: 0.25
     - _Roughness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SpecularMode: 1
+    - _SpecularMode: 0
     - _SrcBlend: 1
     - _UVSec: 0
     - _UseSlice: 0
