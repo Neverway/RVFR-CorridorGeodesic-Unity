@@ -34,7 +34,7 @@ public class Screenshot : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.C))
         {
             StartCoroutine(TakeScreenShot());
         }
