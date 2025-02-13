@@ -36,7 +36,7 @@ namespace Neverway.Framework.LogicSystem
         {
         }
 
-        private new void OnTriggerEnter2D(Collider2D _other)
+        private new void OnTriggerStay2D(Collider2D _other)
         {
             worldLoader = FindObjectOfType<WorldLoader>();
             if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
@@ -46,7 +46,7 @@ namespace Neverway.Framework.LogicSystem
             }
         }
 
-        private new void OnTriggerEnter(Collider _other)
+        private new void OnTriggerStay(Collider _other)
         {
             worldLoader = FindObjectOfType<WorldLoader>();
             if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
@@ -54,9 +54,10 @@ namespace Neverway.Framework.LogicSystem
                 _other.transform.SetParent(null);
 
                 //Game_LevelHelpers.StoreObjectRelativePosition(_other.gameObject.GetInstanceID(), _other.transform);
-
-                SceneManager.MoveGameObjectToScene(_other.gameObject,
-                    SceneManager.GetSceneByName(worldLoader.streamingWorldID));
+                if (SceneManager.GetSceneByName(worldLoader.streamingWorldID).IsValid())
+                {
+                    SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetSceneByName(worldLoader.streamingWorldID));
+                }
             }
         }
 

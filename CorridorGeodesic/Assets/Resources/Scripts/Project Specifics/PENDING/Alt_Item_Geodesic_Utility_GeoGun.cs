@@ -249,7 +249,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
         if (riftTimer < 0)
         {
             var calculatedLerpValue = (riftTimer / minRiftTimer);
-            print(calculatedLerpValue);
             var lerpedRiftColorShallow = Color.Lerp(riftColorShallowStable, riftColorShallowUnstable, calculatedLerpValue);
             var lerpedRiftColorDeep = Color.Lerp(riftColorDeepStable, riftColorDeepUnstable, calculatedLerpValue);
             
