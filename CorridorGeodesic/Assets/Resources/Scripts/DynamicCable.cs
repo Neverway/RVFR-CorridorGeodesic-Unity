@@ -28,6 +28,7 @@ namespace Neverway.Framework.LogicSystem
             extraWaypoints; //How many extra waypoints to be added after waypointsPerUnity calculation (Increases slack in cable)
 
         public bool updateOnMove;
+        public bool anchorA = true, anchorB = true;
 
         //=-----------------=
         // Private Variables
@@ -109,8 +110,8 @@ namespace Neverway.Framework.LogicSystem
 
         private void LateUpdate()
         {
-            anchorPointARigidBody.isKinematic = true;
-            anchorPointBRigidBody.isKinematic = true;
+            if (anchorA) anchorPointARigidBody.isKinematic = true;
+            if (anchorB) anchorPointBRigidBody.isKinematic = true;
         }
 
 

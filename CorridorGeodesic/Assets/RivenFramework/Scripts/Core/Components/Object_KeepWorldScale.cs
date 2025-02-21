@@ -3,6 +3,7 @@
 // Purpose: If an object is the child of another object that changes scale
 //  this component will make sure the child keeps their original scale
 // Notes:
+//  Fixed this function using Seneral's post here: https://discussions.unity.com/t/reading-and-setting-an-objects-global-scale-with-transform-functions/143857
 //
 //=============================================================================
 
@@ -17,12 +18,13 @@ namespace Neverway.Framework
         //=-----------------=
         // Public Variables
         //=-----------------=
+        public bool overrideInitialScale;
 
 
         //=-----------------=
         // Private Variables
         //=-----------------=
-        private Vector3 initialScale;
+        public Vector3 initialScale;
 
 
         //=-----------------=
@@ -36,11 +38,13 @@ namespace Neverway.Framework
         void Start()
         {
             // Record the initial scale of the sprite
-            initialScale = transform.localScale;
+            if (!overrideInitialScale) initialScale = transform.localScale;
         }
 
         void LateUpdate()
         {
+            SetGlobalScale(initialScale);
+            /*
             // Get the parent's scale
             Vector3 parentScale = transform.parent.localScale;
 
@@ -52,12 +56,17 @@ namespace Neverway.Framework
             );
 
             // Apply the inverse scale to the sprite
-            transform.localScale = Vector3.Scale(initialScale, inverseScale);
+            transform.localScale = Vector3.Scale(initialScale, inverseScale);*/
         }
 
         //=-----------------=
         // Internal Functions
         //=-----------------=
+        public void SetGlobalScale (Vector3 globalScale)
+        {
+            transform.localScale = Vector3.one;
+            transform.localScale = new Vector3 (globalScale.x/transform.lossyScale.x, globalScale.y/transform.lossyScale.y, globalScale.z/transform.lossyScale.z);
+        }
 
 
         //=-----------------=
