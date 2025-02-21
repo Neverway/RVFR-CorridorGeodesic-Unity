@@ -203,10 +203,6 @@ namespace Neverway.Framework.PawnManagement
             foreach (var actor in SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects())
             {
                 SceneManager.MoveGameObjectToScene(actor.gameObject, SceneManager.GetActiveScene());
-                //RotationPositionBinding binding = Game_LevelHelpers.GetObjectWorldStartPosition(actor.gameObject.GetInstanceID());
-
-                //actor.transform.position = binding.position;
-                //actor.transform.rotation = binding.rotation;
             }
         }
 

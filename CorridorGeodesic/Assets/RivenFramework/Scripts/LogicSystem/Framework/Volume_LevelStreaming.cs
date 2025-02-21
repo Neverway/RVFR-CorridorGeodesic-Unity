@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose:
+// Purpose: 
 // Notes:
 //
 //=============================================================================
@@ -21,12 +21,16 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         // Private Variables
         //=-----------------=
+        [SerializeField] private Vector3 exitOffset;
+        [SerializeField] private bool debugDrawExitZone;
+        private bool initializedExitZone;
 
 
         //=-----------------=
         // Reference Variables
         //=-----------------=
         private WorldLoader worldLoader;
+        private GameObject streamContainer;
 
 
         //=-----------------=
@@ -34,6 +38,30 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         private void Start()
         {
+            worldLoader = FindObjectOfType<WorldLoader>();
+            streamContainer = transform.GetChild(0).gameObject;
+            streamContainer.GetComponent<Volume_LevelStreamContainer>().exitOffset = exitOffset;
+            streamContainer.GetComponent<Volume_LevelStreamContainer>().parentStreamVolume = gameObject;
+            streamContainer.transform.SetParent(null);
+        }
+
+        private void Update()
+        {
+            if (initializedExitZone) return;
+            if (SceneManager.GetSceneByName(worldLoader.streamingWorldID).IsValid())
+            {
+                streamContainer.GetComponent<Volume_LevelStreamContainer>().initializedExitZone = true;
+                initializedExitZone = true;
+                SceneManager.MoveGameObjectToScene(streamContainer.gameObject, SceneManager.GetSceneByName(worldLoader.streamingWorldID));
+                streamContainer.transform.SetParent(null);
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (!debugDrawExitZone) return;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(transform.position+exitOffset, transform.localScale);
         }
 
         private new void OnTriggerStay2D(Collider2D _other)
@@ -57,6 +85,7 @@ namespace Neverway.Framework.LogicSystem
                 if (SceneManager.GetSceneByName(worldLoader.streamingWorldID).IsValid())
                 {
                     SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetSceneByName(worldLoader.streamingWorldID));
+                    _other.transform.SetParent(streamContainer.transform);
                 }
             }
         }
@@ -75,6 +104,7 @@ namespace Neverway.Framework.LogicSystem
             worldLoader = FindObjectOfType<WorldLoader>();
             if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
             {
+                _other.transform.SetParent(null);
                 SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetActiveScene());
 
                 //RotationPositionBinding binding = Game_LevelHelpers.GetObjectWorldStartPosition(_other.gameObject.GetInstanceID());
