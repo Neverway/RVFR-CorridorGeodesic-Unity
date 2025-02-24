@@ -43,6 +43,7 @@ namespace Neverway.Framework.LogicSystem
             streamContainer.GetComponent<Volume_LevelStreamContainer>().exitOffset = exitOffset;
             streamContainer.GetComponent<Volume_LevelStreamContainer>().parentStreamVolume = gameObject;
             streamContainer.transform.SetParent(null);
+            worldLoader = FindObjectOfType<WorldLoader>();
         }
 
         private void Update()
@@ -64,7 +65,7 @@ namespace Neverway.Framework.LogicSystem
             Gizmos.DrawWireCube(transform.position+exitOffset, transform.localScale);
         }
 
-        private new void OnTriggerStay2D(Collider2D _other)
+        private new void OnTriggerEnter2D(Collider2D _other)
         {
             worldLoader = FindObjectOfType<WorldLoader>();
             if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
@@ -76,12 +77,11 @@ namespace Neverway.Framework.LogicSystem
 
         private new void OnTriggerStay(Collider _other)
         {
-            worldLoader = FindObjectOfType<WorldLoader>();
+            if (!initializedExitZone) return;
             if (_other.GetComponent<Pawn>() || _other.CompareTag("PhysProp"))
             {
+                if (_other.transform.parent == streamContainer.transform) return;
                 _other.transform.SetParent(null);
-
-                //Game_LevelHelpers.StoreObjectRelativePosition(_other.gameObject.GetInstanceID(), _other.transform);
                 if (SceneManager.GetSceneByName(worldLoader.streamingWorldID).IsValid())
                 {
                     SceneManager.MoveGameObjectToScene(_other.gameObject, SceneManager.GetSceneByName(worldLoader.streamingWorldID));

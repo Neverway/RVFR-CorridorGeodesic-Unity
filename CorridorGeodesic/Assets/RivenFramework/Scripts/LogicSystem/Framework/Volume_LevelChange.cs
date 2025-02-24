@@ -51,6 +51,7 @@ namespace Neverway.Framework.LogicSystem
         {
             if (_other.GetComponent<Pawn>())
             {
+                DevConsole.Log("Player has entered a load trigger", "WorldLoader");
                 if (!_other.GetComponent<Pawn>().isPossessed) return;
                 if (!worldLoader) worldLoader = FindObjectOfType<WorldLoader>();
                 if (useIndexInsteadOfID)
@@ -59,6 +60,7 @@ namespace Neverway.Framework.LogicSystem
                 }
                 else if (!useIndexInsteadOfID)
                 {
+                    DevConsole.Log($"Firing StreamLoadWorld({worldID})", "WorldLoader");
                     worldLoader.StreamLoadWorld(worldID);
                 }
             }

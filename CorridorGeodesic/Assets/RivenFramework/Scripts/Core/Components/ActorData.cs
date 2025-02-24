@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 namespace Neverway.Framework
@@ -19,6 +20,7 @@ namespace Neverway.Framework
         // Public Variables
         //=-----------------=
         public string actorId;
+        public string GUId;
         public List<ScriptData> scriptDataList;
         public bool isHeld;
 
@@ -95,6 +97,12 @@ namespace Neverway.Framework
         //=-----------------=
         // External Functions
         //=-----------------=
+        [ContextMenu("RivenFramework/AssignUniqueID")]
+        public void AssignUniqueID()
+        {
+            GUId = GUID.Generate().ToString();
+        }
+        
         public void InitializeDataFromId()
         {
 

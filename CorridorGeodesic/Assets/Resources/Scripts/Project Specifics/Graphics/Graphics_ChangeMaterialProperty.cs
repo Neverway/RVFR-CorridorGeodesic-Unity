@@ -50,22 +50,29 @@ public class Graphics_ChangeMaterialProperty: MonoBehaviour
 
         int materialIndex = materials.IndexOf(material);
 
-        instanceMat = new Material(meshRenderer.sharedMaterials[materialIndex]);
-
-        materials[materialIndex] = instanceMat;
-
-        meshRenderer.sharedMaterials = materials.ToArray();
-
-        switch (propertyType)
+        if (materialIndex <= meshRenderer.sharedMaterials.Length)
         {
-            case PropertyType.Color:
-                originalColor = instanceMat.GetColor(propertyName);
-                break;
-            case PropertyType.Float:
-                originalFloat = instanceMat.GetFloat(propertyName);
-                break;
-            default:
-                break;
+            instanceMat = new Material(meshRenderer.sharedMaterials[materialIndex]);
+
+            materials[materialIndex] = instanceMat;
+
+            meshRenderer.sharedMaterials = materials.ToArray();
+
+            switch (propertyType)
+            {
+                case PropertyType.Color:
+                    originalColor = instanceMat.GetColor(propertyName);
+                    break;
+                case PropertyType.Float:
+                    originalFloat = instanceMat.GetFloat(propertyName);
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            print($"failed on {gameObject.name}");
         }
     }
 

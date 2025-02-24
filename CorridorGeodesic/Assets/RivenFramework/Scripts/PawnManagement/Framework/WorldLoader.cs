@@ -109,6 +109,7 @@ namespace Neverway.Framework.PawnManagement
             {
                 yield return new WaitForEndOfFrame();
             }
+            DevConsole.Log($"Unloaded previous scene", "WorldLoader");
 
             isLoading = false;
 
@@ -116,8 +117,9 @@ namespace Neverway.Framework.PawnManagement
 
             SceneManager.SetActiveScene(
                 SceneManager.GetSceneByName(targetWorldID)); // Assign the new scene to be the active scene
+            DevConsole.Log($"Set active scene to {targetWorldID}", "WorldLoader");
 
-            EjectStreamedActors(streamedObjects);
+            //EjectStreamedActors(streamedObjects);
         }
         //private IEnumerator StreamLoadDos()
         //{
@@ -200,8 +202,10 @@ namespace Neverway.Framework.PawnManagement
 
         private void EjectStreamedActors( GameObject[] streamedObjects)
         {
+            //DevConsole.Log($"Ejecting streamed actors...", "WorldLoader");
             foreach (var actor in SceneManager.GetSceneByName(streamingWorldID).GetRootGameObjects())
             {
+                //DevConsole.Log($"Ejected {actor.gameObject.name}", "WorldLoader");
                 SceneManager.MoveGameObjectToScene(actor.gameObject, SceneManager.GetActiveScene());
             }
         }
@@ -247,6 +251,7 @@ namespace Neverway.Framework.PawnManagement
             }
 
             if (isLoading) return;
+            //DevConsole.Log($"StreamLoadWorld firing StreamLoad coroutine...", "WorldLoader");
             StartCoroutine(StreamLoad());
             // TODO: Identify purpose of Graphics_SliceableObjectManager
             //Graphics_SliceableObjectManager.Instance.ClearList();
