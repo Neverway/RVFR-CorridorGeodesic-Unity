@@ -65,7 +65,13 @@ public class Projectile_Vacumm : Projectile
         hit.collider.gameObject.TryGetComponent<Mesh_Slicable>(out var _out);
         if (_out)
         {
-            if (hit.collider is not MeshCollider) return;
+            if (hit.collider is not MeshCollider)
+            {
+                //If the collider isn't a mesh, we can't get material data from it, so we assume the bulb cannot attach.
+                KillProjectile ();
+                return;
+            }
+
             MeshCollider mCollider = (MeshCollider)hit.collider;
 
             Mesh colMesh = mCollider.sharedMesh;
