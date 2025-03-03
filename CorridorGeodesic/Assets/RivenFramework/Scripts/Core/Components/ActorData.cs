@@ -97,11 +97,6 @@ namespace Neverway.Framework
         //=-----------------=
         // External Functions
         //=-----------------=
-        [ContextMenu("RivenFramework/AssignUniqueID")]
-        public void AssignUniqueID()
-        {
-            GUId = GUID.Generate().ToString();
-        }
         
         public void InitializeDataFromId()
         {
