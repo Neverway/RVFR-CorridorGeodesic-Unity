@@ -436,6 +436,13 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
             // if rift is being reset, increase the speed modifier.
             speedMod *= 2.5f;
             
+            // If the rift is unstable, increase the speed modifer more
+            var riftInstability = (riftTimer / minRiftTimer);
+            if (riftInstability >= 0.1)
+            {
+                speedMod *= 3;
+            }
+            
             HandleUnstableRiftVacuum();
         }
 
@@ -872,9 +879,9 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     {
         if (riftTimer >= 0) return;
 
-        var vacuumForce = 10;
+        var vacuumForce = 1;
         var riftInstability = (riftTimer / minRiftTimer);
-        var vacuumRange = 10;
+        var vacuumRange = 15;
         var vacuumDirection = new Vector3(0,1,0);
         
         foreach (CorGeo_ActorData _actor in CorGeo_ActorDatas)
@@ -884,11 +891,17 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
                 // Check if they are within range of the vacuum
                 var distanceToPlane0 = Vector3.Distance(_actor.transform.position, cutPreviews[0].transform.position);
                 var distanceToPlane1 = Vector3.Distance(_actor.transform.position, cutPreviews[1].transform.position);
+                //print($"0:{distanceToPlane0} 1:{distanceToPlane1}");
                 if (distanceToPlane0 <= vacuumRange || distanceToPlane1 <= vacuumRange)
                 {
+                    print("TRUE");
                     // Apply a force that pushes them towards the center plane
-                    _actor.GetComponent<Rigidbody>().velocity += (vacuumDirection * vacuumForce * riftInstability);
+                    _actor.GetComponent<Rigidbody>().velocity += (vacuumDirection * (vacuumForce * (riftInstability * 5)));
                     // TODO: I need to figure out some way of multiplying the full vacuum force in a way that pulls actors towards the center PLANE (not point) of the rift
+                }
+                else
+                {
+                    print("FALSE");
                 }
             }
         }
