@@ -23,6 +23,7 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         [SerializeField, LogicComponentHandle] private LogicComponent addSignal;
         [SerializeField, LogicComponentHandle] private LogicComponent subtractSignal;
+        [SerializeField, LogicComponentHandle] private LogicComponent resetSignal;
 
         //=-----------------=
         // Reference Variables
@@ -61,6 +62,8 @@ namespace Neverway.Framework.LogicSystem
                 count++;
             if (subtractSignal && subtractSignal.isPowered)
                 count--;
+            if (resetSignal && resetSignal.isPowered)
+                count=0;
 
             isPowered = !isPowered;
         }

@@ -1,6 +1,6 @@
 //===================== (Neverway 2024) Written by Liz M. =====================
 //
-// Purpose: Right now this just makes sure the host gets a netdummy assigned
+// Purpose:
 // Notes:
 //
 //=============================================================================
@@ -8,16 +8,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using FishNet.Connection;
 using FishNet.Object;
-using Neverway.Framework.PawnManagement;
+using FishNet.Object.Synchronizing;
+using UnityEngine;
 
-public class ConnectionHandler : NetworkBehaviour
+public class Func_JoinTeam : NetworkBehaviour
 {
     //=-----------------=
     // Public Variables
     //=-----------------=
+    public string team;
 
 
     //=-----------------=
@@ -33,7 +33,20 @@ public class ConnectionHandler : NetworkBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+    
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        print($"Detected {other.name}");
+        if (other.GetComponent<NetDumSync>())
+        {
+            print("Joined");
+            other.GetComponent<NetDumSync>().UpdateTeam(other.GetComponent<NetDumSync>(), team);
+        }
+    }
 
     //=-----------------=
     // Internal Functions

@@ -15,6 +15,8 @@ namespace Neverway.Framework.LogicSystem
 		// Public Variables
 		//=-----------------=
 		[LogicComponentHandle, SerializeField] private LogicComponent startSignal;
+		[LogicComponentHandle, SerializeField] private LogicComponent resetSignal;
+		public bool resetAutomatically;
 		public bool inProgress;
 		public DialogueEvent dialogueEvent;
 
@@ -39,6 +41,12 @@ namespace Neverway.Framework.LogicSystem
 				isPowered = true;
 				FindObjectOfType<DialougeEventManager>().StartDialogueEvent(dialogueEvent);
 				inProgress = true;
+			}
+
+			if (resetSignal.isPowered)
+			{
+				isPowered = false;
+				inProgress = false;
 			}
 		}
 
