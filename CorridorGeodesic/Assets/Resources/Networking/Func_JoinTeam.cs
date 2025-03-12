@@ -8,11 +8,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using FishNet.Object;
-using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-public class Func_JoinTeam : NetworkBehaviour
+public class Func_JoinTeam : MonoBehaviour
 {
     //=-----------------=
     // Public Variables
@@ -41,10 +39,10 @@ public class Func_JoinTeam : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         print($"Detected {other.name}");
-        if (other.GetComponent<NetDumSync>())
+        if (other.GetComponent<NetDummy>())
         {
             print("Joined");
-            other.GetComponent<NetDumSync>().UpdateTeam(other.GetComponent<NetDumSync>(), team);
+            other.GetComponent<NetDummy>().SetTeam(team);
         }
     }
 
