@@ -23,7 +23,7 @@ namespace Neverway.Framework.LogicSystem
         // Private Variables
         //=-----------------=
         [SerializeField, LogicComponentHandle] private Logic_Counter counter;
-        //[SerializeField] private CompareOperation compareOperation;
+        [SerializeField] private CompareOperation compareOperation;
         [SerializeField] private int compareValue;
 
         //=-----------------=
@@ -34,16 +34,16 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         // Mono Functions
         //=-----------------=
-        //private void OnEnable()
-        //{
-        //    if (counter)
-        //        counter.OnPowerStateChanged += SourcePowerStateChanged;
-        //}
-        //private void OnDestroy()
-        //{
-        //    if (counter)
-        //        counter.OnPowerStateChanged -= SourcePowerStateChanged;
-        //}
+        private void OnEnable()
+        {
+            if (counter)
+                counter.OnPowerStateChanged += SourcePowerStateChanged;
+        }
+        private void OnDestroy()
+        {
+            if (counter)
+                counter.OnPowerStateChanged -= SourcePowerStateChanged;
+        }
 
         //=-----------------=
         // Internal Functions
@@ -53,15 +53,15 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         // External Functions
         //=-----------------=
-        //public override void AutoSubscribe()
-        //{
-        //    subscribeLogicComponents.Add(counter);
-        //    base.AutoSubscribe();
-        //}
+        // public override void AutoSubscribe()
+        // {
+        //     subscribeLogicComponents.Add(counter);
+        //     base.AutoSubscribe();
+        // }
         public override void SourcePowerStateChanged(bool powered)
         {
             base.SourcePowerStateChanged(powered);
-/*
+    
             switch (compareOperation)
             {
                 case CompareOperation.LessThan:
@@ -81,7 +81,7 @@ namespace Neverway.Framework.LogicSystem
                     break;
                 default:
                     break;
-        }*/
+        }
         }
     }
 }
