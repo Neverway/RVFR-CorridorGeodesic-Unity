@@ -86,7 +86,7 @@ namespace Neverway.Framework.Cartographer
                 }
             }
 
-            if (!assetsRoot) assetsRoot = GameObject.FindGameObjectWithTag("AssetContainer");
+            if (!assetsRoot) assetsRoot = GameObject.FindGameObjectWithTag("[ActorContainer]");
         }
 
         private IEnumerator ShowFileDialogCoroutine(string _mode)
