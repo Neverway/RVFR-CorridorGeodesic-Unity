@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,7 @@ public class Light_DistanceCulling : MonoBehaviour
     [SerializeField] private float rangeMultiplier = 1;
     [SerializeField] private bool fadeLightWhenCulled;
     [SerializeField] private float fadeSpeed = 0.2f;
+    [SerializeField] private bool debugDrawCullRange;
 
 
     //=-----------------=
@@ -46,6 +48,19 @@ public class Light_DistanceCulling : MonoBehaviour
         light = GetComponent<Light>();
         gameInstance = FindObjectOfType<GameInstance>();
         storedLightIntensity = light.intensity;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!light)
+        {
+            light = GetComponent<Light>();
+            return;
+        }
+        Gizmos.color = new Color(0.9f,0.5f,0.0f,0.25f);
+        Gizmos.DrawSphere(transform.position, light.range * rangeMultiplier);
+        Gizmos.color = new Color(0.9f,0.5f,0.0f,0.4f);
+        Gizmos.DrawWireSphere(transform.position, light.range * rangeMultiplier);
     }
 
     private void Update()
