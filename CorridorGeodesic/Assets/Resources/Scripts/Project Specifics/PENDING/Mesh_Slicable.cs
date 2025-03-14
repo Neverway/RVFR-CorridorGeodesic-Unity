@@ -57,9 +57,18 @@ public class Mesh_Slicable : MonoBehaviour
         {
             sliceableObject.defaultSliceMaterial = CorGeo_ReferenceManager.Instance.nullSpace;
         }
+        EnsureNonConvexWhenCloned();
     }
     
     public void Update()
+    {
+    }
+
+    
+    //=-----------------=
+    // Internal Functions
+    //=-----------------=
+    private void EnsureNonConvexWhenCloned()
     {
         foreach (var meshCollider in gameObject.GetComponents<MeshCollider>())  //todo no no no no no
         {
@@ -70,11 +79,6 @@ public class Mesh_Slicable : MonoBehaviour
             meshCollider.sharedMesh = meshCollider.sharedMesh;
         }
     }
-
-    
-    //=-----------------=
-    // Internal Functions
-    //=-----------------=
 
     
     //=-----------------=

@@ -25,6 +25,7 @@ namespace Neverway.Framework
         // Private Variables
         //=-----------------=
         public Vector3 initialScale;
+        private Vector3 lastScale;
 
 
         //=-----------------=
@@ -43,7 +44,11 @@ namespace Neverway.Framework
 
         void LateUpdate()
         {
-            SetGlobalScale(initialScale);
+            if (transform.localScale != lastScale)
+            {
+                lastScale = transform.localScale;
+                SetGlobalScale(initialScale);
+            }
             /*
             // Get the parent's scale
             Vector3 parentScale = transform.parent.localScale;

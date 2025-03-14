@@ -49,7 +49,7 @@ namespace Neverway.Framework.PawnManagement
         private void LateUpdate()
         {
             // If no player was found, enable a random pawns camera
-            if (localPlayerCharacter == null)
+            if (!localPlayerCharacter)
             {
                 var emergencyFallback = FindObjectOfType<Pawn>();
                 if (emergencyFallback)

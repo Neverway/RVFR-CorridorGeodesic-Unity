@@ -5,6 +5,7 @@
 //
 //=============================================================================
 
+using System.Collections;
 using UnityEngine;
 using Neverway.Framework.PawnManagement;
 
@@ -30,6 +31,7 @@ namespace Neverway
         //=-----------------=
         private GameInstance gameInstance;
         private Pawn_WeaponInventory weaponInventory;
+        private Alt_Item_Geodesic_Utility_GeoGun geoGun;
 
         //=-----------------=
         // Mono Functions
@@ -39,6 +41,7 @@ namespace Neverway
             gameInstance = FindObjectOfType<GameInstance>();
             gameInstance.UI_ShowHUD();
             UpdateGeoGunUpgrade();
+            StartCoroutine(FindReferences());
         }
 
         private void Update()
@@ -48,30 +51,36 @@ namespace Neverway
 
         public void UpdateGeoGunUpgrade()
         {
-            if (weaponInventory == null)
-            {
-                weaponInventory = FindObjectOfType<Pawn_WeaponInventory>();
-                if (weaponInventory == null)
-                {
-                    //Debug.LogWarning("Could not find " + nameof(Pawn_WeaponInventory) + " to update geogun");
-                    return;
-                }
-            }
+            if (!weaponInventory) return;
 
-            if (shouldHaveGeoGun)
-                weaponInventory.GiveGeoGun();
+            if (shouldHaveGeoGun) weaponInventory.GiveGeoGun();
 
-            if (shouldHaveUpgradedGeoGun)
-                weaponInventory.UpgradeGeoGun();
-
-            if (FindObjectOfType<Alt_Item_Geodesic_Utility_GeoGun>())
-                FindObjectOfType<Alt_Item_Geodesic_Utility_GeoGun>().allowMarkerPlacementAnywhere = debugMarkerPlacementAnywhere;
+            if (shouldHaveUpgradedGeoGun) weaponInventory.UpgradeGeoGun();
+            
+            if (geoGun) geoGun.allowMarkerPlacementAnywhere = debugMarkerPlacementAnywhere;
         }
 
 
         //=-----------------=
         // Internal Functions
         //=-----------------=
+        private IEnumerator FindReferences()
+        {
+            if (!weaponInventory)
+            {
+                weaponInventory = FindObjectOfType<Pawn_WeaponInventory>();
+            }
+            if (!geoGun)
+            {
+                geoGun = FindObjectOfType<Alt_Item_Geodesic_Utility_GeoGun>();
+            }
+            yield return new WaitForEndOfFrame();
+            
+            if (!weaponInventory || !geoGun)
+            {
+                StartCoroutine(FindReferences());
+            }
+        }
 
 
         //=-----------------=

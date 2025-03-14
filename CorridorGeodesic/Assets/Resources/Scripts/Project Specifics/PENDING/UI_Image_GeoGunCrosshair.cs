@@ -36,16 +36,16 @@ public class UI_Image_GeoGunCrosshair : MonoBehaviour
     //=-----------------=
     // Mono Functions
     //=-----------------=
+    private void Start()
+    {
+        StartCoroutine(FindReferences());
+    }
+
     private void Update()
     {
         // Locate the player and see if they have the geofolder
         if (!geoGun)
         {
-            var pawn = FindPossessedPawn();
-            if (pawn)
-            {
-                geoGun = pawn.GetComponentInChildren<Alt_Item_Geodesic_Utility_GeoGun>();
-            }
             // Hide the crosshair if the player is not holding the geofolder
             crosshair.SetActive(false);
             return;
@@ -81,7 +81,7 @@ public class UI_Image_GeoGunCrosshair : MonoBehaviour
         }
         
         // Toggle bad dog crosshair according to if the target is shootable
-        switch (geoGun.isValidTarget)
+        switch (geoGun.GetIsValidTarget())
         {
             case true:
                 badDogNoBiscuits.gameObject.SetActive(true);
@@ -107,6 +107,19 @@ public class UI_Image_GeoGunCrosshair : MonoBehaviour
     //=-----------------=
     // Internal Functions
     //=-----------------=
+    private IEnumerator FindReferences()
+    {
+        if (!geoGun)
+        {
+            geoGun = FindObjectOfType<Alt_Item_Geodesic_Utility_GeoGun>();
+        }
+        yield return new WaitForEndOfFrame();
+        if (!geoGun)
+        {
+            StartCoroutine(FindReferences());
+        }
+    }
+    
     private Pawn FindPossessedPawn()
     {
         foreach (var entity in FindObjectsByType<Pawn>(FindObjectsSortMode.None))

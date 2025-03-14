@@ -32,6 +32,8 @@ public class UI_Image_EntityPain : MonoBehaviour
     //=-----------------=
     // Reference Variables
     //=-----------------=
+    private Image image;
+    private Animator animator;
 
 
     //=-----------------=
@@ -39,6 +41,8 @@ public class UI_Image_EntityPain : MonoBehaviour
     //=-----------------=
     private void Start()
     {
+        image = GetComponent<Image>();
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -53,8 +57,8 @@ public class UI_Image_EntityPain : MonoBehaviour
         }
         else
         {
-            var color = GetComponent<Image>().color;
-            GetComponent<Image>().color = new Color(color.r, color.g, color.b, 0);
+            var color = image.color;
+            image.color = new Color(color.r, color.g, color.b, 0);
         }
     }
 
@@ -76,7 +80,7 @@ public class UI_Image_EntityPain : MonoBehaviour
     private IEnumerator FadeInPain()
     {
         isInPain = true;
-        GetComponent<Animator>().Play("PainFlash");
+        animator.Play("PainFlash");
         yield return new WaitForSeconds(targetPawn.currentState.invulnerabilityTime);
         isInPain = false;
     }
