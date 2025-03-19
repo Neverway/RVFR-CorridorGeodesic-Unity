@@ -94,6 +94,7 @@ namespace Neverway.Framework.ApplicationManagement
 
         // General Accessibility
         public float brightness;
+        public bool speedrunMode;
         public float colorBlindIntensity;
         [Range(0, 3)] public int colorBlindFilter;
         public bool dyslexicFriendlyFont;
@@ -151,6 +152,7 @@ namespace Neverway.Framework.ApplicationManagement
             enablePushToTalk = false;
 
             brightness = 1;
+            speedrunMode = false;
             colorBlindIntensity = 1;
             colorBlindFilter = 0;
             dyslexicFriendlyFont = false;
@@ -209,6 +211,7 @@ namespace Neverway.Framework.ApplicationManagement
             enablePushToTalk = other.enablePushToTalk;
 
             brightness = other.brightness;
+            speedrunMode = other.speedrunMode;
             colorBlindIntensity = other.colorBlindIntensity;
             colorBlindFilter = other.colorBlindFilter;
             dyslexicFriendlyFont = other.dyslexicFriendlyFont;

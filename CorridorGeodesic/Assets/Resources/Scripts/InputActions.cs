@@ -859,7 +859,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Keyboard&Mouse"",
                     ""id"": ""989b4ad1-57f9-4252-9dd1-fcc17ee35776"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=1)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
