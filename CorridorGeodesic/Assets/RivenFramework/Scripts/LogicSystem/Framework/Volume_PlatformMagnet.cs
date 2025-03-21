@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Neverway.Framework.PawnManagement;
+using UnityEngine.Events;
 
 namespace Neverway.Framework.LogicSystem
 {
@@ -27,6 +28,8 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         // Reference Variables
         //=-----------------=
+        public UnityEvent OnEnter;
+        public UnityEvent OnExit;
 
 
         //=-----------------=
@@ -41,16 +44,18 @@ namespace Neverway.Framework.LogicSystem
                 if (_other.GetComponent<Pawn>())
                 {
                     _other.transform.SetParent(gameObject.transform);
+                    OnEnter.Invoke();
                     // TODO THIS IS A CORGEO FUNC, REMOVE ME LATER!!
-                    _other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = true;
+                    //_other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = true;
                 }
             }
 
             if (_other.CompareTag("PhysProp"))
             {
                 _other.transform.SetParent(gameObject.transform);
+                OnEnter.Invoke();
                 // TODO THIS IS A CORGEO FUNC, REMOVE ME LATER!!
-                _other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = true;
+                //_other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = true;
             }
         }
 
@@ -62,16 +67,18 @@ namespace Neverway.Framework.LogicSystem
                 if (_other.GetComponent<Pawn>())
                 {
                     _other.transform.SetParent(null);
+                    OnExit.Invoke();
                     // TODO THIS IS A CORGEO FUNC, REMOVE ME LATER!!
-                    _other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = false;
+                    //_other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = false;
                 }
             }
 
             if (_other.CompareTag("PhysProp"))
             {
                 _other.transform.SetParent(null);
+                OnExit.Invoke();
                 // TODO THIS IS A CORGEO FUNC, REMOVE ME LATER!!
-                _other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = false;
+                //_other.GetComponent<CorGeo_ActorData>().isParentedIgnoreOffsets = false;
             }
         }
 

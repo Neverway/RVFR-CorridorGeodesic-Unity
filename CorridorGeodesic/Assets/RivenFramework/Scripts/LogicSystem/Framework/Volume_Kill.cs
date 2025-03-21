@@ -51,6 +51,7 @@ namespace Neverway.Framework.LogicSystem
                 _other.GetComponent<Pawn>().Kill();
             }
 
+            /*
             if (_other.TryGetComponent<CorGeo_ActorData>(out CorGeo_ActorData actor))
             {
                 // Why was there a parameter to disable death in kill volumes? ~Liz
@@ -58,7 +59,7 @@ namespace Neverway.Framework.LogicSystem
                 {
                     Destroy(_other.gameObject);
                 }
-            }
+            }*/
         }
 
 
