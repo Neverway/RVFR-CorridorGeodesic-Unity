@@ -70,7 +70,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2383793733163904730, guid: fb11275e9729d449a86b1ee89b4c2898, type: 3}
+    - {fileID: 5721104320253161485, guid: fb11275e9729d449a86b1ee89b4c2898, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6202963431475856333, guid: fb11275e9729d449a86b1ee89b4c2898,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4113845468015318178}
   m_SourcePrefab: {fileID: 100100000, guid: fb11275e9729d449a86b1ee89b4c2898, type: 3}
+--- !u!1 &6640859663447329171 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6202963431475856333, guid: fb11275e9729d449a86b1ee89b4c2898,
+    type: 3}
+  m_PrefabInstance: {fileID: 737544486789630558}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4113845468015318178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6640859663447329171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 067ccf786626ddc70ae809cfffbdf8fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cullWhenOutOfRange: 1
+  rangeMultiplier: 2
+  fadeLightWhenCulled: 1
+  fadeSpeed: 1
+  debugDrawCullRange: 0

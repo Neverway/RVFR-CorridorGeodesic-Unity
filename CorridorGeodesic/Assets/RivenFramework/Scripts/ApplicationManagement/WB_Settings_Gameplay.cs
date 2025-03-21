@@ -40,6 +40,7 @@ namespace Neverway.Framework.ApplicationManagement
 
         // Display
         [SerializeField] private Slider brightness;
+        [SerializeField] private Toggle speedrunMode;
         [SerializeField] private Slider colorBlindIntensity;
         [SerializeField] private Button_Selector colorBlindFilter;
         [SerializeField] private Toggle dyslexicFriendlyFont;
@@ -75,6 +76,7 @@ namespace Neverway.Framework.ApplicationManagement
             cameraFov.value = applicationSettings.bufferedSettingsData.cameraFov;
 
             brightness.value = applicationSettings.bufferedSettingsData.brightness * 100;
+            speedrunMode.isOn = applicationSettings.bufferedSettingsData.speedrunMode;
             colorBlindIntensity.value = applicationSettings.bufferedSettingsData.colorBlindIntensity * 100;
             dyslexicFriendlyFont.isOn = applicationSettings.bufferedSettingsData.dyslexicFriendlyFont;
             colorBlindFilter.currentIndex = applicationSettings.bufferedSettingsData.colorBlindFilter;
@@ -115,6 +117,10 @@ namespace Neverway.Framework.ApplicationManagement
             brightness.onValueChanged.AddListener(delegate
             {
                 applicationSettings.bufferedSettingsData.brightness = brightness.value / 100;
+            });
+            speedrunMode.onValueChanged.AddListener(delegate
+            {
+                applicationSettings.bufferedSettingsData.speedrunMode = speedrunMode.isOn;
             });
             colorBlindIntensity.onValueChanged.AddListener(delegate
             {

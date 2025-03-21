@@ -10,9 +10,6 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 using Neverway.Framework.AudioManagement;
 
 public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
@@ -34,7 +31,7 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     [Tooltip("Used in the view raycast to aim the barrel transform of the gun towards the proper point")]
     public LayerMask viewRaycastMask;
     [Tooltip("Used by the crosshair to visualize if the gun is pointing at a valid target")]
-    public bool isValidTarget;
+    //public bool isValidTarget;
     
     public Material riftMaterial;
     public Color riftColorShallowStable, riftColorDeepStable;
@@ -327,50 +324,38 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
 
             UpdateRiftOffset(offset);
         }
-
-        isValidTarget = GetValidTarget();
     }
 
 
     //=-----------------=
     // Internal Functions
     //=-----------------=
-    bool GetValidTarget()
+    /// <summary>
+    /// Returns true if the gun is pointed at a target it's allowed to shoot
+    /// This is used by the hud's crosshair
+    /// </summary>
+    /// <returns></returns>
+    public bool GetIsValidTarget()
     {
-        
-        // Get weather the gun is pointed at a valid target (for crosshair)
         if (Physics.Raycast (centerViewTransform.position, centerViewTransform.forward, out RaycastHit hit, Mathf.Infinity, validTargetMask))
         {
-            if (hit.collider.gameObject.TryGetComponent<BulbCollisionBehaviour>(out var bulbBehaviourObj))
-            {
-                return true;
-            }
+            // Gun is pointed at a bulb snapping point (That is valid!)
+            if (hit.collider.gameObject.TryGetComponent<BulbCollisionBehaviour>(out _)) return true;
             
-            else if (hit.collider.gameObject.TryGetComponent<Mesh_Slicable>(out var _out))
-            {
-                if (hit.collider is not MeshCollider)
-                {
-                    return false;
-                }
-                MeshCollider mCollider = (MeshCollider)hit.collider;
+            // Gun is pointed at a sliceable object
+            if (!hit.collider.gameObject.TryGetComponent<Mesh_Slicable>(out _)) return false;
+            // Non-mesh colliders don't support getting the polygon information, so we exit if it's not a mesh collider
+            if (hit.collider is not MeshCollider) return false;
+                
+            // Gather information about the mesh
+            MeshCollider mCollider = (MeshCollider)hit.collider;
+            Mesh colMesh = mCollider.sharedMesh;
+            int triIndex = hit.triangleIndex;
+            int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
 
-                Mesh colMesh = mCollider.sharedMesh;
-
-                int triIndex = hit.triangleIndex;
-
-                //todo: Commented out this line of code, actually ended up throwing an IndexOutOfRangeException
-                //DisplayDebugTriangle(colMesh, triIndex, hit.collider.transform);
-
-                if (hit.collider.gameObject.TryGetComponent(out Renderer rend))
-                {
-                    int subMeshIndex = GetSubMeshIndex(colMesh, triIndex);
-                    if (subMeshIndex != -1 && !CorGeo_ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]))
-                    {
-                        return false;
-                    }
-                    return true;
-                }
-            }
+            // Get if the raycast hit a polygon with a valid material to place markers on
+            if (!hit.collider.gameObject.TryGetComponent(out Renderer rend)) return false;
+            return subMeshIndex == -1 || CorGeo_ReferenceManager.Instance.conductiveMats.Contains(rend.sharedMaterials[subMeshIndex]);
         }
             
         return false;
@@ -1172,11 +1157,6 @@ public class Alt_Item_Geodesic_Utility_GeoGun : Item_Geodesic_Utility
     {
         float distance1 = planeA.GetDistanceToPoint (_actor.transform.position);
         float distance2 = planeB.GetDistanceToPoint (_actor.transform.position);
-
-        if (_actor.debugLogData)
-        {
-
-        }//print ($"{_actor.gameObject.name}: A{distance1} | B{distance2}");
 
         if (distance1 < 0)
         {

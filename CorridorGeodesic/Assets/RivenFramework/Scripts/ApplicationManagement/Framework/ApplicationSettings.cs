@@ -255,7 +255,7 @@ namespace Neverway.Framework.ApplicationManagement
         //=-----------------=
         public void ResetSettings()
         {
-            currentSettingsData = new ApplicationSettingsData(defaultSettingsData);
+            bufferedSettingsData = new ApplicationSettingsData(defaultSettingsData);
             ApplySettings();
         }
 

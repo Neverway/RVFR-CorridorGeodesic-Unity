@@ -43,6 +43,7 @@ namespace Neverway.Framework.LogicSystem
 				inProgress = true;
 			}
 
+            if (!resetSignal) return;
 			if (resetSignal.isPowered)
 			{
 				isPowered = false;

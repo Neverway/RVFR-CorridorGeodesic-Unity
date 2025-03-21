@@ -87,15 +87,13 @@ namespace Neverway.Framework.ApplicationManagement
                                     // Create a binding entry
                                     var newBindingEntry = Instantiate(bindingObject, contentRoot.transform);
                                     string partName = partBinding.name;
-                                    newBindingEntry.GetComponent<ControlBindingEntry>().text.text =
-                                        $"{action.name} {partName}";
+                                    newBindingEntry.GetComponent<ControlBindingEntry>().text.text = $"{action.name} {partName}";
                                     newBindingEntry.GetComponent<ControlBindingEntry>().isComposite = true;
-                                    foreach (var keyHint in newBindingEntry.GetComponent<ControlBindingEntry>()
-                                                 .keyHints)
+                                    foreach (var keyHint in newBindingEntry.GetComponent<ControlBindingEntry>().keyHints)
                                     {
                                         keyHint.targetAction = $"{action.name} {partName}";
                                     }
-                                    //newBindingEntry.SetActive(true);
+                                    newBindingEntry.SetActive(true);
                                     //Debug.Log($"      Keyboard Part: {partBinding.path}");
                                     //Debug.Log($"[{this.name}] {action.name} contains binding path '{partBinding.path}'");
                                 }
