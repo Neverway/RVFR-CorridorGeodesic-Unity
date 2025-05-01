@@ -5,6 +5,8 @@
 //
 //=============================================================================
 
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Neverway.Framework.LogicSystem
@@ -17,6 +19,7 @@ namespace Neverway.Framework.LogicSystem
 		[LogicComponentHandle, SerializeField] private LogicComponent startSignal;
 		[LogicComponentHandle, SerializeField] private LogicComponent resetSignal;
 		public bool resetAutomatically;
+		public bool autoProgress;
 		public bool inProgress;
 		public DialogueEvent dialogueEvent;
 
@@ -24,6 +27,7 @@ namespace Neverway.Framework.LogicSystem
 		//=-----------------=
 		// Private Variables
 		//=-----------------=
+		private bool hasBeenTriggered;
 
 
 		//=-----------------=
@@ -36,18 +40,33 @@ namespace Neverway.Framework.LogicSystem
 		//=-----------------=
 		public void Update()
 		{
-			if (!inProgress && startSignal.isPowered)
+			if (!inProgress && startSignal.isPowered && !hasBeenTriggered)
 			{
 				isPowered = true;
-				FindObjectOfType<DialougeEventManager>().StartDialogueEvent(dialogueEvent);
+				hasBeenTriggered = true;
+				StartCoroutine(WaitForReactivation());
+				FindObjectOfType<DialogueEventManager>().StopDialogueEvent();
+				FindObjectOfType<DialogueEventManager>().StartDialogueEvent(dialogueEvent, autoProgress);
+				print("Started");
 				inProgress = true;
 			}
+			else if (!autoProgress && inProgress && startSignal.isPowered && !hasBeenTriggered)
+			{
+				hasBeenTriggered = true;
+				StartCoroutine(WaitForReactivation());
+				FindObjectOfType<DialogueEventManager>().ContinueDialogueEvent();
+				print("Progressing");
+			}
 
+			if (resetAutomatically && !FindObjectOfType<WB_DialogueBox>() && isPowered)
+			{
+				StartCoroutine(Reset());
+				print("resetting");
+			}
             if (!resetSignal) return;
 			if (resetSignal.isPowered)
 			{
-				isPowered = false;
-				inProgress = false;
+				StartCoroutine(Reset());
 			}
 		}
 
@@ -55,10 +74,29 @@ namespace Neverway.Framework.LogicSystem
 		//=-----------------=
 		// Internal Functions
 		//=-----------------=
+		private IEnumerator Reset()
+		{
+			yield return new WaitForSeconds(0.2f);
+			isPowered = false;
+			inProgress = false;
+		}
+
+		IEnumerator WaitForReactivation()
+		{
+			yield return new WaitForSeconds(0.2f);
+			hasBeenTriggered = false;
+		}
 
 
 		//=-----------------=
 		// External Functions
 		//=-----------------=
+		public void ForceReset()
+		{
+			if (!inProgress) return;
+			FindObjectOfType<DialogueEventManager>().StopDialogueEvent();
+			isPowered = false;
+			inProgress = false;
+		}
 	}
 }

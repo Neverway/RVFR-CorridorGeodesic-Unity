@@ -6,10 +6,13 @@
 //
 //=============================================================================
 
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using Neverway.Framework.LogicSystem;
+using Neverway;
+using Neverway.Framework.PawnManagement;
+using UnityEngine.UI;
 
 namespace Neverway.Framework.LogicSystem
 {
@@ -20,6 +23,7 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         public DialogueEvent dialogueEvent;
         public float printSpeed = 0.05f;
+        public bool autoProgress;
 
 
         //=-----------------=
@@ -27,29 +31,29 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         private int currentIndex;
         private string currentText;
+        private bool enablePortrait;
 
 
         //=-----------------=
         // Reference Variables
         //=-----------------=
+        [SerializeField] private Image portrait;
         [SerializeField] private TMP_Text name;
         [SerializeField] private TMP_Text dialogue;
+        [SerializeField] private GameObject dialogueObject;
 
 
         //=-----------------=
         // Mono Functions
         //=-----------------=
+        private void Start()
+        {
+        }
 
 
         //=-----------------=
         // Internal Functions
         //=-----------------=
-        public void PrintFrame()
-        {
-            name.text = dialogueEvent.dialogue[currentIndex].name;
-            StartCoroutine(ShowText());
-        }
-
         private IEnumerator ShowText()
         {
             for (int i = 0; i < dialogueEvent.dialogue[currentIndex].text.Length; i++)
@@ -58,11 +62,46 @@ namespace Neverway.Framework.LogicSystem
                 dialogue.text = currentText;
                 yield return new WaitForSeconds(printSpeed / dialogueEvent.dialogue[currentIndex].textSpeed);
             }
+            dialogueEvent.dialogue[currentIndex].OnCompleted.Invoke();
 
-            StartCoroutine(NextFrame());
+            if (autoProgress)
+            {
+                StartCoroutine(NextFrame());
+            }
         }
 
-        private IEnumerator NextFrame()
+        private void SetDialogueMode()
+        {
+            var textOffset = dialogue.rectTransform;
+            if (enablePortrait)
+            {
+                // Set to dialogue mode where we show the portrait and name
+                dialogueObject.SetActive(true);
+                //dialogue.rectTransform.offsetMin = new Vector2(280, textOffset.offsetMin.y);
+            }
+            else
+            {
+                // Set to dialogue mode where we show the portrait and name
+                dialogueObject.SetActive(false);
+                //dialogue.rectTransform.offsetMin = new Vector2(32, textOffset.offsetMin.y);
+            }
+        }
+
+
+        //=-----------------=
+        // External Functions
+        //=-----------------=
+        public void PrintFrame()
+        {
+            portrait.sprite = dialogueEvent.dialogue[currentIndex].portraitSpr;
+            portrait.material = dialogueEvent.dialogue[currentIndex].portraitMat;
+            name.text = dialogueEvent.dialogue[currentIndex].name;
+            enablePortrait = dialogueEvent.dialogue[currentIndex].enablePortrait;
+            SetDialogueMode();
+            StartCoroutine(ShowText());
+        }
+
+        public IEnumerator NextFrame()
         {
             yield return new WaitForSeconds(dialogueEvent.dialogue[currentIndex].endDelay);
             if (dialogueEvent.dialogue.Count - 1 == currentIndex)
@@ -76,9 +115,17 @@ namespace Neverway.Framework.LogicSystem
             }
         }
 
-
-        //=-----------------=
-        // External Functions
-        //=-----------------=
+        public void QuickNextFrame()
+        {
+            if (dialogueEvent.dialogue.Count - 1 == currentIndex)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                currentIndex++;
+                PrintFrame();
+            }
+        }
     }
 }

@@ -162,5 +162,10 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         // External Functions
         //=-----------------=
+        public void SetIndicatorEnabled(bool _enabled)
+        {
+            hideIndicator = !_enabled;
+            SetInteractionIndicatorState();
+        }
     }
 }

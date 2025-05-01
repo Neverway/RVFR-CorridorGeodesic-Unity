@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Neverway.Framework.LogicSystem
 {
-    public class DialougeEventManager: MonoBehaviour
+    public class DialogueEventManager: MonoBehaviour
     {
         //=-----------------=
         // Public Variables
@@ -43,18 +43,27 @@ namespace Neverway.Framework.LogicSystem
         //=-----------------=
         // External Functions
         //=-----------------=
-        public void StartDialogueEvent(DialogueEvent _dialogueEvent)
+        public void StartDialogueEvent(DialogueEvent _dialogueEvent, bool _autoProgress)
         {
             // Stop all existing dialogue events
-            StopDialogueEvent();
+            if (_autoProgress) StopDialogueEvent();
             GameInstance.AddWidget(dialogueBoxWidget);
             FindObjectOfType<WB_DialogueBox>().dialogueEvent = _dialogueEvent;
+            FindObjectOfType<WB_DialogueBox>().autoProgress = _autoProgress;
             FindObjectOfType<WB_DialogueBox>().PrintFrame();
         }
 
         public void StopDialogueEvent()
         {
             Destroy(GameInstance.GetWidget("WB_DialogueBox"));
+        }
+
+        public void ContinueDialogueEvent()
+        {
+            if (FindObjectOfType<WB_DialogueBox>())
+            {
+                FindObjectOfType<WB_DialogueBox>().QuickNextFrame();
+            }
         }
     }
 }

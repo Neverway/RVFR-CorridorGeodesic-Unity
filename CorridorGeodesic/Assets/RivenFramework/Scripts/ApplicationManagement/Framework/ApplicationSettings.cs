@@ -597,6 +597,7 @@ namespace Neverway.Framework.ApplicationManagement
             // Apply to any active cameras
             foreach (var camera in FindObjectsOfType<Camera>())
             {
+                if (camera.GetComponent<Camera_NoChangeFOV>()) return;
                 camera.fieldOfView = currentSettingsData.cameraFov;
             }
 

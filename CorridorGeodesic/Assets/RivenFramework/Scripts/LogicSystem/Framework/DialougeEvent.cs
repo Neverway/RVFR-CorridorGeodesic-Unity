@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Neverway.Framework.LogicSystem
 {
@@ -16,8 +17,12 @@ namespace Neverway.Framework.LogicSystem
     {
         public string name;
         [TextArea] public string text;
+        public bool enablePortrait;
+        public Sprite portraitSpr;
+        public Material portraitMat;
         public float textSpeed=1f;
         public float endDelay=1f;
+        public UnityEvent OnCompleted;
     }
 
     [Serializable]
