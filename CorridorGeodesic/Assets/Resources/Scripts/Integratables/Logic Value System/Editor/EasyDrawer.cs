@@ -16,7 +16,7 @@ public abstract class EasyDrawer : PropertyDrawer
 
 
     private List<string> alreadyDisplayedErrors = new();
-    private static bool propertiesWereModified = true;
+    public static int nestedDrawing = 0;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -24,17 +24,16 @@ public abstract class EasyDrawer : PropertyDrawer
         this.label = label;
         this.area = position;
 
+        List<DrawerObject> previouslyDrawing = DrawerObject.currentlyDrawing;
         DrawerObject.currentlyDrawing = new();
 
+        property.serializedObject.Update();
         EditorGUI.BeginProperty(position, label, property);
         try
         {
             DrawerObject contents = OnGUIEasyDrawer(new VerticalGroup());
-
             position.height = propertyHeight = contents.GetHeight();
-
             contents.Draw(position);
-
             OnBeforeFinishGUI(position);
         }
         catch (Exception e)
@@ -67,12 +66,12 @@ public abstract class EasyDrawer : PropertyDrawer
         EditorGUI.EndProperty();
         OnAfterGUI();
 
-        if (propertiesWereModified)
+        if (property.serializedObject.hasModifiedProperties)
         {
             property.serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(property.serializedObject.targetObject);
-            propertiesWereModified = false;
         }
+        DrawerObject.currentlyDrawing = previouslyDrawing;
     }
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
         Mathf.Max(propertyHeight, EditorGUIUtility.singleLineHeight);
@@ -81,8 +80,6 @@ public abstract class EasyDrawer : PropertyDrawer
     public virtual void OnBeforeFinishGUI(Rect position) { }
     public virtual void DebugError(Exception e) { Debug.LogError(e); }
     public abstract void OnAfterGUI();
-
-    public static bool SetModified { set { propertiesWereModified |= value; } }
 
     public struct Properties
     {
@@ -100,12 +97,12 @@ public abstract class EasyDrawer : PropertyDrawer
         }
 
         public SerializedProperty Property => property;
+        #region Quick Access To Property Values
         public AnimationCurve AnimationCurve
         {
             get { return property.animationCurveValue; }
             set { property.animationCurveValue = value; }
         }
-        #region Quick Access To Property Values
         public bool Bool
         {
             get { return property.boolValue; }
@@ -218,7 +215,26 @@ public abstract class EasyDrawer : PropertyDrawer
         public void Draw(Rect area)
         {
             currentlyDrawing.Add(this);
-            OnDraw(area);
+            try
+            {
+                OnDraw(area);
+            }
+            catch (Exception e)
+            {
+                EditorGUI.DrawRect(area, new Color(0.8f, 0f, 0f, 0.3f));
+                //GUIContent content = new GUIContent(e.GetType().Name, e.StackTrace);
+                GUIStyle errorStyle = new GUIStyle(EditorStyles.helpBox);
+                errorStyle.alignment = TextAnchor.MiddleCenter;
+                errorStyle.fontSize = 16;
+
+                EditorGUI.LabelField(area, e.GetType().Name, errorStyle);
+
+                if (Event.current.type == EventType.MouseDown && area.Contains(Event.current.mousePosition))
+                {
+                    Debug.LogError(e);
+                    Event.current.Use();
+                }
+            }
             currentlyDrawing.Remove(this);
         }
         protected abstract void OnDraw(Rect area);
@@ -248,6 +264,15 @@ public abstract class EasyDrawer : PropertyDrawer
                 totalString += (totalString == "" ? "" : " -> ") + obj.ToString();
 
             return totalString;
+        }
+
+        public Rect ResizeAreaToOwnHeight(Rect area)
+        {
+            float drawerObjectHeight = GetHeight();
+            area.height = drawerObjectHeight;
+            area.y += drawerObjectHeight / 2;
+
+            return area;
         }
     }
     
@@ -503,7 +528,7 @@ public abstract class EasyDrawer : PropertyDrawer
                 if (useFlatWidth)
                     return flatWidth;
 
-                return percentageWidth * flatWidth;
+                return percentageWidth * fullWidth;
             }
         }
         
@@ -615,6 +640,108 @@ public abstract class EasyDrawer : PropertyDrawer
         }
     }
 
+    public class ScrollGroup : DrawerObject
+    {
+        public DrawerObject contents;
+        public Action<Vector2> setScrollPos;
+        public Func<Vector2> getScrollPos;
+        public bool lockedHeight = false;
+        public ScrollGroup(DrawerObject contents, float height, 
+            Func<Vector2> getScrollPos, Action<Vector2> setScrollPos)
+        {
+            this.height = height;
+            this.contents = contents;
+            this.getScrollPos = getScrollPos;
+            this.setScrollPos = setScrollPos;
+        }
+        public ScrollGroup LockedHeight()
+        {
+            lockedHeight = true;
+            return this;
+        }
+        protected override void OnDraw(Rect area)
+        {
+            Rect contentRect = new Rect(0, 0, area.width - 20, contents.GetHeight());
+            bool needsScrollBar = contentRect.size.y > height;
+
+            if (needsScrollBar)
+            {
+                setScrollPos.Invoke(GUI.BeginScrollView(area, getScrollPos.Invoke(), contentRect));
+                contents.Draw(contentRect);
+                GUI.EndScrollView();
+            }
+            else
+                contents.Draw(area);
+            
+        }
+        protected override float OnGetHeight() => lockedHeight ? height : Mathf.Min(height, contents.GetHeight());
+    }
+
+    //todo: finish tab group
+    public class TabGroup : DrawerObject
+    {
+        public Tab[] tabs;
+        public TabGroup()
+        {
+            tabs = new Tab[0];
+        }
+        public TabGroup Add(string tabName, DrawerObject contents)
+        {
+            List<Tab> newTabs = new List<Tab>();
+
+            newTabs.AddRange(tabs);
+            newTabs.Add(new Tab(tabName, contents));
+
+            tabs = newTabs.ToArray();
+            return this;
+        }
+
+        protected override void OnDraw(Rect area)
+        {
+            try
+            {
+                //Rect[] dividedAreas = DivideRectHorizontally(area, objects.Length);
+                //
+                //for (int i = 0; i < objects.Length; i++)
+                //{
+                //    objects[i].Draw(dividedAreas[i]);
+                //}
+            }
+            catch (Exception e) { Debug.LogError(e); }
+        }
+        protected override float OnGetHeight()
+        {
+            //height = 0;
+            //foreach (DrawerObject obj in objects)
+            //    height = Mathf.Max(height, obj.GetHeight());
+            //return height;
+            return 0f;
+        }
+        public static Rect[] DivideRectHorizontally(Rect position, int divisions)
+        {
+            Rect[] dividedRects = new Rect[divisions];
+            position.width /= divisions;
+
+            for (int i = 0; i < divisions; i++)
+            {
+                dividedRects[i] = position;
+                position.x += position.width;
+            }
+            return dividedRects;
+        }
+
+        public struct Tab
+        {
+            public DrawerObject contents;
+            public string tabName;
+            public Tab(string tabName, DrawerObject contents)
+            {
+                this.tabName = tabName;
+                this.contents = contents;
+            }
+        }
+    }
+
     public class Disable : DrawerObject
     {
         public DrawerObject contents;
@@ -687,14 +814,34 @@ public abstract class EasyDrawer : PropertyDrawer
     {
         public float spaceAbove = 3f;
         public float spaceBelow = 3f;
+        public Color dividerColor = new Color(0.5f, 0.5f, 0.5f);
         protected override void OnDraw(Rect area)
         {
-            Color dividerColor = new Color(0.5f, 0.5f, 0.5f);
+            area = ResizeAreaToOwnHeight(area);
+
             area.height -= spaceAbove + spaceBelow;
             area.y += spaceAbove;
             EditorGUI.DrawRect(area, dividerColor);
         }
         protected override float OnGetHeight() => spaceAbove + 2f + spaceBelow;
+
+        public Divider VerticalPadding(float padding)
+        {
+            spaceAbove = padding;
+            spaceBelow = padding;
+            return this;
+        }
+        public Divider Padding(float abovePadding, float belowPadding)
+        {
+            spaceAbove = abovePadding;
+            spaceBelow = belowPadding;
+            return this;
+        }
+        public Divider Color(Color newColor)
+        {
+            dividerColor = newColor;
+            return this;
+        }
     }
     public class Boxed : DrawerObject
     {
@@ -765,8 +912,16 @@ public abstract class EasyDrawer : PropertyDrawer
     {
         public GUIContent label;
         public DrawerObject afterLabel;
+        public DrawerObject beforeLabel;
         public float maxWidthFactor = 0.5f;
         public float padding = EditorGUIUtility.singleLineHeight;
+        public bool UsingBeforeField => beforeLabel != null;
+        public FittedLabel(SerializedProperty prop)
+        {
+            style = new GUIStyle(EditorStyles.label);
+            this.label = new GUIContent(label);
+            this.afterLabel = new Property(prop).HideLabel();
+        }
         public FittedLabel(string label, DrawerObject afterLabel)
         {
             style = new GUIStyle(EditorStyles.label);
@@ -778,6 +933,11 @@ public abstract class EasyDrawer : PropertyDrawer
             this.maxWidthFactor = Mathf.Clamp(maxWidthFactor, 0f, 1f);
             return this;
         }
+        public FittedLabel AndBeforeLabel(DrawerObject beforeLabel)
+        {
+            this.beforeLabel = beforeLabel;
+            return this;
+        }
         public FittedLabel Padding(float padding)
         {
             this.padding = padding;
@@ -785,25 +945,59 @@ public abstract class EasyDrawer : PropertyDrawer
         }
         protected override void OnDraw(Rect area)
         {
+            //Get the required size of the given label
             Vector2 size = style.CalcSize(label);
-            float requiredWidth = Mathf.Min(size.x + padding, area.width * maxWidthFactor);
+            //Use double padding if content is also being drawn before it
+            float paddingExtraWidth = UsingBeforeField ? padding * 2 : padding;
+            //Limit max % area the label can take up by maxWidthFactor
+            float requiredWidth = Mathf.Min(size.x + paddingExtraWidth, area.width * maxWidthFactor);
 
+            //Setup rect width of label
             Rect labelArea = area;
             labelArea.width = requiredWidth;
-            EditorGUI.LabelField(labelArea, label, style);
 
-            Rect fieldsArea = area;
-            fieldsArea.width -= requiredWidth;
-            fieldsArea.x += requiredWidth;
-            afterLabel.Draw(fieldsArea);
+            //Setup rect width of afterlabel
+            Rect afterLabelArea = area;
+            afterLabelArea.width -= labelArea.width;
+
+            if (UsingBeforeField) //If drawing content before the label
+            {
+                //Divide afterlabel into 2 rects, beforelabel and afterlabel
+                afterLabelArea.width /= 2;
+                Rect beforeLabelArea = afterLabelArea;
+
+                //Shift areas to be in the appropriate horizontal positions
+                labelArea.x      += beforeLabelArea.width;
+                afterLabelArea.x += beforeLabelArea.width + labelArea.width;
+
+                //Draw beforelabel contents
+                this.beforeLabel.Draw(beforeLabelArea);
+            }
+            else //Otherwise, you're only drawing the label and content after it
+            {
+                //Shift afterlabel area to be after the label
+                afterLabelArea.x += labelArea.width;
+            }
+
+            //Draw label and afterlabel contents
+            EditorGUI.LabelField(labelArea, label, style);
+            this.afterLabel.Draw(afterLabelArea);
         }
-        protected override float OnGetHeight() => afterLabel.GetHeight();
+        protected override float OnGetHeight()
+        {
+            float height = afterLabel.GetHeight();
+            if (UsingBeforeField)
+                height = Mathf.Max(height, beforeLabel.GetHeight());
+            height = Mathf.Max(height, style.CalcSize(label).y);
+            return height;
+        }
     }
     public class Property : DrawerObjectWithGUIContent
     {
         public SerializedProperty property;
         bool usePropertyLabel = true;
         bool includeChildren = false;
+        bool updateSerializedObject = false;
         public Property(SerializedProperty property)
         {
             if (property == null)
@@ -828,13 +1022,25 @@ public abstract class EasyDrawer : PropertyDrawer
             includeChildren = true;
             return this;
         }
+        //Reminder: Don't use this when drawing custom property drawers
+        public Property UpdateSerializedObject()
+        {
+            updateSerializedObject = true;
+            return this;
+        }
 
         protected override void OnDraw(Rect area)
         {
+            if (updateSerializedObject)
+                property.serializedObject.Update();
+
             if (usePropertyLabel)
-                SetModified = EditorGUI.PropertyField(area, property, includeChildren);
+                EditorGUI.PropertyField(area, property, includeChildren);
             else
-                SetModified = EditorGUI.PropertyField(area, property, content, includeChildren);
+                EditorGUI.PropertyField(area, property, content, includeChildren);
+
+            if (updateSerializedObject && property.serializedObject.hasModifiedProperties)
+                property.serializedObject.ApplyModifiedProperties();
         }
 
         protected override float OnGetHeight()
@@ -843,6 +1049,173 @@ public abstract class EasyDrawer : PropertyDrawer
                 return EditorGUI.GetPropertyHeight(property, includeChildren);
 
             return EditorGUI.GetPropertyHeight(property, content, includeChildren);
+        }
+    }
+
+    public class TextField : DrawerObjectWithGUIContent
+    {
+        string textValue;
+        bool useLabel = true;
+        string controlName;
+        Action<string> onTextChanged;
+        Action<string> onConfirm;
+
+        private bool HasControlName => !string.IsNullOrEmpty(controlName);
+        private bool EnterPressed =>
+            Event.current.type == EventType.KeyUp &&
+            Event.current.keyCode == KeyCode.Return;
+        private bool IsControlFocused => GUI.GetNameOfFocusedControl() == controlName;
+
+        public TextField(string initialValue, Action<string> onTextChanged)
+        {
+            content = new GUIContent(GUIContent.none);
+            this.textValue = initialValue;
+            this.onTextChanged = onTextChanged;
+        }
+
+        public new TextField Label(string label)
+        {
+            content.text = label;
+            useLabel = true;
+            return this;
+        }
+
+        public new TextField HideLabel()
+        {
+            useLabel = false;
+            return this;
+        }
+
+        public TextField OnConfirm(string uniqueControlIdentifier, Action<string> onConfirm)
+        {
+            controlName = uniqueControlIdentifier;
+            this.onConfirm = onConfirm;
+            return this;
+        }
+
+        protected override void OnDraw(Rect area)
+        {
+            if (HasControlName)
+                GUI.SetNextControlName(controlName);
+
+            EditorGUI.BeginChangeCheck();
+
+            if (useLabel)
+                textValue = EditorGUI.TextField(area, content, textValue);
+            else
+                textValue = EditorGUI.TextField(area, textValue);
+
+            if (EditorGUI.EndChangeCheck())
+                onTextChanged?.Invoke(textValue);
+
+            if (HasControlName && EnterPressed && IsControlFocused)
+                onConfirm?.Invoke(textValue);
+        }
+    }
+    /*
+    public class ObjectField : DrawerObjectWithGUIContent
+    {
+        UnityEngine.Object objectValue;
+        bool useLabel = true;
+        string controlName;
+        Action<string> onTextChanged;
+        Action<string> onConfirm;
+
+        private bool HasControlName => !string.IsNullOrEmpty(controlName);
+        private bool EnterPressed =>
+            Event.current.type == EventType.KeyUp &&
+            Event.current.keyCode == KeyCode.Return;
+        private bool IsControlFocused => GUI.GetNameOfFocusedControl() == controlName;
+
+        public ObjectField(string initialValue, Action<string> onTextChanged)
+        {
+            content = new GUIContent(GUIContent.none);
+            this.objectValue = initialValue;
+            this.onTextChanged = onTextChanged;
+        }
+
+        public new ObjectField Label(string label)
+        {
+            content.text = label;
+            useLabel = true;
+            return this;
+        }
+
+        public new ObjectField HideLabel()
+        {
+            useLabel = false;
+            return this;
+        }
+
+        public ObjectField OnConfirm(string uniqueControlIdentifier, Action<string> onConfirm)
+        {
+            controlName = uniqueControlIdentifier;
+            this.onConfirm = onConfirm;
+            return this;
+        }
+
+        protected override void OnDraw(Rect area)
+        {
+            if (HasControlName)
+                GUI.SetNextControlName(controlName);
+
+            EditorGUI.BeginChangeCheck();
+
+            if (useLabel)
+                objectValue = EditorGUI.ObjectField(area, ,,,);
+            else
+                objectValue = EditorGUI.ObjectField(area, objectValue);
+
+            if (EditorGUI.EndChangeCheck())
+                onTextChanged?.Invoke(objectValue);
+
+            if (HasControlName && EnterPressed && IsControlFocused)
+                onConfirm?.Invoke(objectValue);
+        }
+    }
+    // */
+    public class CallFunction : DrawerObject
+    {
+        Action function;
+        public CallFunction(Action function)
+        {
+            this.function = function;
+        }
+        protected override void OnDraw(Rect area)
+        {
+            function?.Invoke();
+        }
+        protected override float OnGetHeight() => 0f;
+    }
+
+    public class Foldout : DrawerObjectWithGUIContent
+    {
+        public SerializedProperty property;
+
+        public Foldout(SerializedProperty property)
+        {
+            if (property == null)
+                throw new NullReferenceException();
+
+            content = new GUIContent(GUIContent.none);
+            this.property = property;
+        }
+        public new Foldout Label(string label)
+        {
+            content.text = label;
+            return this;
+        }
+        public new Foldout HideLabel()
+        {
+            content.text = "";
+            return this;
+        }
+        public bool IsExpanded => property.isExpanded;
+
+        protected override void OnDraw(Rect area)
+        {
+            property.isExpanded = EditorGUI.Foldout(area, property.isExpanded, content);
+
         }
     }
 
@@ -980,6 +1353,7 @@ public abstract class EasyDrawer : PropertyDrawer
         public object toGetFieldsFrom;
         public SerializedProperty stringProperty;
         public Func<FieldInfo, bool> filter;
+        public bool includeBaseTypes = true;
         public SelectFieldDropdown(object toGetFieldsFrom, SerializedProperty stringProperty)
         {
             this.style = EditorStyles.popup;
@@ -997,6 +1371,11 @@ public abstract class EasyDrawer : PropertyDrawer
             this.filter = (f => type.IsAssignableFrom(f.FieldType));
             return this;
         }
+        public SelectFieldDropdown ExcludeBaseTypes()
+        {
+            includeBaseTypes = false;
+            return this;
+        }
         protected override void OnDraw(Rect area)
         {
             if (toGetFieldsFrom == null)
@@ -1004,11 +1383,23 @@ public abstract class EasyDrawer : PropertyDrawer
                 new Label("<Missing object>").Draw(area);
                 return;
             }
+            Type currentType = toGetFieldsFrom.GetType();
+            List<string> fieldNamesList = new List<string>();
 
-            string[] fieldNames = toGetFieldsFrom.GetType()
-                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .Where(filter)
-                .Select(f => f.Name).ToArray();
+            while (currentType != null)
+            {
+                fieldNamesList.AddRange(
+                    currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                        .Where(filter)
+                        .Select(f => f.Name)
+                );
+
+                if (includeBaseTypes)
+                    currentType = currentType.BaseType;
+                else
+                    currentType = null;
+            }
+            string[] fieldNames = fieldNamesList.ToArray();
 
             List<string> fieldNamesWithDefault = new List<string>();
             fieldNamesWithDefault.Add("[Select Field]");
@@ -1030,6 +1421,7 @@ public abstract class EasyDrawer : PropertyDrawer
         }
     }
 }
+
 
 public static class EasyDrawerExtensions
 {

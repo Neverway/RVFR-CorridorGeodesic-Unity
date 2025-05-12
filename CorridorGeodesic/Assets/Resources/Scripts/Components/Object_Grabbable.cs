@@ -16,7 +16,8 @@ public class Object_Grabbable : MonoBehaviour
     //=-----------------=
     // Public Variables
     //=-----------------=
-
+    public float springStrength = 1f;
+    public float damp = 1f;
 
     //=-----------------=
     // Private Variables
@@ -65,22 +66,22 @@ public class Object_Grabbable : MonoBehaviour
         }
         else
         {
-            var direction = targetPawn.physObjectAttachmentPoint.transform.position - gameObject.transform.position;
-            var distance = Vector3.Distance(targetPawn.physObjectAttachmentPoint.transform.position, gameObject.transform.position);
-            Vector3 targetPosition;
-            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance, layerMask))
-            {
+            Transform targetTransform = targetPawn.physObjectAttachmentPoint.transform;
+            Vector3 correctionVelocity = (targetTransform.position - (transform.position + (propRigidbody.velocity*Time.deltaTime)));
+            correctionVelocity *= springStrength * (correctionVelocity.magnitude);
+            correctionVelocity *= Mathf.Max(1f - Vector3.Dot(correctionVelocity.normalized, propRigidbody.velocity.normalized), 0f);
 
-                targetPosition = (hit.point - (direction.normalized * 0.5f));
-            }
-            else
-            {
-                targetPosition = (targetPawn.physObjectAttachmentPoint.transform.position);
-            }
-            propRigidbody.velocity = Vector3.zero;
-            propRigidbody.angularVelocity = Vector3.zero;
-            propRigidbody.MovePosition (targetPosition);
-            
+            propRigidbody.AddForce(correctionVelocity + (-propRigidbody.velocity * damp), ForceMode.Acceleration);
+
+            //Quaternion rotationDifference = Quaternion.Inverse(transform.rotation) * targetTransform.rotation;
+            //rotationDifference.ToAngleAxis(out float angleInDegrees, out Vector3 axis);
+            //if (angleInDegrees > 180f) angleInDegrees -= 360f;
+            //
+            //Vector3 targetAngularVelocity = axis.normalized * Mathf.Deg2Rad * angleInDegrees / Time.deltaTime;
+            //
+            //propRigidbody.angularVelocity = Vector3.Lerp(propRigidbody.angularVelocity, targetAngularVelocity, 1f - Mathf.Exp(-angularLerpSpeed * Time.deltaTime)); ;
+
+
             var targetRotation = targetPawn.physObjectAttachmentPoint.transform.rotation;
             transform.rotation = new Quaternion(targetRotation.x, targetRotation.y, targetRotation.z, targetRotation.w);
             

@@ -38,7 +38,6 @@ public class ComponentFieldReferenceDrawer : EasyDrawer
         else
             contents.Add(new FittedLabel($" {ReferenceType.SelectedName(true, true)}: ", new Boxed(line)).MaxWidthFactor(0.33f));
 
-
         return contents;
     }
     public override void OnAfterGUI()

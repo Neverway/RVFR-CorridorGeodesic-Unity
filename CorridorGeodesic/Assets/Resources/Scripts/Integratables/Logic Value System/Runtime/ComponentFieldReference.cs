@@ -51,12 +51,16 @@ public struct ComponentFieldReference<T>
             if (_field == null)
             {
                 if (IsUndefined)
-                    throw new Exception("ComponentFieldReference is not defined, cannot get value");
+                    throw new UnityException("ComponentFieldReference is not defined, cannot get value");
 
                 _field = targetComponent.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
                 if (_field == null)
-                    throw new Exception($"ComponentFieldReference could not find field {fieldName}");
+                {
+                    Exception e = new Exception($"ComponentFieldReference could not find field {fieldName}");
+                    //Debug.LogException(e, targetComponent);
+                    throw e;
+                }
             }
             return _field;
         }

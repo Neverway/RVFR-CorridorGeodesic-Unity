@@ -11,18 +11,18 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    public int something;
-    public NewBehaviourScript RAHHH;
+    public int something = 5;
+    public GameObject someObject;
+
+    private NewBehaviourScript RAHHH;
 
     private void Start()
     {
-        RAHHH = GetComponent<NewBehaviourScript>();
-
-
+        RAHHH = someObject.GetComponent<NewBehaviourScript>();
     }
 
     private void Update()
     {
-        
+        Time.timeScale = 2f;
     }
 }

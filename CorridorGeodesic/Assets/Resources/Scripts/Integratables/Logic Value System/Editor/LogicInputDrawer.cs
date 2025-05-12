@@ -31,7 +31,6 @@ public class LogicInputDrawer : EasyDrawer
         if (!property[sourceField][_hideTypeFilterText].Bool)
         {
             property[sourceField][_hideTypeFilterText].Property.boolValue = true;
-            SetModified = true;
         }
         bool hasOutput = HasOutputTarget;
         if (Application.isPlaying && hasOutput)

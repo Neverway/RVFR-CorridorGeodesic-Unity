@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class TEST_GetPowerFromLogicComponent : MonoBehaviour
 {
-    [LogicComponentHandle] public LogicComponent someComponent;
+    [IsDomainReloaded]
+    public LogicComponent someComponent;
     public LogicOutput<bool> isLogicComponentPowered = new(false);
 
     public void Update()
